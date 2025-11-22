@@ -1,0 +1,85 @@
+#pragma once
+
+#include "Interfaces/Serializable.hpp"
+
+namespace Gecko
+{
+    // TODO: Refactor to serialize from map instead of array, to allow overriding.
+    class Skills : public Serializable
+    {
+    public:
+        typedef std::vector<Skill*> Items;
+
+    public:
+        explicit Skills() = default;
+        explicit Skills(const Skills& other);
+
+        std::shared_ptr<Configuration> serialize() const override;
+        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+
+    public:
+        void activate(const std::string& name, const Id& id);
+        void activate(const std::string& name, const Ogre::Vector3& position);
+
+        void clear()
+        {
+            m_items.clear();
+        }
+
+        auto empty() const
+        {
+            return m_items.empty();
+        }
+
+        template<typename Type>
+        bool has() const
+        {
+            for (const auto& i : m_items)
+            {
+                if (dynamic_cast<Type*>(i) != nullptr)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        bool is_available(const std::string& name) const;
+
+        auto size() const
+        {
+            return m_items.size();
+        }
+
+    public:
+        auto begin() const
+        {
+            return m_items.begin();
+        }
+
+        auto end() const
+        {
+            return m_items.end();
+        }
+
+        auto cbegin() const
+        {
+            return m_items.cbegin();
+        }
+
+        auto cend()
+        {
+            return m_items.cend();
+        }
+
+    public:
+        bool operator==(const Skills& other) const
+        {
+            return m_items == other.m_items;
+        }
+
+    private:
+        Items m_items;
+    };
+}

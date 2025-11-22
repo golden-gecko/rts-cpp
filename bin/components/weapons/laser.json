@@ -1,0 +1,33 @@
+{
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "health": {
+        "current": 10.0,
+        "maximal": 10.0
+    },
+    "include": [
+        "../components/weapons/_weapon.json"
+    ],
+    "mesh": {
+        "color": {
+            "b": 0.5,
+            "g": 0.5,
+            "r": 0.5
+        },
+        "scale": {
+            "x": 0.1,
+            "y": 0.1,
+            "z": 0.4
+        }
+    },
+    "missile": {
+        "configuration": "energy_missile"
+    },
+    "name": "Laser",
+    "reload_timer": {
+        "maximal": 2.0
+    },
+    "rotation_speed": 15.0
+}

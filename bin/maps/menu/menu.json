@@ -1,0 +1,14 @@
+{
+    "active_player": "human",
+    "cameras": [
+        {
+            "name": "Main",
+            "type": "TopDown"
+        }
+    ],
+    "creatable": {
+        "by_game": true
+    },
+    "name": "Menu",
+    "type": "Map"
+}

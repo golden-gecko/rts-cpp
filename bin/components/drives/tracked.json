@@ -1,0 +1,27 @@
+{
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "health": {
+        "current": 100.0,
+        "maximal": 100.0
+    },
+    "include": [
+        "../components/drives/_drive.json"
+    ],
+    "mesh": {
+        "color": {
+            "b": 0.8,
+            "g": 0.1,
+            "r": 0.1
+        },
+        "scale": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 2.0
+        }
+    },
+    "name": "Tracked",
+    "speed": 10.0
+}

@@ -1,0 +1,21 @@
+{
+    "alive_timer": {
+        "maximal": 3.0
+    },
+    "components": [
+        {
+            "configuration": "missile_hull"
+        }
+    ],
+    "health": {
+        "current": 1.0,
+        "maximal": 1.0
+    },
+    "orders": {
+        "available": [
+            "Destroy",
+            "Move"
+        ]
+    },
+    "type": "Missile"
+}

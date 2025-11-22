@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "removeComments": true,
+    "outFile": "../../bin/ui/js/app.js",
+    "alwaysStrict": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

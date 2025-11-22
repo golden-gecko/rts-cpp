@@ -1,0 +1,17 @@
+{
+    "layers": [
+        "Terrain"
+    ],
+    "processes": {
+        "Groving": {
+            "in": {
+                "items": {
+                    "Pollution": {
+                        "consumption": 0.1
+                    }
+                }
+            }
+        }
+    },
+    "type": "Object"
+}

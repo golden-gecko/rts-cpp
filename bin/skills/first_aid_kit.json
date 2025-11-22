@@ -1,0 +1,12 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "name": "First Aid Kit",
+    "refresh_timer": {
+        "current": 60.0,
+        "maximal": 60.0
+    },
+    "type": "Repair",
+    "value": 20.0
+}

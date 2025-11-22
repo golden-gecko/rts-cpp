@@ -1,0 +1,69 @@
+{
+    "components": [
+        {
+            "configuration": "hull",
+            "mesh": {
+                "color": {
+                    "b": 0.5,
+                    "g": 0.5,
+                    "r": 0.5
+                }
+            }
+        }
+    ],
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "include": [
+        "../objects/buildings/_building.json"
+    ],
+    "industrial": true,
+    "max_workers": 2,
+    "name": "Warehouse",
+    "processes": {
+        "Returning": {
+            "out": {
+                "items": {
+                    "Coal": {
+                        "priority": 0.5
+                    },
+                    "Iron": {
+                        "priority": 0.5
+                    },
+                    "Iron Ore": {
+                        "priority": 0.5
+                    }
+                }
+            }
+        },
+        "Storing": {
+            "in": {
+                "items": {
+                    "Coal": {
+                        "priority": 0.5
+                    },
+                    "Iron": {
+                        "priority": 0.5
+                    },
+                    "Iron Ore": {
+                        "priority": 0.5
+                    }
+                }
+            }
+        }
+    },
+    "resources": {
+        "items": {
+            "Coal": {
+                "maximal": 1000.0
+            },
+            "Iron": {
+                "maximal": 1000.0
+            },
+            "Iron Ore": {
+                "maximal": 1000.0
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "components": [
+        {
+            "configuration": "wall_hull",
+            "mesh": {
+                "color": {
+                    "b": 0.5,
+                    "g": 0.5,
+                    "r": 0.5
+                }
+            }
+        }
+    ],
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "include": [
+        "../objects/buildings/_building.json"
+    ],
+    "name": "Wall"
+}

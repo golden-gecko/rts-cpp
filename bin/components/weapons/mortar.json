@@ -1,0 +1,33 @@
+{
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "health": {
+        "current": 20.0,
+        "maximal": 20.0
+    },
+    "include": [
+        "../components/weapons/_weapon.json"
+    ],
+    "mesh": {
+        "color": {
+            "b": 0.5,
+            "g": 0.5,
+            "r": 0.5
+        },
+        "scale": {
+            "x": 0.2,
+            "y": 1.0,
+            "z": 0.2
+        }
+    },
+    "missile": {
+        "configuration": "mortar_missile"
+    },
+    "name": "Mortar",
+    "reload_timer": {
+        "maximal": 3.0
+    },
+    "rotation_speed": 3.0
+}

@@ -1,0 +1,12 @@
+{
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "health": {
+        "current": 10.0,
+        "maximal": 10.0
+    },
+    "name": "Storage",
+    "type": "Storage"
+}

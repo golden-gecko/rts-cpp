@@ -1,0 +1,29 @@
+{
+    "components": [
+        {
+            "configuration": "hull",
+            "mesh": {
+                "color": {
+                    "b": 0.1,
+                    "g": 0.1,
+                    "r": 0.8
+                }
+            }
+        }
+    ],
+    "creatable": {
+        "by_game": true
+    },
+    "include": [
+        "../objects/resource_deposits/_resource_deposit.json"
+    ],
+    "name": "Iron Ore Deposit",
+    "resources": {
+        "items": {
+            "Unprocessed Iron Ore": {
+                "current": 1000.0,
+                "maximal": 1000.0
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "components": [
+        {
+            "configuration": "hull",
+            "mesh": {
+                "color": {
+                    "b": 0.1,
+                    "g": 0.1,
+                    "r": 0.8
+                }
+            }
+        }
+    ],
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "include": [
+        "../objects/buildings/_building.json"
+    ],
+    "max_residents": 1,
+    "name": "House",
+    "residential": true
+}

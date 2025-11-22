@@ -1,0 +1,176 @@
+{
+    "commands": {
+        "Assign_To_Group_0": [
+            "KC_LCONTROL",
+            "KC_0"
+        ],
+        "Assign_To_Group_1": [
+            "KC_LCONTROL",
+            "KC_1"
+        ],
+        "Assign_To_Group_2": [
+            "KC_LCONTROL",
+            "KC_2"
+        ],
+        "Assign_To_Group_3": [
+            "KC_LCONTROL",
+            "KC_3"
+        ],
+        "Assign_To_Group_4": [
+            "KC_LCONTROL",
+            "KC_4"
+        ],
+        "Assign_To_Group_5": [
+            "KC_LCONTROL",
+            "KC_5"
+        ],
+        "Assign_To_Group_6": [
+            "KC_LCONTROL",
+            "KC_6"
+        ],
+        "Assign_To_Group_7": [
+            "KC_LCONTROL",
+            "KC_7"
+        ],
+        "Assign_To_Group_8": [
+            "KC_LCONTROL",
+            "KC_8"
+        ],
+        "Assign_To_Group_9": [
+            "KC_LCONTROL",
+            "KC_9"
+        ],
+        "Camera_Move_Backward": [
+            "KC_S"
+        ],
+        "Camera_Move_Down": [
+            "KC_Z"
+        ],
+        "Camera_Move_Forward": [
+            "KC_W"
+        ],
+        "Camera_Move_Left": [
+            "KC_A"
+        ],
+        "Camera_Move_Right": [
+            "KC_D"
+        ],
+        "Camera_Move_Up": [
+            "KC_Q"
+        ],
+        "Game_Faster": [
+            "KC_ADD"
+        ],
+        "Game_Pause": [
+            "KC_PAUSE"
+        ],
+        "Game_Slower": [
+            "KC_SUBTRACT"
+        ],
+        "Multiple_Order": [
+            "KC_LSHIFT"
+        ],
+        "Multiple_Select": [
+            "KC_LSHIFT"
+        ],
+        "Order_Attack": [
+            "KC_LCONTROL",
+            "KC_A"
+        ],
+        "Order_Destroy": [
+            "KC_LCONTROL",
+            "KC_D"
+        ],
+        "Order_Follow": [
+            "KC_LCONTROL",
+            "KC_F"
+        ],
+        "Order_Guard": [
+            "KC_LCONTROL",
+            "KC_G"
+        ],
+        "Order_Move": [
+            "KC_LCONTROL",
+            "KC_M"
+        ],
+        "Order_Patrol": [
+            "KC_LCONTROL",
+            "KC_P"
+        ],
+        "Order_Stop": [
+            "KC_LCONTROL",
+            "KC_S"
+        ],
+        "Quit": [
+            "KC_ESCAPE"
+        ],
+        "Select_Group_0": [
+            "KC_0"
+        ],
+        "Select_Group_1": [
+            "KC_1"
+        ],
+        "Select_Group_2": [
+            "KC_2"
+        ],
+        "Select_Group_3": [
+            "KC_3"
+        ],
+        "Select_Group_4": [
+            "KC_4"
+        ],
+        "Select_Group_5": [
+            "KC_5"
+        ],
+        "Select_Group_6": [
+            "KC_6"
+        ],
+        "Select_Group_7": [
+            "KC_7"
+        ],
+        "Select_Group_8": [
+            "KC_8"
+        ],
+        "Select_Group_9": [
+            "KC_9"
+        ],
+        "Switch_Player_1": [
+            "KC_LCONTROL",
+            "KC_F1"
+        ],
+        "Switch_Player_2": [
+            "KC_LCONTROL",
+            "KC_F2"
+        ],
+        "Switch_Player_3": [
+            "KC_LCONTROL",
+            "KC_F3"
+        ],
+        "Switch_Player_4": [
+            "KC_LCONTROL",
+            "KC_F4"
+        ],
+        "Switch_Player_5": [
+            "KC_LCONTROL",
+            "KC_F5"
+        ],
+        "Switch_Player_6": [
+            "KC_LCONTROL",
+            "KC_F6"
+        ],
+        "Switch_Player_7": [
+            "KC_LCONTROL",
+            "KC_F7"
+        ],
+        "Switch_Player_8": [
+            "KC_LCONTROL",
+            "KC_F8"
+        ],
+        "UI_Show_Menu": [
+            "KC_F10"
+        ],
+        "UI_Toggle_Floating_Description": [
+            "KC_TAB"
+        ]
+    }
+}

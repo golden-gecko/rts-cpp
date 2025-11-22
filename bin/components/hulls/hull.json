@@ -1,0 +1,14 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "health": {
+        "current": 100.0,
+        "maximal": 100.0
+    },
+    "include": [
+        "../objects/meshes/cube_centered_on_bottom.json"
+    ],
+    "name": "Hull",
+    "type": "Hull"
+}

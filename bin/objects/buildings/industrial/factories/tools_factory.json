@@ -1,0 +1,58 @@
+{
+    "components": [
+        {
+            "configuration": "hull",
+            "mesh": {
+                "color": {
+                    "b": 0.5,
+                    "g": 0.5,
+                    "r": 0.5
+                }
+            }
+        }
+    ],
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "include": [
+        "../objects/buildings/_building.json"
+    ],
+    "industrial": true,
+    "max_workers": 4,
+    "name": "Tools Factory",
+    "processes": {
+        "Producing Tools": {
+            "in": {
+                "items": {
+                    "Iron": {
+                        "consumption": 2.0
+                    }
+                }
+            },
+            "out": {
+                "items": {
+                    "Pollution": {
+                        "production": 0.1
+                    },
+                    "Tools": {
+                        "production": 1.0
+                    }
+                }
+            }
+        }
+    },
+    "resources": {
+        "items": {
+            "Iron": {
+                "maximal": 10.0
+            },
+            "Pollution": {
+                "maximal": 1000000.0
+            },
+            "Tools": {
+                "maximal": 10.0
+            }
+        }
+    }
+}

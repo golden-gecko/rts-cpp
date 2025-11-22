@@ -1,0 +1,14 @@
+{
+    "color": "green",
+    "creatable": {
+        "by_game": true
+    },
+    "diplomacy": {
+        "CPU 1": "Ally",
+        "CPU 2": "Ally",
+        "Human": "Ally",
+        "World": "Ally"
+    },
+    "name": "World",
+    "type": "Player"
+}

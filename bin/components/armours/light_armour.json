@@ -1,0 +1,15 @@
+{
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "defence": 2.0,
+    "health": {
+        "current": 10.0,
+        "maximal": 10.0
+    },
+    "include": [
+        "../components/armours/_armour.json"
+    ],
+    "name": "Light Armour"
+}

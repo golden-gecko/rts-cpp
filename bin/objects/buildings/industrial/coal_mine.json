@@ -1,0 +1,64 @@
+{
+    "components": [
+        {
+            "configuration": "hull",
+            "mesh": {
+                "color": {
+                    "b": 0.5,
+                    "g": 0.5,
+                    "r": 0.5
+                }
+            }
+        }
+    ],
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "include": [
+        "../objects/buildings/_building.json"
+    ],
+    "industrial": true,
+    "max_workers": 2,
+    "name": "Coal Mine",
+    "orders": {
+        "available": [
+            "Destroy",
+            "Stop",
+            "Wait"
+        ]
+    },
+    "processes": {
+        "Coal Mining": {
+            "in": {
+                "items": {
+                    "Unprocessed Coal": {
+                        "consumption": 8.0,
+                        "deposit_range": 100.0,
+                        "need_deposit": true
+                    }
+                }
+            },
+            "out": {
+                "items": {
+                    "Coal": {
+                        "production": 7.2
+                    },
+                    "Pollution": {
+                        "production": 0.1
+                    }
+                }
+            }
+        }
+    },
+    "resources": {
+        "items": {
+            "Coal": {
+                "maximal": 100.0
+            },
+            "Pollution": {
+                "maximal": 1000000.0
+            }
+        }
+    }
+}

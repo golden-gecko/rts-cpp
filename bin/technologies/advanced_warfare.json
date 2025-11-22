@@ -1,0 +1,20 @@
+{
+    "costs": {
+        "Iron": 100.0
+    },
+    "creatable": {
+        "by_game": true
+    },
+    "name": "Advanced Warfare",
+    "obsoletes": [
+        "rifle"
+    ],
+    "research_timer": {
+        "maximal": 120.0
+    },
+    "type": "Technology",
+    "unlocks": [
+        "big_shot",
+        "tank"
+    ]
+}

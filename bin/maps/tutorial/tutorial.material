@@ -1,0 +1,35 @@
+material tutorial_terrain
+{
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture terr_dirt-grass.jpg
+            }
+
+            texture_unit
+            {
+                scale 4.0 4.0
+                tex_coord_set 1
+                texture terrain_detail.jpg
+            }
+
+            texture_unit data
+            {
+                colour_op alpha_blend
+                filtering none
+                texture tutorial_terrain_none.png
+            }
+
+            texture_unit grid
+            {
+                colour_op alpha_blend
+                filtering none
+                tex_coord_set 2
+                texture grid_yellow.png
+            }
+        }
+    }
+}

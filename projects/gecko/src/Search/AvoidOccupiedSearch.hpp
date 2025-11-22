@@ -1,0 +1,18 @@
+#pragma once
+
+#include "Search/Search.hpp"
+
+namespace Gecko
+{
+    class AvoidOccupiedSearch : public Search
+    {
+    private:
+        using base_type = Search;
+
+    public:
+        explicit AvoidOccupiedSearch(const Layer& layer);
+
+    public:
+        std::optional<Path::Points> get_path(const Ogre::Vector3& from, const Ogre::Vector3& to) override;
+    };
+}

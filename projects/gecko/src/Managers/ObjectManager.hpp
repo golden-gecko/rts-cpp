@@ -1,0 +1,28 @@
+#pragma once
+
+#include "Id.hpp"
+#include "Interfaces/Updatable.hpp"
+#include "Managers/Manager.hpp"
+
+namespace Gecko
+{
+    class ObjectManager :
+        public Ogre::Singleton<ObjectManager>,
+        public Manager<Object, std::string, Id>,
+        public Updatable
+    {
+    private:
+        using base_type = Manager<Object, std::string, Id>;
+
+    public:
+        using ObjectsInRange = std::vector<std::pair<Object*, float>>;
+
+    public:
+        Object* create(const std::string& name);
+
+        void update(float time) override;
+
+    public:
+        ObjectsInRange get_in_range(const Ogre::Vector3& position, float range = std::numeric_limits<float>::max());
+    };
+}

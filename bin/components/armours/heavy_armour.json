@@ -1,0 +1,15 @@
+{
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "defence": 20.0,
+    "health": {
+        "current": 30.0,
+        "maximal": 30.0
+    },
+    "include": [
+        "../components/armours/_armour.json"
+    ],
+    "name": "Heavy Armour"
+}

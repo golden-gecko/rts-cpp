@@ -1,0 +1,226 @@
+{
+    "active_player": "human",
+    "creatable": {
+        "by_game": true
+    },
+    "layers": {
+        "Terrain": {
+            "data": [
+                [
+                    "tutorial_terrain_height_00.png"
+                ]
+            ],
+            "data_layers": {
+                "Navigation": {},
+                "None": {
+                    "source": "tutorial_terrain_none.png"
+                }
+            },
+            "grid": {
+                "scale": {
+                    "x": 8.0,
+                    "z": 8.0
+                }
+            },
+            "material": "tutorial_terrain",
+            "scale": {
+                "x": 8.0,
+                "y": 0.1,
+                "z": 8.0
+            },
+            "search": {
+                "algorithm": "AvoidOccupied"
+            },
+            "shards": 16,
+            "validators": {
+                "position": "SquareCenter"
+            }
+        }
+    },
+    "name": "Tutorial",
+    "objects": [
+        {
+            "configuration": "coal_deposit",
+            "player": "world",
+            "position": {
+                "x": 240.0,
+                "z": 200.0
+            }
+        },
+        {
+            "configuration": "coal_mine",
+            "player": "human",
+            "position": {
+                "x": 245.0,
+                "z": 200.0
+            }
+        },
+        {
+            "configuration": "iron_ore_deposit",
+            "player": "world",
+            "position": {
+                "x": 250.0,
+                "z": 200.0
+            }
+        },
+        {
+            "configuration": "iron_ore_mine",
+            "player": "human",
+            "position": {
+                "x": 255.0,
+                "z": 200.0
+            }
+        },
+        {
+            "configuration": "ironworks",
+            "player": "human",
+            "position": {
+                "x": 260.0,
+                "z": 200.0
+            }
+        },
+        {
+            "configuration": "tools_factory",
+            "player": "human",
+            "position": {
+                "x": 265.0,
+                "z": 200.0
+            }
+        },
+        {
+            "configuration": "vehicles_factory",
+            "player": "human",
+            "position": {
+                "x": 270.0,
+                "z": 200.0
+            }
+        },
+        {
+            "configuration": "truck",
+            "player": "human",
+            "position": {
+                "x": 250.0,
+                "z": 210.0
+            }
+        },
+        {
+            "configuration": "truck",
+            "player": "human",
+            "position": {
+                "x": 250.0,
+                "z": 220.0
+            }
+        },
+        {
+            "configuration": "jeep",
+            "player": "human",
+            "position": {
+                "x": 200.0,
+                "z": 200.0
+            }
+        },
+        {
+            "configuration": "jeep",
+            "player": "human",
+            "position": {
+                "x": 210.0,
+                "z": 200.0
+            }
+        },
+        {
+            "configuration": "jeep",
+            "player": "human",
+            "position": {
+                "x": 220.0,
+                "z": 200.0
+            }
+        },
+        {
+            "configuration": "tank",
+            "player": "human",
+            "position": {
+                "x": 200.0,
+                "z": 210.0
+            }
+        },
+        {
+            "configuration": "tank",
+            "player": "human",
+            "position": {
+                "x": 210.0,
+                "z": 210.0
+            }
+        },
+        {
+            "configuration": "tank",
+            "player": "human",
+            "position": {
+                "x": 220.0,
+                "z": 210.0
+            }
+        },
+        {
+            "configuration": "tank",
+            "player": "human",
+            "position": {
+                "x": 200.0,
+                "z": 220.0
+            }
+        },
+        {
+            "configuration": "tank",
+            "player": "human",
+            "position": {
+                "x": 210.0,
+                "z": 220.0
+            }
+        },
+        {
+            "configuration": "tank",
+            "player": "human",
+            "position": {
+                "x": 220.0,
+                "z": 220.0
+            }
+        },
+        {
+            "configuration": "tank",
+            "player": "cpu_1",
+            "position": {
+                "x": 200.0,
+                "z": 290.0
+            }
+        },
+        {
+            "configuration": "tank",
+            "player": "cpu_1",
+            "position": {
+                "x": 210.0,
+                "z": 290.0
+            }
+        },
+        {
+            "configuration": "tank",
+            "player": "cpu_1",
+            "position": {
+                "x": 220.0,
+                "z": 290.0
+            }
+        }
+    ],
+    "players": [
+        {
+            "configuration": "cpu_1"
+        },
+        {
+            "configuration": "cpu_2"
+        },
+        {
+            "configuration": "human"
+        },
+        {
+            "configuration": "world"
+        }
+    ],
+    "type": "Map"
+}

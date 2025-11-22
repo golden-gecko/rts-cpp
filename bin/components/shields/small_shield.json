@@ -1,0 +1,15 @@
+{
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "defence": 4.0,
+    "health": {
+        "current": 10.0,
+        "maximal": 10.0
+    },
+    "include": [
+        "../components/shields/_shield.json"
+    ],
+    "name": "Small Shield"
+}

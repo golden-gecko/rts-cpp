@@ -1,0 +1,29 @@
+{
+    "components": [
+        {
+            "configuration": "rifle",
+            "position": {
+                "y": 0.2
+            }
+        },
+        {
+            "configuration": "wheeled"
+        }
+    ],
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "include": [
+        "../objects/vehicles/vehicle.json"
+    ],
+    "name": "Jeep",
+    "orders": {
+        "available": [
+            "Destroy",
+            "Move",
+            "Stop",
+            "Wait"
+        ]
+    }
+}

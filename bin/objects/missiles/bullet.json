@@ -1,0 +1,11 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "damage": 1.0,
+    "include": [
+        "../objects/missiles/_missile.json"
+    ],
+    "name": "Bullet",
+    "speed": 20.0
+}

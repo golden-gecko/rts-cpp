@@ -1,0 +1,14 @@
+.idea
+.vs
+.vscode
+__pycache__
+bin/cache
+bin/saves
+build
+dependencies
+lib
+*.log
+ogre.cfg
+projects/editor/venv
+projects/ui/.idea
+projects/ui/node_modules

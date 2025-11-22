@@ -1,0 +1,32 @@
+{
+    "components": [
+        {
+            "configuration": "hull",
+            "mesh": {
+                "color": {
+                    "b": 0.5,
+                    "g": 0.5,
+                    "r": 0.5
+                }
+            }
+        }
+    ],
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "include": [
+        "../objects/buildings/_building.json"
+    ],
+    "industrial": true,
+    "max_workers": 2,
+    "name": "Shop",
+    "resources": {
+        "items": {
+            "Pollution": {
+                "maximal": 1000.0,
+                "production": 1.0
+            }
+        }
+    }
+}

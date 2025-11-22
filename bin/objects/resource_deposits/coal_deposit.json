@@ -1,0 +1,29 @@
+{
+    "components": [
+        {
+            "configuration": "hull",
+            "mesh": {
+                "color": {
+                    "b": 0.1,
+                    "g": 0.1,
+                    "r": 0.1
+                }
+            }
+        }
+    ],
+    "creatable": {
+        "by_game": true
+    },
+    "include": [
+        "../objects/resource_deposits/_resource_deposit.json"
+    ],
+    "name": "Coal Deposit",
+    "resources": {
+        "items": {
+            "Unprocessed Coal": {
+                "current": 1000.0,
+                "maximal": 1000.0
+            }
+        }
+    }
+}

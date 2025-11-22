@@ -1,0 +1,37 @@
+{
+    "components": [
+        {
+            "configuration": "wheeled"
+        }
+    ],
+    "creatable": {
+        "by_game": true
+    },
+    "include": [
+        "../objects/vehicles/vehicle.json"
+    ],
+    "name": "Food Truck",
+    "orders": {
+        "available": [
+            "Destroy",
+            "Load",
+            "Move",
+            "Stop",
+            "Unload",
+            "Wait"
+        ]
+    },
+    "resources": {
+        "items": {
+            "Flour": {
+                "maximal": 10.0
+            },
+            "Food": {
+                "maximal": 10.0
+            },
+            "Wheat": {
+                "maximal": 10.0
+            }
+        }
+    }
+}

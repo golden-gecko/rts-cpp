@@ -1,0 +1,59 @@
+{
+    "components": [
+        {
+            "configuration": "hull",
+            "mesh": {
+                "color": {
+                    "b": 0.5,
+                    "g": 0.5,
+                    "r": 0.5
+                }
+            }
+        }
+    ],
+    "configurations": [
+        "robot",
+        "tank"
+    ],
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "include": [
+        "../objects/buildings/_building.json"
+    ],
+    "industrial": true,
+    "max_workers": 4,
+    "name": "Vehicles Factory",
+    "orders": {
+        "available": [
+            "Create"
+        ]
+    },
+    "processes": {
+        "Producing Vehicles": {
+            "in": {
+                "items": {
+                    "Iron": {}
+                }
+            },
+            "out": {
+                "items": {
+                    "Pollution": {
+                        "production": 0.1
+                    }
+                }
+            }
+        }
+    },
+    "resources": {
+        "items": {
+            "Iron": {
+                "maximal": 100.0
+            },
+            "Pollution": {
+                "maximal": 1000000.0
+            }
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "missile": {
+        "configuration": "big_missile"
+    },
+    "name": "Big Shot",
+    "refresh_timer": {
+        "current": 20.0,
+        "maximal": 20.0
+    },
+    "type": "FireMissile"
+}

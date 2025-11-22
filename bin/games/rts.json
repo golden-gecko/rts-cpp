@@ -1,0 +1,58 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "include": [
+        "../settings/commands.json",
+        "../settings/options.json",
+        "../settings/resources.json"
+    ],
+    "memory": {
+        "components": 1200,
+        "maps": 10,
+        "objects": 30,
+        "orders": 1000,
+        "players": 10,
+        "skills": 1200
+    },
+    "name": "RTS",
+    "scene": {
+        "ambient": {
+            "color": {
+                "b": 1.0,
+                "g": 1.0,
+                "r": 1.0
+            }
+        },
+        "directional": {
+            "color": {
+                "b": 0.2,
+                "g": 0.2,
+                "r": 0.2
+            },
+            "direction": {
+                "x": -0.19,
+                "y": -0.65,
+                "z": -0.85
+            }
+        }
+    },
+    "ui": {
+        "font": "Arial",
+        "height": 960,
+        "layout": "../ui/ui.html",
+        "scale": 1.0,
+        "width": 1280
+    },
+    "windows": [
+        {
+            "camera": "Main",
+            "fullscreen": false,
+            "height": 960,
+            "left": 10,
+            "name": "Main",
+            "top": 40,
+            "width": 1280
+        }
+    ]
+}

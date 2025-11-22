@@ -1,0 +1,53 @@
+{
+    "options": {
+        "cache": {
+            "configurations": {
+                "enabled": true,
+                "path": "../cache/configurations"
+            },
+            "gpu": {
+                "enabled": true,
+                "path": "../cache/gpu_cache.bin"
+            },
+            "meshes": {
+                "enabled": true,
+                "path": "../cache/meshes"
+            },
+            "values": {
+                "enabled": true,
+                "path": "../cache/values"
+            }
+        },
+        "fog_of_war": {
+            "color": {
+                "a": 255,
+                "b": 64,
+                "g": 64,
+                "r": 64
+            },
+            "type": "fuzzy"
+        },
+        "input": {
+            "mouse": {
+                "sensitivity": {
+                    "x": -0.2,
+                    "y": -0.2
+                }
+            }
+        },
+        "saves": {
+            "path": "../saves"
+        },
+        "ui": {
+            "cursor": {
+                "visible": true
+            },
+            "minimap": {
+                "visible": true
+            },
+            "preview": {
+                "visible": true
+            }
+        }
+    }
+}

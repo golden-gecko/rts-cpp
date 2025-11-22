@@ -1,0 +1,16 @@
+{
+    "costs": {
+        "Crystal": 20.0
+    },
+    "creatable": {
+        "by_game": true
+    },
+    "name": "Optics",
+    "research_timer": {
+        "maximal": 120.0
+    },
+    "type": "Technology",
+    "unlocks": [
+        "laser_technology"
+    ]
+}

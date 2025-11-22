@@ -1,0 +1,8 @@
+{
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "name": "Rally",
+    "type": "Rally"
+}

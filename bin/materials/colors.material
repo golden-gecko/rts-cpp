@@ -1,0 +1,83 @@
+material black
+{
+    technique
+    {
+        pass
+        {
+            ambient 0.0 0.0 0.0 1.0
+            lighting on
+        }
+    }
+}
+
+material blue
+{
+    technique
+    {
+        pass
+        {
+            ambient 0.0 0.0 1.0 1.0
+            lighting on
+        }
+    }
+}
+
+material green
+{
+    technique
+    {
+        pass
+        {
+            ambient 0.0 1.0 0.0 1.0
+            lighting on
+        }
+    }
+}
+
+material red
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 0.0 0.0 1.0
+            lighting on
+        }
+    }
+}
+
+material yellow
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 0.0 1.0
+            lighting on
+        }
+    }
+}
+
+material vertex_color
+{
+    technique
+    {
+        pass
+        {
+            ambient vertexcolour
+            lighting on
+        }
+    }
+}
+
+material white
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0 1.0
+            lighting on
+        }
+    }
+}

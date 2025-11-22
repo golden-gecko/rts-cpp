@@ -1,0 +1,41 @@
+#include "Containers/Processes.hpp"
+
+#include "Configuration.hpp"
+
+namespace Gecko
+{
+    std::shared_ptr<Configuration> Processes::serialize() const
+    {
+        auto configuration = std::make_shared<Configuration>();
+
+        for (const auto& [name, process] : m_items)
+        {
+            configuration->append(process.serialize());
+        }
+
+        return configuration;
+    }
+
+    void Processes::deserialize(const std::shared_ptr<Configuration>& configuration)
+    {
+        clear();
+
+        for (auto i = configuration->begin(); i != configuration->end(); ++i)
+        {
+            auto name = i.key().asString();
+            auto process = Process(name);
+
+            process.deserialize(std::make_shared<Configuration>(*i));
+
+            m_items.emplace(name, process);
+        }
+    }
+
+    void Processes::update(float time, Id id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources)
+    {
+        for (auto& [name, process] : m_items)
+        {
+            process.update(time, id, position, resources);
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "costs": {
+        "Crystal": 40.0
+    },
+    "creatable": {
+        "by_game": true
+    },
+    "name": "Laser Technology",
+    "research_timer": {
+        "maximal": 240.0
+    },
+    "type": "Technology",
+    "unlocks": [
+        "laser"
+    ]
+}

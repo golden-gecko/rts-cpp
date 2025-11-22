@@ -1,0 +1,157 @@
+material cursor_grid_blue
+{
+    technique
+    {
+        pass
+        {
+            depth_write off
+            scene_blend alpha_blend
+
+            texture_unit
+            {
+                filtering none
+                texture cursor_grid_blue.png
+            }
+        }
+    }
+}
+
+material cursor_grid_green
+{
+    technique
+    {
+        pass
+        {
+            depth_write off
+            scene_blend alpha_blend
+
+            texture_unit
+            {
+                filtering none
+                texture cursor_grid_green.png
+            }
+        }
+    }
+}
+
+material cursor_grid_red
+{
+    technique
+    {
+        pass
+        {
+            depth_write off
+            scene_blend alpha_blend
+
+            texture_unit
+            {
+                filtering none
+                texture cursor_grid_red.png
+            }
+        }
+    }
+}
+
+material cursor_grid_yellow
+{
+    technique
+    {
+        pass
+        {
+            depth_write off
+            scene_blend alpha_blend
+
+            texture_unit
+            {
+                filtering none
+                texture cursor_grid_yellow.png
+            }
+        }
+    }
+}
+
+material selection_blue
+{
+    technique
+    {
+        pass
+        {
+            depth_write off
+            scene_blend alpha_blend
+
+            texture_unit
+            {
+                filtering none
+                texture selection_blue.png
+            }
+        }
+    }
+}
+
+material selection_green
+{
+    technique
+    {
+        pass
+        {
+            depth_write off
+            scene_blend alpha_blend
+
+            texture_unit
+            {
+                filtering none
+                texture selection_green.png
+            }
+        }
+    }
+}
+
+material selection_red
+{
+    technique
+    {
+        pass
+        {
+            depth_write off
+            scene_blend alpha_blend
+
+            texture_unit
+            {
+                filtering none
+                texture selection_red.png
+            }
+        }
+    }
+}
+
+material selection_yellow
+{
+    technique
+    {
+        pass
+        {
+            depth_write off
+            scene_blend alpha_blend
+
+            texture_unit
+            {
+                filtering none
+                texture selection_yellow.png
+            }
+        }
+    }
+}
+
+material wireframe
+{
+    technique
+    {
+        pass
+        {
+            ambient 0.0 0.0 0.0 1.0
+            depth_bias 8
+            lighting on
+            polygon_mode wireframe
+        }
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "name": "Debug",
+    "type": "Debug"
+}

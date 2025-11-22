@@ -1,0 +1,9 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "mesh": {
+        "name": "selection.mesh"
+    },
+    "name": "Selection"
+}

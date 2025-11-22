@@ -1,0 +1,20 @@
+{
+    "components": [
+        {
+            "configuration": "light_armour"
+        },
+        {
+            "configuration": "cannon"
+        },
+        {
+            "configuration": "small_shield"
+        },
+        {
+            "configuration": "tracked"
+        }
+    ],
+    "creatable": {
+        "by_game": true
+    },
+    "name": "Tank"
+}

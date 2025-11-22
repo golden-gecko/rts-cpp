@@ -1,0 +1,22 @@
+{
+    "components": [
+        {
+            "configuration": "wheeled"
+        }
+    ],
+    "creatable": {
+        "by_game": true
+    },
+    "include": [
+        "../objects/vehicles/vehicle.json"
+    ],
+    "name": "Car",
+    "orders": {
+        "available": [
+            "Destroy",
+            "Move",
+            "Stop",
+            "Wait"
+        ]
+    }
+}

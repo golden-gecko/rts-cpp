@@ -1,0 +1,211 @@
+#pragma once
+
+#include "Interfaces/Initializable.hpp"
+#include "Order.hpp"
+#include "Timer.hpp"
+#include "UI/OgreSurface.hpp"
+
+namespace Gecko
+{
+    class UI :
+        public Ogre::Singleton<UI>,
+        public ultralight::LoadListener,
+        public ultralight::Logger,
+        public ultralight::ViewListener,
+        public Initializable
+    {
+    public:
+        // From ultralight::LoadListener.
+        void OnFinishLoading(ultralight::View* caller, uint64_t frame_id, bool is_main_frame, const ultralight::String& url) override;
+        void OnDOMReady(ultralight::View* caller, uint64_t frame_id, bool is_main_frame, const ultralight::String& url) override;
+
+        // From ultralight::Logger.
+        void LogMessage(ultralight::LogLevel log_level, const ultralight::String16& message) override;
+
+        // From ultralight::ViewListener.
+        void OnAddConsoleMessage(ultralight::View* caller, ultralight::MessageSource source, ultralight::MessageLevel level, const ultralight::String& message, uint32_t line_number, uint32_t column_number, const ultralight::String& source_id) override;
+
+    public:
+        explicit UI(const std::shared_ptr<Configuration>& configuration);
+
+        virtual ~UI();
+
+        void init() override;
+        void deinit() override;
+
+        void update(float time);
+
+    public:
+        void change_visibility(const std::string& type, bool visible);
+
+        void engine_application_save_options(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_application_quit(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_game_new(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_game_load(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_game_save(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_game_quit(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_map_set_data_layer(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_minimap_click(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_minimap_move(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_minimap_zoom_in(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_minimap_zoom_out(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_preview_hide(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_preview_set_position(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_preview_show(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_technology_research(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_ui_change_visibility(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_ui_look_at_object(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_ui_select_object(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_ui_set_configuration(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_ui_set_order(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        void engine_ui_set_skill(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+
+        void inject_key_press(char key_code);
+        void inject_key_release(char key_code);
+        void inject_mouse_move(std::size_t x, std::size_t y);
+        void inject_mouse_press(std::size_t x, std::size_t y, OIS::MouseButtonID id);
+        void inject_mouse_release(std::size_t x, std::size_t y, OIS::MouseButtonID id);
+
+        bool is_mouse_inside(std::size_t x, std::size_t y);
+
+        bool is_ready() const
+        {
+            return is_dom_ready && is_loaded;
+        }
+
+        bool is_visible() const
+        {
+            return m_visible;
+        }
+
+        void log_error(const std::string& text, Id id = Id::Empty);
+        void log_info(const std::string& text, Id id = Id::Empty);
+
+        void reset();
+        void reset_configuration();
+        void reset_order();
+        void reset_skill();
+
+        void restore_visibility(const std::map<std::string, bool>& state);
+
+        void show_layers(bool visible);
+
+        void show_menu();
+
+        void toggle_floating_description();
+
+    public:
+        const auto& get_configuration_name() const
+        {
+            return configuration_name;
+        }
+
+        auto& get_cursor()
+        {
+            return *cursor.get();
+        }
+
+        const auto& get_cursor() const
+        {
+            return *cursor.get();
+        }
+
+        auto& get_minimap()
+        {
+            return *minimap.get();
+        }
+
+        const auto& get_minimap() const
+        {
+            return *minimap.get();
+        }
+
+        auto get_order_name() const
+        {
+            return order_name;
+        }
+
+        auto& get_preview()
+        {
+            return *preview.get();
+        }
+
+        const auto& get_preview() const
+        {
+            return *preview.get();
+        }
+
+        auto& get_selection_box()
+        {
+            return *selection_box.get();
+        }
+
+        const auto& get_selection_box() const
+        {
+            return *selection_box.get();
+        }
+
+        const auto& get_skill_name() const
+        {
+            return skill_name;
+        }
+
+    public:
+        void set_configuration_name(const std::string& _configuration_name);
+        void set_configurations(const std::set<std::string>& configurations);
+        void set_configurations_header(const std::string& _configuration_name);
+        void set_floating_descriptions(const std::vector<Id>& objects);
+        void set_hovered_object_id(Id object_id);
+        void set_info(const std::shared_ptr<Configuration>& info);
+        void set_layers(const std::map<std::string, std::shared_ptr<Layer>>& layers);
+        void set_maps(const std::vector<std::string>& maps);
+        void set_objects_admin();
+        void set_orders_admin();
+        void set_players();
+        void set_order_name(order_type::Value _order_name);
+        void set_orders(const std::set<std::string>& orders);
+        void set_orders_header(order_type::Value order_type);
+        void set_resources(const Resources& resources);
+        void set_saves(const std::vector<std::string>& saves);
+        void set_skill_name(const std::string& _order_name);
+        void set_skills(const std::set<std::string>& skills);
+        void set_skills_header(const std::string& skill_name);
+        void set_statistics(const std::map<std::string, std::string>& info);
+        void set_terrain_layers(const std::set<std::string>& layers);
+        void set_visible(bool visible);
+        void set_water_layers(const std::set<std::string>& layers);
+
+    private:
+        std::shared_ptr<Configuration> configuration;
+
+        bool is_loaded = false;
+        bool is_dom_ready = false;
+
+        ultralight::RefPtr<ultralight::Renderer> renderer;
+        ultralight::RefPtr<ultralight::View> view;
+
+        std::unique_ptr<Cursor> cursor;
+        std::unique_ptr<Minimap> minimap;
+        std::unique_ptr<OgreSurface> ogre_surface;
+        std::unique_ptr<Preview> preview;
+        std::unique_ptr<SelectionBox> selection_box;
+
+        Id hovered_object_id;
+
+        bool floating_description = false;
+        bool m_visible = true;
+
+        Timer refresh_time = Timer(Settings::UI::RefreshInterval);
+
+        std::string configuration_name = "none";
+        order_type::Value order_name = order_type::Value::None;
+        std::string skill_name = "none";
+
+        void init_components();
+        void init_visibility_types();
+
+        void evaluate_with_timeout(const std::string& js);
+        void log_write(const std::string& text, const std::string& type, Id id = Id::Empty);
+        void wait_until_ready();
+    };
+}

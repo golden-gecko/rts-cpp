@@ -1,0 +1,26 @@
+{
+    "components": [
+        {
+            "configuration": "hull",
+            "mesh": {
+                "color": {
+                    "b": 0.1,
+                    "g": 0.8,
+                    "r": 0.1
+                },
+                "scale": {
+                    "x": 0.1,
+                    "y": 1.0,
+                    "z": 0.1
+                }
+            }
+        }
+    ],
+    "creatable": {
+        "by_game": true
+    },
+    "include": [
+        "../objects/plants/_plant.json"
+    ],
+    "name": "Bush"
+}

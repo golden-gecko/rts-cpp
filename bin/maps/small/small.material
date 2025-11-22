@@ -1,0 +1,82 @@
+material small_air
+{
+}
+
+material small_terrain
+{
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture terr_dirt-grass.jpg
+            }
+
+            texture_unit
+            {
+                scale 4.0 4.0
+                tex_coord_set 1
+                texture terrain_detail.jpg
+            }
+
+            texture_unit roads
+            {
+                colour_op alpha_blend
+                filtering none
+                texture terrain_roads.png
+            }
+
+            texture_unit data
+            {
+                colour_op alpha_blend
+                filtering none
+                texture terrain_none.png
+            }
+
+            texture_unit grid
+            {
+                colour_op alpha_blend
+                filtering none
+                tex_coord_set 1
+                texture grid_yellow.png
+            }
+        }
+    }
+}
+
+material small_water
+{
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture Water02.jpg
+            }
+
+            texture_unit
+            {
+                scale 2.0 2.0
+                tex_coord_set 1
+                texture Water02.jpg
+            }
+
+            texture_unit data
+            {
+                colour_op alpha_blend
+                filtering none
+                texture water_none.png
+            }
+
+            texture_unit grid
+            {
+                colour_op alpha_blend
+                filtering none
+                tex_coord_set 1
+                texture grid_yellow.png
+            }
+        }
+    }
+}
