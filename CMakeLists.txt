@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.21.3 FATAL_ERROR)
+cmake_minimum_required(VERSION 4.2)
 
-project(RTS)
+project(rts)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 20)

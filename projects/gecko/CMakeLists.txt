@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21.3 FATAL_ERROR)
+cmake_minimum_required(VERSION 4.2)
 
 project(Gecko)
 
