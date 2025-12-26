@@ -8,9 +8,18 @@ file(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 add_library(${PROJECT_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES})
 
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    CXX_EXTENSIONS OFF
+    CXX_STANDARD 23
+    CXX_STANDARD_REQUIRED ON
+)
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
-target_precompile_headers(${PROJECT_NAME} PRIVATE src/Gecko.hpp)
+target_precompile_headers(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src/Gecko/Gecko.hpp)
+
+# Find Boost
+target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_DIR}/include)
 
 # Find JsonCpp
 find_package(jsoncpp REQUIRED)
@@ -28,4 +37,7 @@ target_link_libraries(${PROJECT_NAME} debug ${OIS_DIR}/lib/OIS_d.lib optimized $
 
 # Find Ultralight
 target_include_directories(${PROJECT_NAME} PUBLIC ${ULTRALIGHT_DIR}/include)
+target_link_libraries(${PROJECT_NAME} debug ${ULTRALIGHT_DIR}/lib/AppCore.lib optimized ${OIS_DIR}/lib/AppCore.lib)
 target_link_libraries(${PROJECT_NAME} debug ${ULTRALIGHT_DIR}/lib/Ultralight.lib optimized ${OIS_DIR}/lib/Ultralight.lib)
+target_link_libraries(${PROJECT_NAME} debug ${ULTRALIGHT_DIR}/lib/UltralightCore.lib optimized ${OIS_DIR}/lib/UltralightCore.lib)
+target_link_libraries(${PROJECT_NAME} debug ${ULTRALIGHT_DIR}/lib/WebCore.lib optimized ${OIS_DIR}/lib/WebCore.lib)

@@ -1,8 +1,8 @@
-#include "CityBuilding.hpp"
+#include "Gecko/Games/Game.hpp"
+#include "Gecko/Validators/RoadPosition.hpp"
 
 #include "Citizen.hpp"
-#include "Game.hpp"
-#include "Validators/RoadPosition.hpp"
+#include "CityBuilding.hpp"
 
 namespace City
 {
@@ -34,7 +34,7 @@ namespace City
         max_workers = other.max_workers;
     }
 
-    std::optional<Gecko::Entrance> CityBuilding::get_entrance() const
+    Gecko::Entrance CityBuilding::get_entrance() const
     {
         /*
         const auto& position = get_position();
@@ -94,7 +94,7 @@ namespace City
         L_WARNING << "CityBuilding has no entrance.";
         */
 
-        return {};
+        return Gecko::Entrance(Ogre::Vector3::ZERO, Ogre::Vector3::ZERO);
     }
 
     std::size_t CityBuilding::get_present_residents() const
@@ -190,9 +190,9 @@ namespace City
     }
     */
 
+    /*
     Gecko::Rectangle CityBuilding::get_occupied_space() const
     {
-        /*
         TODO: Fix.
         const auto& terrain = Gecko::Game::getSingleton().get_active_map()->get_terrain();
         auto terrain_scale = terrain.get_scale();
@@ -208,12 +208,12 @@ namespace City
         auto end_index = terrain.get_index(end);
 
         return Gecko::Rectangle(start_index, end_index);
-        */
 
-        return Gecko::Rectangle(0, 0);
+        return Gecko::Rectangle(0, 0, 0, 0);
     }
+    */
 
-    void CityBuilding::set_position(const Ogre::Vector3& position)
+    void CityBuilding::set_position(const Ogre::Vector3& position, bool validate)
     {
         base_type::set_position(position);
 

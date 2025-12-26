@@ -23,7 +23,7 @@ namespace City
         int getAvailableTrucksCount() const;
 
     public:
-        void set_position(const Ogre::Vector3& position) override;
+        void set_position(const Ogre::Vector3& position, bool validate = true) override;
 
     private:
         std::size_t maxTrucks = 0;

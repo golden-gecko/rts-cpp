@@ -57,7 +57,7 @@ namespace City
         return count;
     }
 
-    void Depot::set_position(const Ogre::Vector3& position)
+    void Depot::set_position(const Ogre::Vector3& position, bool validate)
     {
         base_type::set_position(position);
 

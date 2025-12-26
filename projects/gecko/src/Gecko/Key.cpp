@@ -1,0 +1,189 @@
+#include "Gecko/Key.hpp"
+
+#include "Gecko/Exception.hpp"
+#include "Gecko/Utils/Utils.hpp"
+
+namespace Gecko::Key
+{
+    /*
+    static const boost::bimap<OIS::KeyCode, std::string> type_to_string = boost::assign::list_of<boost::bimap<OIS::KeyCode, std::string>::relation>
+        TYPE_TO_STRING(OIS::KeyCode, KC_UNASSIGNED)
+        TYPE_TO_STRING(OIS::KeyCode, KC_ESCAPE)
+        TYPE_TO_STRING(OIS::KeyCode, KC_1)
+        TYPE_TO_STRING(OIS::KeyCode, KC_2)
+        TYPE_TO_STRING(OIS::KeyCode, KC_3)
+        TYPE_TO_STRING(OIS::KeyCode, KC_4)
+        TYPE_TO_STRING(OIS::KeyCode, KC_5)
+        TYPE_TO_STRING(OIS::KeyCode, KC_6)
+        TYPE_TO_STRING(OIS::KeyCode, KC_7)
+        TYPE_TO_STRING(OIS::KeyCode, KC_8)
+        TYPE_TO_STRING(OIS::KeyCode, KC_9)
+        TYPE_TO_STRING(OIS::KeyCode, KC_0)
+        TYPE_TO_STRING(OIS::KeyCode, KC_MINUS)
+        TYPE_TO_STRING(OIS::KeyCode, KC_EQUALS)
+        TYPE_TO_STRING(OIS::KeyCode, KC_BACK)
+        TYPE_TO_STRING(OIS::KeyCode, KC_TAB)
+        TYPE_TO_STRING(OIS::KeyCode, KC_Q)
+        TYPE_TO_STRING(OIS::KeyCode, KC_W)
+        TYPE_TO_STRING(OIS::KeyCode, KC_E)
+        TYPE_TO_STRING(OIS::KeyCode, KC_R)
+        TYPE_TO_STRING(OIS::KeyCode, KC_T)
+        TYPE_TO_STRING(OIS::KeyCode, KC_Y)
+        TYPE_TO_STRING(OIS::KeyCode, KC_U)
+        TYPE_TO_STRING(OIS::KeyCode, KC_I)
+        TYPE_TO_STRING(OIS::KeyCode, KC_O)
+        TYPE_TO_STRING(OIS::KeyCode, KC_P)
+        TYPE_TO_STRING(OIS::KeyCode, KC_LBRACKET)
+        TYPE_TO_STRING(OIS::KeyCode, KC_RBRACKET)
+        TYPE_TO_STRING(OIS::KeyCode, KC_RETURN)
+        TYPE_TO_STRING(OIS::KeyCode, KC_LCONTROL)
+        TYPE_TO_STRING(OIS::KeyCode, KC_A)
+        TYPE_TO_STRING(OIS::KeyCode, KC_S)
+        TYPE_TO_STRING(OIS::KeyCode, KC_D)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F)
+        TYPE_TO_STRING(OIS::KeyCode, KC_G)
+        TYPE_TO_STRING(OIS::KeyCode, KC_H)
+        TYPE_TO_STRING(OIS::KeyCode, KC_J)
+        TYPE_TO_STRING(OIS::KeyCode, KC_K)
+        TYPE_TO_STRING(OIS::KeyCode, KC_L)
+        TYPE_TO_STRING(OIS::KeyCode, KC_SEMICOLON)
+        TYPE_TO_STRING(OIS::KeyCode, KC_APOSTROPHE)
+        TYPE_TO_STRING(OIS::KeyCode, KC_GRAVE)
+        TYPE_TO_STRING(OIS::KeyCode, KC_LSHIFT)
+        TYPE_TO_STRING(OIS::KeyCode, KC_BACKSLASH)
+        TYPE_TO_STRING(OIS::KeyCode, KC_Z)
+        TYPE_TO_STRING(OIS::KeyCode, KC_X)
+        TYPE_TO_STRING(OIS::KeyCode, KC_C)
+        TYPE_TO_STRING(OIS::KeyCode, KC_V)
+        TYPE_TO_STRING(OIS::KeyCode, KC_B)
+        TYPE_TO_STRING(OIS::KeyCode, KC_N)
+        TYPE_TO_STRING(OIS::KeyCode, KC_M)
+        TYPE_TO_STRING(OIS::KeyCode, KC_COMMA)
+        TYPE_TO_STRING(OIS::KeyCode, KC_PERIOD)
+        TYPE_TO_STRING(OIS::KeyCode, KC_SLASH)
+        TYPE_TO_STRING(OIS::KeyCode, KC_RSHIFT)
+        TYPE_TO_STRING(OIS::KeyCode, KC_MULTIPLY)
+        TYPE_TO_STRING(OIS::KeyCode, KC_LMENU)
+        TYPE_TO_STRING(OIS::KeyCode, KC_SPACE)
+        TYPE_TO_STRING(OIS::KeyCode, KC_CAPITAL)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F1)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F2)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F3)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F4)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F5)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F6)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F7)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F8)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F9)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F10)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMLOCK)
+        TYPE_TO_STRING(OIS::KeyCode, KC_SCROLL)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPAD7)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPAD8)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPAD9)
+        TYPE_TO_STRING(OIS::KeyCode, KC_SUBTRACT)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPAD4)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPAD5)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPAD6)
+        TYPE_TO_STRING(OIS::KeyCode, KC_ADD)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPAD1)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPAD2)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPAD3)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPAD0)
+        TYPE_TO_STRING(OIS::KeyCode, KC_DECIMAL)
+        TYPE_TO_STRING(OIS::KeyCode, KC_OEM_102)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F11)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F12)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F13)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F14)
+        TYPE_TO_STRING(OIS::KeyCode, KC_F15)
+        TYPE_TO_STRING(OIS::KeyCode, KC_KANA)
+        TYPE_TO_STRING(OIS::KeyCode, KC_ABNT_C1)
+        TYPE_TO_STRING(OIS::KeyCode, KC_CONVERT)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NOCONVERT)
+        TYPE_TO_STRING(OIS::KeyCode, KC_YEN)
+        TYPE_TO_STRING(OIS::KeyCode, KC_ABNT_C2)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPADEQUALS)
+        TYPE_TO_STRING(OIS::KeyCode, KC_PREVTRACK)
+        TYPE_TO_STRING(OIS::KeyCode, KC_AT)
+        TYPE_TO_STRING(OIS::KeyCode, KC_COLON)
+        TYPE_TO_STRING(OIS::KeyCode, KC_UNDERLINE)
+        TYPE_TO_STRING(OIS::KeyCode, KC_KANJI)
+        TYPE_TO_STRING(OIS::KeyCode, KC_STOP)
+        TYPE_TO_STRING(OIS::KeyCode, KC_AX)
+        TYPE_TO_STRING(OIS::KeyCode, KC_UNLABELED)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NEXTTRACK)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPADENTER)
+        TYPE_TO_STRING(OIS::KeyCode, KC_RCONTROL)
+        TYPE_TO_STRING(OIS::KeyCode, KC_MUTE)
+        TYPE_TO_STRING(OIS::KeyCode, KC_CALCULATOR)
+        TYPE_TO_STRING(OIS::KeyCode, KC_PLAYPAUSE)
+        TYPE_TO_STRING(OIS::KeyCode, KC_MEDIASTOP)
+        TYPE_TO_STRING(OIS::KeyCode, KC_VOLUMEDOWN)
+        TYPE_TO_STRING(OIS::KeyCode, KC_VOLUMEUP)
+        TYPE_TO_STRING(OIS::KeyCode, KC_WEBHOME)
+        TYPE_TO_STRING(OIS::KeyCode, KC_NUMPADCOMMA)
+        TYPE_TO_STRING(OIS::KeyCode, KC_DIVIDE)
+        TYPE_TO_STRING(OIS::KeyCode, KC_SYSRQ)
+        TYPE_TO_STRING(OIS::KeyCode, KC_RMENU)
+        TYPE_TO_STRING(OIS::KeyCode, KC_PAUSE)
+        TYPE_TO_STRING(OIS::KeyCode, KC_HOME)
+        TYPE_TO_STRING(OIS::KeyCode, KC_UP)
+        TYPE_TO_STRING(OIS::KeyCode, KC_PGUP)
+        TYPE_TO_STRING(OIS::KeyCode, KC_LEFT)
+        TYPE_TO_STRING(OIS::KeyCode, KC_RIGHT)
+        TYPE_TO_STRING(OIS::KeyCode, KC_END)
+        TYPE_TO_STRING(OIS::KeyCode, KC_DOWN)
+        TYPE_TO_STRING(OIS::KeyCode, KC_PGDOWN)
+        TYPE_TO_STRING(OIS::KeyCode, KC_INSERT)
+        TYPE_TO_STRING(OIS::KeyCode, KC_DELETE)
+        TYPE_TO_STRING(OIS::KeyCode, KC_LWIN)
+        TYPE_TO_STRING(OIS::KeyCode, KC_RWIN)
+        TYPE_TO_STRING(OIS::KeyCode, KC_APPS)
+        TYPE_TO_STRING(OIS::KeyCode, KC_POWER)
+        TYPE_TO_STRING(OIS::KeyCode, KC_SLEEP)
+        TYPE_TO_STRING(OIS::KeyCode, KC_WAKE)
+        TYPE_TO_STRING(OIS::KeyCode, KC_WEBSEARCH)
+        TYPE_TO_STRING(OIS::KeyCode, KC_WEBFAVORITES)
+        TYPE_TO_STRING(OIS::KeyCode, KC_WEBREFRESH)
+        TYPE_TO_STRING(OIS::KeyCode, KC_WEBSTOP)
+        TYPE_TO_STRING(OIS::KeyCode, KC_WEBFORWARD)
+        TYPE_TO_STRING(OIS::KeyCode, KC_WEBBACK)
+        TYPE_TO_STRING(OIS::KeyCode, KC_MYCOMPUTER)
+        TYPE_TO_STRING(OIS::KeyCode, KC_MAIL)
+        TYPE_TO_STRING(OIS::KeyCode, KC_MEDIASELECT)
+    ;
+    */
+
+    std::string to_string(OIS::KeyCode value)
+    {
+        /*
+        auto i = type_to_string.left.find(value);
+
+        if (i == type_to_string.left.end())
+        {
+            throw Exception("Value not found.");
+        }
+
+        return i->second;
+        */
+
+        return "";
+    }
+
+    OIS::KeyCode from_string(const std::string& value)
+    {
+        /*
+        auto i = type_to_string.right.find(value);
+
+        if (i == type_to_string.right.end())
+        {
+            throw Exception("Value '" + value + "' not found.");
+        }
+
+        return i->second;
+        */
+
+        return OIS::KeyCode::KC_0;
+    }
+}

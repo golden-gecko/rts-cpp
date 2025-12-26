@@ -652,7 +652,7 @@ typedef boost::graph_traits<graph_t>::vertex_descriptor vertex_descriptor;
 typedef std::pair<int, int> Edge;
 */
 
-int main(int argc, char* argv[])
+int main()
 {
     /*
     for (int i = 0; i < 40; ++i)

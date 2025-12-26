@@ -1,17 +1,17 @@
-#include "CityMap.hpp"
+#include "Gecko/Configuration.hpp"
+#include "Gecko/DataLayers/DataLayer.hpp"
+#include "Gecko/Exception.hpp"
+#include "Gecko/Games/Game.hpp"
+#include "Gecko/Layers/Layer.hpp"
+#include "Gecko/Log.hpp"
+#include "Gecko/Managers/ObjectManager.hpp"
+#include "Gecko/Objects/Vehicle.hpp"
+#include "Gecko/Utils/Random.hpp"
+#include "Gecko/Validators/RoadPosition.hpp"
 
 #include "Citizen.hpp"
 #include "CityBuilding.hpp"
-#include "Configuration.hpp"
-#include "DataLayers/DataLayer.hpp"
-#include "Exception.hpp"
-#include "Game.hpp"
-#include "Layers/Layer.hpp"
-#include "Log.hpp"
-#include "Managers/ObjectManager.hpp"
-#include "Objects/Vehicle.hpp"
-#include "Random.hpp"
-#include "Validators/RoadPosition.hpp"
+#include "CityMap.hpp"
 
 namespace City
 {
@@ -74,8 +74,8 @@ namespace City
                 auto type = data_layer->get_data(x, z);
 
                 // TODO: Refactor. Create data layer class.
-                auto is_industrial = (type[0] == 255 && type[1] == 255 && type[2] == 0);
-                auto is_residential = (type[0] == 0 && type[1] == 255 && type[2] == 0);
+                auto is_industrial = true; // (type[0] == 255 && type[1] == 255 && type[2] == 0);
+                auto is_residential = true; // (type[0] == 0 && type[1] == 255 && type[2] == 0);
 
                 if (is_industrial || is_residential)
                 {
@@ -158,19 +158,21 @@ namespace City
             // Place at entrance.
             auto entrance = home->get_entrance();
 
-            if (entrance)
+            // if (entrance)
             {
                 // TODO: Remove hardcoded value.
                 auto layer = get_layer("Terrain");
                 auto validator = Gecko::RoadPosition(*layer.get());
 
+                /*
                 citizen->set_position(
                     validator.validate_position(
-                        entrance.value().get_position(),
+                        entrance.get_position(),
                         // TODO: Test. Not working correctly.
-                        entrance.value().get_direction().crossProduct(Ogre::Vector3::NEGATIVE_UNIT_Y)
+                        entrance.get_direction().crossProduct(Ogre::Vector3::NEGATIVE_UNIT_Y)
                     )
                 );
+                */
             }
 
             // TODO: Refactor.
@@ -233,20 +235,22 @@ namespace City
             // Place at entrance.
             auto entrance = home->get_entrance();
 
-            if (entrance)
+            // if (entrance)
             {
                 // TODO: Remove active map.
                 // TODO: Remove hardcoded value.
                 auto layer = get_layer("Terrain");
                 auto validator = Gecko::RoadPosition(*layer.get());
 
+                /*
                 vehicle->set_position(
                     validator.validate_position(
-                        entrance.value().get_position(),
+                        entrance.get_position(),
                         // TODO: Test. Not working correctly.
-                        entrance.value().get_direction().crossProduct(Ogre::Vector3::NEGATIVE_UNIT_Y)
+                        entrance.get_direction().crossProduct(Ogre::Vector3::NEGATIVE_UNIT_Y)
                     )
                 );
+                */
             }
         }
     }

@@ -1,18 +1,18 @@
-#include "Citizen.hpp"
+#include "Gecko/Containers/Orders.hpp"
+#include "Gecko/Containers/Resources.hpp"
+#include "Gecko/Games/Game.hpp"
+#include "Gecko/Log.hpp"
+#include "Gecko/Managers/JobManager.hpp"
+#include "Gecko/Managers/ObjectManager.hpp"
+#include "Gecko/Managers/OrderManager.hpp"
+#include "Gecko/Maps/Map.hpp"
+#include "Gecko/Orders/OrderLoad.hpp"
+#include "Gecko/Orders/OrderMove.hpp"
+#include "Gecko/Orders/OrderUnload.hpp"
+#include "Gecko/Search/FollowRoadsSearch.hpp"
+#include "Gecko/Utils/Utils.hpp"
 
-#include "Containers/Orders.hpp"
-#include "Containers/Resources.hpp"
-#include "Game.hpp"
-#include "Log.hpp"
-#include "Managers/JobManager.hpp"
-#include "Managers/ObjectManager.hpp"
-#include "Managers/OrderManager.hpp"
-#include "Maps/Map.hpp"
-#include "Orders/OrderLoad.hpp"
-#include "Orders/OrderMove.hpp"
-#include "Orders/OrderUnload.hpp"
-#include "Search/FollowRoadsSearch.hpp"
-#include "Utils/Utils.hpp"
+#include "Citizen.hpp"
 
 namespace City
 {
@@ -110,9 +110,9 @@ namespace City
     }
     */
 
-    void Citizen::set_position(const Ogre::Vector3& position)
+    void Citizen::set_position(const Ogre::Vector3& position, bool validate)
     {
-        base_type::set_position(position);
+        base_type::set_position(position, validate);
 
         /*
         TODO: Fix.
@@ -431,7 +431,7 @@ namespace City
         {
             L_WARNING << capacity_available_to_fill << " " << resource_name << " is not enough to load.";
 
-            on_order_retry(order);
+            // on_order_retry(order);
 
             return Gecko::order_status::retry;
         }
@@ -768,7 +768,7 @@ namespace City
         {
             L_WARNING << capacity_available_to_fill << " " << resource_name << " is not enough to unload.";
 
-            on_order_retry(order);
+            // on_order_retry(order);
 
             return Gecko::order_status::retry;
         }

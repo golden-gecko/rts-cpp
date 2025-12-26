@@ -1,14 +1,14 @@
-#include "CityGame.hpp"
+#include "Gecko/Log.hpp"
+#include "Gecko/Managers/ConfigurationManager.hpp"
+#include "Gecko/Managers/MapManager.hpp"
+#include "Gecko/Managers/ObjectManager.hpp"
+#include "Gecko/Utils/Time.hpp"
 
 #include "Citizen.hpp"
 #include "CityBuilding.hpp"
+#include "CityGame.hpp"
 #include "CityMap.hpp"
 #include "Depot.hpp"
-#include "Log.hpp"
-#include "Managers/ConfigurationManager.hpp"
-#include "Managers/MapManager.hpp"
-#include "Managers/ObjectManager.hpp"
-#include "Utils/Time.hpp"
 
 template<> City::Game* Ogre::Singleton<City::Game>::msSingleton = nullptr;
 
@@ -21,7 +21,7 @@ namespace City
 
     void Game::init_maps(std::size_t max_size)
     {
-        SCOPED_TIME("City::Game::init_maps()");
+        // SCOPED_TIME("City::Game::init_maps()");
 
         base_type::init_maps(max_size);
 
@@ -45,7 +45,7 @@ namespace City
 
     void Game::init_objects(std::size_t max_size)
     {
-        SCOPED_TIME("City::Game::init_objects()");
+        // SCOPED_TIME("City::Game::init_objects()");
 
         base_type::init_objects(max_size);
 
