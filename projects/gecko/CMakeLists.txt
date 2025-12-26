@@ -20,6 +20,12 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src/Geck
 
 # Find Boost
 target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_DIR}/include)
+target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_atomic-vc143-mt-gd-x64-1_90.lib)
+target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_log-vc143-mt-gd-x64-1_90.lib)
+target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_log_setup-vc143-mt-gd-x64-1_90.lib)
+target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_filesystem-vc143-mt-gd-x64-1_90.lib)
+target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_program_options-vc143-mt-gd-x64-1_90.lib)
+target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_thread-vc143-mt-gd-x64-1_90.lib)
 
 # Find JsonCpp
 find_package(jsoncpp REQUIRED)
@@ -37,7 +43,7 @@ target_link_libraries(${PROJECT_NAME} debug ${OIS_DIR}/lib/OIS_d.lib optimized $
 
 # Find Ultralight
 target_include_directories(${PROJECT_NAME} PUBLIC ${ULTRALIGHT_DIR}/include)
-target_link_libraries(${PROJECT_NAME} debug ${ULTRALIGHT_DIR}/lib/AppCore.lib optimized ${OIS_DIR}/lib/AppCore.lib)
-target_link_libraries(${PROJECT_NAME} debug ${ULTRALIGHT_DIR}/lib/Ultralight.lib optimized ${OIS_DIR}/lib/Ultralight.lib)
-target_link_libraries(${PROJECT_NAME} debug ${ULTRALIGHT_DIR}/lib/UltralightCore.lib optimized ${OIS_DIR}/lib/UltralightCore.lib)
-target_link_libraries(${PROJECT_NAME} debug ${ULTRALIGHT_DIR}/lib/WebCore.lib optimized ${OIS_DIR}/lib/WebCore.lib)
+target_link_libraries(${PROJECT_NAME} ${ULTRALIGHT_DIR}/lib/AppCore.lib)
+target_link_libraries(${PROJECT_NAME} ${ULTRALIGHT_DIR}/lib/Ultralight.lib)
+target_link_libraries(${PROJECT_NAME} ${ULTRALIGHT_DIR}/lib/UltralightCore.lib)
+target_link_libraries(${PROJECT_NAME} ${ULTRALIGHT_DIR}/lib/WebCore.lib)
