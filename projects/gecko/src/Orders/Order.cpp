@@ -8,6 +8,7 @@ namespace Gecko
 {
     namespace order_type
     {
+        /*
         static const boost::bimap<Value, std::string> type_to_string = boost::assign::list_of<boost::bimap<Value, std::string>::relation>
             TYPE_TO_STRING(Value, Attack)
             TYPE_TO_STRING(Value, Create)
@@ -23,9 +24,11 @@ namespace Gecko
             TYPE_TO_STRING(Value, Unload)
             TYPE_TO_STRING(Value, Wait)
         ;
+        */
 
         std::string to_string(Value value)
         {
+            /*
             auto i = type_to_string.left.find(value);
 
             if (i == type_to_string.left.end())
@@ -34,10 +37,14 @@ namespace Gecko
             }
 
             return i->second;
+            */
+
+            return "";
         }
 
         Value from_string(const std::string& value)
         {
+            /*
             auto i = type_to_string.right.find(value);
 
             if (i == type_to_string.right.end())
@@ -46,6 +53,9 @@ namespace Gecko
             }
 
             return i->second;
+            */
+
+            return Value();
         }
     }
 

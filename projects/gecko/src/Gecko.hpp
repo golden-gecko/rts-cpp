@@ -12,7 +12,7 @@
 
 IGNORE_WARNINGS_BEGIN
 
-#include <json.h>
+#include <json/json.h>
 
 #include <Ogre.h>
 #include <OgreBitesConfigDialog.h>
@@ -23,9 +23,6 @@ IGNORE_WARNINGS_BEGIN
 
 #include <OIS.h>
 
-#include <SDL.h>
-#include <SDL_syswm.h>B
-
 #include <AppCore/App.h>
 #include <AppCore/AppCore.h>
 #include <AppCore/JSHelpers.h>
@@ -33,6 +30,7 @@ IGNORE_WARNINGS_BEGIN
 #include <JavaScriptCore/JavaScript.h>
 #include <Ultralight/Ultralight.h>
 
+/*
 #include <boost/algorithm/string.hpp>
 #include <boost/assign.hpp>
 #include <boost/bimap.hpp>
@@ -41,6 +39,7 @@ IGNORE_WARNINGS_BEGIN
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/program_options.hpp>
+*/
 
 #include <algorithm>
 #include <array>
@@ -103,3 +102,11 @@ namespace Gecko
     class Tile;
     class Window;
 }
+
+#define L_WARNING std::cout
+#define L_TRACE   std::cout
+#define L_DEBUG   std::cout
+#define L_INFO    std::cout
+#define L_WARNING std::cout
+#define L_ERROR   std::cout
+#define L_FATAL   std::cout

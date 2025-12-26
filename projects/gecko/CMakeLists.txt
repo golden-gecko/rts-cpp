@@ -1,30 +1,31 @@
 cmake_minimum_required(VERSION 4.2)
 
-project(Gecko)
+project(Gecko LANGUAGES CXX)
 
-file(GLOB HEADER_FILES "src/*.hpp" "src/*/*.hpp")
-file(GLOB SOURCE_FILES "src/*.cpp" "src/*/*.cpp")
-
-list(APPEND COMMON_INCLUDE ${PROJECT_SOURCE_DIR}/src)
-list(APPEND COMMON_INCLUDE ${PROJECT_SOURCE_DIR}/src/Components)
-list(APPEND COMMON_INCLUDE ${PROJECT_SOURCE_DIR}/src/DataLayers)
-list(APPEND COMMON_INCLUDE ${PROJECT_SOURCE_DIR}/src/Layers)
-list(APPEND COMMON_INCLUDE ${PROJECT_SOURCE_DIR}/src/Objects)
-list(APPEND COMMON_INCLUDE ${PROJECT_SOURCE_DIR}/src/Orders)
-list(APPEND COMMON_INCLUDE ${PROJECT_SOURCE_DIR}/src/UI)
-
-include_directories(${COMMON_INCLUDE})
+# Create target and add source files
+file(GLOB_RECURSE HEADER_FILES ${PROJECT_SOURCE_DIR}/src/*.hpp)
+file(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 add_library(${PROJECT_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES})
 
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src)
+
 target_precompile_headers(${PROJECT_NAME} PRIVATE src/Gecko.hpp)
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${COMMON_INCLUDE})
+# Find JsonCpp
+find_package(jsoncpp REQUIRED)
+get_target_property(JSON_INC_PATH jsoncpp_lib INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(${PROJECT_NAME} PUBLIC ${JSON_INC_PATH})
+target_link_libraries(${PROJECT_NAME} jsoncpp_lib)
 
-target_link_libraries(${PROJECT_NAME} debug boostd optimized boost)
-# target_link_libraries(${PROJECT_NAME} debug bulletd optimized bullet)
-target_link_libraries(${PROJECT_NAME} debug jsoncppd optimized jsoncpp)
-target_link_libraries(${PROJECT_NAME} debug ogred optimized ogre)
-target_link_libraries(${PROJECT_NAME} debug oisd optimized ois)
-target_link_libraries(${PROJECT_NAME} debug sdld optimized sdl)
-target_link_libraries(${PROJECT_NAME} debug ultralightd optimized ultralight)
+# Find Ogre
+find_package(OGRE REQUIRED COMPONENTS Bites CONFIG)
+target_link_libraries(${PROJECT_NAME} OgreBites)
+
+# Find OIS
+target_include_directories(${PROJECT_NAME} PUBLIC ${OIS_DIR}/include/ois)
+target_link_libraries(${PROJECT_NAME} debug ${OIS_DIR}/lib/OIS_d.lib optimized ${OIS_DIR}/lib/OIS.lib)
+
+# Find Ultralight
+target_include_directories(${PROJECT_NAME} PUBLIC ${ULTRALIGHT_DIR}/include)
+target_link_libraries(${PROJECT_NAME} debug ${ULTRALIGHT_DIR}/lib/Ultralight.lib optimized ${OIS_DIR}/lib/Ultralight.lib)

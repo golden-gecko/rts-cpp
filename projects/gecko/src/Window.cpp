@@ -18,6 +18,7 @@ namespace Gecko
         auto height = configuration->get_int<int>("height", Settings::Window::SizeHeight);
         auto fullscreen = configuration->get_bool("fullscreen", Settings::Window::Fullscreen);
 
+        /*
         if (SDL_WasInit(SDL_INIT_VIDEO) == 0)
         {
             if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0)
@@ -55,6 +56,7 @@ namespace Gecko
         };
 
         m_render_window = Ogre::Root::getSingleton().createRenderWindow(m_name, width, height, fullscreen, &params);
+        */
     }
 
     Window::~Window()
@@ -66,7 +68,7 @@ namespace Gecko
     {
         Ogre::Root::getSingleton().destroyRenderTarget(get_render_window());
 
-        SDL_DestroyWindow(m_sdl_window);
+        // SDL_DestroyWindow(m_sdl_window);
     }
 
     void Window::on_resize()
@@ -74,7 +76,7 @@ namespace Gecko
         unsigned int width, height, depth;
         int top, left;
 
-        m_render_window->getMetrics(width, height, depth, left, top);
+        // m_render_window->getMetrics(width, height, depth, left, top);
 
         m_viewport->getCamera()->setAspectRatio(
             static_cast<Ogre::Real>(m_viewport->getActualWidth()) /

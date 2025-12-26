@@ -2,6 +2,7 @@
 
 namespace Gecko::Utils::Convert
 {
+    /*
     const std::map<OIS::KeyCode, char> lower = boost::assign::list_of<std::map<OIS::KeyCode, char>::value_type>
         (OIS::KeyCode::KC_1, '1')
         (OIS::KeyCode::KC_2, '2')
@@ -131,9 +132,11 @@ namespace Gecko::Utils::Convert
         (OIS::KeyCode::KC_NUMPADCOMMA, ',')
         (OIS::KeyCode::KC_DIVIDE, '/')
     ;
+    */
 
     char to_char(OIS::KeyCode key_code, bool shift)
     {
+        /*
         if (shift)
         {
             auto i = lower.find(key_code);
@@ -156,6 +159,9 @@ namespace Gecko::Utils::Convert
 
             return i->second;
         }
+        */
+
+        return ' ';
     }
 
     Id to_id(const Ogre::Entity& entity)
@@ -342,6 +348,7 @@ namespace Gecko::Utils::Convert
         }
     }
 
+    /*
     Window* to_window(const SDL_Event& event)
     {
         auto sdl_window = SDL_GetWindowFromID(event.window.windowID);
@@ -349,4 +356,5 @@ namespace Gecko::Utils::Convert
 
         return reinterpret_cast<Window*>(window_data);
     }
+    */
 }

@@ -5,6 +5,7 @@
 
 namespace Gecko::Key
 {
+    /*
     static const boost::bimap<OIS::KeyCode, std::string> type_to_string = boost::assign::list_of<boost::bimap<OIS::KeyCode, std::string>::relation>
         TYPE_TO_STRING(OIS::KeyCode, KC_UNASSIGNED)
         TYPE_TO_STRING(OIS::KeyCode, KC_ESCAPE)
@@ -152,9 +153,11 @@ namespace Gecko::Key
         TYPE_TO_STRING(OIS::KeyCode, KC_MAIL)
         TYPE_TO_STRING(OIS::KeyCode, KC_MEDIASELECT)
     ;
+    */
 
     std::string to_string(OIS::KeyCode value)
     {
+        /*
         auto i = type_to_string.left.find(value);
 
         if (i == type_to_string.left.end())
@@ -163,10 +166,14 @@ namespace Gecko::Key
         }
 
         return i->second;
+        */
+
+        return "";
     }
 
     OIS::KeyCode from_string(const std::string& value)
     {
+        /*
         auto i = type_to_string.right.find(value);
 
         if (i == type_to_string.right.end())
@@ -175,5 +182,8 @@ namespace Gecko::Key
         }
 
         return i->second;
+        */
+
+        return OIS::KeyCode::KC_0;
     }
 }

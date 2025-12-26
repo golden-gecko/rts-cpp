@@ -1,3 +1,4 @@
+/*
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
@@ -5,7 +6,6 @@
 #include <boost/graph/labeled_graph.hpp>
 #include <boost/graph/topological_sort.hpp>
 
-/*
 namespace
 {
     class Object

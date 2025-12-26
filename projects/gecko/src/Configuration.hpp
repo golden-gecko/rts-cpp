@@ -40,7 +40,8 @@ namespace Gecko
             }
 
             std::vector<std::string> segments;
-            boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
+            // TODO: Fix.
+            // boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
             std::ranges::reverse(segments);
 
             Json::Value new_value;
@@ -205,7 +206,8 @@ namespace Gecko
             }
 
             std::vector<std::string> segments;
-            boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
+            // TODO: Fix.
+            // boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
             std::ranges::reverse(segments);
 
             Json::Value new_value;

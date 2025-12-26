@@ -63,7 +63,8 @@ namespace Gecko
         }
 
         std::vector<std::string> segments;
-        boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
+        // TODO: Fix.
+        // boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
 
         Json::Value current_value = m_value;
 
@@ -85,7 +86,7 @@ namespace Gecko
 
     void Configuration::load_includes()
     {
-        L_TRACE << "Configuration::load_includes()";
+        // L_TRACE << "Configuration::load_includes()";
 
         auto includes = get_includes(*this);
 
@@ -95,7 +96,7 @@ namespace Gecko
 
             for (const auto& i : includes)
             {
-                L_INFO << "Parsing include " << i << ".";
+                // L_INFO << "Parsing include " << i << ".";
 
                 Configuration include(i);
 
@@ -379,7 +380,8 @@ namespace Gecko
 
         std::vector<std::string> segments;
 
-        boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
+        // TODO: Fix.
+        // boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
 
         Json::Value return_value = m_value;
 
@@ -409,7 +411,7 @@ namespace Gecko
             = path("..")
             / path("cache")
             / path("configurations")
-            / boost::replace_all_copy(m_file_name, "/", "_");
+            ; // / boost::replace_all_copy(m_file_name, "/", "_");
 
         return cache_path.string();
     }
@@ -423,7 +425,7 @@ namespace Gecko
             = path("..")
             / path("cache")
             / path("values")
-            / boost::replace_all_copy(m_file_name, "/", "_");
+            ; // / boost::replace_all_copy(m_file_name, "/", "_");
 
         return cache_path.string();
     }

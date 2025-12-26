@@ -29,7 +29,7 @@ namespace City
 
         for (const auto& [name, configuration] : Gecko::ConfigurationManager::getSingleton())
         {
-            L_INFO << "Loading '" << name << "' configuration.";
+            // L_INFO << "Loading '" << name << "' configuration.";
 
             auto type = configuration->get_string("type", "");
 
@@ -53,7 +53,7 @@ namespace City
 
         for (const auto& [name, configuration] : Gecko::ConfigurationManager::getSingleton())
         {
-            L_INFO << "Loading '" << name << "' configuration.";
+            // L_INFO << "Loading '" << name << "' configuration.";
 
             auto type = configuration->get_string("type", "");
 

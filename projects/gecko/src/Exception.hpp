@@ -10,7 +10,7 @@ namespace Gecko
         Exception(const std::string& message) :
             std::runtime_error(message.c_str())
         {
-            L_ERROR << message;
+            // L_ERROR << message;
         }
     };
 }

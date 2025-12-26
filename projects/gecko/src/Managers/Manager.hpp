@@ -100,7 +100,8 @@ namespace Gecko
 
             for (int i = 0; i < m_max_size; ++i)
             {
-                m_memory.destroy(m_pointer + i);
+                // TODO: Fix.
+                // m_memory.destroy(m_pointer + i);
             }
 
             m_memory.deallocate(m_pointer, m_max_size);

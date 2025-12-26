@@ -29,14 +29,19 @@ namespace Gecko
             return m_camera;
         }
 
+        auto get_camera_node() const
+        {
+            return m_camera_node;
+        }
+
         auto get_direction() const
         {
-            return m_camera->getDirection();
+            return m_camera_node->getOrientation().zAxis();
         }
 
         const auto& get_position() const
         {
-            return m_camera->getPosition();
+            return m_camera_node->getPosition();
         }
 
         const auto& get_speed() const
@@ -47,12 +52,13 @@ namespace Gecko
     public:
         void set_position(const Ogre::Vector3& position)
         {
-            m_camera->setPosition(position);
+            m_camera_node->setPosition(position);
         }
 
     protected:
         Ogre::SceneManager* m_scene_manager = nullptr;
         Ogre::Camera* m_camera = nullptr;
+        Ogre::SceneNode* m_camera_node = nullptr;
 
         Ogre::Vector3 m_speed = Ogre::Vector3::ZERO;
     };

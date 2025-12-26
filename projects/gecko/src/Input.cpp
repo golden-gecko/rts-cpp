@@ -166,7 +166,7 @@ namespace Gecko
         UI::getSingleton().get_cursor().set_visible(false);
 
         auto camera = MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::MainName);
-        camera->get_camera()->moveRelative(Ogre::Vector3::NEGATIVE_UNIT_Z * static_cast<float>(arg.state.Z.rel) * 0.1f);
+        camera->get_camera_node()->translate(Ogre::Vector3::NEGATIVE_UNIT_Z * static_cast<float>(arg.state.Z.rel) * 0.1f);
 
         if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
         {

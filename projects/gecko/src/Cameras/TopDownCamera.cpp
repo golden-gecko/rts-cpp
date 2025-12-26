@@ -18,7 +18,7 @@ namespace Gecko
 
         if (Input::getSingleton().is_key_pressed(Command::Value::Camera_Move_Left))
         {
-            auto current_direction = get_camera()->getDirection();
+            auto current_direction = get_direction();
 
             current_direction.y = 0.0f;
             current_direction.normalise();
@@ -27,7 +27,7 @@ namespace Gecko
         }
         else if (Input::getSingleton().is_key_pressed(Command::Value::Camera_Move_Right))
         {
-            auto current_direction = get_camera()->getDirection();
+            auto current_direction = get_direction();
 
             current_direction.y = 0.0f;
             current_direction.normalise();
@@ -46,7 +46,7 @@ namespace Gecko
 
         if (Input::getSingleton().is_key_pressed(Command::Value::Camera_Move_Forward))
         {
-            auto current_direction = get_camera()->getDirection();
+            auto current_direction = get_direction();
 
             current_direction.y = 0.0f;
             current_direction.normalise();
@@ -55,7 +55,7 @@ namespace Gecko
         }
         else if (Input::getSingleton().is_key_pressed(Command::Value::Camera_Move_Backward))
         {
-            auto current_direction = get_camera()->getDirection();
+            auto current_direction = get_direction();
 
             current_direction.y = 0.0f;
             current_direction.normalise();
@@ -63,7 +63,7 @@ namespace Gecko
             direction -= current_direction;
         }
 
-        m_camera->move(direction * m_speed * time);
+        m_camera_node->translate(direction * m_speed * time);
 
         // Limit camera to layer.
         // TODO: First map.

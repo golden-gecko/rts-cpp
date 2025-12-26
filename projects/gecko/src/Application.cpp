@@ -2,6 +2,7 @@
 
 namespace Gecko
 {
+    /*
     boost::program_options::variables_map Application::parse_options(int argc, char* argv[], const std::string& default_configuration)
     {
         using namespace boost::program_options;
@@ -15,4 +16,5 @@ namespace Gecko
 
         return vm;
     }
+    */
 }

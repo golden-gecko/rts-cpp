@@ -56,7 +56,7 @@ namespace Gecko
     {
         using namespace ultralight;
 
-        SetJSContext(caller->LockJSContext().get());
+        /// SetJSContext(caller->LockJSContext().get());
 
         auto global = JSGlobalObject();
 
@@ -85,27 +85,30 @@ namespace Gecko
         is_dom_ready = true;
     }
 
+    /*
     void UI::LogMessage(ultralight::LogLevel log_level, const ultralight::String16& message)
     {
         switch (log_level)
         {
             case ultralight::LogLevel::kLogLevel_Error:
-                L_ERROR << message.data();
+                // L_ERROR << message.data();
                 break;
 
             case ultralight::LogLevel::kLogLevel_Info:
-                L_INFO << message.data();
+                // L_INFO << message.data();
                 break;
 
             case ultralight::LogLevel::kLogLevel_Warning:
-                L_WARNING << message.data();
+                // L_WARNING << message.data();
                 break;
 
             default:
-                L_DEBUG << message.data();
+                // L_DEBUG << message.data();
         }
     }
+    */
 
+    /*
     void UI::OnAddConsoleMessage(ultralight::View* caller, ultralight::MessageSource source, ultralight::MessageLevel level, const ultralight::String& message, uint32_t line_number, uint32_t column_number, const ultralight::String& source_id)
     {
         L_ERROR
@@ -122,6 +125,7 @@ namespace Gecko
                 << ")";
         }
     }
+    */
 
     UI::UI(const std::shared_ptr<Configuration>& configuration) :
         configuration(configuration)
@@ -154,6 +158,7 @@ namespace Gecko
         // Create configuration.
         ultralight::Config config;
 
+        /*
         config.device_scale = scale;
         config.font_family_fixed = font.c_str();
         config.font_family_serif = font.c_str();
@@ -161,6 +166,7 @@ namespace Gecko
         config.font_family_standard = font.c_str();
         config.font_hinting = ultralight::FontHinting::kFontHinting_Smooth;
         config.use_gpu_renderer = false;
+        */
 
         ultralight::Platform::instance().set_config(config);
         ultralight::Platform::instance().set_font_loader(ultralight::GetPlatformFontLoader());
@@ -171,10 +177,12 @@ namespace Gecko
         renderer = ultralight::Renderer::Create();
 
         // Create view.
+        /*
         view = renderer->CreateView(width, height, true, nullptr);
         view->set_load_listener(this);
         view->set_view_listener(this);
         view->LoadURL(url.c_str());
+        */
 
         init_components();
         init_visibility_types();
@@ -444,10 +452,10 @@ namespace Gecko
 
                 Game::getSingleton().get_active_player()->get_selected()->select(object_id);
 
-                auto camera = map->get_camera(Settings::Camera::MainName)->get_camera();
+                auto camera = map->get_camera(Settings::Camera::MainName)->get_camera_node();
 
                 camera->setPosition(object->get_position() + Settings::UI::LookAtObjectOffset);
-                camera->lookAt(object->get_position());
+                camera->lookAt(object->get_position(), Ogre::Node::TransformSpace::TS_PARENT);
             }
         }
     }

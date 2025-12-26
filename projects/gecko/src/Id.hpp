@@ -62,7 +62,7 @@ namespace Gecko
             return *this;
         }
 
-        Id& operator++(int)
+        Id operator++(int)
         {
             Id previous(*this);
 
@@ -78,7 +78,7 @@ namespace Gecko
             return *this;
         }
 
-        Id& operator--(int)
+        Id operator--(int)
         {
             Id previous(*this);
 

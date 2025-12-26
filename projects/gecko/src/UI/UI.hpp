@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Interfaces/Initializable.hpp"
-#include "Order.hpp"
+#include "Orders/Order.hpp"
 #include "Timer.hpp"
 #include "UI/OgreSurface.hpp"
 
@@ -20,10 +20,10 @@ namespace Gecko
         void OnDOMReady(ultralight::View* caller, uint64_t frame_id, bool is_main_frame, const ultralight::String& url) override;
 
         // From ultralight::Logger.
-        void LogMessage(ultralight::LogLevel log_level, const ultralight::String16& message) override;
+        // void LogMessage(ultralight::LogLevel log_level, const ultralight::String16& message) override;
 
         // From ultralight::ViewListener.
-        void OnAddConsoleMessage(ultralight::View* caller, ultralight::MessageSource source, ultralight::MessageLevel level, const ultralight::String& message, uint32_t line_number, uint32_t column_number, const ultralight::String& source_id) override;
+        // void OnAddConsoleMessage(ultralight::View* caller, ultralight::MessageSource source, ultralight::MessageLevel level, const ultralight::String& message, uint32_t line_number, uint32_t column_number, const ultralight::String& source_id) override;
 
     public:
         explicit UI(const std::shared_ptr<Configuration>& configuration);

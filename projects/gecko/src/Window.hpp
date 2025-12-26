@@ -80,7 +80,8 @@ namespace Gecko
 
         std::string m_name;
 
-        SDL_Window* m_sdl_window = nullptr;
+        // TODO: Fix.
+        // SDL_Window* m_sdl_window = nullptr;
 
         Ogre::RenderWindow* m_render_window = nullptr;
         Ogre::Viewport* m_viewport = nullptr;

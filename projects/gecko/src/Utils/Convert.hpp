@@ -35,5 +35,5 @@ namespace Gecko::Utils::Convert
         return stream.str();
     }
 
-    Window* to_window(const SDL_Event& event);
+    // Window* to_window(const SDL_Event& event);
 }
