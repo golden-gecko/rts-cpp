@@ -83,7 +83,7 @@ namespace Gecko
                 break;
             }
 
-            for (size_t i = 0; i < indices.size(); ++i)
+            for (size_t i = 0; i < indices.size(); i++)
             {
                 Coordinate next(current.x + indices[i].x, current.z + indices[i].z);
 
@@ -140,7 +140,7 @@ namespace Gecko
 
         while (found == false)
         {
-            for (size_t i = 0; i < indices.size(); ++i)
+            for (size_t i = 0; i < indices.size(); i++)
             {
                 Index x = node.x + indices[i].x;
                 Index z = node.z + indices[i].z;
@@ -171,7 +171,7 @@ namespace Gecko
         {
             Path::Points points;
 
-            for (std::vector<Coordinate>::size_type i = 0; i < node_path.size(); ++i)
+            for (std::vector<Coordinate>::size_type i = 0; i < node_path.size(); i++)
             {
                 Coordinate previous;
                 Coordinate current = node_path[i];

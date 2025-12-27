@@ -17,8 +17,5 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 target_precompile_headers(${PROJECT_NAME} REUSE_FROM Gecko)
 
-# Find Boost
-target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_log-vc143-mt-gd-x64-1_90.lib)
-
 # Find Gecko
 target_link_libraries(${PROJECT_NAME} Gecko)

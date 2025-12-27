@@ -110,7 +110,7 @@ namespace Gecko
                 break;
             }
 
-            for (int i = 0; i < indices.size(); ++i)
+            for (int i = 0; i < indices.size(); i++)
             {
                 int x = current->position.x;
                 int z = current->position.z;

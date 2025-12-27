@@ -20,7 +20,7 @@ namespace Gecko
     {
         clear();
 
-        for (auto i = configuration->begin(); i != configuration->end(); ++i)
+        for (auto i = configuration->begin(); i != configuration->end(); i++)
         {
             auto name = i.key().asString();
             auto process = Process(name);

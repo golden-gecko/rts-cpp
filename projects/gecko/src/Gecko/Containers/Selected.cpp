@@ -123,7 +123,7 @@ namespace Gecko
 
     void Selected::select(const Items& object_ids, bool add)
     {
-        // L_TRACE << "Player::select(" << object_ids.size() << ", " << add << ")";
+        L_TRACE << "Player::select(" << object_ids.size() << ", " << add << ")";
 
         if (add == false)
         {
@@ -136,21 +136,21 @@ namespace Gecko
 
             if (object == nullptr)
             {
-                // L_WARNING << "Cannot select object " << id << " " << ", because it does not exist.";
+                L_WARNING << "Cannot select object " << id << " " << ", because it does not exist.";
 
                 continue;
             }
 
             if (object->is_selectable() == false)
             {
-                // L_WARNING << "Cannot select object " << object->get_id() << " " << object->get_name() << ", because it is not selectable.";
+                L_WARNING << "Cannot select object " << object->get_id() << " " << object->get_name() << ", because it is not selectable.";
 
                 continue;
             }
 
             if (object->get_player_id() != Game::getSingleton().get_active_player_id())
             {
-                // L_WARNING << "Cannot select object from non-active player (" << object->get_player_id() << ", " << Game::getSingleton().get_active_player_id() << ").";
+                L_WARNING << "Cannot select object from non-active player (" << object->get_player_id() << ", " << Game::getSingleton().get_active_player_id() << ").";
 
                 continue;
             }

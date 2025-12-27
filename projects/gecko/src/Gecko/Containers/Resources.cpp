@@ -26,7 +26,7 @@ namespace Gecko
         {
             auto child = configuration->get_child("items");
 
-            for (auto i = child->begin(); i != child->end(); ++i)
+            for (auto i = child->begin(); i != child->end(); i++)
             {
                 auto name = i.key().asString();
                 auto resource = Resource(name);

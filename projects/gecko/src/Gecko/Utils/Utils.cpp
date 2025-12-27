@@ -142,6 +142,16 @@ namespace Gecko::Utils
         return oss.str();
     }
 
+    std::string json_to_string(const Json::Value& value, bool minify)
+    {
+        Json::StreamWriterBuilder builder;
+
+        builder["commentStyle"] = "None";
+        builder["indentation"] = "";
+
+        return Json::writeString(builder, value);
+    }
+
     void json_to_file(const Json::Value& value, const std::string& file_name, bool minify)
     {
         Json::StreamWriterBuilder builder;

@@ -292,7 +292,7 @@ namespace Gecko
 
         Coordinate adjacent(-1, -1);
 
-        for (int i = 0; i < indices.size(); ++i)
+        for (int i = 0; i < indices.size(); i++)
         {
             int x = index.x;
             int z = index.z;

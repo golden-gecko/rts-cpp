@@ -113,7 +113,7 @@ namespace Gecko
 
         auto windows_configuration = m_configuration->get_child("windows");
 
-        for (auto i = windows_configuration->begin(); i != windows_configuration->end(); ++i)
+        for (auto i = windows_configuration->begin(); i != windows_configuration->end(); i++)
         {
             auto window_configuration = std::make_shared<Configuration>(*i);
             auto window_name = window_configuration->get_string("name");
@@ -374,23 +374,21 @@ namespace Gecko
 
     void Game::save_options(const std::string& options)
     {
-        // L_TRACE << "Game::save_options(" << options << ")";
+        L_TRACE << "Game::save_options(" << options << ")";
 
         std::vector<std::string> settings;
-
-        // boost::algorithm::split(settings, options, boost::is_any_of("&"), boost::token_compress_on);
+        boost::algorithm::split(settings, options, boost::is_any_of("&"), boost::token_compress_on);
 
         for (const auto& setting : settings)
         {
-            // L_DEBUG << "setting: " << setting;
+            L_DEBUG << "setting: " << setting;
 
             std::vector<std::string> key_value;
-
-            // boost::algorithm::split(key_value, setting, boost::is_any_of("="), boost::token_compress_on);
+            boost::algorithm::split(key_value, setting, boost::is_any_of("="), boost::token_compress_on);
 
             if (key_value.size() != 2)
             {
-                // L_WARNING << "Setting " << setting << " is incorrect.";
+                L_WARNING << "Setting " << setting << " is incorrect.";
 
                 continue;
             }
@@ -628,7 +626,7 @@ namespace Gecko
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
-            // L_INFO << "Loading '" << name << "' configuration.";
+            L_INFO << "Loading '" << name << "' configuration.";
 
             // TODO: Remove default value.
             auto type = configuration->get_string("type", "");
@@ -700,7 +698,7 @@ namespace Gecko
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
-            // L_INFO << "Loading '" << name << "' configuration.";
+            L_INFO << "Loading '" << name << "' configuration.";
 
             // TODO: Remove default value.
             auto type = configuration->get_string("type", "");
@@ -880,7 +878,7 @@ namespace Gecko
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
-            // L_INFO << "Loading '" << name << "' configuration.";
+            L_INFO << "Loading '" << name << "' configuration.";
 
             // TODO: Remove default value.
             auto type = configuration->get_string("type", "");
@@ -904,7 +902,7 @@ namespace Gecko
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
-            // L_INFO << "Loading '" << name << "' configuration.";
+            L_INFO << "Loading '" << name << "' configuration.";
 
             // TODO: Remove default value.
             auto type = configuration->get_string("type", "");
@@ -995,7 +993,7 @@ namespace Gecko
     {
         auto resources_configuration = m_configuration->get_child("resources");
 
-        for (auto i = resources_configuration->begin(); i != resources_configuration->end(); ++i)
+        for (auto i = resources_configuration->begin(); i != resources_configuration->end(); i++)
         {
             auto path = i->get("path", "").asString();
             auto type = i->get("type", "").asString();
@@ -1063,7 +1061,7 @@ namespace Gecko
         {
             if (create_directories(directory) == false)
             {
-                // L_ERROR << "Failed to create '" << directory << "' file.";
+                L_ERROR << "Failed to create '" << directory << "' file.";
 
                 return;
             }
@@ -1073,7 +1071,7 @@ namespace Gecko
 
         if (cache_file.is_open() == false)
         {
-            // L_ERROR << "Failed to open '" << cache_path << "' file.";
+            L_ERROR << "Failed to open '" << cache_path << "' file.";
 
             return;
         }
@@ -1109,9 +1107,9 @@ namespace Gecko
 
     void Game::init_windows()
     {
-        auto windows_configuration = m_configuration->get_child("windows");
+        std::shared_ptr<Configuration> windows_configuration = m_configuration->get_child("windows");
 
-        for (auto i = windows_configuration->begin(); i != windows_configuration->end(); ++i)
+        for (Json::ValueConstIterator i = windows_configuration->begin(); i != windows_configuration->end(); i++)
         {
             auto window_configuration = std::make_shared<Configuration>(*i);
             auto window_name = window_configuration->get_string("name");

@@ -26,6 +26,8 @@ namespace Gecko::Utils
 
     std::string get_filename_from_date();
 
+    std::string json_to_string(const Json::Value& value, bool minify = false);
+
     void json_to_file(const Json::Value& value, const std::string& file_name, bool minify = false);
 
     bool is_friendly(const Object& object, const Player& player);

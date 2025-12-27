@@ -114,7 +114,7 @@ namespace City
 
                     for (std::size_t j = z; j < zz; ++j)
                     {
-                        for (std::size_t i = x; i < xx; ++i)
+                        for (std::size_t i = x; i < xx; i++)
                         {
                             processed[i][j] = true;
                         }
@@ -129,7 +129,7 @@ namespace City
 
     void Map::init_citizens(CityBuilding* home)
     {
-        for (std::size_t i = 0; i < home->get_max_residents(); ++i)
+        for (std::size_t i = 0; i < home->get_max_residents(); i++)
         {
             auto object = Gecko::ObjectManager::getSingleton().create("citizen");
 
@@ -206,7 +206,7 @@ namespace City
     void Map::init_vehicles(CityBuilding* home)
     {
         // TODO: Read from configuration.
-        for (std::size_t i = 0; i < 1; ++i)
+        for (std::size_t i = 0; i < 1; i++)
         {
             auto object = Gecko::ObjectManager::getSingleton().create("truck");
 

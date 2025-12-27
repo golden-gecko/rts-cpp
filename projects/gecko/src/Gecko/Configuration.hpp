@@ -46,7 +46,7 @@ namespace Gecko
             Json::Value new_value;
             new_value[segments.front()].append(value);
 
-            for (auto i = 1; i < segments.size(); ++i)
+            for (auto i = 1; i < segments.size(); i++)
             {
                 Json::Value current_value;
                 current_value[segments[i]] = new_value;
@@ -119,7 +119,7 @@ namespace Gecko
 
             auto child = get_child(path);
 
-            for (auto i = child->begin(); i != child->end(); ++i)
+            for (auto i = child->begin(); i != child->end(); i++)
             {
                 map.emplace(std::make_pair(i.key().asString(), i->as<Value>()));
             }
@@ -211,7 +211,7 @@ namespace Gecko
             Json::Value new_value;
             new_value[segments.front()] = _value;
 
-            for (auto i = 1; i < segments.size(); ++i)
+            for (auto i = 1; i < segments.size(); i++)
             {
                 Json::Value current_value;
                 current_value[segments[i]] = new_value;

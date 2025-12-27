@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 4.2)
 
 project(Gecko LANGUAGES CXX)
 
+set(CMAKE_DEBUG_POSTFIX _d)
+
 # Create target and add source files
 file(GLOB_RECURSE HEADER_FILES ${PROJECT_SOURCE_DIR}/src/*.hpp)
 file(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
@@ -20,12 +22,12 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src/Geck
 
 # Find Boost
 target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_DIR}/include)
-target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_atomic-vc143-mt-gd-x64-1_90.lib)
-target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_log-vc143-mt-gd-x64-1_90.lib)
-target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_log_setup-vc143-mt-gd-x64-1_90.lib)
-target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_filesystem-vc143-mt-gd-x64-1_90.lib)
-target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_program_options-vc143-mt-gd-x64-1_90.lib)
-target_link_libraries(${PROJECT_NAME} ${Boost_DIR}/lib/libboost_thread-vc143-mt-gd-x64-1_90.lib)
+target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_atomic-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_atomic-vc143-mt-x64-1_90.lib)
+target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_log-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_log-vc143-mt-x64-1_90.lib)
+target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_log_setup-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_log_setup-vc143-mt-x64-1_90.lib)
+target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_filesystem-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_filesystem-vc143-mt-x64-1_90.lib)
+target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_program_options-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_program_options-vc143-mt-x64-1_90.lib)
+target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_thread-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_thread-vc143-mt-x64-1_90.lib)
 
 # Find JsonCpp
 find_package(jsoncpp REQUIRED)

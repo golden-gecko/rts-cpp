@@ -23,15 +23,15 @@ namespace Gecko
     {
         using namespace std::filesystem;
 
-        // L_INFO << "Parsing directory '" << directory << "'.";
+        L_INFO << "Parsing directory '" << directory << "'.";
 
-        for (auto i = directory_iterator(directory); i != directory_iterator(); ++i)
+        for (auto i = directory_iterator(directory); i != directory_iterator(); i++)
         {
             const auto& path = i->path();
             auto path_string = path.generic_string();
             auto name = path.stem().string();
 
-            // L_INFO << "Parsing path '" << path_string << "'.";
+            L_INFO << "Parsing path '" << path_string << "'.";
 
             if (is_directory(path))
             {
@@ -42,7 +42,7 @@ namespace Gecko
 
             if (path.extension() != ".json")
             {
-                // L_WARNING << "File '" << path_string << "' is not JSON.";
+                L_WARNING << "File '" << path_string << "' is not JSON.";
 
                 continue;
             }
@@ -56,7 +56,7 @@ namespace Gecko
 
             if (configuration->get_bool("creatable.by_game", false) == false)
             {
-                // L_WARNING << "Configuration '" << name << "' not creatable by game.";
+                L_WARNING << "Configuration '" << name << "' not creatable by game.";
 
                 continue;
             }

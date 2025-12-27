@@ -58,7 +58,7 @@ namespace Gecko::Utils::Mesh
         vertex_count = index_count = 0;
 
         // Calculate how many vertices and indices we're going to need
-        for (unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i)
+        for (unsigned short i = 0; i < mesh->getNumSubMeshes(); i++)
         {
             Ogre::SubMesh* submesh = mesh->getSubMesh(i);
 

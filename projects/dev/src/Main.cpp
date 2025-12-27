@@ -259,13 +259,13 @@ namespace
         auto car_memory = car_allocator.allocate(size);
         auto tank_memory = tank_allocator.allocate(size);
 
-        for (std::size_t i = 0; i < size; ++i)
+        for (std::size_t i = 0; i < size; i++)
         {
             car_allocator.construct(car_memory + i);
             tank_allocator.construct(tank_memory + i);
         }
 
-        for (std::size_t i = 0; i < size; ++i)
+        for (std::size_t i = 0; i < size; i++)
         {
             car_allocator.destroy(car_memory + i);
             tank_allocator.destroy(tank_memory + i);
@@ -285,13 +285,13 @@ namespace
         auto car_memory = car_allocator.allocate(size);
         auto tank_memory = tank_allocator.allocate(size);
 
-        for (std::size_t i = 0; i < size; ++i)
+        for (std::size_t i = 0; i < size; i++)
         {
             std::construct_at(car_memory + i);
             std::construct_at(tank_memory + i);
         }
 
-        for (std::size_t i = 0; i < size; ++i)
+        for (std::size_t i = 0; i < size; i++)
         {
             std::destroy_at(car_memory + i);
             std::destroy_at(tank_memory + i);
@@ -311,19 +311,19 @@ namespace
         auto car_memory = car_allocator.allocate(size);
         auto tank_memory = tank_allocator.allocate(size);
 
-        for (std::size_t i = 0; i < size; ++i)
+        for (std::size_t i = 0; i < size; i++)
         {
             new (car_memory + i) Car();
             new (tank_memory + i) Tank();
         }
 
-        for (std::size_t i = 0; i < size; ++i)
+        for (std::size_t i = 0; i < size; i++)
         {
             (car_memory + i)->update(0.0f);
             (tank_memory + i)->update(0.0f);
         }
 
-        for (std::size_t i = 0; i < size; ++i)
+        for (std::size_t i = 0; i < size; i++)
         {
             (car_memory + i)->~Car();
             (tank_memory + i)->~Tank();
@@ -346,19 +346,19 @@ namespace
         new (car_memory) Car();
         new (tank_memory) Tank();
 
-        for (std::size_t i = 1; i < size; ++i)
+        for (std::size_t i = 1; i < size; i++)
         {
             new (car_memory + i) Car(*car_memory);
             new (tank_memory + i) Tank(*tank_memory);
         }
 
-        for (std::size_t i = 0; i < size; ++i)
+        for (std::size_t i = 0; i < size; i++)
         {
             (car_memory + i)->update(0.0f);
             (tank_memory + i)->update(0.0f);
         }
 
-        for (std::size_t i = 0; i < size; ++i)
+        for (std::size_t i = 0; i < size; i++)
         {
             (car_memory + i)->~Car();
             (tank_memory + i)->~Tank();
@@ -381,19 +381,19 @@ namespace
         Car::create(car_memory);
         Tank::create(tank_memory);
 
-        for (std::size_t i = 1; i < size; ++i)
+        for (std::size_t i = 1; i < size; i++)
         {
             Car::create(car_memory + i);
             Tank::create(tank_memory + i);
         }
 
-        for (std::size_t i = 0; i < size; ++i)
+        for (std::size_t i = 0; i < size; i++)
         {
             (car_memory + i)->update(0.0f);
             (tank_memory + i)->update(0.0f);
         }
 
-        for (std::size_t i = 0; i < size; ++i)
+        for (std::size_t i = 0; i < size; i++)
         {
             (car_memory + i)->~Car();
             (tank_memory + i)->~Tank();
@@ -655,7 +655,7 @@ typedef std::pair<int, int> Edge;
 int main()
 {
     /*
-    for (int i = 0; i < 40; ++i)
+    for (int i = 0; i < 40; i++)
     {
         std::cout << i << " " << ((i & (i - 1)) == 0) << std::endl;
     }
@@ -753,7 +753,7 @@ int main()
     std::vector<vertex_descriptor> container;
     boost::topological_sort(graph.graph(), std::back_inserter(container));
 
-    for (auto i = container.rbegin(); i != container.rend(); ++i)
+    for (auto i = container.rbegin(); i != container.rend(); i++)
     {
         std::cout << *i << " ";
     }

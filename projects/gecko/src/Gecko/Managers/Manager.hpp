@@ -60,7 +60,7 @@ namespace Gecko
             m_elements.emplace_back(m_pointer);
 
             // Create elements by copying the first one.
-            for (int i = 1; i < m_max_size; ++i)
+            for (int i = 1; i < m_max_size; i++)
             {
                 new (m_pointer + i) Type(*m_pointer);
                 m_elements.emplace_back(m_pointer + i);
@@ -98,7 +98,7 @@ namespace Gecko
                 return;
             }
 
-            for (int i = 0; i < m_max_size; ++i)
+            for (int i = 0; i < m_max_size; i++)
             {
                 // TODO: Fix.
                 // m_memory.destroy(m_pointer + i);
@@ -130,7 +130,7 @@ namespace Gecko
 
         void iterate(std::function<void(BaseType& element)> functor) override
         {
-            for (int i = 0; i < m_size; ++i)
+            for (int i = 0; i < m_size; i++)
             {
                 functor(*(m_elements[i]));
             }
@@ -138,7 +138,7 @@ namespace Gecko
 
         void iterate_all(std::function<void(BaseType& element)> functor) override
         {
-            for (int i = 0; i < m_max_size; ++i)
+            for (int i = 0; i < m_max_size; i++)
             {
                 functor(*(m_elements[i]));
             }

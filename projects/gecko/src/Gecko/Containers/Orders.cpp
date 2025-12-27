@@ -80,14 +80,14 @@ namespace Gecko
 
         if (order == nullptr)
         {
-            // L_WARNING << "Order '" << order_id << "' not exists.";
+            L_WARNING << "Order '" << order_id << "' not exists.";
 
             return false;
         }
 
         if (is_available(order->get_type()) == false)
         {
-            // L_WARNING << "Cannot add order " << order_type::to_string(order->get_type()) << ".";
+            L_WARNING << "Cannot add order " << order_type::to_string(order->get_type()) << ".";
 
             OrderManager::getSingleton().destroy(order_id);
 
@@ -105,14 +105,14 @@ namespace Gecko
 
         if (order == nullptr)
         {
-            // L_WARNING << "Order '" << order_id << "' not exists.";
+            L_WARNING << "Order '" << order_id << "' not exists.";
 
             return false;
         }
 
         if (is_available(order->get_type()) == false)
         {
-            // L_WARNING << "Cannot add order '" << order_type::to_string(order->get_type()) << "'.";
+            L_WARNING << "Cannot add order '" << order_type::to_string(order->get_type()) << "'.";
 
             OrderManager::getSingleton().destroy(order_id);
 

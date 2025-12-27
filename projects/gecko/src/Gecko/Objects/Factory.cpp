@@ -18,7 +18,7 @@ namespace Gecko
         auto configuration = ConfigurationManager::getSingleton().get(configuration_name);
         auto configurations_configuration = configuration->get_child("configurations");
 
-        for (auto i = configurations_configuration.begin(); i != configurations_configuration.end(); ++i)
+        for (auto i = configurations_configuration.begin(); i != configurations_configuration.end(); i++)
         {
             configurations.emplace(i->asString());
         }
@@ -27,7 +27,7 @@ namespace Gecko
 
         if (usage_configuration)
         {
-            for (auto i = usage_configuration.get().begin(); i != usage_configuration.get().end(); ++i)
+            for (auto i = usage_configuration.get().begin(); i != usage_configuration.get().end(); i++)
             {
                 usage.emplace(i.key(), i->.second.get<float>(""));
             }

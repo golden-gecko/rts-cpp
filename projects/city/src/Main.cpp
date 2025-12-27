@@ -28,7 +28,6 @@ int main(int argc, char* argv[])
 
     std::shared_ptr<Gecko::Configuration> configuration = configuration_manager->get(configuration_name);
 
-    /*
     auto component_manager = std::make_unique<Gecko::ComponentManager>();
     auto game = std::make_unique<Gecko::Game>(configuration);
     auto input = std::make_unique<Gecko::Input>(configuration);
@@ -49,15 +48,14 @@ int main(int argc, char* argv[])
 
     ui->init();
 
-    // TODO: Fix.
     // Restore options.
+    // TODO: Fix.
     // game->load_options();
     game->load_map("tutorial");
     game->run();
 
-    // TODO: Restore.
+    // TODO: Enable cache.
     // configuration_manager->save_cache();
-    */
 
     return 0;
 }

@@ -74,7 +74,7 @@ namespace Gecko
                 {
                     manualObject->position(m_owner->get_vertex_data(x, z));
 
-                    for (auto i = 0; i < m_owner->get_texture_coordinate_data(x, z).size(); ++i)
+                    for (auto i = 0; i < m_owner->get_texture_coordinate_data(x, z).size(); i++)
                     {
                          manualObject->textureCoord(m_owner->get_texture_coordinate_data(x, z, i));
                     }

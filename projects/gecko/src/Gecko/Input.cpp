@@ -261,7 +261,7 @@ namespace Gecko
 
         auto commands_configuration = m_configuration->get_child("commands");
 
-        for (auto i = commands_configuration->begin(); i != commands_configuration->end(); ++i)
+        for (auto i = commands_configuration->begin(); i != commands_configuration->end(); i++)
         {
             for (auto j = i->begin(); j != i->end(); ++j)
             {

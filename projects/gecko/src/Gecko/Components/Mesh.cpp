@@ -196,7 +196,7 @@ namespace Gecko
                 throw Exception("Normals has different size than vertices.");
             }
 
-            for (auto i = 0; i < texture_coordinates.size(); ++i)
+            for (auto i = 0; i < texture_coordinates.size(); i++)
             {
                 if (vertices.size() != texture_coordinates[i].size())
                 {
@@ -209,7 +209,7 @@ namespace Gecko
 
             mesh->begin(material_name);
 
-            for (auto i = 0; i < vertices.size(); ++i)
+            for (auto i = 0; i < vertices.size(); i++)
             {
                 mesh->position(vertices[i]);
                 mesh->colour(colors[i]);

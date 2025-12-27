@@ -22,7 +22,7 @@ namespace Gecko
 
         if (m_scale.x <= 0.0f || m_scale.y <= 0.0f || m_scale.z <= 0.0f)
         {
-            // L_WARNING << "Scale cannot be lower then zero. Setting to 1.0:1.0:1.0.";
+            L_WARNING << "Scale cannot be lower then zero. Setting to 1.0:1.0:1.0.";
 
             m_scale = Ogre::Vector3::UNIT_SCALE;
         }
@@ -33,7 +33,7 @@ namespace Gecko
         // Do not check Y, because grid is two-dimensional.
         if (m_grid_scale.x <= 0.0f || m_grid_scale.z <= 0.0f)
         {
-            // L_WARNING << "Grid scale cannot be lower then zero. Setting to 1.0:1.0:1.0.";
+            L_WARNING << "Grid scale cannot be lower then zero. Setting to 1.0:1.0:1.0.";
 
             m_grid_scale = Ogre::Vector3::UNIT_SCALE;
         }
@@ -41,7 +41,7 @@ namespace Gecko
         // Do not check Y, because grid is two-dimensional.
         if (m_grid_scale.x > m_scale.x || m_grid_scale.z > m_scale.z)
         {
-            // L_WARNING << "Grid scale cannot be greater than scale. Setting to 1.0:1.0:1.0.";
+            L_WARNING << "Grid scale cannot be greater than scale. Setting to 1.0:1.0:1.0.";
 
             m_grid_scale = Ogre::Vector3::UNIT_SCALE;
         }
@@ -306,7 +306,7 @@ namespace Gecko
                 int count = 0;
                 float height = 0.0f;
 
-                for (int i = 0; i < 4; ++i)
+                for (int i = 0; i < 4; i++)
                 {
                     int xx = x + indices[i][0];
                     int zz = z + indices[i][1];
@@ -458,7 +458,7 @@ namespace Gecko
 
         if (data_layers_configuration)
         {
-            for (auto i = data_layers_configuration.value()->begin(); i != data_layers_configuration.value()->end(); ++i)
+            for (auto i = data_layers_configuration.value()->begin(); i != data_layers_configuration.value()->end(); i++)
             {
                 auto data_layer_name = i.key().asString();
 

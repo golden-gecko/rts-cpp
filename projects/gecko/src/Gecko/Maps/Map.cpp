@@ -174,7 +174,7 @@ namespace Gecko
     {
         auto cameras_configuration = m_configuration->get_child("cameras");
 
-        for (auto i = cameras_configuration->begin(); i != cameras_configuration->end(); ++i)
+        for (auto i = cameras_configuration->begin(); i != cameras_configuration->end(); i++)
         {
             auto camera_configuration = std::make_shared<Configuration>(*i);
 
@@ -220,7 +220,7 @@ namespace Gecko
 
         if (layers_configuration)
         {
-            for (auto i = layers_configuration.value()->begin(); i != layers_configuration.value()->end(); ++i)
+            for (auto i = layers_configuration.value()->begin(); i != layers_configuration.value()->end(); i++)
             {
                 auto name = i.key().asString();
 
@@ -318,7 +318,7 @@ namespace Gecko
 
         if (seasons_configuration)
         {
-            for (auto i = seasons_configuration.value()->begin(); i != seasons_configuration.value()->end(); ++i)
+            for (auto i = seasons_configuration.value()->begin(); i != seasons_configuration.value()->end(); i++)
             {
                 auto name = i.key().asString();
 

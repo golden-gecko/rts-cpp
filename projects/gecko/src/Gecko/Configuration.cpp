@@ -63,8 +63,7 @@ namespace Gecko
         }
 
         std::vector<std::string> segments;
-        // TODO: Fix.
-        // boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
+        boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
 
         Json::Value current_value = m_value;
 
@@ -86,7 +85,7 @@ namespace Gecko
 
     void Configuration::load_includes()
     {
-        // L_TRACE << "Configuration::load_includes()";
+        L_TRACE << "Configuration::load_includes()";
 
         auto includes = get_includes(*this);
 
@@ -96,7 +95,7 @@ namespace Gecko
 
             for (const auto& i : includes)
             {
-                // L_INFO << "Parsing include " << i << ".";
+                L_INFO << "Parsing include " << i << ".";
 
                 Configuration include(i);
 
@@ -355,7 +354,8 @@ namespace Gecko
 
     void Configuration::add_to_cache(const std::string& path, const Json::Value& value) const
     {
-        m_cache[path] = value;
+        // TODO: Enable cache.
+        // m_cache[path] = value;
     }
 
     Json::Value Configuration::get(const std::string& path) const
@@ -379,9 +379,7 @@ namespace Gecko
         }
 
         std::vector<std::string> segments;
-
-        // TODO: Fix.
-        // boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
+        boost::algorithm::split(segments, path, boost::is_any_of("."), boost::token_compress_on);
 
         Json::Value return_value = m_value;
 
@@ -411,7 +409,7 @@ namespace Gecko
             = path("..")
             / path("cache")
             / path("configurations")
-            ; // / boost::replace_all_copy(m_file_name, "/", "_");
+            / boost::replace_all_copy(m_file_name, "/", "_");
 
         return cache_path.string();
     }
@@ -425,7 +423,7 @@ namespace Gecko
             = path("..")
             / path("cache")
             / path("values")
-            ; // / boost::replace_all_copy(m_file_name, "/", "_");
+            / boost::replace_all_copy(m_file_name, "/", "_");
 
         return cache_path.string();
     }
@@ -516,6 +514,7 @@ namespace Gecko
             create_directories(directory);
         }
 
-        Utils::json_to_file(m_value, get_cache_file_path(), true);
+        // TODO: Enable cache.
+        // Utils::json_to_file(m_value, get_cache_file_path(), true);
     }
 }
