@@ -1,3 +1,3 @@
 #include "Gecko/Managers/SkillManager.hpp"
 
-template<> Gecko::SkillManager* Ogre::Singleton<Gecko::SkillManager>::msSingleton = nullptr;
+Gecko::SkillManager* Ogre::Singleton<Gecko::SkillManager>::msSingleton = nullptr;

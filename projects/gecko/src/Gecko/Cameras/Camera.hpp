@@ -20,8 +20,8 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        virtual void pitch(const Ogre::Radian& angle);
-        virtual void yaw(const Ogre::Radian& angle);
+        virtual void pitch(const Ogre::Degree& angle);
+        virtual void yaw(const Ogre::Degree& angle);
 
     public:
         auto get_camera() const

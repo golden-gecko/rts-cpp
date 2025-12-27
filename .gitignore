@@ -1,4 +1,5 @@
-bin/Media
+bin/cache
+bin/media
 build
 *.exe
 *.lib

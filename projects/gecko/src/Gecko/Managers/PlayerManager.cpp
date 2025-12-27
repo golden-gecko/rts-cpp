@@ -2,7 +2,7 @@
 
 #include "Gecko/Players/Player.hpp"
 
-template<> Gecko::PlayerManager* Ogre::Singleton<Gecko::PlayerManager>::msSingleton = nullptr;
+Gecko::PlayerManager* Ogre::Singleton<Gecko::PlayerManager>::msSingleton = nullptr;
 
 namespace Gecko
 {

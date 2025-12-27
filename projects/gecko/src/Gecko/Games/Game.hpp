@@ -117,6 +117,11 @@ namespace Gecko
         Id active_map_id;
         Id active_player_id;
 
+    // TODO: Make private.
+    public:
+        OgreBites::ApplicationContext* context = nullptr;
+
+    private:
         Ogre::Root* root = nullptr;
 
         OgreBites::SGTechniqueResolverListener* material_listener = nullptr;

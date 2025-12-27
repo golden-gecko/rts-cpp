@@ -2,6 +2,8 @@
 
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Input.hpp"
+#include "Gecko/Managers/MapManager.hpp"
+#include "Gecko/Maps/Map.hpp"
 
 namespace Gecko
 {
@@ -80,9 +82,8 @@ namespace Gecko
 
     void Camera::deserialize(const std::shared_ptr<Configuration>& configuration)
     {
-        m_camera_node->lookAt(configuration->get_vector3("look_at", Ogre::Vector3::ZERO), Ogre::Node::TransformSpace::TS_PARENT);
-        // m_camera->setDirection(configuration->get_vector3("direction", Ogre::Vector3::ZERO)); // TODO: Enable.
         m_camera_node->setPosition(configuration->get_vector3("position", Ogre::Vector3::ZERO));
+        m_camera_node->lookAt(configuration->get_vector3("look_at", Ogre::Vector3::ZERO), Ogre::Node::TransformSpace::TS_PARENT);
 
         m_speed = configuration->get_vector3("speed", Ogre::Vector3::ZERO);
     }
@@ -91,13 +92,13 @@ namespace Gecko
     {
     }
 
-    void Camera::yaw(const Ogre::Radian& angle)
+    void Camera::yaw(const Ogre::Degree& angle)
     {
-        m_camera_node->yaw(angle);
+        m_camera_node->yaw(angle, Ogre::Node::TS_WORLD);
     }
 
-    void Camera::pitch(const Ogre::Radian& angle)
+    void Camera::pitch(const Ogre::Degree& angle)
     {
-        m_camera_node->pitch(angle);
+        m_camera_node->pitch(angle, Ogre::Node::TS_LOCAL);
     }
 }

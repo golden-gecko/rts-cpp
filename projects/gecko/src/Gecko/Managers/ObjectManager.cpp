@@ -3,7 +3,7 @@
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/Statistics.hpp"
 
-template<> Gecko::ObjectManager* Ogre::Singleton<Gecko::ObjectManager>::msSingleton = nullptr;
+Gecko::ObjectManager* Ogre::Singleton<Gecko::ObjectManager>::msSingleton = nullptr;
 
 namespace Gecko
 {

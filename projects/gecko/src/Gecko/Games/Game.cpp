@@ -49,7 +49,7 @@
 #include "Gecko/Utils/Time.hpp"
 #include "Gecko/Window.hpp"
 
-template<> Gecko::Game* Ogre::Singleton<Gecko::Game>::msSingleton = nullptr;
+Gecko::Game* Ogre::Singleton<Gecko::Game>::msSingleton = nullptr;
 
 namespace Gecko
 {
@@ -79,7 +79,7 @@ namespace Gecko
         deinit_scene();
         deinit_resources();
         deinit_windows();
-        deinit_root();
+        deinit_root();       
     }
 
     void Game::load_map(const std::string& map_name)
@@ -306,7 +306,9 @@ namespace Gecko
         ObjectManager::getSingleton().update(time);
         OrderManager::getSingleton().update(time);
         PlayerManager::getSingleton().update(time);
-        UI::getSingleton().update(time);
+
+        // TODO: Fix.
+        // UI::getSingleton().update(time);
     }
 
     void Game::update_input(float time)
@@ -1006,14 +1008,28 @@ namespace Gecko
             Ogre::ResourceGroupManager::getSingleton().addResourceLocation(path, type);
         }
 
-        init_shader_system();
-        init_shader_system_cache();
+        // TODO: Fix.
+        // init_shader_system();
+        // init_shader_system_cache();
 
         Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
     }
 
     void Game::init_root()
     {
+        context = new OgreBites::ApplicationContext();
+        context->initApp();
+
+        if (context->getRoot()->restoreConfig() == false)
+        {
+            context->getRoot()->showConfigDialog(OgreBites::getNativeConfigDialog());
+        }
+
+        root = context->getRoot();
+
+        /*
+        TODO: Fix.
+
         root = OGRE_NEW Ogre::Root(
             Settings::Game::OgrePluginsFile,
             Settings::Game::OgreConfigurationFile,
@@ -1027,6 +1043,7 @@ namespace Gecko
 
         root->initialise(false);
         root->saveConfig();
+        */
     }
 
     void Game::init_shader_system()
@@ -1083,7 +1100,7 @@ namespace Gecko
 
     void Game::init_scene()
     {
-        scene_manager = root->createSceneManager("OctreeSceneManager");
+        scene_manager = root->createSceneManager(); // "OctreeSceneManager");
         scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::White));
 
         // TODO: Move materials to bin directory.
@@ -1134,7 +1151,9 @@ namespace Gecko
 
     void Game::deinit_root()
     {
-        OGRE_DELETE root;
+        delete context;
+
+        // OGRE_DELETE root;
     }
 
     void Game::deinit_scene()

@@ -3,7 +3,7 @@
 #include "Gecko/Exception.hpp"
 #include "Gecko/Log.hpp"
 
-template<> Gecko::ConfigurationManager* Ogre::Singleton<Gecko::ConfigurationManager>::msSingleton = nullptr;
+Gecko::ConfigurationManager* Ogre::Singleton<Gecko::ConfigurationManager>::msSingleton = nullptr;
 
 namespace Gecko
 {

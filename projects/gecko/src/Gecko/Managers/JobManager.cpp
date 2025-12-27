@@ -9,7 +9,7 @@
 #include "Gecko/Managers/OrderManager.hpp"
 #include "Gecko/Utils/Utils.hpp"
 
-template<> Gecko::JobManager* Ogre::Singleton<Gecko::JobManager>::msSingleton = nullptr;
+Gecko::JobManager* Ogre::Singleton<Gecko::JobManager>::msSingleton = nullptr;
 
 namespace Gecko
 {

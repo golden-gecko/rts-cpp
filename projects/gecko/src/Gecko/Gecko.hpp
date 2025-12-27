@@ -40,6 +40,9 @@
 #include <OgreSGTechniqueResolverListener.h>
 #include <OgreShaderGenerator.h>
 
+#include <Bites/OgreApplicationContext.h>
+#include <Bites/OgreBitesConfigDialog.h>
+
 #include <OIS.h>
 
 #include <AppCore/App.h>

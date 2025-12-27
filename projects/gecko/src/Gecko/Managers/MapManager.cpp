@@ -2,7 +2,7 @@
 
 #include "Gecko/Maps/Map.hpp"
 
-template<> Gecko::MapManager* Ogre::Singleton<Gecko::MapManager>::msSingleton = nullptr;
+Gecko::MapManager* Ogre::Singleton<Gecko::MapManager>::msSingleton = nullptr;
 
 namespace Gecko
 {

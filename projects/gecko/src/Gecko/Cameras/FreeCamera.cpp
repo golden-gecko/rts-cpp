@@ -40,6 +40,7 @@ namespace Gecko
             direction += Ogre::Vector3::UNIT_Z;
         }
 
-        m_camera_node->translate(direction * m_speed * time);
+        // TODO: Restore.
+        // m_camera_node->translate(direction * m_speed * time);
     }
 }

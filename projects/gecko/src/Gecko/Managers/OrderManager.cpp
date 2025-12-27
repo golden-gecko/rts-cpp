@@ -11,7 +11,7 @@
 #include "Gecko/Orders/OrderUnload.hpp"
 #include "Gecko/Orders/OrderWait.hpp"
 
-template<> Gecko::OrderManager* Ogre::Singleton<Gecko::OrderManager>::msSingleton = nullptr;
+Gecko::OrderManager* Ogre::Singleton<Gecko::OrderManager>::msSingleton = nullptr;
 
 namespace Gecko
 {

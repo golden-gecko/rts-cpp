@@ -1,6 +1,6 @@
 #include "Gecko/Statistics.hpp"
 
-template<> Gecko::Statistics* Ogre::Singleton<Gecko::Statistics>::msSingleton = nullptr;
+Gecko::Statistics* Ogre::Singleton<Gecko::Statistics>::msSingleton = nullptr;
 
 namespace Gecko
 {

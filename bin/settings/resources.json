@@ -25,7 +25,19 @@
             "type": "FileSystem"
         },
         {
+            "path": "../media/Main",
+            "type": "FileSystem"
+        },
+        {
             "path": "../media/models",
+            "type": "FileSystem"
+        },
+        {
+            "path": "../media/RTShaderLib",
+            "type": "FileSystem"
+        },
+        {
+            "path": "../media/Terrain",
             "type": "FileSystem"
         },
         {
@@ -42,50 +54,6 @@
         },
         {
             "path": "../textures/selections",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../Media/materials/textures",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../Media/models",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../Media/packs/cubemap.zip",
-            "type": "Zip"
-        },
-        {
-            "path": "../Media/packs/cubemapsJS.zip",
-            "type": "Zip"
-        },
-        {
-            "path": "../Media/packs/skybox.zip",
-            "type": "Zip"
-        },
-        {
-            "path": "../Media/particle",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../Media/RTShaderLib/GLSL",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../Media/RTShaderLib/HLSL_Cg",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../Media/RTShaderLib/materials",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../Media/ShadowVolume",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../Media/Terrain",
             "type": "FileSystem"
         }
     ]

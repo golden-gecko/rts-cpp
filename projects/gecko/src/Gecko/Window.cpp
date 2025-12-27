@@ -1,9 +1,9 @@
-#include "Gecko/Window.hpp"
-
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Exception.hpp"
+#include "Gecko/Games/Game.hpp"
 #include "Gecko/Input.hpp"
 #include "Gecko/Settings.hpp"
+#include "Gecko/Window.hpp"
 
 namespace Gecko
 {
@@ -18,7 +18,11 @@ namespace Gecko
         auto height = configuration->get_int<int>("height", Settings::Window::SizeHeight);
         auto fullscreen = configuration->get_bool("fullscreen", Settings::Window::Fullscreen);
 
+        m_render_window = Game::getSingletonPtr()->context->getRenderWindow();
+
         /*
+        TODO: Fix.
+
         if (SDL_WasInit(SDL_INIT_VIDEO) == 0)
         {
             if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0)

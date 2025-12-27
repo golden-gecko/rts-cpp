@@ -3,7 +3,7 @@
 #include "Gecko/Managers/ConfigurationManager.hpp"
 #include "Gecko/Technologies/Technology.hpp"
 
-template<> Gecko::TechnologyTree* Ogre::Singleton<Gecko::TechnologyTree>::msSingleton = nullptr;
+Gecko::TechnologyTree* Ogre::Singleton<Gecko::TechnologyTree>::msSingleton = nullptr;
 
 namespace Gecko
 {

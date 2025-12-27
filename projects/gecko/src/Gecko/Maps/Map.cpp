@@ -8,6 +8,7 @@
 #include "Gecko/Exception.hpp"
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Layers/SquareLayer.hpp"
+#include "Gecko/Managers/MapManager.hpp"
 #include "Gecko/Managers/ObjectManager.hpp"
 #include "Gecko/Managers/OrderManager.hpp"
 #include "Gecko/Managers/PlayerManager.hpp"

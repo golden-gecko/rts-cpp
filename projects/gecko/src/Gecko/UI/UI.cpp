@@ -25,7 +25,7 @@
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Window.hpp"
 
-template<> Gecko::UI* Ogre::Singleton<Gecko::UI>::msSingleton = nullptr;
+Gecko::UI* Ogre::Singleton<Gecko::UI>::msSingleton = nullptr;
 
 namespace
 {
@@ -56,7 +56,7 @@ namespace Gecko
     {
         using namespace ultralight;
 
-        /// SetJSContext(caller->LockJSContext().get());
+        // SetJSContext(caller->LockJSContext().get());
 
         auto global = JSGlobalObject();
 
@@ -90,40 +90,37 @@ namespace Gecko
         switch (log_level)
         {
             case ultralight::LogLevel::Error:
-                // L_ERROR << message.data();
+                L_ERROR << Utils::Convert::to_string(message);
                 break;
 
             case ultralight::LogLevel::Info:
-                // L_INFO << message.data();
+                L_INFO << Utils::Convert::to_string(message);
                 break;
 
             case ultralight::LogLevel::Warning:
-                // L_WARNING << message.data();
+                L_WARNING << Utils::Convert::to_string(message);
                 break;
 
             default:
-                // L_DEBUG << message.data();
-                break;
+                L_DEBUG << Utils::Convert::to_string(message);
         }
     }
 
     void UI::OnAddConsoleMessage(ultralight::View* caller, const ultralight::ConsoleMessage& message)
     {
-        /*
         L_ERROR
-            << "[Console]: [" << Utils::Convert::to_string(source)
-            << "] [" << Utils::Convert::to_string(level)
-            << "] " << Utils::Convert::to_string(message);
+            << "[Console]: [" << Utils::Convert::to_string(message.source())
+            << "] [" << Utils::Convert::to_string(message.level())
+            << "] " << Utils::Convert::to_string(message.message());
 
-        if (source == ultralight::kMessageSource_JS)
+        if (message.source() == ultralight::kMessageSource_JS)
         {
             L_ERROR
-                << " (" << Utils::Convert::to_string(source_id)
-                << " @ line " << line_number
-                << ", col " << column_number
+                << " (" << Utils::Convert::to_string(message.source_id())
+                << " @ line " << Utils::Convert::to_string(message.line_number())
+                << ", col " << Utils::Convert::to_string(message.column_number())
                 << ")";
         }
-        */
     }
 
     UI::UI(const std::shared_ptr<Configuration>& configuration) :
@@ -176,12 +173,15 @@ namespace Gecko
         renderer = ultralight::Renderer::Create();
 
         // Create view.
-        /*
-        view = renderer->CreateView(width, height, true, nullptr);
+        ultralight::ViewConfig view_config;
+        
+        view_config.initial_device_scale = 2.0;
+        view_config.is_accelerated = false;
+
+        view = renderer->CreateView(width, height, view_config, nullptr);
         view->set_load_listener(this);
         view->set_view_listener(this);
         view->LoadURL(url.c_str());
-        */
 
         init_components();
         init_visibility_types();
