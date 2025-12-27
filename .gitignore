@@ -1,6 +1,5 @@
 bin/Media
 build
-*.dll
 *.exe
 *.lib
 *.log
