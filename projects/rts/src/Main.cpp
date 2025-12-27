@@ -60,6 +60,15 @@ int main(int argc, char* argv[])
     // TODO: Fix.
     // ui->init();
 
+    {
+        auto scene_manager = Gecko::Game::getSingleton().get_scene_manager();
+
+        auto entity = scene_manager->createEntity("ogrehead.mesh");
+        
+        auto sceneNode = scene_manager->getRootSceneNode()->createChildSceneNode();
+        sceneNode->attachObject(entity);
+    }
+
     game->load_options();
     game->run();
 

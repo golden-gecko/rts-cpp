@@ -63,8 +63,7 @@ namespace Gecko
             direction -= current_direction;
         }
 
-        // TODO: Restore.
-        // m_camera_node->translate(direction * m_speed * time);
+        m_camera_node->translate(direction * m_speed * time);
 
         // Limit camera to layer.
         // TODO: First map.
@@ -87,7 +86,6 @@ namespace Gecko
         camera_position.y = std::clamp(camera_position.y, min_y, max_y);
         camera_position.z = std::clamp(camera_position.z, min_z, max_z);
 
-        // TODO: Restore.
-        // set_position(camera_position);
+        set_position(camera_position);
     }
 }

@@ -9,6 +9,10 @@
             "type": "FileSystem"
         },
         {
+            "path": "../maps/menu",
+            "type": "FileSystem"
+        },
+        {
             "path": "../maps/small",
             "type": "FileSystem"
         },
@@ -22,22 +26,6 @@
         },
         {
             "path": "../materials",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../media/Main",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../media/models",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../media/RTShaderLib",
-            "type": "FileSystem"
-        },
-        {
-            "path": "../media/Terrain",
             "type": "FileSystem"
         },
         {

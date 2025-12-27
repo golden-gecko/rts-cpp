@@ -993,6 +993,9 @@ namespace Gecko
 
     void Game::init_resources()
     {
+        /*
+        TODO: Restore.
+
         auto resources_configuration = m_configuration->get_child("resources");
 
         for (auto i = resources_configuration->begin(); i != resources_configuration->end(); i++)
@@ -1013,6 +1016,7 @@ namespace Gecko
         // init_shader_system_cache();
 
         Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+        */
     }
 
     void Game::init_root()
@@ -1100,16 +1104,14 @@ namespace Gecko
 
     void Game::init_scene()
     {
-        scene_manager = root->createSceneManager(); // "OctreeSceneManager");
-        scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::White));
+        scene_manager = root->createSceneManager(); // "OctreeSceneManager"); // TODO: Fix.
+        scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::Black));
 
         // TODO: Move materials to bin directory.
         // TODO: Move to configuration.
-        scene_manager->setSkyDome(true, "Examples/CloudySky", 5.0f, 8.0f);
-        // scene_manager->setSkyBox(true, "Examples/CloudyNoonSkyBox", 10.0f);
-
         scene_manager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);
         scene_manager->setFog(Ogre::FogMode::FOG_EXP2, Ogre::ColourValue(0.9f, 0.9f, 0.9f), 0.002f, 100.0f, 500.0f);
+        scene_manager->setSkyBox(true, "Examples/CloudyNoonSkyBox", 10.0f);
 
         Ogre::RTShader::ShaderGenerator::getSingleton().addSceneManager(scene_manager);
 

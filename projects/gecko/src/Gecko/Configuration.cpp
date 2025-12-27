@@ -354,8 +354,7 @@ namespace Gecko
 
     void Configuration::add_to_cache(const std::string& path, const Json::Value& value) const
     {
-        // TODO: Enable cache.
-        // m_cache[path] = value;
+        m_cache[path] = value;
     }
 
     Json::Value Configuration::get(const std::string& path) const
@@ -514,7 +513,6 @@ namespace Gecko
             create_directories(directory);
         }
 
-        // TODO: Enable cache.
-        // Utils::json_to_file(m_value, get_cache_file_path(), true);
+        Utils::json_to_file(m_value, get_cache_file_path(), true);
     }
 }
