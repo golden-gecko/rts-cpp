@@ -21,6 +21,8 @@ namespace Gecko
 
     public:
         virtual void move(const Ogre::Vector3& direction);
+        virtual void rotate(const Ogre::Degree& yaw_angle, const Ogre::Degree& pitch_angle);
+
         virtual void pitch(const Ogre::Degree& angle);
         virtual void yaw(const Ogre::Degree& angle);
 

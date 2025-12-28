@@ -5,10 +5,15 @@ project(Gecko LANGUAGES CXX)
 set(CMAKE_DEBUG_POSTFIX _d)
 
 # Create target and add source files
+file(GLOB_RECURSE BINARY_FILES ${CMAKE_SOURCE_DIR}/bin/*.json ${CMAKE_SOURCE_DIR}/bin/*.material)
 file(GLOB_RECURSE HEADER_FILES ${PROJECT_SOURCE_DIR}/src/*.hpp)
 file(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
-add_library(${PROJECT_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES})
+source_group(TREE ${CMAKE_SOURCE_DIR}/bin PREFIX "Binary Files" FILES ${BINARY_FILES})
+source_group(TREE ${PROJECT_SOURCE_DIR}/src PREFIX "Header Files" FILES ${HEADER_FILES})
+source_group(TREE ${PROJECT_SOURCE_DIR}/src PREFIX "Source Files" FILES ${SOURCE_FILES})
+
+add_library(${PROJECT_NAME} STATIC ${BINARY_FILES} ${HEADER_FILES} ${SOURCE_FILES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_EXTENSIONS OFF

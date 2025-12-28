@@ -92,12 +92,17 @@ namespace Gecko
     {
     }
 
-<<<<<<< HEAD
     void Camera::move(const Ogre::Vector3& direction)
     {
         m_camera_node->translate(direction, Ogre::Node::TransformSpace::TS_LOCAL);
     }
 
+    void Camera::rotate(const Ogre::Degree& yaw_angle, const Ogre::Degree& pitch_angle)
+    {
+        yaw(yaw_angle);
+        pitch(pitch_angle);
+    }
+
     void Camera::yaw(const Ogre::Degree& angle)
     {
         m_camera_node->yaw(angle, Ogre::Node::TS_WORLD);
@@ -105,15 +110,6 @@ namespace Gecko
 
     void Camera::pitch(const Ogre::Degree& angle)
     {
-=======
-    void Camera::yaw(const Ogre::Degree& angle)
-    {
-        m_camera_node->yaw(angle, Ogre::Node::TS_WORLD);
-    }
-
-    void Camera::pitch(const Ogre::Degree& angle)
-    {
->>>>>>> develop
         m_camera_node->pitch(angle, Ogre::Node::TS_LOCAL);
     }
 }

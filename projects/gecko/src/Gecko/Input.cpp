@@ -159,9 +159,6 @@ namespace Gecko
 
     bool Input::mouseMoved(const OIS::MouseEvent& arg)
     {
-        // TODO: Fix.
-        return true;
-
         auto x = static_cast<float>(arg.state.X.rel);
         auto y = static_cast<float>(arg.state.Y.rel);
 
@@ -174,7 +171,8 @@ namespace Gecko
 
         if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
         {
-            UI::getSingleton().get_selection_box().set_visible(false);
+            // TODO: Fix.
+            // UI::getSingleton().get_selection_box().set_visible(false);
         }
         else if (is_mouse_button_pressed(OIS::MouseButtonID::MB_Left))
         {
@@ -188,8 +186,7 @@ namespace Gecko
         }
         else if (is_mouse_button_pressed(OIS::MouseButtonID::MB_Middle))
         {
-            camera->yaw(Ogre::Degree(x * mouse_sensitivity.x));
-            camera->pitch(Ogre::Degree(y * mouse_sensitivity.y));
+            camera->rotate(Ogre::Degree(x * mouse_sensitivity.x), Ogre::Degree(y * mouse_sensitivity.y));
 
             // TODO: Fix.
             // UI::getSingleton().get_cursor().set_visible(true);

@@ -1,25 +1,25 @@
-#include "Gecko/Application.hpp"
-#include "Gecko/Games/Game.hpp"
-#include "Gecko/Input.hpp"
-#include "Gecko/Log.hpp"
-#include "Gecko/Managers/ComponentManager.hpp"
-#include "Gecko/Managers/ConfigurationManager.hpp"
-#include "Gecko/Managers/JobManager.hpp"
-#include "Gecko/Managers/MapManager.hpp"
-#include "Gecko/Managers/ObjectManager.hpp"
-#include "Gecko/Managers/OrderManager.hpp"
-#include "Gecko/Managers/PlayerManager.hpp"
-#include "Gecko/Managers/SkillManager.hpp"
-#include "Gecko/Maps/Map.hpp"
-#include "Gecko/NVIDIA.hpp"
-#include "Gecko/Statistics.hpp"
-#include "Gecko/Technologies/TechnologyTree.hpp"
-#include "Gecko/UI/UI.hpp"
-#include "Gecko/Window.hpp"
+#include <Gecko/Application.hpp>
+#include <Gecko/Games/Game.hpp>
+#include <Gecko/Input.hpp>
+#include <Gecko/Log.hpp>
+#include <Gecko/Managers/ComponentManager.hpp>
+#include <Gecko/Managers/ConfigurationManager.hpp>
+#include <Gecko/Managers/JobManager.hpp>
+#include <Gecko/Managers/MapManager.hpp>
+#include <Gecko/Managers/ObjectManager.hpp>
+#include <Gecko/Managers/OrderManager.hpp>
+#include <Gecko/Managers/PlayerManager.hpp>
+#include <Gecko/Managers/SkillManager.hpp>
+#include <Gecko/Maps/Map.hpp>
+#include <Gecko/NVIDIA.hpp>
+#include <Gecko/Statistics.hpp>
+#include <Gecko/Technologies/TechnologyTree.hpp>
+#include <Gecko/UI/UI.hpp>
+#include <Gecko/Window.hpp>
 
 int main(int argc, char* argv[])
 {
-    Gecko::Log::setup();
+    Gecko::Log::setup("rts.log");
 
     // Parse configuration files.
     auto configuration_manager = std::make_unique<Gecko::ConfigurationManager>();
@@ -44,40 +44,28 @@ int main(int argc, char* argv[])
     auto technology_tree = std::make_unique<Gecko::TechnologyTree>();
     auto ui = std::make_unique<Gecko::UI>(configuration);
 
-    // Initialize and run game.
+    // Initialize game and load map.
     game->init();
     game->load_map("tutorial");
-    
+
+    // TODO: Refactor.
     auto main_window = game->get_window(Gecko::Settings::Window::MainName);
 
+    // Initialize input system.
     input->set_render_window_handle(main_window->get_handle());
     input->init();
 
+    // TODO: Refactor.
     main_window->on_resize();
 
+    // Initialize other system.
     technology_tree->init();
-
-    // TODO: Fix.
-    // ui->init();
-
-    {
-        auto scene_manager = Gecko::Game::getSingleton().get_scene_manager();
-
-        auto entity = scene_manager->createEntity("ogrehead.mesh");
-        
-        auto sceneNode = scene_manager->getRootSceneNode()->createChildSceneNode();
-        sceneNode->attachObject(entity);
-    }
+    ui->init();
 
     game->load_options();
     game->run();
 
-    // TODO: Fix.
-    // ui->deinit();
-
-    input->deinit();
-
-    game->deinit();
+    // TODO: Free memory here.
 
     return 0;
 }

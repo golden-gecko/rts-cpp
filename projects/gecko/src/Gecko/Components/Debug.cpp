@@ -60,15 +60,17 @@ namespace Gecko
     {
         assert(m_manual_object);
 
-        m_manual_object->begin("vertex_color", Ogre::RenderOperation::OT_LINE_LIST);
+        m_manual_object->begin("vertex_color", Ogre::RenderOperation::OperationType::OT_LINE_LIST);
 
         m_manual_object->position(start);
         m_manual_object->colour(color);
-        m_manual_object->normal(Ogre::Vector3::ZERO);
+        m_manual_object->normal((end - start).normalisedCopy());
+        m_manual_object->textureCoord(0);
 
         m_manual_object->position(end);
         m_manual_object->colour(color);
-        m_manual_object->normal(Ogre::Vector3::ZERO);
+        m_manual_object->normal((end - start).normalisedCopy());
+        m_manual_object->textureCoord(1);
 
         m_manual_object->end();
     }

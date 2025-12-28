@@ -2,6 +2,7 @@
 
 #include "Gecko/Exception.hpp"
 #include "Gecko/Log.hpp"
+#include "Gecko/Settings.hpp"
 
 Gecko::ConfigurationManager* Ogre::Singleton<Gecko::ConfigurationManager>::msSingleton = nullptr;
 
@@ -9,23 +10,17 @@ namespace Gecko
 {
     void ConfigurationManager::parse_configuration_files()
     {
-        parse_directory("../components");
-        parse_directory("../games");
-        parse_directory("../maps");
-        parse_directory("../objects");
-        parse_directory("../orders");
-        parse_directory("../players");
-        parse_directory("../skills");
-        parse_directory("../technologies");
+        for (const std::string& directory : Settings::Configuration::Directories)
+        {
+            parse_directory(directory);
+        }
     }
 
     void ConfigurationManager::parse_directory(const std::string& directory)
     {
-        using namespace std::filesystem;
-
         L_INFO << "Parsing directory '" << directory << "'.";
 
-        for (auto i = directory_iterator(directory); i != directory_iterator(); i++)
+        for (auto i = std::filesystem::directory_iterator(directory); i != std::filesystem::directory_iterator(); i++)
         {
             const auto& path = i->path();
             auto path_string = path.generic_string();
@@ -40,9 +35,9 @@ namespace Gecko
                 continue;
             }
 
-            if (path.extension() != ".json")
+            if (path.extension() != Settings::Configuration::Extension)
             {
-                L_WARNING << "File '" << path_string << "' is not JSON.";
+                L_WARNING << "File '" << path_string << "' has invalid extension.";
 
                 continue;
             }

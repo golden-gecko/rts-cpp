@@ -45,7 +45,7 @@ namespace Gecko
                 return false;
             }
 
-            if (max_size == 0)
+            if (max_size <= 0)
             {
                 return false;
             }

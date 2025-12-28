@@ -2,25 +2,8 @@
 
 #pragma warning(push, 0)
 
-#include <algorithm>
-#include <array>
-#include <cassert>
-#include <chrono>
-#include <cmath>
-#include <deque>
 #include <filesystem>
-#include <functional>
-#include <iomanip>
-#include <iostream>
-#include <limits>
-#include <map>
-#include <memory>
-#include <optional>
 #include <random>
-#include <set>
-#include <sstream>
-#include <string>
-#include <vector>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/assign.hpp>
@@ -41,7 +24,6 @@
 #include <OgreShaderGenerator.h>
 
 #include <Bites/OgreApplicationContext.h>
-#include <Bites/OgreBitesConfigDialog.h>
 
 #include <OIS.h>
 
@@ -54,6 +36,7 @@
 
 #pragma warning(pop)
 
+// TODO: Remove or add all classes.
 namespace Gecko
 {
     class Application;

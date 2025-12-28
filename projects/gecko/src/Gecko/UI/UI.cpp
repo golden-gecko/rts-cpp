@@ -138,6 +138,7 @@ namespace Gecko
 
     void UI::init()
     {
+        /*
         auto width = configuration->get_int<std::size_t>("ui.width", 1024);
         auto height = configuration->get_int<std::size_t>("ui.height", 768);
 
@@ -154,7 +155,6 @@ namespace Gecko
         // Create configuration.
         ultralight::Config config;
 
-        /*
         config.device_scale = scale;
         config.font_family_fixed = font.c_str();
         config.font_family_serif = font.c_str();
@@ -162,7 +162,6 @@ namespace Gecko
         config.font_family_standard = font.c_str();
         config.font_hinting = ultralight::FontHinting::kFontHinting_Smooth;
         config.use_gpu_renderer = false;
-        */
 
         ultralight::Platform::instance().set_config(config);
         ultralight::Platform::instance().set_font_loader(ultralight::GetPlatformFontLoader());
@@ -187,6 +186,7 @@ namespace Gecko
         init_visibility_types();
 
         wait_until_ready();
+        */
     }
 
     void UI::deinit()

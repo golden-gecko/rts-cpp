@@ -1105,23 +1105,30 @@ namespace Gecko
     void Game::init_scene()
     {
         scene_manager = root->createSceneManager(); // "OctreeSceneManager"); // TODO: Fix.
-        scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::Black));
+        scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::White));
 
         // TODO: Move materials to bin directory.
         // TODO: Move to configuration.
-        scene_manager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);
-        scene_manager->setFog(Ogre::FogMode::FOG_EXP2, Ogre::ColourValue(0.9f, 0.9f, 0.9f), 0.002f, 100.0f, 500.0f);
-        scene_manager->setSkyBox(true, "Examples/CloudyNoonSkyBox", 10.0f);
+        // TODO: Enable.
+        // scene_manager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);
+        // scene_manager->setFog(Ogre::FogMode::FOG_EXP2, Ogre::ColourValue(0.9f, 0.9f, 0.9f), 0.002f, 100.0f, 500.0f);
+        // scene_manager->setSkyBox(true, "Examples/CloudyNoonSkyBox", 10.0f);
 
         Ogre::RTShader::ShaderGenerator::getSingleton().addSceneManager(scene_manager);
 
+        // TODO: Enable.
         light = scene_manager->createLight();
-        light->setDiffuseColour(m_configuration->get_color("scene.directional.color", Ogre::ColourValue::White));
+        // light->setDiffuseColour(m_configuration->get_color("scene.directional.color", Ogre::ColourValue::White)); // TODO: Makes all black. Not working?
         light->setType(Ogre::Light::LightTypes::LT_DIRECTIONAL);
 
         light_scene_node = create_scene_node();
         light_scene_node->attachObject(light);
         light_scene_node->setDirection(m_configuration->get_vector3("scene.directional.direction"));
+
+        auto ogre_entity = create_entity("ogrehead.mesh");
+
+        auto ogre_node = create_scene_node();
+        ogre_node->attachObject(ogre_entity);
     }
 
     void Game::init_windows()

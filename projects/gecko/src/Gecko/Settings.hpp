@@ -23,6 +23,12 @@ namespace Gecko
             const std::string ProjectionType   = "perspective";
         }
 
+        namespace Configuration
+        {
+            const std::vector<std::string> Directories = { "../components", "../games", "../maps", "../objects", "../orders", "../players", "../skills", "../technologies" };
+            const std::string Extension                = ".json";
+        }
+
         namespace Game
         {
             const float       DistanceComparisionMinValue = 0.01f;
