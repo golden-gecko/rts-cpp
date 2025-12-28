@@ -9,6 +9,10 @@
             "type": "FileSystem"
         },
         {
+            "path": "../maps/menu",
+            "type": "FileSystem"
+        },
+        {
             "path": "../maps/small",
             "type": "FileSystem"
         },
@@ -25,10 +29,6 @@
             "type": "FileSystem"
         },
         {
-            "path": "../media/models",
-            "type": "FileSystem"
-        },
-        {
             "path": "../textures",
             "type": "FileSystem"
         },
@@ -42,50 +42,6 @@
         },
         {
             "path": "../textures/selections",
-            "type": "FileSystem"
-        },
-        {
-            "path": "D:/Projects/rts/lib/Ogre/Media/materials/textures",
-            "type": "FileSystem"
-        },
-        {
-            "path": "D:/Projects/rts/lib/Ogre/Media/models",
-            "type": "FileSystem"
-        },
-        {
-            "path": "D:/Projects/rts/lib/Ogre/Media/packs/cubemap.zip",
-            "type": "Zip"
-        },
-        {
-            "path": "D:/Projects/rts/lib/Ogre/Media/packs/cubemapsJS.zip",
-            "type": "Zip"
-        },
-        {
-            "path": "D:/Projects/rts/lib/Ogre/Media/packs/skybox.zip",
-            "type": "Zip"
-        },
-        {
-            "path": "D:/Projects/rts/lib/Ogre/Media/particle",
-            "type": "FileSystem"
-        },
-        {
-            "path": "D:/Projects/rts/dependencies/ogre-1.12.11/Media/RTShaderLib/GLSL",
-            "type": "FileSystem"
-        },
-        {
-            "path": "D:/Projects/rts/dependencies/ogre-1.12.11/Media/RTShaderLib/HLSL_Cg",
-            "type": "FileSystem"
-        },
-        {
-            "path": "D:/Projects/rts/dependencies/ogre-1.12.11/Media/RTShaderLib/materials",
-            "type": "FileSystem"
-        },
-        {
-            "path": "D:/Projects/rts/dependencies/ogre-1.12.11/Media/ShadowVolume",
-            "type": "FileSystem"
-        },
-        {
-            "path": "D:/Projects/rts/dependencies/ogre-1.12.11/Media/Terrain",
             "type": "FileSystem"
         }
     ]

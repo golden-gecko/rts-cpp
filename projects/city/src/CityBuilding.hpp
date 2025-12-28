@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Objects/Object.hpp"
+#include "Gecko/Objects/Object.hpp"
+#include "Gecko/Rectangle.hpp"
 
 namespace City
 {
@@ -39,7 +40,7 @@ namespace City
             return is_industrial() && workers.size() < max_workers;
         }
 
-        std::optional<Gecko::Entrance> get_entrance() const override;
+        Gecko::Entrance get_entrance() const override;
 
         std::size_t get_present_residents() const;
 
@@ -69,9 +70,9 @@ namespace City
             return industrial;
         }
 
-        Gecko::Rectangle get_occupied_space() const override;
+        // Gecko::Rectangle get_occupied_space() const override;
 
-        void set_position(const Ogre::Vector3& position) override;
+        void set_position(const Ogre::Vector3& position, bool validate = true) override;
 
     protected:
         void update_resources(float time) override;

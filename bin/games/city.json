@@ -44,14 +44,15 @@
         "scale": 1.0,
         "width": 1280
     },
-    "windows": {
-        "Main": {
+    "windows": [
+        {
             "camera": "Main",
             "fullscreen": false,
             "height": 960,
             "left": 10,
+            "name": "Main",
             "top": 40,
             "width": 1280
         }
-    }
+    ]
 }

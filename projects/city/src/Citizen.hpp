@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Objects/Object.hpp"
+#include "Gecko/Objects/Object.hpp"
 
 namespace City
 {
@@ -43,7 +43,7 @@ namespace City
             home_id = _home_id;
         }
 
-        void set_position(const Ogre::Vector3& position) override;
+        void set_position(const Ogre::Vector3& position, bool validate = true) override;
 
         void set_workplace_id(Gecko::Id _workplace_id)
         {
