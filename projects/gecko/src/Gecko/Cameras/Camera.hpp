@@ -20,6 +20,7 @@ namespace Gecko
         void update(float time) override;
 
     public:
+        virtual void move(const Ogre::Vector3& direction);
         virtual void pitch(const Ogre::Degree& angle);
         virtual void yaw(const Ogre::Degree& angle);
 

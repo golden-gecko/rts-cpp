@@ -14,25 +14,15 @@ namespace Gecko
 
     void TopDownCamera::update(float time)
     {
-        auto direction = Ogre::Vector3::ZERO;
+        Ogre::Vector3 direction = Ogre::Vector3::ZERO;
 
         if (Input::getSingleton().is_key_pressed(Command::Value::Camera_Move_Left))
         {
-            auto current_direction = get_direction();
-
-            current_direction.y = 0.0f;
-            current_direction.normalise();
-
-            direction += current_direction.crossProduct(Ogre::Vector3::NEGATIVE_UNIT_Y);
+            direction += Ogre::Vector3::NEGATIVE_UNIT_X;
         }
         else if (Input::getSingleton().is_key_pressed(Command::Value::Camera_Move_Right))
         {
-            auto current_direction = get_direction();
-
-            current_direction.y = 0.0f;
-            current_direction.normalise();
-
-            direction -= current_direction.crossProduct(Ogre::Vector3::NEGATIVE_UNIT_Y);
+            direction += Ogre::Vector3::UNIT_X;
         }
 
         if (Input::getSingleton().is_key_pressed(Command::Value::Camera_Move_Down))
@@ -46,24 +36,14 @@ namespace Gecko
 
         if (Input::getSingleton().is_key_pressed(Command::Value::Camera_Move_Forward))
         {
-            auto current_direction = get_direction();
-
-            current_direction.y = 0.0f;
-            current_direction.normalise();
-
-            direction += current_direction;
+            direction += Ogre::Vector3::NEGATIVE_UNIT_Z;
         }
         else if (Input::getSingleton().is_key_pressed(Command::Value::Camera_Move_Backward))
         {
-            auto current_direction = get_direction();
-
-            current_direction.y = 0.0f;
-            current_direction.normalise();
-
-            direction -= current_direction;
+            direction += Ogre::Vector3::UNIT_Z;
         }
 
-        m_camera_node->translate(direction * m_speed * time);
+        move(direction * m_speed * time);
 
         // Limit camera to layer.
         // TODO: First map.
