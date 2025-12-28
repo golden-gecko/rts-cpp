@@ -159,6 +159,9 @@ namespace Gecko
 
     bool Input::mouseMoved(const OIS::MouseEvent& arg)
     {
+        // TODO: Fix.
+        return true;
+
         auto x = static_cast<float>(arg.state.X.rel);
         auto y = static_cast<float>(arg.state.Y.rel);
 
