@@ -194,7 +194,7 @@ namespace Gecko
         // Save players.
         Json::Value json_players;
 
-        for (const auto& [id, player] : PlayerManager::getSingleton())
+        for (const auto& [_, player] : PlayerManager::getSingleton())
         {
         json_players.append(player->serialize().get());
         }
@@ -257,7 +257,7 @@ namespace Gecko
         // Save objects.
         Json::Value json_objects;
 
-        for (const auto& [id, object] : ObjectManager::getSingleton())
+        for (const auto& [_, object] : ObjectManager::getSingleton())
         {
         const auto& player_id = object->get_player_id();
         auto player = PlayerManager::getSingleton().get(player_id);
@@ -1104,7 +1104,8 @@ namespace Gecko
 
     void Game::init_scene()
     {
-        scene_manager = root->createSceneManager(); // "OctreeSceneManager"); // TODO: Fix.
+        // TODO: Use "OctreeSceneManager".
+        scene_manager = root->createSceneManager();
         scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::White));
 
         // TODO: Move materials to bin directory.
@@ -1116,19 +1117,15 @@ namespace Gecko
 
         Ogre::RTShader::ShaderGenerator::getSingleton().addSceneManager(scene_manager);
 
-        // TODO: Enable.
         light = scene_manager->createLight();
-        // light->setDiffuseColour(m_configuration->get_color("scene.directional.color", Ogre::ColourValue::White)); // TODO: Makes all black. Not working?
+        // TODO: Makes all material black. Investigate.
+        // light->setDiffuseColour(m_configuration->get_color("scene.directional.color", Ogre::ColourValue::White));
         light->setType(Ogre::Light::LightTypes::LT_DIRECTIONAL);
 
         light_scene_node = create_scene_node();
         light_scene_node->attachObject(light);
-        light_scene_node->setDirection(m_configuration->get_vector3("scene.directional.direction"));
-
-        auto ogre_entity = create_entity("ogrehead.mesh");
-
-        auto ogre_node = create_scene_node();
-        ogre_node->attachObject(ogre_entity);
+        // TODO: Makes some parts of objects white. Investigate.
+        // light_scene_node->setDirection(m_configuration->get_vector3("scene.directional.direction"));
     }
 
     void Game::init_windows()
@@ -1147,7 +1144,7 @@ namespace Gecko
 
     void Game::deinit_maps()
     {
-        for (const auto& [name, map] : MapManager::getSingleton())
+        for (const auto& [_, map] : MapManager::getSingleton())
         {
             map->deinit();
         }

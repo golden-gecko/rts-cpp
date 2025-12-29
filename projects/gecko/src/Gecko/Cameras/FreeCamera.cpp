@@ -11,7 +11,7 @@ namespace Gecko
 
     void FreeCamera::update(float time)
     {
-        auto direction = Ogre::Vector3::ZERO;
+        Ogre::Vector3 direction = Ogre::Vector3::ZERO;
 
         if (Input::getSingleton().is_key_pressed(Command::Value::Camera_Move_Left))
         {
@@ -40,6 +40,6 @@ namespace Gecko
             direction += Ogre::Vector3::UNIT_Z;
         }
 
-        m_camera_node->translate(direction * m_speed * time);
+        move(direction * m_speed * time);
     }
 }

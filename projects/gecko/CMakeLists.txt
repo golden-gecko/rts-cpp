@@ -5,7 +5,7 @@ project(Gecko LANGUAGES CXX)
 set(CMAKE_DEBUG_POSTFIX _d)
 
 # Create target and add source files
-file(GLOB_RECURSE BINARY_FILES ${CMAKE_SOURCE_DIR}/bin/*.json ${CMAKE_SOURCE_DIR}/bin/*.material)
+file(GLOB_RECURSE BINARY_FILES ${CMAKE_SOURCE_DIR}/bin/*.json ${CMAKE_SOURCE_DIR}/bin/*.material ${CMAKE_SOURCE_DIR}/bin/*.png)
 file(GLOB_RECURSE HEADER_FILES ${PROJECT_SOURCE_DIR}/src/*.hpp)
 file(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 

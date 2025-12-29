@@ -18,8 +18,8 @@ namespace Gecko
         m_camera->setAutoAspectRatio(true);
         m_camera->setNearClipDistance(near_clip_distance);
 
-        m_camera_node = m_scene_manager->createSceneNode(name);
-        m_camera_node->attachObject(m_camera);
+        m_camera_scene_node = m_scene_manager->createSceneNode(name);
+        m_camera_scene_node->attachObject(m_camera);
 
         // TODO: Use deserialize instead of constructor.
         deserialize(configuration);
@@ -82,8 +82,8 @@ namespace Gecko
 
     void Camera::deserialize(const std::shared_ptr<Configuration>& configuration)
     {
-        m_camera_node->setPosition(configuration->get_vector3("position", Ogre::Vector3::ZERO));
-        m_camera_node->lookAt(configuration->get_vector3("look_at", Ogre::Vector3::ZERO), Ogre::Node::TransformSpace::TS_PARENT);
+        m_camera_scene_node->setPosition(configuration->get_vector3("position", Ogre::Vector3::ZERO));
+        m_camera_scene_node->lookAt(configuration->get_vector3("look_at", Ogre::Vector3::ZERO), Ogre::Node::TransformSpace::TS_PARENT);
 
         m_speed = configuration->get_vector3("speed", Ogre::Vector3::ZERO);
     }
@@ -94,7 +94,7 @@ namespace Gecko
 
     void Camera::move(const Ogre::Vector3& direction)
     {
-        m_camera_node->translate(direction, Ogre::Node::TransformSpace::TS_LOCAL);
+        m_camera_scene_node->translate(direction, Ogre::Node::TransformSpace::TS_LOCAL);
     }
 
     void Camera::rotate(const Ogre::Degree& yaw_angle, const Ogre::Degree& pitch_angle)
@@ -105,11 +105,11 @@ namespace Gecko
 
     void Camera::yaw(const Ogre::Degree& angle)
     {
-        m_camera_node->yaw(angle, Ogre::Node::TS_WORLD);
+        m_camera_scene_node->yaw(angle, Ogre::Node::TS_WORLD);
     }
 
     void Camera::pitch(const Ogre::Degree& angle)
     {
-        m_camera_node->pitch(angle, Ogre::Node::TS_LOCAL);
+        m_camera_scene_node->pitch(angle, Ogre::Node::TS_LOCAL);
     }
 }

@@ -286,7 +286,7 @@ namespace Gecko
                 auto player_configuration = Configuration(i);
                 auto configuration = player_configuration.get_string("configuration");
 
-                for (const auto& [id, player] : PlayerManager::getSingleton())
+                for (const auto& [_, player] : PlayerManager::getSingleton())
                 {
                     if (player->get_configuration()->get_name() == configuration)
                     {

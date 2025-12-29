@@ -1,8 +1,8 @@
-#include "Gecko/Log.hpp"
-#include "Gecko/Managers/ConfigurationManager.hpp"
-#include "Gecko/Managers/MapManager.hpp"
-#include "Gecko/Managers/ObjectManager.hpp"
-#include "Gecko/Utils/Time.hpp"
+#include <Gecko/Log.hpp>
+#include <Gecko/Managers/ConfigurationManager.hpp>
+#include <Gecko/Managers/MapManager.hpp>
+#include <Gecko/Managers/ObjectManager.hpp>
+#include <Gecko/Utils/Time.hpp>
 
 #include "Citizen.hpp"
 #include "CityBuilding.hpp"
