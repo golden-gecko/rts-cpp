@@ -49,6 +49,298 @@
 #include "Gecko/Utils/Time.hpp"
 #include "Gecko/Window.hpp"
 
+
+
+
+
+
+
+
+
+
+
+
+#include <RmlUi/Core/RenderInterface.h>
+#include <RmlUi/Core/SystemInterface.h>
+
+#include <RmlUi/Core/Element.h>
+#include <RmlUi/Core/EventListener.h>
+#include <RmlUi/Core/EventListenerInstancer.h>
+#include <RmlUi/Core/Context.h>
+
+class SystemInterface : public Rml::SystemInterface
+{
+public:
+    // From Rml::SystemInterface.
+    bool LogMessage(Rml::Log::Type type, const Rml::String& message) override
+    {
+        L_INFO << "RmlUI: " << message;
+
+        return Rml::SystemInterface::LogMessage(type, message);
+    }
+};
+
+struct RocketCompiledGeometry
+{
+    Ogre::RenderOperation mRenderOperation;
+    Rml::Texture*         mTexture = nullptr;
+};
+
+struct RocketVertex
+{
+    Ogre::Real x, y, z;
+    Ogre::uint32 diffuse;
+    Ogre::Real u, v;
+};
+
+class RenderInterface : public Rml::RenderInterface
+{
+public:
+    RenderInterface(unsigned int window_width, unsigned int window_height);
+
+    Rml::CompiledGeometryHandle CompileGeometry(Rml::Span<const Rml::Vertex> vertices, Rml::Span<const int> indices) override;
+    void RenderGeometry(Rml::CompiledGeometryHandle geometry, Rml::Vector2f translation, Rml::TextureHandle texture) override;
+    void ReleaseGeometry(Rml::CompiledGeometryHandle geometry) override;
+    Rml::TextureHandle LoadTexture(Rml::Vector2i& texture_dimensions, const Rml::String& source) override;
+    Rml::TextureHandle GenerateTexture(Rml::Span<const Rml::byte> source, Rml::Vector2i source_dimensions) override;
+    void ReleaseTexture(Rml::TextureHandle texture) override;
+    void EnableScissorRegion(bool enable) override;
+    void SetScissorRegion(Rml::Rectanglei region) override;
+
+private:
+    Ogre::RenderSystem*    mRenderSystem = nullptr;
+    Ogre::LayerBlendModeEx mColourBlendMode;
+    Ogre::LayerBlendModeEx mAlphaBlendMode;
+    bool                   mScissorEnable = false;
+    size_t                 mScissorRect[4] = { 0, 0, 0, 0 };
+    Ogre::String           mGroup;
+};
+
+RenderInterface::RenderInterface(unsigned int window_width, unsigned int window_height)
+{
+    mRenderSystem = Ogre::Root::getSingletonPtr()->getRenderSystem();
+
+    mColourBlendMode.blendType = Ogre::LBT_COLOUR;
+    mColourBlendMode.source1 = Ogre::LBS_DIFFUSE;
+    mColourBlendMode.source2 = Ogre::LBS_TEXTURE;
+    mColourBlendMode.operation = Ogre::LBX_MODULATE;
+
+    mAlphaBlendMode.blendType = Ogre::LBT_ALPHA;
+    mAlphaBlendMode.source1 = Ogre::LBS_DIFFUSE;
+    mAlphaBlendMode.source2 = Ogre::LBS_TEXTURE;
+    mAlphaBlendMode.operation = Ogre::LBX_MODULATE;
+
+    mScissorEnable = false;
+
+    mScissorRect[0] = 0;
+    mScissorRect[1] = 0;
+    mScissorRect[2] = window_width;
+    mScissorRect[3] = window_height;
+
+    mGroup = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
+}
+
+Rml::CompiledGeometryHandle RenderInterface::CompileGeometry(Rml::Span<const Rml::Vertex> vertices, Rml::Span<const int> indices)
+{
+    RocketCompiledGeometry* geometry = new RocketCompiledGeometry();
+    // geometry->mTexture = (texture == NULL) ? NULL : (RocketTexture*)texture;
+
+    // Add vertex buffer
+    geometry->mRenderOperation.vertexData = new Ogre::VertexData();
+    geometry->mRenderOperation.vertexData->vertexStart = 0;
+    geometry->mRenderOperation.vertexData->vertexCount = vertices.size();
+
+    // Add index buffer
+    geometry->mRenderOperation.indexData = new Ogre::IndexData();
+    geometry->mRenderOperation.indexData->indexStart = 0;
+    geometry->mRenderOperation.indexData->indexCount = indices.size();
+
+    geometry->mRenderOperation.operationType = Ogre::RenderOperation::OT_TRIANGLE_LIST;
+
+    // Set up the vertex declaration.
+    Ogre::VertexDeclaration* vertex_declaration = geometry->mRenderOperation.vertexData->vertexDeclaration;
+    size_t element_offset = 0;
+    vertex_declaration->addElement(0, element_offset, Ogre::VET_FLOAT3, Ogre::VES_POSITION);
+    element_offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
+    vertex_declaration->addElement(0, element_offset, Ogre::VET_COLOUR, Ogre::VES_DIFFUSE);
+    element_offset += Ogre::VertexElement::getTypeSize(Ogre::VET_COLOUR);
+    vertex_declaration->addElement(0, element_offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES);
+
+    // Create the vertex buffer.
+    Ogre::HardwareVertexBufferSharedPtr vertex_buffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(vertex_declaration->getVertexSize(0), vertices.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+    geometry->mRenderOperation.vertexData->vertexBufferBinding->setBinding(0, vertex_buffer);
+
+    // Fill the vertex buffer.
+    RocketVertex* ogre_vertices = (RocketVertex*)vertex_buffer->lock(0, vertex_buffer->getSizeInBytes(), Ogre::HardwareBuffer::HBL_NORMAL);
+
+    for (int i = 0; i < vertices.size(); ++i)
+    {
+        ogre_vertices[i].x = vertices[i].position.x;
+        ogre_vertices[i].y = vertices[i].position.y;
+        ogre_vertices[i].z = 0;
+
+        Ogre::ColourValue diffuse(vertices[i].colour.red / 255.0f, vertices[i].colour.green / 255.0f, vertices[i].colour.blue / 255.0f, vertices[i].colour.alpha / 255.0f);
+        mRenderSystem->convertColourValue(diffuse, &ogre_vertices[i].diffuse);
+
+        ogre_vertices[i].u = vertices[i].tex_coord[0];
+        ogre_vertices[i].v = vertices[i].tex_coord[1];
+    }
+    vertex_buffer->unlock();
+
+    // Create the index buffer.
+    Ogre::HardwareIndexBufferSharedPtr index_buffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, indices.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+    geometry->mRenderOperation.indexData->indexBuffer = index_buffer;
+    geometry->mRenderOperation.useIndexes = true;
+
+    // Fill the index buffer.
+    void* ogre_indices = index_buffer->lock(0, index_buffer->getSizeInBytes(), Ogre::HardwareBuffer::HBL_NORMAL);
+    memcpy(ogre_indices, indices.data(), sizeof(unsigned int) * indices.size());
+    index_buffer->unlock();
+
+    return reinterpret_cast<Rml::CompiledGeometryHandle>(geometry);
+}
+
+void RenderInterface::RenderGeometry(Rml::CompiledGeometryHandle geometry, Rml::Vector2f translation, Rml::TextureHandle texture)
+{
+    Ogre::Matrix4 transform;
+    transform.makeTrans(translation.x, translation.y, 0);
+    mRenderSystem->_setWorldMatrix(transform);
+    RocketCompiledGeometry* ogre3d_geometry = (RocketCompiledGeometry*)geometry;
+
+    /*
+    if (ogre3d_geometry->mTexture != NULL)
+    {
+        mRenderSystem->_setTexture(0, true, ogre3d_geometry->mTexture->mTexture);
+        mRenderSystem->_setTextureBlendMode(0, mColourBlendMode);
+        mRenderSystem->_setTextureBlendMode(0, mAlphaBlendMode);
+    }
+    else
+        mRenderSystem->_disableTextureUnit(0);
+
+    mRenderSystem->_render(ogre3d_geometry->mRenderOperation);
+    */
+}
+
+void RenderInterface::ReleaseGeometry(Rml::CompiledGeometryHandle geometry)
+{
+    RocketCompiledGeometry* ogre3d_geometry = reinterpret_cast<RocketCompiledGeometry*>(geometry);
+    delete ogre3d_geometry->mRenderOperation.vertexData;
+    delete ogre3d_geometry->mRenderOperation.indexData;
+    delete ogre3d_geometry;
+}
+
+Rml::TextureHandle RenderInterface::LoadTexture(Rml::Vector2i& texture_dimensions, const Rml::String& source)
+{
+    std::filesystem::path path(source);
+    std::string filename = path.filename().string();
+
+    Ogre::TextureManager* texture_manager = Ogre::TextureManager::getSingletonPtr();
+
+    /*
+    // Get the file name
+    Rocket::Core::String::size_type lc = source.RFind("/");
+    Rocket::Core::String::size_type lc_win = source.RFind("\\");
+    if (lc_win != Rocket::Core::String::npos && (lc == Rocket::Core::String::npos || lc < lc_win))
+        lc = lc_win;
+    Ogre::String file = (lc != Rocket::Core::String::npos) ? source.Substring(lc + 1).CString() : source.CString();
+
+    // Try to find resource group
+    Ogre::String group = Ogre::ResourceGroupManager::getSingletonPtr()->findGroupContainingResource(file);
+
+    // If mGroup is set to autodetect use the resource group of the given texture as default group
+    if (mGroup == Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME && !group.empty()) mGroup = group;
+    */
+
+    // Try to get loaded texture
+    Ogre::TexturePtr ogre_texture = texture_manager->getByName(filename);
+
+    // Try to load texture if necessary
+    if (ogre_texture.isNull())
+    {
+        ogre_texture = texture_manager->load(filename, "General", Ogre::TEX_TYPE_2D, 0);
+    }
+
+    // Error
+    if (ogre_texture.isNull())
+    {
+        return 0;
+    }
+
+    // Texture size
+    texture_dimensions.x = ogre_texture->getWidth();
+    texture_dimensions.y = ogre_texture->getHeight();
+
+    // Create handle for the texture
+    // texture_handle = reinterpret_cast<Rocket::Core::TextureHandle>(new RocketTexture(ogre_texture));
+
+    return reinterpret_cast<Rml::TextureHandle>(ogre_texture.get());
+}
+
+Rml::TextureHandle RenderInterface::GenerateTexture(Rml::Span<const Rml::byte> source, Rml::Vector2i source_dimensions)
+{
+    static int texture_id = 1;
+
+    // Create a memory file
+    Ogre::DataStreamPtr dataStream(new Ogre::MemoryDataStream((void*)&source, source_dimensions.x * source_dimensions.y * sizeof(unsigned int)));
+
+    // Try to create texture from memory
+    Ogre::TexturePtr ogre_texture; /*= Ogre::TextureManager::getSingleton().loadRawData(Rocket::Core::String(16, "%d", texture_id++).CString(),
+        mGroup,
+        dataStream,
+        source_dimensions.x,
+        source_dimensions.y,
+        Ogre::PF_A8B8G8R8,
+        Ogre::TEX_TYPE_2D,
+        0);*/
+
+    // Error
+    if (ogre_texture.isNull())
+        return 0;
+
+    return reinterpret_cast<Rml::TextureHandle>(ogre_texture.get());
+}
+
+void RenderInterface::ReleaseTexture(Rml::TextureHandle texture)
+{
+    int i = 0;
+
+    // delete ((RocketTexture*)texture);
+}
+
+void RenderInterface::EnableScissorRegion(bool enable)
+{
+    mScissorEnable = enable;
+
+    if (!mScissorEnable)
+        mRenderSystem->setScissorTest(false);
+    else
+        mRenderSystem->setScissorTest(true, mScissorRect[0], mScissorRect[1], mScissorRect[2], mScissorRect[3]);
+}
+
+void RenderInterface::SetScissorRegion(Rml::Rectanglei region)
+{
+    mScissorRect[0] = std::max<int>(0, region.Position().x);
+    mScissorRect[1] = std::max<int>(0, region.Position().y);
+
+    /*
+    mScissorRect[2] = x + width;
+    mScissorRect[3] = y + height;
+
+    if (mScissorEnable)
+        mRenderSystem->setScissorTest(true, mScissorRect[0], mScissorRect[1], mScissorRect[2], mScissorRect[3]);
+    */
+}
+
+
+
+
+
+
+
+
+
+
+
 Gecko::Game* Ogre::Singleton<Gecko::Game>::msSingleton = nullptr;
 
 namespace Gecko
@@ -154,6 +446,68 @@ namespace Gecko
 
     void Game::run()
     {
+        auto system_interface = new SystemInterface();
+        auto render_interface = new RenderInterface(1920, 1200);
+
+        Rml::SetSystemInterface(system_interface);
+        Rml::SetRenderInterface(render_interface);
+
+        Rml::Initialise();
+
+        Rml::Context* context = Rml::CreateContext("main", Rml::Vector2i(1920, 1200));
+        Rml::Debugger::Initialise(context);
+
+        {
+            const Rml::String directory = "../assets/";
+
+            struct FontFace {
+                const char* filename;
+                bool fallback_face;
+            };
+            FontFace font_faces[] = {
+                {"LatoLatin-Regular.ttf", false},
+                {"LatoLatin-Italic.ttf", false},
+                {"LatoLatin-Bold.ttf", false},
+                {"LatoLatin-BoldItalic.ttf", false},
+                {"NotoEmoji-Regular.ttf", true},
+            };
+
+            for (const FontFace& face : font_faces)
+            {
+                Rml::LoadFontFace(directory + face.filename, face.fallback_face);
+            }
+        }
+
+        {
+            // DemoEventListenerInstancer event_listener_instancer{ &demo_window };
+            // Rml::Factory::RegisterEventListenerInstancer(&event_listener_instancer);
+
+            // demo_window.GetDocument()->AddEventListener(Rml::EventId::Keydown, &demo_window);
+            // demo_window.GetDocument()->AddEventListener(Rml::EventId::Keyup, &demo_window);
+            // demo_window.GetDocument()->AddEventListener(Rml::EventId::Animationend, &demo_window);
+        }
+
+        /*
+        Rml::ElementDocument* cursor = context->LoadMouseCursor(getResourceFullPath("cursor.rml").c_str());
+        
+        if (cursor)
+        {
+            // cursor->RemoveReference();
+        }
+        */
+
+        Rml::ElementDocument* document = context->LoadDocument("../assets/demo.rml");
+        
+        if (document)
+        {
+            document->Show();
+            // document->RemoveReference();
+        }
+
+
+
+
+
         auto previous_time = Utils::Time::get();
         auto elasped_time = 0.0f;
 
@@ -168,6 +522,11 @@ namespace Gecko
             {
                 update_input(Settings::Game::FrameTime);
                 update(Settings::Game::FrameTime);
+
+
+                context->Update();
+                context->Render();
+
 
                 root->renderOneFrame();
 

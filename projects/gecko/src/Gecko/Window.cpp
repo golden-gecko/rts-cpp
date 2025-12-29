@@ -1,9 +1,10 @@
+#include "Gecko/Window.hpp"
+
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Exception.hpp"
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Input.hpp"
 #include "Gecko/Settings.hpp"
-#include "Gecko/Window.hpp"
 
 namespace Gecko
 {

@@ -1,6 +1,10 @@
 {
     "resources": [
         {
+            "path": "../assets",
+            "type": "FileSystem"
+        },
+        {
             "path": "../cache/meshes",
             "type": "FileSystem"
         },

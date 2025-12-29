@@ -5,9 +5,20 @@ project(Gecko LANGUAGES CXX)
 set(CMAKE_DEBUG_POSTFIX _d)
 
 # Create target and add source files
-file(GLOB_RECURSE BINARY_FILES ${CMAKE_SOURCE_DIR}/bin/*.json ${CMAKE_SOURCE_DIR}/bin/*.material ${CMAKE_SOURCE_DIR}/bin/*.png)
-file(GLOB_RECURSE HEADER_FILES ${PROJECT_SOURCE_DIR}/src/*.hpp)
-file(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE BINARY_FILES
+    ${CMAKE_SOURCE_DIR}/bin/*.cfg
+    ${CMAKE_SOURCE_DIR}/bin/*.json
+    ${CMAKE_SOURCE_DIR}/bin/*.material
+    ${CMAKE_SOURCE_DIR}/bin/*.png
+    ${CMAKE_SOURCE_DIR}/bin/*.rcss
+    ${CMAKE_SOURCE_DIR}/bin/*.rml
+)
+file(GLOB_RECURSE HEADER_FILES
+    ${PROJECT_SOURCE_DIR}/src/*.hpp
+)
+file(GLOB_RECURSE SOURCE_FILES
+    ${PROJECT_SOURCE_DIR}/src/*.cpp
+)
 
 source_group(TREE ${CMAKE_SOURCE_DIR}/bin PREFIX "Binary Files" FILES ${BINARY_FILES})
 source_group(TREE ${PROJECT_SOURCE_DIR}/src PREFIX "Header Files" FILES ${HEADER_FILES})
@@ -47,6 +58,10 @@ target_link_libraries(${PROJECT_NAME} OgreBites)
 # Find OIS
 target_include_directories(${PROJECT_NAME} PUBLIC ${OIS_DIR}/include/ois)
 target_link_libraries(${PROJECT_NAME} debug ${OIS_DIR}/lib/OIS_d.lib optimized ${OIS_DIR}/lib/OIS.lib)
+
+# Find RmlUi
+find_package(RmlUi REQUIRED)
+target_link_libraries(${PROJECT_NAME} RmlUi::RmlUi)
 
 # Find Ultralight
 target_include_directories(${PROJECT_NAME} PUBLIC ${ULTRALIGHT_DIR}/include)

@@ -27,6 +27,10 @@
 
 #include <OIS.h>
 
+#include <RmlUi/Core/ElementDocument.h>
+#include <RmlUi/Core/Factory.h>
+#include <RmlUi/Debugger.h>
+
 #include <AppCore/App.h>
 #include <AppCore/AppCore.h>
 #include <AppCore/JSHelpers.h>

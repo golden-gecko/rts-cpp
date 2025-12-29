@@ -60,12 +60,15 @@ int main(int argc, char* argv[])
 
     // Initialize other system.
     technology_tree->init();
-    ui->init();
 
+    // Run game.
     game->load_options();
     game->run();
 
     // TODO: Free memory here.
+    {
+        Rml::Shutdown();
+    }
 
     return 0;
 }
