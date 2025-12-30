@@ -242,16 +242,6 @@ namespace Gecko::Utils::Convert
         return Json::writeString(builder, value);
     }
 
-    std::string to_string(const ultralight::JSValue& value)
-    {
-        return to_string(ultralight::String(value));
-    }
-
-    std::string to_string(const ultralight::String& value)
-    {
-        return value.utf8().data();
-    }
-
     std::string to_string(const Ogre::ColourValue& value, std::uint8_t precision)
     {
         std::stringstream stream;
@@ -270,76 +260,6 @@ namespace Gecko::Utils::Convert
         stream << value.x << ":" << value.y << ":" << value.z;
 
         return stream.str();
-    }
-
-    std::string to_string(ultralight::MessageLevel level)
-    {
-        using namespace ultralight;
-
-        switch (level)
-        {
-            case kMessageLevel_Log:
-                return "Log";
-
-            case kMessageLevel_Warning:
-                return "Warning";
-
-            case kMessageLevel_Error:
-                return "Error";
-
-            case kMessageLevel_Debug:
-                return "Debug";
-
-            case kMessageLevel_Info:
-                return "Info";
-
-            default:
-                return "";
-        }
-    }
-
-    std::string to_string(ultralight::MessageSource source)
-    {
-        using namespace ultralight;
-
-        switch (source)
-        {
-            case kMessageSource_XML:
-                return "XML";
-
-            case kMessageSource_JS:
-                return "JS";
-
-            case kMessageSource_Network:
-                return "Network";
-
-            case kMessageSource_ConsoleAPI:
-                return "ConsoleAPI";
-
-            case kMessageSource_Storage:
-                return "Storage";
-
-            case kMessageSource_AppCache:
-                return "AppCache";
-
-            case kMessageSource_Rendering:
-                return "Rendering";
-
-            case kMessageSource_CSS:
-                return "CSS";
-
-            case kMessageSource_Security:
-                return "Security";
-
-            case kMessageSource_ContentBlocker:
-                return "ContentBlocker";
-
-            case kMessageSource_Other:
-                return "Other";
-
-            default:
-                return "";
-        }
     }
 
     /*

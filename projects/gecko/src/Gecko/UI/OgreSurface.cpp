@@ -5,6 +5,7 @@
 
 namespace Gecko
 {
+    /*
     OgreSurface::OgreSurface(const std::string& name, std::size_t width, std::size_t height)
     {
         auto size = Ogre::Bitwise::firstPO2From(std::max(width, height));
@@ -110,4 +111,5 @@ namespace Gecko
         pixel_buffer->unlock();
         bitmap->UnlockPixels();
     }
+    */
 }

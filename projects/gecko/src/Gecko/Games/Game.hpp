@@ -7,8 +7,13 @@ namespace Gecko
 {
     class Game :
         public Ogre::Singleton<Game>,
+        public Ogre::RenderQueueListener,
         public Updatable
     {
+    public:
+        // From Ogre::RenderQueueListener.
+        void renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation) override;
+
     public:
         explicit Game(const std::shared_ptr<Configuration>& configuration);
 

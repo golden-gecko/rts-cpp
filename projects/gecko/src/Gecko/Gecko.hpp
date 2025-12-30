@@ -27,16 +27,15 @@
 
 #include <OIS.h>
 
+#include <RmlUi/Core/Context.h>
+#include <RmlUi/Core/Element.h>
 #include <RmlUi/Core/ElementDocument.h>
+#include <RmlUi/Core/EventListener.h>
+#include <RmlUi/Core/EventListenerInstancer.h>
 #include <RmlUi/Core/Factory.h>
+#include <RmlUi/Core/RenderInterface.h>
+#include <RmlUi/Core/SystemInterface.h>
 #include <RmlUi/Debugger.h>
-
-#include <AppCore/App.h>
-#include <AppCore/AppCore.h>
-#include <AppCore/JSHelpers.h>
-#include <AppCore/Window.h>
-#include <JavaScriptCore/JavaScript.h>
-#include <Ultralight/Ultralight.h>
 
 #pragma warning(pop)
 

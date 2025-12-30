@@ -59,6 +59,7 @@ int main(int argc, char* argv[])
     main_window->on_resize();
 
     // Initialize other system.
+    ui->init();
     technology_tree->init();
 
     // Run game.
@@ -66,9 +67,6 @@ int main(int argc, char* argv[])
     game->run();
 
     // TODO: Free memory here.
-    {
-        Rml::Shutdown();
-    }
 
     return 0;
 }

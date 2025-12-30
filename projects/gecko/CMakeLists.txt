@@ -7,11 +7,14 @@ set(CMAKE_DEBUG_POSTFIX _d)
 # Create target and add source files
 file(GLOB_RECURSE BINARY_FILES
     ${CMAKE_SOURCE_DIR}/bin/*.cfg
+    ${CMAKE_SOURCE_DIR}/bin/*.jpg
     ${CMAKE_SOURCE_DIR}/bin/*.json
     ${CMAKE_SOURCE_DIR}/bin/*.material
     ${CMAKE_SOURCE_DIR}/bin/*.png
     ${CMAKE_SOURCE_DIR}/bin/*.rcss
     ${CMAKE_SOURCE_DIR}/bin/*.rml
+    ${CMAKE_SOURCE_DIR}/bin/*.tga
+    ${CMAKE_SOURCE_DIR}/bin/*.ttf
 )
 file(GLOB_RECURSE HEADER_FILES
     ${PROJECT_SOURCE_DIR}/src/*.hpp
@@ -62,10 +65,3 @@ target_link_libraries(${PROJECT_NAME} debug ${OIS_DIR}/lib/OIS_d.lib optimized $
 # Find RmlUi
 find_package(RmlUi REQUIRED)
 target_link_libraries(${PROJECT_NAME} RmlUi::RmlUi)
-
-# Find Ultralight
-target_include_directories(${PROJECT_NAME} PUBLIC ${ULTRALIGHT_DIR}/include)
-target_link_libraries(${PROJECT_NAME} ${ULTRALIGHT_DIR}/lib/AppCore.lib)
-target_link_libraries(${PROJECT_NAME} ${ULTRALIGHT_DIR}/lib/Ultralight.lib)
-target_link_libraries(${PROJECT_NAME} ${ULTRALIGHT_DIR}/lib/UltralightCore.lib)
-target_link_libraries(${PROJECT_NAME} ${ULTRALIGHT_DIR}/lib/WebCore.lib)

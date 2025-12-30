@@ -27,101 +27,243 @@
 
 Gecko::UI* Ogre::Singleton<Gecko::UI>::msSingleton = nullptr;
 
-namespace
-{
-    ultralight::MouseEvent::Button convert_button_id(OIS::MouseButtonID id)
-    {
-        switch (id)
-        {
-            case OIS::MouseButtonID::MB_Middle:
-                return ultralight::MouseEvent::Button::kButton_Middle;
-
-            case OIS::MouseButtonID::MB_Right:
-                return ultralight::MouseEvent::Button::kButton_Right;
-
-            default:
-                return ultralight::MouseEvent::Button::kButton_Left;
-        }
-    }
-}
-
 namespace Gecko
 {
-    void UI::OnFinishLoading(ultralight::View* caller, uint64_t frame_id, bool is_main_frame, const ultralight::String& url)
+    RenderInterface::RenderInterface(unsigned int window_width, unsigned int window_height)
     {
-        is_loaded = true;
+        mRenderSystem = Ogre::Root::getSingletonPtr()->getRenderSystem();
+
+        mColourBlendMode.blendType = Ogre::LBT_COLOUR;
+        mColourBlendMode.source1 = Ogre::LBS_DIFFUSE;
+        mColourBlendMode.source2 = Ogre::LBS_TEXTURE;
+        mColourBlendMode.operation = Ogre::LBX_MODULATE;
+
+        mAlphaBlendMode.blendType = Ogre::LBT_ALPHA;
+        mAlphaBlendMode.source1 = Ogre::LBS_DIFFUSE;
+        mAlphaBlendMode.source2 = Ogre::LBS_TEXTURE;
+        mAlphaBlendMode.operation = Ogre::LBX_MODULATE;
+
+        mScissorEnable = false;
+
+        mScissorRect[0] = 0;
+        mScissorRect[1] = 0;
+        mScissorRect[2] = window_width;
+        mScissorRect[3] = window_height;
+
+        mGroup = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
     }
 
-    void UI::OnDOMReady(ultralight::View* caller, uint64_t frame_id, bool is_main_frame, const ultralight::String& url)
+    Rml::CompiledGeometryHandle RenderInterface::CompileGeometry(Rml::Span<const Rml::Vertex> vertices, Rml::Span<const int> indices)
     {
-        using namespace ultralight;
+        RocketCompiledGeometry* geometry = new RocketCompiledGeometry();
+        // geometry->mTexture = (texture == NULL) ? NULL : (RocketTexture*)texture;
 
-        // SetJSContext(caller->LockJSContext().get());
+        // Add vertex buffer
+        geometry->mRenderOperation.vertexData = new Ogre::VertexData();
+        geometry->mRenderOperation.vertexData->vertexStart = 0;
+        geometry->mRenderOperation.vertexData->vertexCount = vertices.size();
 
-        auto global = JSGlobalObject();
+        // Add index buffer
+        geometry->mRenderOperation.indexData = new Ogre::IndexData();
+        geometry->mRenderOperation.indexData->indexStart = 0;
+        geometry->mRenderOperation.indexData->indexCount = indices.size();
 
-        global["engine_application_save_options"] = BindJSCallback(&UI::engine_application_save_options);
-        global["engine_application_quit"] = BindJSCallback(&UI::engine_application_quit);
-        global["engine_game_load"] = BindJSCallback(&UI::engine_game_load);
-        global["engine_game_new"] = BindJSCallback(&UI::engine_game_new);
-        global["engine_game_save"] = BindJSCallback(&UI::engine_game_save);
-        global["engine_game_quit"] = BindJSCallback(&UI::engine_game_quit);
-        global["engine_map_set_data_layer"] = BindJSCallback(&UI::engine_map_set_data_layer);
-        global["engine_minimap_click"] = BindJSCallback(&UI::engine_minimap_click);
-        global["engine_minimap_move"] = BindJSCallback(&UI::engine_minimap_move);
-        global["engine_minimap_zoom_in"] = BindJSCallback(&UI::engine_minimap_zoom_in);
-        global["engine_minimap_zoom_out"] = BindJSCallback(&UI::engine_minimap_zoom_out);
-        global["engine_preview_hide"] = BindJSCallback(&UI::engine_preview_hide);
-        global["engine_preview_set_position"] = BindJSCallback(&UI::engine_preview_set_position);
-        global["engine_preview_show"] = BindJSCallback(&UI::engine_preview_show);
-        global["engine_technology_research"] = BindJSCallback(&UI::engine_technology_research);
-        global["engine_ui_change_visibility"] = BindJSCallback(&UI::engine_ui_change_visibility);
-        global["engine_ui_look_at_object"] = BindJSCallback(&UI::engine_ui_look_at_object);
-        global["engine_ui_select_object"] = BindJSCallback(&UI::engine_ui_select_object);
-        global["engine_ui_set_configuration"] = BindJSCallback(&UI::engine_ui_set_configuration);
-        global["engine_ui_set_order"] = BindJSCallback(&UI::engine_ui_set_order);
-        global["engine_ui_set_skill"] = BindJSCallback(&UI::engine_ui_set_skill);
+        geometry->mRenderOperation.operationType = Ogre::RenderOperation::OT_TRIANGLE_LIST;
 
-        is_dom_ready = true;
-    }
+        // Set up the vertex declaration.
+        Ogre::VertexDeclaration* vertex_declaration = geometry->mRenderOperation.vertexData->vertexDeclaration;
+        size_t element_offset = 0;
+        vertex_declaration->addElement(0, element_offset, Ogre::VET_FLOAT3, Ogre::VES_POSITION);
+        element_offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
+        vertex_declaration->addElement(0, element_offset, Ogre::VET_COLOUR, Ogre::VES_DIFFUSE);
+        element_offset += Ogre::VertexElement::getTypeSize(Ogre::VET_COLOUR);
+        vertex_declaration->addElement(0, element_offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES);
 
-    void UI::LogMessage(ultralight::LogLevel log_level, const ultralight::String& message)
-    {
-        switch (log_level)
+        // Create the vertex buffer.
+        Ogre::HardwareVertexBufferSharedPtr vertex_buffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(vertex_declaration->getVertexSize(0), vertices.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+        geometry->mRenderOperation.vertexData->vertexBufferBinding->setBinding(0, vertex_buffer);
+
+        // Fill the vertex buffer.
+        RocketVertex* ogre_vertices = (RocketVertex*)vertex_buffer->lock(0, vertex_buffer->getSizeInBytes(), Ogre::HardwareBuffer::HBL_NORMAL);
+
+        for (int i = 0; i < vertices.size(); ++i)
         {
-            case ultralight::LogLevel::Error:
-                L_ERROR << Utils::Convert::to_string(message);
-                break;
+            ogre_vertices[i].x = vertices[i].position.x;
+            ogre_vertices[i].y = vertices[i].position.y;
+            ogre_vertices[i].z = 0;
 
-            case ultralight::LogLevel::Info:
-                L_INFO << Utils::Convert::to_string(message);
-                break;
+            Ogre::ColourValue diffuse(vertices[i].colour.red / 255.0f, vertices[i].colour.green / 255.0f, vertices[i].colour.blue / 255.0f, vertices[i].colour.alpha / 255.0f);
+            mRenderSystem->convertColourValue(diffuse, &ogre_vertices[i].diffuse);
 
-            case ultralight::LogLevel::Warning:
-                L_WARNING << Utils::Convert::to_string(message);
-                break;
-
-            default:
-                L_DEBUG << Utils::Convert::to_string(message);
+            ogre_vertices[i].u = vertices[i].tex_coord[0];
+            ogre_vertices[i].v = vertices[i].tex_coord[1];
         }
+        vertex_buffer->unlock();
+
+        // Create the index buffer.
+        Ogre::HardwareIndexBufferSharedPtr index_buffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, indices.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+        geometry->mRenderOperation.indexData->indexBuffer = index_buffer;
+        geometry->mRenderOperation.useIndexes = true;
+
+        // Fill the index buffer.
+        void* ogre_indices = index_buffer->lock(0, index_buffer->getSizeInBytes(), Ogre::HardwareBuffer::HBL_NORMAL);
+        memcpy(ogre_indices, indices.data(), sizeof(unsigned int) * indices.size());
+        index_buffer->unlock();
+
+        return reinterpret_cast<Rml::CompiledGeometryHandle>(geometry);
     }
 
-    void UI::OnAddConsoleMessage(ultralight::View* caller, const ultralight::ConsoleMessage& message)
+    void RenderInterface::RenderGeometry(Rml::CompiledGeometryHandle geometry, Rml::Vector2f translation, Rml::TextureHandle texture)
     {
-        L_ERROR
-            << "[Console]: [" << Utils::Convert::to_string(message.source())
-            << "] [" << Utils::Convert::to_string(message.level())
-            << "] " << Utils::Convert::to_string(message.message());
+        Ogre::Matrix4 transform;
+        transform.makeTrans(translation.x, translation.y, 0);
+        mRenderSystem->_setWorldMatrix(transform);
+        RocketCompiledGeometry* ogre3d_geometry = reinterpret_cast<RocketCompiledGeometry*>(geometry);
 
-        if (message.source() == ultralight::kMessageSource_JS)
+        //*
+        auto ogre_resource = Ogre::TextureManager::getSingleton().getByHandle(texture);
+
+        if (ogre_resource.isNull())
         {
-            L_ERROR
-                << " (" << Utils::Convert::to_string(message.source_id())
-                << " @ line " << Utils::Convert::to_string(message.line_number())
-                << ", col " << Utils::Convert::to_string(message.column_number())
-                << ")";
+            mRenderSystem->_disableTextureUnit(0);
         }
+        else
+        {
+            auto ogre_texture = static_pointer_cast<Ogre::Texture>(ogre_resource);
+
+            mRenderSystem->_setTexture(0, true, ogre_texture);
+            mRenderSystem->_setTextureBlendMode(0, mColourBlendMode);
+            mRenderSystem->_setTextureBlendMode(0, mAlphaBlendMode);
+        }
+
+        mRenderSystem->_render(ogre3d_geometry->mRenderOperation);
+        //*/
     }
+
+    void RenderInterface::ReleaseGeometry(Rml::CompiledGeometryHandle geometry)
+    {
+        int i = 0;
+
+        /*
+        RocketCompiledGeometry* ogre3d_geometry = reinterpret_cast<RocketCompiledGeometry*>(geometry);
+        delete ogre3d_geometry->mRenderOperation.vertexData;
+        delete ogre3d_geometry->mRenderOperation.indexData;
+        delete ogre3d_geometry;
+        */
+    }
+
+    Rml::TextureHandle RenderInterface::LoadTexture(Rml::Vector2i& texture_dimensions, const Rml::String& source)
+    {
+        std::filesystem::path path(source);
+        std::string filename = path.filename().string();
+
+        Ogre::TextureManager* texture_manager = Ogre::TextureManager::getSingletonPtr();
+
+        /*
+        // Get the file name
+        Rocket::Core::String::size_type lc = source.RFind("/");
+        Rocket::Core::String::size_type lc_win = source.RFind("\\");
+        if (lc_win != Rocket::Core::String::npos && (lc == Rocket::Core::String::npos || lc < lc_win))
+            lc = lc_win;
+        Ogre::String file = (lc != Rocket::Core::String::npos) ? source.Substring(lc + 1).CString() : source.CString();
+
+        // Try to find resource group
+        Ogre::String group = Ogre::ResourceGroupManager::getSingletonPtr()->findGroupContainingResource(file);
+
+        // If mGroup is set to autodetect use the resource group of the given texture as default group
+        if (mGroup == Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME && !group.empty()) mGroup = group;
+        */
+
+        // Try to get loaded texture
+        Ogre::TexturePtr ogre_texture = texture_manager->getByName(filename);
+
+        // Try to load texture if necessary
+        if (ogre_texture.isNull())
+        {
+            ogre_texture = texture_manager->load(filename, "General", Ogre::TEX_TYPE_2D, 0);
+        }
+
+        // Error
+        if (ogre_texture.isNull())
+        {
+            return 0;
+        }
+
+        // Texture size
+        texture_dimensions.x = ogre_texture->getWidth();
+        texture_dimensions.y = ogre_texture->getHeight();
+
+        // Create handle for the texture
+        // texture_handle = reinterpret_cast<Rocket::Core::TextureHandle>(new RocketTexture(ogre_texture));
+
+        return ogre_texture->getHandle(); // reinterpret_cast<Rml::TextureHandle>(ogre_texture.get());
+    }
+
+    Rml::TextureHandle RenderInterface::GenerateTexture(Rml::Span<const Rml::byte> source, Rml::Vector2i source_dimensions)
+    {
+        static int texture_id = 1;
+        std::string texture_name = std::format("generated_texture_{}", texture_id++);
+
+        // Create a memory file
+        Ogre::DataStreamPtr dataStream(new Ogre::MemoryDataStream((void*)source.data(), source_dimensions.x * source_dimensions.y * sizeof(unsigned int)));
+
+        // Try to create texture from memory
+        Ogre::TexturePtr ogre_texture = Ogre::TextureManager::getSingleton().loadRawData(
+            texture_name,
+            mGroup,
+            dataStream,
+            source_dimensions.x,
+            source_dimensions.y,
+            Ogre::PF_A8B8G8R8,
+            Ogre::TEX_TYPE_2D,
+            0);
+
+        // Error
+        if (ogre_texture.isNull())
+        {
+            return 0;
+        }
+
+        return ogre_texture->getHandle(); // reinterpret_cast<Rml::TextureHandle>(ogre_texture.get());
+    }
+
+    void RenderInterface::ReleaseTexture(Rml::TextureHandle texture)
+    {
+        int i = 0;
+
+        // delete ((RocketTexture*)texture);
+    }
+
+    void RenderInterface::EnableScissorRegion(bool enable)
+    {
+        mScissorEnable = enable;
+
+        if (!mScissorEnable)
+            mRenderSystem->setScissorTest(false);
+        else
+            mRenderSystem->setScissorTest(true, mScissorRect[0], mScissorRect[1], mScissorRect[2], mScissorRect[3]);
+    }
+
+    void RenderInterface::SetScissorRegion(Rml::Rectanglei region)
+    {
+        mScissorRect[0] = std::max<int>(0, region.Position().x);
+        mScissorRect[1] = std::max<int>(0, region.Position().y);
+
+        /*
+        mScissorRect[2] = x + width;
+        mScissorRect[3] = y + height;
+
+        if (mScissorEnable)
+            mRenderSystem->setScissorTest(true, mScissorRect[0], mScissorRect[1], mScissorRect[2], mScissorRect[3]);
+        */
+    }
+
+
+
+
+
+
+
 
     UI::UI(const std::shared_ptr<Configuration>& configuration) :
         configuration(configuration)
@@ -130,63 +272,71 @@ namespace Gecko
 
     UI::~UI()
     {
-        view = nullptr;
-        renderer = nullptr;
-
-        ogre_surface.reset();
     }
 
     void UI::init()
     {
+        render_interface = std::make_shared<RenderInterface>(1920, 1200);
+        system_interface = std::make_shared<SystemInterface>();
+
+        Rml::SetSystemInterface(system_interface.get());
+        Rml::SetRenderInterface(render_interface.get());
+
+        Rml::Initialise();
+
+        context = Rml::CreateContext("main", Rml::Vector2i(1920, 1200));
+
+        Rml::Debugger::Initialise(context);
+
+        // Load fonts.
+        const Rml::String directory = "../assets";
+
+        struct FontFace {
+            const char* filename;
+            bool fallback_face;
+        };
+        FontFace font_faces[] = {
+            {"LatoLatin-Regular.ttf", false},
+            {"LatoLatin-Italic.ttf", false},
+            {"LatoLatin-Bold.ttf", false},
+            {"LatoLatin-BoldItalic.ttf", false},
+            {"NotoEmoji-Regular.ttf", true},
+        };
+
+        for (const FontFace& face : font_faces)
+        {
+            L_INFO << "LoadFontFace: " << Rml::LoadFontFace(directory + "/" + face.filename, face.fallback_face);
+        }
+
+        // Setup events.
+        // DemoEventListenerInstancer event_listener_instancer{ &demo_window };
+        // Rml::Factory::RegisterEventListenerInstancer(&event_listener_instancer);
+
+        // demo_window.GetDocument()->AddEventListener(Rml::EventId::Keydown, &demo_window);
+        // demo_window.GetDocument()->AddEventListener(Rml::EventId::Keyup, &demo_window);
+        // demo_window.GetDocument()->AddEventListener(Rml::EventId::Animationend, &demo_window);
+
+        // Load cursor.
         /*
-        auto width = configuration->get_int<std::size_t>("ui.width", 1024);
-        auto height = configuration->get_int<std::size_t>("ui.height", 768);
+        Rml::ElementDocument* cursor = context->LoadMouseCursor(getResourceFullPath("cursor.rml").c_str());
 
-        auto scale = configuration->get_float("ui.scale", 1.0);
-        auto font = configuration->get_string("ui.font", "Arial");
+        if (cursor)
+        {
+            // cursor->RemoveReference();
+        }
+        */
 
-        auto current_directory = std::filesystem::path(std::filesystem::current_path());
-        auto layout = std::filesystem::path(configuration->get_string("ui.layout"));
-        auto url = "file:///" + (current_directory / layout).string();
+        // Load document.
+        auto document1 = context->LoadDocument("../assets/demo.rml");
+        auto position1 = Rml::Vector2f(50, 200);
 
-        // Create texture.
-        ogre_surface = std::make_unique<OgreSurface>("ui", width, height);
-
-        // Create configuration.
-        ultralight::Config config;
-
-        config.device_scale = scale;
-        config.font_family_fixed = font.c_str();
-        config.font_family_serif = font.c_str();
-        config.font_family_sans_serif = font.c_str();
-        config.font_family_standard = font.c_str();
-        config.font_hinting = ultralight::FontHinting::kFontHinting_Smooth;
-        config.use_gpu_renderer = false;
-
-        ultralight::Platform::instance().set_config(config);
-        ultralight::Platform::instance().set_font_loader(ultralight::GetPlatformFontLoader());
-        ultralight::Platform::instance().set_file_system(ultralight::GetPlatformFileSystem("."));
-        ultralight::Platform::instance().set_logger(this);
-
-        // Create renderer.
-        renderer = ultralight::Renderer::Create();
-
-        // Create view.
-        ultralight::ViewConfig view_config;
-        
-        view_config.initial_device_scale = 2.0;
-        view_config.is_accelerated = false;
-
-        view = renderer->CreateView(width, height, view_config, nullptr);
-        view->set_load_listener(this);
-        view->set_view_listener(this);
-        view->LoadURL(url.c_str());
+        document1->GetElementById("title")->SetInnerRML("RTS 1");
+        document1->SetProperty(Rml::PropertyId::Left, Rml::Property(position1.x, Rml::Unit::DP));
+        document1->SetProperty(Rml::PropertyId::Top, Rml::Property(position1.y, Rml::Unit::DP));
+        document1->Show();
 
         init_components();
         init_visibility_types();
-
-        wait_until_ready();
-        */
     }
 
     void UI::deinit()
@@ -196,7 +346,101 @@ namespace Gecko
         preview.reset();
         selection_box.reset();
 
-        ogre_surface.reset();
+        Rml::Shutdown();
+    }
+
+    void UI::render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
+    {
+        if (queueGroupId != Ogre::RENDER_QUEUE_OVERLAY || Ogre::Root::getSingleton().getRenderSystem()->_getViewport()->getOverlaysEnabled() == false)
+        {
+            return;
+        }
+
+        Ogre::RenderSystem* render_system = Game::getSingleton().get_root()->getRenderSystem();
+
+        if (render_system == nullptr)
+        {
+            return;
+        }
+
+        auto window = Game::getSingleton().get_window(Gecko::Settings::Window::MainName);
+
+        if (window == nullptr)
+        {
+            return;
+        }
+
+        auto render_window = window->get_render_window();
+
+        if (render_window == nullptr)
+        {
+            return;
+        }
+
+        context->Update();
+
+        // Set up the projection and view matrices.
+        float z_near = -1;
+        float z_far = 1;
+        Ogre::Matrix4 projection_matrix = Ogre::Matrix4::ZERO;
+        projection_matrix[0][0] = 2.0f / (Ogre::Real)render_window->getWidth();
+        projection_matrix[0][3] = -1.0000000f;
+        projection_matrix[1][1] = -2.0f / (Ogre::Real)render_window->getHeight();
+        projection_matrix[1][3] = 1.0000000f;
+        projection_matrix[2][2] = -2.0f / (z_far - z_near);
+        projection_matrix[3][3] = 1.0000000f;
+        render_system->_setProjectionMatrix(projection_matrix);
+        render_system->_setViewMatrix(Ogre::Matrix4::IDENTITY);
+
+        // Disable lighting, as all of Rocket's geometry is unlit.
+        render_system->setLightingEnabled(false);
+        // Disable depth-buffering; all of the geometry is already depth-sorted.
+        render_system->_setDepthBufferParams(false, false);
+        // Rocket generates anti-clockwise geometry, so enable clockwise-culling.
+        render_system->_setCullingMode(Ogre::CULL_CLOCKWISE);
+        // Disable fogging.
+        render_system->_setFog(Ogre::FOG_NONE);
+        // Enable writing to all four channels.
+        render_system->_setColourBufferWriteEnabled(true, true, true, true);
+        // Unbind any vertex or fragment programs bound previously by the application.
+        render_system->unbindGpuProgram(Ogre::GPT_FRAGMENT_PROGRAM);
+        render_system->unbindGpuProgram(Ogre::GPT_VERTEX_PROGRAM);
+
+        // Set texture settings to clamp along both axes.
+        Ogre::TextureUnitState::UVWAddressingMode addressing_mode;
+        addressing_mode.u = Ogre::TextureUnitState::TAM_CLAMP;
+        addressing_mode.v = Ogre::TextureUnitState::TAM_CLAMP;
+        addressing_mode.w = Ogre::TextureUnitState::TAM_CLAMP;
+
+
+        //render_system->_setTextureAddressingMode(0, addressing_mode);
+
+
+        // Set the texture coordinates for unit 0 to be read from unit 0.
+        render_system->_setTextureCoordSet(0, 0);
+        // Disable texture coordinate calculation.
+        render_system->_setTextureCoordCalculation(0, Ogre::TEXCALC_NONE);
+        // Enable linear filtering; images should be rendering 1 texel == 1 pixel, so point filtering could be used
+        // except in the case of scaling tiled decorators.
+
+
+        // render_system->_setTextureUnitFiltering(0, Ogre::FO_LINEAR, Ogre::FO_LINEAR, Ogre::FO_POINT);
+
+
+        // Disable texture coordinate transforms.
+        render_system->_setTextureMatrix(0, Ogre::Matrix4::IDENTITY);
+        // Reject pixels with an alpha of 0.
+        render_system->_setAlphaRejectSettings(Ogre::CMPF_GREATER, 0, false);
+        // Disable all texture units but the first.
+        render_system->_disableTextureUnitsFrom(1);
+
+        // Enable simple alpha blending.
+        render_system->_setSceneBlending(Ogre::SBF_SOURCE_ALPHA, Ogre::SBF_ONE_MINUS_SOURCE_ALPHA);
+
+        // Disable depth bias.
+        render_system->_setDepthBias(0, 0);
+
+        context->Render();
     }
 
     void UI::update(float time)
@@ -303,16 +547,8 @@ namespace Gecko
             get_minimap().update();
             get_preview().update();
 
-            renderer->Update();
-            renderer->Render();
-
-            auto bitmap_surface = dynamic_cast<ultralight::BitmapSurface*>(view->surface());
-            auto bitmap = bitmap_surface->bitmap();
-
-            if (bitmap_surface->dirty_bounds().IsEmpty() == false)
-            {
-                ogre_surface->update(bitmap);
-            }
+            // renderer->Update();
+            // renderer->Render();
         }
     }
 
@@ -328,6 +564,7 @@ namespace Gecko
         */
     }
 
+    /*
     void UI::engine_application_save_options(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args)
     {
         if (args.size() == 1 && args[0].IsString())
@@ -596,6 +833,7 @@ namespace Gecko
             set_skill_name(Utils::Convert::to_string(args[0]));
         }
     }
+    */
 
     void UI::inject_key_press(char key_code)
     {
@@ -609,6 +847,7 @@ namespace Gecko
 
     void UI::inject_mouse_move(std::size_t x, std::size_t y)
     {
+        /*
         ultralight::MouseEvent evt;
 
         evt.type = ultralight::MouseEvent::kType_MouseMoved;
@@ -616,10 +855,12 @@ namespace Gecko
         evt.y = y;
 
         view->FireMouseEvent(evt);
+        */
     }
 
     void UI::inject_mouse_press(std::size_t x, std::size_t y, OIS::MouseButtonID id)
     {
+        /*
         ultralight::MouseEvent evt;
 
         evt.type = ultralight::MouseEvent::kType_MouseDown;
@@ -628,10 +869,12 @@ namespace Gecko
         evt.button = convert_button_id(id);
 
         view->FireMouseEvent(evt);
+        */
     }
 
     void UI::inject_mouse_release(std::size_t x, std::size_t y, OIS::MouseButtonID id)
     {
+        /*
         ultralight::MouseEvent evt;
 
         evt.type = ultralight::MouseEvent::kType_MouseUp;
@@ -640,15 +883,14 @@ namespace Gecko
         evt.button = convert_button_id(id);
 
         view->FireMouseEvent(evt);
+        */
     }
 
     bool UI::is_mouse_inside(std::size_t x, std::size_t y)
     {
-        if (is_ready() == false)
-        {
-            return false;
-        }
+        return false;
 
+        /*
         static std::stringstream stream;
 
         stream.str("");
@@ -661,6 +903,7 @@ namespace Gecko
         auto value = view->EvaluateScript(stream.str().c_str());
 
         return Utils::Convert::to_string(value) == "true";
+        */
     }
 
     void UI::log_error(const std::string& text, Id id)
@@ -754,13 +997,8 @@ namespace Gecko
 
     void UI::show_menu()
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update UI.
-        view->EvaluateScript("app.menu.show()");
+        // view->EvaluateScript("app.menu.show()");
     }
 
     void UI::toggle_floating_description()
@@ -812,11 +1050,6 @@ namespace Gecko
 
     void UI::set_configurations(const std::set<std::string>& configurations)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::set<std::string> configurations_cache;
 
@@ -848,11 +1081,6 @@ namespace Gecko
 
     void UI::set_configurations_header(const std::string& _configuration_name)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::string configuration_name_cache = "none";
 
@@ -876,11 +1104,6 @@ namespace Gecko
     {
         // TODO: Refactor? Fix? Remove?
         /*
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::vector<Id> json_floating_descriptions_cache;
 
@@ -937,11 +1160,6 @@ namespace Gecko
 
     void UI::set_layers(const std::map<std::string, std::shared_ptr<Layer>>& layers)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::map<std::string, std::shared_ptr<Layer>> layers_cache;
 
@@ -984,11 +1202,6 @@ namespace Gecko
 
     void UI::set_maps(const std::vector<std::string>& maps)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::vector<std::string> maps_cache;
 
@@ -1025,11 +1238,6 @@ namespace Gecko
 
     void UI::set_info(const std::shared_ptr<Configuration>& info)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::shared_ptr<Configuration> info_cache;
 
@@ -1053,11 +1261,6 @@ namespace Gecko
 
     void UI::set_objects_admin()
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // TODO: Fix cache.
         /*
         // Update cache.
@@ -1116,11 +1319,6 @@ namespace Gecko
 
     void UI::set_orders_admin()
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         /* TODO: Fix cache.
         // Update cache.
         static OrderManager::Container orders_cache;
@@ -1165,11 +1363,6 @@ namespace Gecko
 
     void UI::set_players()
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // TODO: Fix cache.
         /*
         // Update cache.
@@ -1220,11 +1413,6 @@ namespace Gecko
 
     void UI::set_orders(const std::set<std::string>& orders)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::set<std::string> orders_cache;
 
@@ -1256,11 +1444,6 @@ namespace Gecko
 
     void UI::set_orders_header(order_type::Value order_type)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static order_type::Value order_type_cache = order_type::Value::None;
 
@@ -1284,11 +1467,6 @@ namespace Gecko
 
     void UI::set_resources(const Resources& resources)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static Resources resources_cache;
 
@@ -1328,11 +1506,6 @@ namespace Gecko
 
     void UI::set_saves(const std::vector<std::string>& saves)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::vector<std::string> saves_cache;
 
@@ -1374,11 +1547,6 @@ namespace Gecko
 
     void UI::set_skills(const std::set<std::string>& skills)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::set<std::string> skills_cache;
 
@@ -1410,11 +1578,6 @@ namespace Gecko
 
     void UI::set_skills_header(const std::string& skill_name)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::string skill_name_cache = "none";
 
@@ -1438,11 +1601,6 @@ namespace Gecko
 
     void UI::set_statistics(const std::map<std::string, std::string>& statistics)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::map<std::string, std::string> statistics_cache;
 
@@ -1479,11 +1637,6 @@ namespace Gecko
 
     void UI::set_terrain_layers(const std::set<std::string>& layers)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::set<std::string> layers_cache;
 
@@ -1513,11 +1666,6 @@ namespace Gecko
 
     void UI::set_water_layers(const std::set<std::string>& layers)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::set<std::string> layers_cache;
 
@@ -1569,16 +1717,11 @@ namespace Gecko
 
     void UI::evaluate_with_timeout(const std::string& js)
     {
-        view->EvaluateScript(("setTimeout(() => {" + js + ";}, 0)").c_str());
+        // view->EvaluateScript(("setTimeout(() => {" + js + ";}, 0)").c_str());
     }
 
     void UI::log_write(const std::string& text, const std::string& type, Id id)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update UI.
         static std::stringstream stream;
 
@@ -1592,15 +1735,5 @@ namespace Gecko
         stream << ")";
 
         evaluate_with_timeout(stream.str());
-    }
-
-    void UI::wait_until_ready()
-    {
-        L_INFO << "Waiting for UI..." << std::endl;
-
-        while (is_ready() == false)
-        {
-            renderer->Update();
-        }
     }
 }

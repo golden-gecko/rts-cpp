@@ -1,30 +1,66 @@
 #pragma once
 
 #include "Gecko/Interfaces/Initializable.hpp"
+#include "Gecko/Log.hpp"
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Timer.hpp"
 #include "Gecko/UI/OgreSurface.hpp"
 
 namespace Gecko
 {
-    class UI :
-        public Ogre::Singleton<UI>,
-        public ultralight::LoadListener,
-        public ultralight::Logger,
-        public ultralight::ViewListener,
-        public Initializable
+    class SystemInterface : public Rml::SystemInterface
     {
     public:
-        // From ultralight::LoadListener.
-        void OnFinishLoading(ultralight::View* caller, uint64_t frame_id, bool is_main_frame, const ultralight::String& url) override;
-        void OnDOMReady(ultralight::View* caller, uint64_t frame_id, bool is_main_frame, const ultralight::String& url) override;
+        // From Rml::SystemInterface.
+        bool LogMessage(Rml::Log::Type type, const Rml::String& message) override
+        {
+            L_INFO << "RmlUI: " << message;
 
-        // From ultralight::Logger.
-        void LogMessage(ultralight::LogLevel log_level, const ultralight::String& message) override;
+            return Rml::SystemInterface::LogMessage(type, message);
+        }
+    };
 
-        // From ultralight::ViewListener.
-        void OnAddConsoleMessage(ultralight::View* caller, const ultralight::ConsoleMessage& message) override;
+    struct RocketCompiledGeometry
+    {
+        Ogre::RenderOperation mRenderOperation;
+        Rml::Texture* mTexture = nullptr;
+        std::string           mTextureName;
+    };
 
+    struct RocketVertex
+    {
+        Ogre::Real x, y, z;
+        Ogre::uint32 diffuse;
+        Ogre::Real u, v;
+    };
+
+    class RenderInterface : public Rml::RenderInterface
+    {
+    public:
+        RenderInterface(unsigned int window_width, unsigned int window_height);
+
+        Rml::CompiledGeometryHandle CompileGeometry(Rml::Span<const Rml::Vertex> vertices, Rml::Span<const int> indices) override;
+        void RenderGeometry(Rml::CompiledGeometryHandle geometry, Rml::Vector2f translation, Rml::TextureHandle texture) override;
+        void ReleaseGeometry(Rml::CompiledGeometryHandle geometry) override;
+        Rml::TextureHandle LoadTexture(Rml::Vector2i& texture_dimensions, const Rml::String& source) override;
+        Rml::TextureHandle GenerateTexture(Rml::Span<const Rml::byte> source, Rml::Vector2i source_dimensions) override;
+        void ReleaseTexture(Rml::TextureHandle texture) override;
+        void EnableScissorRegion(bool enable) override;
+        void SetScissorRegion(Rml::Rectanglei region) override;
+
+    private:
+        Ogre::RenderSystem*    mRenderSystem = nullptr;
+        Ogre::LayerBlendModeEx mColourBlendMode;
+        Ogre::LayerBlendModeEx mAlphaBlendMode;
+        bool                   mScissorEnable = false;
+        size_t                 mScissorRect[4] = { 0, 0, 0, 0 };
+        Ogre::String           mGroup;
+    };
+
+    class UI :
+        public Ogre::Singleton<UI>,
+        public Initializable
+    {
     public:
         explicit UI(const std::shared_ptr<Configuration>& configuration);
 
@@ -33,11 +69,13 @@ namespace Gecko
         void init() override;
         void deinit() override;
 
+        void render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation);
         void update(float time);
 
     public:
         void change_visibility(const std::string& type, bool visible);
 
+        /*
         void engine_application_save_options(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
         void engine_application_quit(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
         void engine_game_new(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
@@ -59,6 +97,7 @@ namespace Gecko
         void engine_ui_set_configuration(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
         void engine_ui_set_order(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
         void engine_ui_set_skill(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        */
 
         void inject_key_press(char key_code);
         void inject_key_release(char key_code);
@@ -67,11 +106,6 @@ namespace Gecko
         void inject_mouse_release(std::size_t x, std::size_t y, OIS::MouseButtonID id);
 
         bool is_mouse_inside(std::size_t x, std::size_t y);
-
-        bool is_ready() const
-        {
-            return is_dom_ready && is_loaded;
-        }
 
         bool is_visible() const
         {
@@ -178,15 +212,13 @@ namespace Gecko
     private:
         std::shared_ptr<Configuration> configuration;
 
-        bool is_loaded = false;
-        bool is_dom_ready = false;
+        std::shared_ptr<SystemInterface> system_interface;
+        std::shared_ptr<RenderInterface> render_interface;
 
-        ultralight::RefPtr<ultralight::Renderer> renderer;
-        ultralight::RefPtr<ultralight::View> view;
+        Rml::Context* context = nullptr;
 
         std::unique_ptr<Cursor> cursor;
         std::unique_ptr<Minimap> minimap;
-        std::unique_ptr<OgreSurface> ogre_surface;
         std::unique_ptr<Preview> preview;
         std::unique_ptr<SelectionBox> selection_box;
 
@@ -206,6 +238,5 @@ namespace Gecko
 
         void evaluate_with_timeout(const std::string& js);
         void log_write(const std::string& text, const std::string& type, Id id = Id::Empty);
-        void wait_until_ready();
     };
 }
