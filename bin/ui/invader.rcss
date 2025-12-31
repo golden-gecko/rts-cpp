@@ -140,7 +140,7 @@
 	gauge-fill: 0px 356px 100px 86px;
 }
 
-body
+div
 {
 	font-family: LatoLatin;
 	font-weight: normal;
@@ -150,7 +150,7 @@ body
 	nav: auto;
 }
 
-body.window
+div.window
 {
 	padding-top: 43dp;
 	padding-bottom: 20dp;

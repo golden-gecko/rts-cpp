@@ -4,11 +4,12 @@
 #include "Gecko/Log.hpp"
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Timer.hpp"
-#include "Gecko/UI/OgreSurface.hpp"
+#include "Gecko/UI/Events.hpp"
 
 namespace Gecko
 {
-    class SystemInterface : public Rml::SystemInterface
+    class SystemInterface :
+        public Rml::SystemInterface
     {
     public:
         // From Rml::SystemInterface.
@@ -34,11 +35,11 @@ namespace Gecko
         Ogre::Real u, v;
     };
 
-    class RenderInterface : public Rml::RenderInterface
+    class RenderInterface :
+        public Rml::RenderInterface
     {
     public:
-        RenderInterface(unsigned int window_width, unsigned int window_height);
-
+        // From Rml::RenderInterface.
         Rml::CompiledGeometryHandle CompileGeometry(Rml::Span<const Rml::Vertex> vertices, Rml::Span<const int> indices) override;
         void RenderGeometry(Rml::CompiledGeometryHandle geometry, Rml::Vector2f translation, Rml::TextureHandle texture) override;
         void ReleaseGeometry(Rml::CompiledGeometryHandle geometry) override;
@@ -47,6 +48,9 @@ namespace Gecko
         void ReleaseTexture(Rml::TextureHandle texture) override;
         void EnableScissorRegion(bool enable) override;
         void SetScissorRegion(Rml::Rectanglei region) override;
+
+    public:
+        RenderInterface(unsigned int window_width, unsigned int window_height);
 
     private:
         Ogre::RenderSystem*    mRenderSystem = nullptr;
@@ -212,10 +216,14 @@ namespace Gecko
     private:
         std::shared_ptr<Configuration> configuration;
 
-        std::shared_ptr<SystemInterface> system_interface;
         std::shared_ptr<RenderInterface> render_interface;
+        std::shared_ptr<SystemInterface> system_interface;
 
         Rml::Context* context = nullptr;
+        Rml::ElementDocument* document = nullptr;
+
+        std::shared_ptr<Events> events;
+        std::shared_ptr<Instancer> instancer;
 
         std::unique_ptr<Cursor> cursor;
         std::unique_ptr<Minimap> minimap;
@@ -234,6 +242,8 @@ namespace Gecko
         std::string skill_name = "none";
 
         void init_components();
+        void init_events();
+        void init_fonts();
         void init_visibility_types();
 
         void evaluate_with_timeout(const std::string& js);

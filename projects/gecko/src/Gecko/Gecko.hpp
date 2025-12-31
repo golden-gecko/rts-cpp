@@ -35,6 +35,7 @@
 #include <RmlUi/Core/Factory.h>
 #include <RmlUi/Core/RenderInterface.h>
 #include <RmlUi/Core/SystemInterface.h>
+#include <RmlUi/Core/Types.h>
 #include <RmlUi/Debugger.h>
 
 #pragma warning(pop)

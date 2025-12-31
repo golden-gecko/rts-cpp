@@ -60,13 +60,8 @@ namespace Gecko
 
     bool Input::keyPressed(const OIS::KeyEvent& arg)
     {
-        /*
-        // TODO: Implement.
         // Process UI.
-        UI::getSingleton().inject_key_press(Convert::to_char(
-            arg.key, is_key_pressed(OIS::KeyCode::KC_LSHIFT) || is_key_pressed(OIS::KeyCode::KC_RSHIFT)
-        ));
-        */
+        UI::getSingleton().inject_key_press(arg.key);
 
         // Call command based on pressed key.
         auto assign_to_group = [](std::uint8_t group_number)
@@ -140,19 +135,14 @@ namespace Gecko
             }
         }
 
+        Statistics::getSingleton().add("Pressed keys", 1.0f);
+
         return true;
     }
 
     bool Input::keyReleased(const OIS::KeyEvent& arg)
     {
-        Statistics::getSingleton().add("Pressed keys", 1.0f);
-
-        /*
-        // Process UI.
-        UI::getSingleton().inject_key_press(Convert::to_char(
-        arg.key, is_key_pressed(OIS::KeyCode::KC_LSHIFT) || is_key_pressed(OIS::KeyCode::KC_RSHIFT)
-        ));
-        */
+        UI::getSingleton().inject_key_release(arg.key);
 
         return true;
     }
@@ -162,8 +152,8 @@ namespace Gecko
         auto x = static_cast<float>(arg.state.X.rel);
         auto y = static_cast<float>(arg.state.Y.rel);
 
+        UI::getSingleton().inject_mouse_move(arg.state.X.abs, arg.state.Y.abs);
         // TODO: Fix.
-        // UI::getSingleton().inject_mouse_move(arg.state.X.abs, arg.state.Y.abs);
         // UI::getSingleton().get_cursor().set_visible(false);
 
         auto camera = MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::MainName);
@@ -171,8 +161,7 @@ namespace Gecko
 
         if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
         {
-            // TODO: Fix.
-            // UI::getSingleton().get_selection_box().set_visible(false);
+            UI::getSingleton().get_selection_box().set_visible(false);
         }
         else if (is_mouse_button_pressed(OIS::MouseButtonID::MB_Left))
         {
@@ -224,13 +213,9 @@ namespace Gecko
 
     bool Input::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
     {
-        // TODO: Fix.
-        return true;
-
         if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
         {
-            // TODO: Fix.
-            // UI::getSingleton().inject_mouse_press(arg.state.X.abs, arg.state.Y.abs, id);
+            UI::getSingleton().inject_mouse_press(arg.state.X.abs, arg.state.Y.abs, id);
         }
         else if (id == OIS::MouseButtonID::MB_Left)
         {
@@ -243,21 +228,19 @@ namespace Gecko
 
     bool Input::mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
     {
-        // TODO: Fix.
-        return true;
-
         if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
         {
-            // TODO: Fix.
-            // UI::getSingleton().inject_mouse_release(arg.state.X.abs, arg.state.Y.abs, id);
+            UI::getSingleton().inject_mouse_release(arg.state.X.abs, arg.state.Y.abs, id);
         }
         else if (id == OIS::MouseButtonID::MB_Left)
         {
-            handle_left_mouse_button(arg);
+            // TODO: Fix.
+            // handle_left_mouse_button(arg);
         }
         else if (id == OIS::MouseButtonID::MB_Right)
         {
-            handle_right_mouse_button(arg);
+            // TODO: Fix.
+            // handle_right_mouse_button(arg);
         }
 
         Statistics::getSingleton().add("Mouse clicks", 1.0f);

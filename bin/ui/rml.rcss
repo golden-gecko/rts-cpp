@@ -1,7 +1,3 @@
-/*
-* Default styles for all the basic elements.
-*/
-
 div
 {
 	display: block;
@@ -37,25 +33,36 @@ tabset tabs
 	display: block;
 }
 
-table {
+table
+{
 	box-sizing: border-box;
 	display: table;
 }
-tr {
+
+tr
+{
 	box-sizing: border-box;
 	display: table-row;
 }
-td {
+
+td
+{
 	box-sizing: border-box;
 	display: table-cell;
 }
-col {
+
+col
+{
 	box-sizing: border-box;
 	display: table-column;
 }
-colgroup {
+
+colgroup
+{
 	display: table-column-group;
 }
-thead, tbody, tfoot {
+
+thead, tbody, tfoot
+{
 	display: table-row-group;
 }

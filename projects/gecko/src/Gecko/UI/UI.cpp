@@ -276,37 +276,26 @@ namespace Gecko
 
     void UI::init()
     {
+        // TODO: Get window size.
         render_interface = std::make_shared<RenderInterface>(1920, 1200);
         system_interface = std::make_shared<SystemInterface>();
 
-        Rml::SetSystemInterface(system_interface.get());
         Rml::SetRenderInterface(render_interface.get());
+        Rml::SetSystemInterface(system_interface.get());
 
         Rml::Initialise();
 
+        // TODO: Get window size.
         context = Rml::CreateContext("main", Rml::Vector2i(1920, 1200));
 
-        Rml::Debugger::Initialise(context);
+        // TODO: Move to configuration.
+        if (true)
+        {
+            Rml::Debugger::Initialise(context);
+        }
 
         // Load fonts.
-        const Rml::String directory = "../assets";
-
-        struct FontFace {
-            const char* filename;
-            bool fallback_face;
-        };
-        FontFace font_faces[] = {
-            {"LatoLatin-Regular.ttf", false},
-            {"LatoLatin-Italic.ttf", false},
-            {"LatoLatin-Bold.ttf", false},
-            {"LatoLatin-BoldItalic.ttf", false},
-            {"NotoEmoji-Regular.ttf", true},
-        };
-
-        for (const FontFace& face : font_faces)
-        {
-            L_INFO << "LoadFontFace: " << Rml::LoadFontFace(directory + "/" + face.filename, face.fallback_face);
-        }
+        init_fonts();
 
         // Setup events.
         // DemoEventListenerInstancer event_listener_instancer{ &demo_window };
@@ -327,15 +316,11 @@ namespace Gecko
         */
 
         // Load document.
-        auto document1 = context->LoadDocument("../assets/demo.rml");
-        auto position1 = Rml::Vector2f(50, 200);
-
-        document1->GetElementById("title")->SetInnerRML("RTS 1");
-        document1->SetProperty(Rml::PropertyId::Left, Rml::Property(position1.x, Rml::Unit::DP));
-        document1->SetProperty(Rml::PropertyId::Top, Rml::Property(position1.y, Rml::Unit::DP));
-        document1->Show();
+        document = context->LoadDocument("../ui/ui.rml");
+        document->Show();
 
         init_components();
+        // init_events();
         init_visibility_types();
     }
 
@@ -351,7 +336,12 @@ namespace Gecko
 
     void UI::render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
     {
-        if (queueGroupId != Ogre::RENDER_QUEUE_OVERLAY || Ogre::Root::getSingleton().getRenderSystem()->_getViewport()->getOverlaysEnabled() == false)
+        if (queueGroupId != Ogre::RENDER_QUEUE_OVERLAY)
+        {
+            return;
+        }
+
+        if (Ogre::Root::getSingleton().getRenderSystem()->_getViewport()->getOverlaysEnabled() == false)
         {
             return;
         }
@@ -382,62 +372,48 @@ namespace Gecko
         // Set up the projection and view matrices.
         float z_near = -1;
         float z_far = 1;
+
         Ogre::Matrix4 projection_matrix = Ogre::Matrix4::ZERO;
+
         projection_matrix[0][0] = 2.0f / (Ogre::Real)render_window->getWidth();
         projection_matrix[0][3] = -1.0000000f;
         projection_matrix[1][1] = -2.0f / (Ogre::Real)render_window->getHeight();
         projection_matrix[1][3] = 1.0000000f;
         projection_matrix[2][2] = -2.0f / (z_far - z_near);
         projection_matrix[3][3] = 1.0000000f;
+        
         render_system->_setProjectionMatrix(projection_matrix);
         render_system->_setViewMatrix(Ogre::Matrix4::IDENTITY);
 
-        // Disable lighting, as all of Rocket's geometry is unlit.
         render_system->setLightingEnabled(false);
-        // Disable depth-buffering; all of the geometry is already depth-sorted.
         render_system->_setDepthBufferParams(false, false);
-        // Rocket generates anti-clockwise geometry, so enable clockwise-culling.
         render_system->_setCullingMode(Ogre::CULL_CLOCKWISE);
-        // Disable fogging.
         render_system->_setFog(Ogre::FOG_NONE);
-        // Enable writing to all four channels.
         render_system->_setColourBufferWriteEnabled(true, true, true, true);
-        // Unbind any vertex or fragment programs bound previously by the application.
         render_system->unbindGpuProgram(Ogre::GPT_FRAGMENT_PROGRAM);
         render_system->unbindGpuProgram(Ogre::GPT_VERTEX_PROGRAM);
 
-        // Set texture settings to clamp along both axes.
+        // TODO: Investigate.
+        /*
         Ogre::TextureUnitState::UVWAddressingMode addressing_mode;
+
         addressing_mode.u = Ogre::TextureUnitState::TAM_CLAMP;
         addressing_mode.v = Ogre::TextureUnitState::TAM_CLAMP;
         addressing_mode.w = Ogre::TextureUnitState::TAM_CLAMP;
 
+        render_system->_setTextureAddressingMode(0, addressing_mode);
+        */
 
-        //render_system->_setTextureAddressingMode(0, addressing_mode);
-
-
-        // Set the texture coordinates for unit 0 to be read from unit 0.
         render_system->_setTextureCoordSet(0, 0);
-        // Disable texture coordinate calculation.
         render_system->_setTextureCoordCalculation(0, Ogre::TEXCALC_NONE);
-        // Enable linear filtering; images should be rendering 1 texel == 1 pixel, so point filtering could be used
-        // except in the case of scaling tiled decorators.
 
-
+        // TODO: Investigate.
         // render_system->_setTextureUnitFiltering(0, Ogre::FO_LINEAR, Ogre::FO_LINEAR, Ogre::FO_POINT);
 
-
-        // Disable texture coordinate transforms.
         render_system->_setTextureMatrix(0, Ogre::Matrix4::IDENTITY);
-        // Reject pixels with an alpha of 0.
         render_system->_setAlphaRejectSettings(Ogre::CMPF_GREATER, 0, false);
-        // Disable all texture units but the first.
         render_system->_disableTextureUnitsFrom(1);
-
-        // Enable simple alpha blending.
         render_system->_setSceneBlending(Ogre::SBF_SOURCE_ALPHA, Ogre::SBF_ONE_MINUS_SOURCE_ALPHA);
-
-        // Disable depth bias.
         render_system->_setDepthBias(0, 0);
 
         context->Render();
@@ -837,58 +813,51 @@ namespace Gecko
 
     void UI::inject_key_press(char key_code)
     {
-        // TODO: Implement.
+        // TODO: Fill the last argument.
+        context->ProcessKeyDown(Utils::Convert::to_rmlui_key(key_code), 0);
+
+        switch (Utils::Convert::to_rmlui_key(key_code))
+        {
+            case Rml::Input::KeyIdentifier::KI_F5:
+                context->UnloadAllDocuments();
+
+                document = context->LoadDocument("../ui/ui.rml");
+                document->Show();
+                break;
+
+            case Rml::Input::KeyIdentifier::KI_F8:
+                Rml::Debugger::SetVisible(!Rml::Debugger::IsVisible());
+                break;
+        }
     }
 
     void UI::inject_key_release(char key_code)
     {
-        // TODO: Implement.
+        // TODO: Fill the last argument.
+        context->ProcessKeyUp(Utils::Convert::to_rmlui_key(key_code), 0);
     }
 
     void UI::inject_mouse_move(std::size_t x, std::size_t y)
     {
-        /*
-        ultralight::MouseEvent evt;
-
-        evt.type = ultralight::MouseEvent::kType_MouseMoved;
-        evt.x = x;
-        evt.y = y;
-
-        view->FireMouseEvent(evt);
-        */
+        // TODO: Convert types and fill the last argument.
+        context->ProcessMouseMove(x, y, 0);
     }
 
     void UI::inject_mouse_press(std::size_t x, std::size_t y, OIS::MouseButtonID id)
     {
-        /*
-        ultralight::MouseEvent evt;
-
-        evt.type = ultralight::MouseEvent::kType_MouseDown;
-        evt.x = x;
-        evt.y = y;
-        evt.button = convert_button_id(id);
-
-        view->FireMouseEvent(evt);
-        */
+        // TODO: Fill the last argument.
+        context->ProcessMouseButtonDown(Utils::Convert::to_rmlui_button(id), 0);
     }
 
     void UI::inject_mouse_release(std::size_t x, std::size_t y, OIS::MouseButtonID id)
     {
-        /*
-        ultralight::MouseEvent evt;
-
-        evt.type = ultralight::MouseEvent::kType_MouseUp;
-        evt.x = x;
-        evt.y = y;
-        evt.button = convert_button_id(id);
-
-        view->FireMouseEvent(evt);
-        */
+        // TODO: Fill the last argument.
+        context->ProcessMouseButtonUp(Utils::Convert::to_rmlui_button(id), 0);
     }
 
     bool UI::is_mouse_inside(std::size_t x, std::size_t y)
     {
-        return false;
+        return true;
 
         /*
         static std::stringstream stream;
@@ -1699,6 +1668,51 @@ namespace Gecko
         minimap = std::make_unique<Minimap>();
         preview = std::make_unique<Preview>();
         selection_box = std::make_unique<SelectionBox>();
+    }
+
+    void UI::init_events()
+    {
+        events = std::make_shared<Events>();
+        instancer = std::make_shared<Instancer>();
+
+        Rml::Factory::RegisterEventListenerInstancer(instancer.get());
+
+        document->AddEventListener(Rml::EventId::Blur, events.get());
+        document->AddEventListener(Rml::EventId::Focus, events.get());
+
+        document->AddEventListener(Rml::EventId::Keydown, events.get());
+        document->AddEventListener(Rml::EventId::Keyup, events.get());
+
+        document->AddEventListener(Rml::EventId::Mousedown, events.get());
+        document->AddEventListener(Rml::EventId::Mouseup, events.get());
+
+        document->AddEventListener(Rml::EventId::Mousemove, events.get());
+
+        document->AddEventListener(Rml::EventId::Drag, events.get());
+        document->AddEventListener(Rml::EventId::Dragstart, events.get());
+        document->AddEventListener(Rml::EventId::Dragend, events.get());
+    }
+
+    void UI::init_fonts()
+    {
+        // TODO: Move to configuration.
+        Rml::String directory = "../ui";
+
+        // TODO: Move to configuration.
+        std::vector<Rml::String> fonts =
+        {
+            "LatoLatin-Regular.ttf",
+            "LatoLatin-Italic.ttf",
+            "LatoLatin-Bold.ttf",
+            "LatoLatin-BoldItalic.ttf",
+            "NotoEmoji-Regular.ttf",
+        };
+
+        for (const Rml::String& font : fonts)
+        {
+            // TODO: Use STL to join paths.
+            Rml::LoadFontFace(directory + "/" + font, false);
+        }
     }
 
     void UI::init_visibility_types()
