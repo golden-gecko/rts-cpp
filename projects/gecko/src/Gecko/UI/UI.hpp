@@ -203,7 +203,7 @@ namespace Gecko
         void set_order_name(order_type::Value _order_name);
         void set_orders(const std::set<std::string>& orders);
         void set_orders_header(order_type::Value order_type);
-        void set_resources(const Resources& resources);
+        void set_resources(std::shared_ptr<Resources> resources);
         void set_saves(const std::vector<std::string>& saves);
         void set_skill_name(const std::string& _order_name);
         void set_skills(const std::set<std::string>& skills);
@@ -220,7 +220,9 @@ namespace Gecko
         std::shared_ptr<SystemInterface> system_interface;
 
         Rml::Context* context = nullptr;
-        Rml::ElementDocument* document = nullptr;
+
+        Rml::ElementDocument* orders = nullptr;
+        Rml::ElementDocument* resources = nullptr;
 
         std::shared_ptr<Events> events;
         std::shared_ptr<Instancer> instancer;
@@ -242,6 +244,7 @@ namespace Gecko
         std::string skill_name = "none";
 
         void init_components();
+        void init_documents();
         void init_events();
         void init_fonts();
         void init_visibility_types();

@@ -311,9 +311,7 @@ namespace Gecko
         ObjectManager::getSingleton().update(time);
         OrderManager::getSingleton().update(time);
         PlayerManager::getSingleton().update(time);
-
-        // TODO: Fix.
-        // UI::getSingleton().update(time);
+        UI::getSingleton().update(time);
     }
 
     void Game::update_input(float time)

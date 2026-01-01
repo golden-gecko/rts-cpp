@@ -40,13 +40,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src)
 target_precompile_headers(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src/Gecko/Gecko.hpp)
 
 # Find Boost
-target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_DIR}/include)
-target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_atomic-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_atomic-vc143-mt-x64-1_90.lib)
-target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_log-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_log-vc143-mt-x64-1_90.lib)
-target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_log_setup-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_log_setup-vc143-mt-x64-1_90.lib)
-target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_filesystem-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_filesystem-vc143-mt-x64-1_90.lib)
-target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_program_options-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_program_options-vc143-mt-x64-1_90.lib)
-target_link_libraries(${PROJECT_NAME} debug ${Boost_DIR}/lib/libboost_thread-vc143-mt-gd-x64-1_90.lib optimized ${Boost_DIR}/lib/libboost_thread-vc143-mt-x64-1_90.lib)
+find_package(Boost REQUIRED COMPONENTS filesystem log_setup program_options)
+target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 
 # Find JsonCpp
 find_package(jsoncpp REQUIRED)

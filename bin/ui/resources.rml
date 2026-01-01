@@ -1,6 +1,6 @@
 <rml>
 	<head>
-		<title>Demo</title>
+		<title>UI</title>
 		<link type="text/rcss" href="invader.rcss"/>
 		<link type="text/rcss" href="rml.rcss"/>
 		<link type="text/rcss" href="ui.rcss"/>

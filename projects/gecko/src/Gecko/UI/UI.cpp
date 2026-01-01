@@ -315,11 +315,8 @@ namespace Gecko
         }
         */
 
-        // Load document.
-        document = context->LoadDocument("../ui/ui.rml");
-        document->Show();
-
         init_components();
+        init_documents();
         // init_events();
         init_visibility_types();
     }
@@ -514,17 +511,13 @@ namespace Gecko
 
             if (Game::getSingleton().get_active_player())
             {
-                // TODO: Fix.
-                // set_resources(Game::getSingleton().get_active_player()->get_resources());
+                set_resources(Game::getSingleton().get_active_player()->get_resources());
             }
 
             set_saves(Game::getSingleton().get_saves());
 
             get_minimap().update();
             get_preview().update();
-
-            // renderer->Update();
-            // renderer->Render();
         }
     }
 
@@ -819,10 +812,7 @@ namespace Gecko
         switch (Utils::Convert::to_rmlui_key(key_code))
         {
             case Rml::Input::KeyIdentifier::KI_F5:
-                context->UnloadAllDocuments();
-
-                document = context->LoadDocument("../ui/ui.rml");
-                document->Show();
+                init_documents();
                 break;
 
             case Rml::Input::KeyIdentifier::KI_F8:
@@ -1434,43 +1424,33 @@ namespace Gecko
         evaluate_with_timeout(stream.str());
     }
 
-    void UI::set_resources(const Resources& resources)
+    void UI::set_resources(std::shared_ptr<Resources> resources)
     {
         // Update cache.
         static Resources resources_cache;
 
-        if (resources_cache == resources)
+        if (resources_cache == (*(resources.get())))
         {
             return;
         }
 
-        resources_cache = resources;
+        resources_cache = (*(resources.get()));
 
         // Create JSON.
-        Json::Value json_resources;
+        std::string html;
 
-        for (const auto& resource : resources)
+        for (const auto& resource : resources_cache)
         {
-            Json::Value json_resource;
+            html += std::format("<p><span class=\"name\">{}</span>: <span class=\"value\">{}/{}</span></p>",
+                resource.first, resource.second.get_current(), resource.second.get_max()
+            );
 
-            json_resource["name"] = resource.first;
-            json_resource["consumption"] = resource.second.get_consumption();
-            json_resource["production"] = resource.second.get_production();
-            json_resource["current"] = resource.second.get_current();
-            json_resource["maximal"] = resource.second.get_max();
-
-            json_resources.append(json_resource);
+            // json_resource["consumption"] = resource.second.get_consumption();
+            // json_resource["production"] = resource.second.get_production();
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.resources.set(";
-        stream << Utils::Convert::to_string(json_resources);
-        stream << ")";
-
-        evaluate_with_timeout(stream.str());
+        this->resources->GetElementById("title")->SetInnerRML(html);
     }
 
     void UI::set_saves(const std::vector<std::string>& saves)
@@ -1670,8 +1650,21 @@ namespace Gecko
         selection_box = std::make_unique<SelectionBox>();
     }
 
+    void UI::init_documents()
+    {
+        context->UnloadAllDocuments();
+
+        // TODO: Move list of documents to configuration.
+        orders = context->LoadDocument("../ui/orders.rml");
+        orders->Show();
+
+        resources = context->LoadDocument("../ui/resources.rml");
+        resources->Show();
+    }
+
     void UI::init_events()
     {
+        /*
         events = std::make_shared<Events>();
         instancer = std::make_shared<Instancer>();
 
@@ -1691,6 +1684,7 @@ namespace Gecko
         document->AddEventListener(Rml::EventId::Drag, events.get());
         document->AddEventListener(Rml::EventId::Dragstart, events.get());
         document->AddEventListener(Rml::EventId::Dragend, events.get());
+        */
     }
 
     void UI::init_fonts()
