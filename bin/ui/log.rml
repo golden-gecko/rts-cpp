@@ -1,0 +1,13 @@
+<rml>
+	<head>
+		<title>UI</title>
+		<link type="text/rcss" href="invader.rcss"/>
+		<link type="text/rcss" href="rml.rcss"/>
+		<link type="text/rcss" href="ui.rcss"/>
+	</head>
+	<body id="log" class="window">
+		<div id="window">
+			<div id="content"></div>
+		</div>
+	</body>
+</rml>

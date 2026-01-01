@@ -1437,11 +1437,11 @@ namespace Gecko
         resources_cache = (*(resources.get()));
 
         // Create JSON.
-        std::string html;
+        std::string rml;
 
         for (const auto& resource : resources_cache)
         {
-            html += std::format("<p><span class=\"name\">{}</span>: <span class=\"value\">{}/{}</span></p>",
+            rml += std::format("<p><span class=\"name\">{}</span>: <span class=\"value\">{}/{}</span></p>",
                 resource.first, resource.second.get_current(), resource.second.get_max()
             );
 
@@ -1450,7 +1450,7 @@ namespace Gecko
         }
 
         // Update UI.
-        this->resources->GetElementById("title")->SetInnerRML(html);
+        this->resources->GetElementById("title")->SetInnerRML(rml);
     }
 
     void UI::set_saves(const std::vector<std::string>& saves)
@@ -1655,6 +1655,9 @@ namespace Gecko
         context->UnloadAllDocuments();
 
         // TODO: Move list of documents to configuration.
+        log = context->LoadDocument("../ui/log.rml");
+        log->Show();
+
         orders = context->LoadDocument("../ui/orders.rml");
         orders->Show();
 
@@ -1730,18 +1733,27 @@ namespace Gecko
 
     void UI::log_write(const std::string& text, const std::string& type, Id id)
     {
-        // Update UI.
-        static std::stringstream stream;
+        // TODO: Refactor. Make class.
+        static std::vector<std::string> lines;
 
-        stream.str("");
-        stream << "app.log.";
-        stream << type;
-        stream << "('";
-        stream << text;
-        stream << "', ";
-        stream << id;
-        stream << ")";
+        lines.push_back(text);
 
-        evaluate_with_timeout(stream.str());
+        if (lines.size() > 10)
+        {
+            lines.erase(lines.cbegin(), lines.cbegin() + (lines.size() - 10));
+        }
+
+        // TODO: Remove if.
+        if (log)
+        {
+            std::string rml;
+
+            for (const std::string& line : lines)
+            {
+                rml += std::format("<p>{}</p>", line);
+            }
+
+            log->GetElementById("content")->SetInnerRML(rml);
+        }
     }
 }

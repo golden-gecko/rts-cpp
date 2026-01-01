@@ -221,6 +221,7 @@ namespace Gecko
 
         Rml::Context* context = nullptr;
 
+        Rml::ElementDocument* log = nullptr;
         Rml::ElementDocument* orders = nullptr;
         Rml::ElementDocument* resources = nullptr;
 
