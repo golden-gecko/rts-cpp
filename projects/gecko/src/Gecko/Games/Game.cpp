@@ -595,6 +595,7 @@ namespace Gecko
             + Utils::Convert::to_string(active_player_id)
             + " to "
             + Utils::Convert::to_string(id)
+            + "."
         );
 
         // Get current active player.

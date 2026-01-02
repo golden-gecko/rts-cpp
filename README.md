@@ -2,13 +2,13 @@
 
 RTS engine.
 
-![Alt text](/bin/docs/wargame_2008_07_13_10_57.png)
-![Alt text](/bin/docs/wargame_2008_08_09_20_08.png)
-![Alt text](/bin/docs/wargame_2008_08_09_20_09.png)
-![Alt text](/bin/docs/wargame_2008_08_10_13_11.png)
-![Alt text](/bin/docs/wargame_2008_08_10_13_12.png)
-![Alt text](/bin/docs/wargame_2008_08_13_11_00.png)
-![Alt text](/bin/docs/wargame_2008_08_13_11_01.png)
+![Alt text](bin/docs/wargame_2008_07_13_10_57.png)
+![Alt text](bin/docs/wargame_2008_08_09_20_08.png)
+![Alt text](bin/docs/wargame_2008_08_09_20_09.png)
+![Alt text](bin/docs/wargame_2008_08_10_13_11.png)
+![Alt text](bin/docs/wargame_2008_08_10_13_12.png)
+![Alt text](bin/docs/wargame_2008_08_13_11_00.png)
+![Alt text](bin/docs/wargame_2008_08_13_11_01.png)
 
 ## Repository
 
@@ -16,99 +16,82 @@ Install Git LFS.
 
 ## Libraries
 
-Use Visual Studio Express 2019 (v142).
+Use Visual Studio Express 2026 (v146).
 
-### Boost 1.75.0
+### Boost 1.90.0
 
-```bash
+```cmd
 .\bootstrap
-.\b2 install --prefix=..\..\lib\Boost
+.\b2 install --prefix=/sdk/Boost
 ```
 
-### Bullet 3.06
+### Bullet 3.25
 
-```bash
+```cmd
 mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=..\..\..\lib\Bullet ..
+cmake -DCMAKE_INSTALL_PREFIX=/sdk/Bullet ..
 ```
 
-### DirectX
+### Google Test 1.17.0
 
-Use installer.
-
-### Google Test 1.10.0
-
-```bash
+```cmd
 mkdir build
 cd build
+cmake -DCMAKE_INSTALL_PREFIX=./sdk/GoogleTest ..
 ```
 
-Change `Multi-threaded` to `Multi-threaded DLL`, to avoid linking conflicts.
+### JsonCpp 1.9.6
 
-```bash
-cmake -DCMAKE_INSTALL_PREFIX=..\..\..\lib\GoogleTest ..
-```
-
-### JsonCpp 1.9.4
-
-```bash
+```cmd
 mkdir build
 cd build
-cmake -DCMAKE_DEBUG_POSTFIX=d -DCMAKE_INSTALL_PREFIX=..\..\..\lib\JsonCpp ..
+cmake -DCMAKE_DEBUG_POSTFIX=d -DCMAKE_INSTALL_PREFIX=/sdk/JsonCpp ..
 ```
 
-### Ogre3D 1.12.11
+### Ogre3D 1.14.1
 
-```bash
+```cmd
 mkdir build
 cd build
-cmake -DOGRE_BUILD_PLUGIN_ASSIMP=OFF -DOGRE_BUILD_PLUGIN_DOT_SCENE=OFF -DOGRE_BUILD_TOOLS=OFF -DCMAKE_INSTALL_PREFIX=..\..\..\lib\Ogre ..
+cmake -DOGRE_BUILD_PLUGIN_ASSIMP=OFF -DOGRE_BUILD_PLUGIN_DOT_SCENE=OFF -DOGRE_BUILD_TOOLS=OFF -DCMAKE_INSTALL_PREFIX=/sdk/Ogre ..
 ```
 
-In CG project replace:
+### OIS 1.5.1
 
-```C:\Program Files (x86)\NVIDIA Corporation\Cg\lib\cg.lib```
-
-with:
-
-```C:\Program Files (x86)\NVIDIA Corporation\Cg\lib.x64\cg.lib```
-
-### OIS 1.5
-
-```bash
+```cmd
 mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=..\..\..\lib\OIS ..
+cmake -DCMAKE_INSTALL_PREFIX=/sdk/OIS ..
 ```
 
-### Ultralight 1.2.1
+### RmlUi 6.1
 
-```bash
+```cmd
 mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=..\..\..\lib\Ultralight ..
-```
+cmake -DCMAKE_INSTALL_PREFIX=/sdk/RmlUi .. ```
 
 ## Build
 
 Use Visual Studio Express 2019 (v142).
 
-```bash
+```cmd
 mkdir build
 cd build
 cmake .. \
-    -DBOOST_ROOT="D:/Projects/rts/lib/Boost" \
-    -DCMAKE_INSTALL_PREFIX="../bin" \
-    -DGOOGLETEST_ROOT="D:/Projects/rts/lib/GoogleTest" \
-    -DJSONCPP_ROOT="D:/Projects/rts/lib/JsonCpp" \
-    -DOGRE_ROOT="D:/Projects/rts/lib/Ogre" \
-    -DOIS_ROOT="D:/Projects/rts/lib/OIS" \
-    -DSDL_ROOT="D:/Projects/rts/dependencies/ogre-1.12.11/build/Dependencies" \
-    -DULTRALIGHT_ROOT="D:/Projects/rts/lib/Ultralight"
+    -DBBoost_DIR="/sdk/Boost/lib64-msvc-14.3/cmake/Boost-1.90.0" /
+    -DFreetype_ROOT="/lib/ogre/build/Dependencies" /
+    -DGTest_DIR="/sdk/GoogleTest/lib/cmake/GTest" /
+    -Djsoncpp_DIR="/sdk/JsonCpp/lib/cmake/jsoncpp" /
+    -DOGRE_DIR="/sdk/Ogre/CMake" /
+    -DOIS_DIR="/sdk/OIS" /
+    -DRmlUi_DIR="/sdk/RmlUI/lib/cmake/RmlUi"
 ```
 
-## Cube
+## Meshes
+
+### Cube
 
 Order of sides:
 
@@ -121,7 +104,7 @@ Order of sides:
 
 Indices:
 
-```bash
+```cmd
  0,  1,  2,  0,  2,  3,
  4,  5,  6,  4,  6,  7,
  8,  9, 10,  8, 10, 11,
@@ -132,7 +115,7 @@ Indices:
 
 Normals:
 
-```bash
+```cmd
  0.0,  1.0,  0.0,
  0.0,  1.0,  0.0,
  0.0,  1.0,  0.0,
@@ -166,7 +149,7 @@ Normals:
 
 Vertices:
 
-```bash
+```cmd
 -0.5,  0.5, -0.5,
 -0.5,  0.5,  0.5,
  0.5,  0.5,  0.5,

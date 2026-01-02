@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Configuration.hpp"
+#include <Gecko/Configuration.hpp>
 
 namespace
 {

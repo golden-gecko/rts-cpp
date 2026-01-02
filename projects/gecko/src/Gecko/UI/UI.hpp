@@ -220,10 +220,7 @@ namespace Gecko
         std::shared_ptr<SystemInterface> system_interface;
 
         Rml::Context* context = nullptr;
-
-        Rml::ElementDocument* log = nullptr;
-        Rml::ElementDocument* orders = nullptr;
-        Rml::ElementDocument* resources = nullptr;
+        Rml::ElementDocument* document = nullptr;
 
         std::shared_ptr<Events> events;
         std::shared_ptr<Instancer> instancer;

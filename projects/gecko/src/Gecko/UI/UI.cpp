@@ -289,7 +289,7 @@ namespace Gecko
         context = Rml::CreateContext("main", Rml::Vector2i(1920, 1200));
 
         // TODO: Move to configuration.
-        if (true)
+        if (false)
         {
             Rml::Debugger::Initialise(context);
         }
@@ -1450,7 +1450,7 @@ namespace Gecko
         }
 
         // Update UI.
-        this->resources->GetElementById("title")->SetInnerRML(rml);
+        // this->resources->GetElementById("title")->SetInnerRML(rml);
     }
 
     void UI::set_saves(const std::vector<std::string>& saves)
@@ -1652,17 +1652,26 @@ namespace Gecko
 
     void UI::init_documents()
     {
+        Rml::Debugger::Shutdown();
+
         context->UnloadAllDocuments();
 
         // TODO: Move list of documents to configuration.
-        log = context->LoadDocument("../ui/log.rml");
-        log->Show();
+        /*
+        std::vector<std::string> documents = {
+            "configurations", "info", "log", "menu", "minimap", "orders", "resources", "skills"
+        };
 
-        orders = context->LoadDocument("../ui/orders.rml");
-        orders->Show();
+        for (const std::string& document_name : documents)
+        {
+            context->LoadDocument(std::format("../ui/{}.rml", document_name))->Show();
+        }
+        */
 
-        resources = context->LoadDocument("../ui/resources.rml");
-        resources->Show();
+        document = context->LoadDocument("../ui/ui.rml");
+        document->Show();
+
+        Rml::Debugger::Initialise(context);
     }
 
     void UI::init_events()
@@ -1693,7 +1702,7 @@ namespace Gecko
     void UI::init_fonts()
     {
         // TODO: Move to configuration.
-        Rml::String directory = "../ui";
+        Rml::String directory = "../ui/fonts";
 
         // TODO: Move to configuration.
         std::vector<Rml::String> fonts =
@@ -1738,22 +1747,28 @@ namespace Gecko
 
         lines.push_back(text);
 
-        if (lines.size() > 10)
+        if (lines.size() > 3)
         {
-            lines.erase(lines.cbegin(), lines.cbegin() + (lines.size() - 10));
+            lines.erase(lines.cbegin(), lines.cbegin() + (lines.size() - 3));
         }
 
-        // TODO: Remove if.
-        if (log)
+        if (document)
         {
             std::string rml;
 
             for (const std::string& line : lines)
             {
-                rml += std::format("<p>{}</p>", line);
+                rml += std::format("<p class=\"{}\">{}</p>", type, line);
             }
 
-            log->GetElementById("content")->SetInnerRML(rml);
+            Rml::ElementList elements;
+
+            document->GetElementById("log")->GetElementsByClassName(elements, "placeholder");
+            
+            if (elements.size() > 0)
+            {
+                elements[0]->SetInnerRML(rml);
+            }
         }
     }
 }

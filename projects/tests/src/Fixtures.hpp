@@ -1,17 +1,13 @@
-namespace Gecko
-{
-    class Configuration;
-    class Game;
-    class ComponentManager;
-    class ConfigurationManager;
-    class MapManager;
-    class ObjectManager;
-    class OrderManager;
-    class PlayerManager;
-    class SkillManager;
-    class Statistics;
-    class UI;
-};
+#include <Gecko/Games/Game.hpp>
+#include <Gecko/Managers/ComponentManager.hpp>
+#include <Gecko/Managers/ConfigurationManager.hpp>
+#include <Gecko/Managers/MapManager.hpp>
+#include <Gecko/Managers/ObjectManager.hpp>
+#include <Gecko/Managers/OrderManager.hpp>
+#include <Gecko/Managers/PlayerManager.hpp>
+#include <Gecko/Managers/SkillManager.hpp>
+#include <Gecko/Statistics.hpp>
+#include <Gecko/UI/UI.hpp>
 
 struct init_game_config
 {

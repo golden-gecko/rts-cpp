@@ -1,0 +1,796 @@
+<rml>
+<head>
+    <title>UI</title>
+
+    <style>
+        /* Global */
+
+        body,
+        html {
+            color: #212529;
+            font-family: LatoLatin;
+            font-size: 1.2rem;
+            height: 100%;
+            width: 100%;
+        }
+
+        .buttons {
+            text-align: center;
+            bottom: 10px;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 0%)
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 400;
+            color: #212529;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            cursor: pointer;
+            background-color: transparent;
+            border-top-color: transparent;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+            font-size: 1rem;
+            border-radius: .25rem;
+            line-height: 1;
+            padding: 0.4rem;
+            margin-left: 0.2rem;
+        }
+        
+        .btn:active,
+        .btn:hover {
+            color: #000;
+            background-color: #f9fafb;
+            border-color: #f9fafb;
+        }
+
+        .btn-light {
+            background-color: #e9ecef;
+            border-color: #e9ecef;
+        }
+
+        .centered {
+            left: 50%;
+            position: fixed;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .centered-horizontally {
+            left: 50%;
+            position: fixed;
+            transform: translate(-50%, 0%);
+        }
+
+        .buttons {
+            text-align: center;
+        }
+
+        .header .button-expand {
+            display: none;
+        }
+
+        .header .button-collapse,
+        .header .button-expand {
+            float: right;
+            height: 16px;
+            margin: 2px -2px 0 8px;
+            width: 16px;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            background-color: #fff;
+            border-radius: .25rem;
+            position: absolute;
+        }
+
+        .card-header {
+            padding: .5rem 1rem;
+            margin-bottom: 0;
+            background-color: #eee;
+        }
+
+        .card-body {
+            flex: 1 1 auto;
+            padding: 1rem 1rem;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table td,
+        .table th {
+            padding: 0.1rem 0.5rem 0.1rem 0.5rem;
+        }
+
+        .table th {
+            border-top: 0;
+        }
+
+        .table.no-header tr:first-child td {
+            border-top: 0;
+        }
+
+        .table .group-item-first {
+            width: 12px;
+        }
+
+        /* Configurations */
+
+        #configurations {
+            bottom: 100px;
+            left: 220px;
+        }
+
+        /* Container */
+
+        #container {
+            bottom: 10px;
+            left: 10px;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        /* Cursor */
+
+        #cursor {
+            display: none;
+            position: absolute;
+        }
+
+        #cursor img {
+            display: none;
+            width: 30px;
+        }
+
+        #cursor,
+        #cursor img {
+            pointer-events: none;
+        }
+
+        #cursor .attack {
+            margin-left: -15px;
+            margin-top: -15px;
+        }
+
+        #cursor .idle {
+            display: block;
+            margin-left: -8px;
+            margin-top: -3px;
+        }
+
+        #cursor .move {
+            margin-left: -16px;
+            margin-top: -15px;
+        }
+
+        /* Diplomacy */
+        #diplomacy {
+            display: none;
+        }
+        
+        #diplomacy .name {
+            font-weight: bold;
+        }
+
+        /* Game Menu */
+
+        #game-menu {
+            right: 5px;
+            top: 5px;
+        }
+
+        /* Info */
+
+        #info {
+            bottom: 5px;
+            left: 5px;
+        }
+        
+        /* Layers */
+
+        #layers  {
+            display: none;
+        }
+
+        #layers .btn {
+            margin-bottom: 4px;
+        }
+        
+        /* Log */
+
+        #log {
+            left: 5px;
+            right: 50%;
+            top: 5px;
+        }
+
+        #log p {
+            display: block;
+        }
+
+        #log .error {
+            color: red;
+        }
+
+        #log .info {
+            color: green;
+        }
+
+        /* Menu */
+
+        #load-menu,
+        #main-menu,
+        #map-menu {
+            display: none;
+            width: 200px;
+        }
+
+        #load-menu button,
+        #main-menu button,
+        #map-menu button {
+            margin-bottom: 0.4rem;
+            width: 100%;
+        }
+
+        #load-menu .button-quit-application,
+        #main-menu .button-quit-application,
+        #map-menu .button-quit-application {
+            margin-bottom: 0;
+        }
+
+        /* Minimap */
+
+        #minimap {
+            bottom: 5px;
+            right: 5px;
+        }
+
+        #minimap .body {
+            height: 128px;
+            width: 128px;
+        }
+
+        /* Objects - Admin */
+        #objects-admin {
+            display: none;
+        }
+
+        /* Options */
+        #options {
+            display: none;
+        }
+
+        /* Orders */
+
+        #orders {
+            bottom: 5px;
+            left: 220px;
+        }
+
+        /* Orders - Admin */
+        #orders-admin {
+            display: none;
+        }
+
+        /* Players */
+
+        #players {
+            display: none;
+            left: 700px;
+            top: 60px;
+        }
+
+        /* Preview */
+
+        #preview {
+            display: none;
+            left: 882px;
+            top: 60px;
+        }
+
+        #preview .body {
+            height: 128px;
+            width: 128px;
+        }
+
+        /* Resources */
+
+        #resources {
+            left: 5px;
+            top: 100px;
+        }
+
+        #resources .green {
+            color: green;
+        }
+
+        #resources .red {
+            color: red;
+        }
+
+        /* Skills */
+
+        #skills {
+            bottom: 5px;
+            left: 620px;
+        }
+
+        /* Statistics */
+
+        #statistics {
+            display: none;
+        }
+
+        /* Technologies */
+        
+        #technologies {
+            display: none;
+        }
+
+        #technologies .placeholder button {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Container -->
+    <div id="container">
+
+        <!-- Configurations -->
+        <div id="configurations" class="card panel ui draggable layer-bottom ui-draggable">
+            <div class="card-header header ui-draggable-handle">Configurations - none
+                <img class="button-collapse" src="icons/arrow-up-short.png" />
+                <img class="button-expand" src="icons/arrow-down-short.png" />
+            </div>
+
+            <div class="card-body body placeholder">
+                <button type="button" class="btn btn-light" data-name="coal_mine">Coal Mine</button>
+                <button type="button" class="btn btn-light" data-name="iron_mine">Iron Mine</button>
+                <button type="button" class="btn btn-light" data-name="vehicle_factory">Vehicle Factory</button>
+            </div>
+        </div>
+
+        <!-- Diplomacy -->
+        <div id="diplomacy" class="card ui layer-top panel panel-medium">
+            <div class="card-header header">Diplomacy</div>
+            <div class="card-body body">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr></tr>
+                    </thead>
+                    <tbody class="placeholder"></tbody>
+                </table>
+
+                <div class="buttons">
+                    <button class="btn btn-light button-close">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Menu -->
+        <div id="game-menu" class="card ui layer-bottom">
+            <div class="card-body body">
+                <button class="button-diplomacy btn btn-light">Diplomacy</button>
+                <button class="button-layers btn btn-light">Layers</button>
+                <button class="button-main-menu btn btn-light">Menu</button>
+                <button class="button-objects btn btn-light">Objects</button>   
+                <button class="button-orders btn btn-light">Orders</button>
+                <button class="button-statistics btn btn-light">Statistics</button>
+                <button class="button-technologies btn btn-light">Technologies</button>
+            </div>
+        </div>
+
+        <!-- Info -->
+        <div id="info" class="card panel ui draggable layer-bottom ui-draggable">
+            <div class="card-header header ui-draggable-handle">Info
+                <img class="button-collapse" src="icons/arrow-up-short.png" />
+                <img class="button-expand" src="icons/arrow-down-short.png" />
+            </div>
+
+            <div class="card-body body">
+                <pre class="placeholder">
+                    name: Tank<br />
+                    position: 10.0:20.0:.30.0<br />
+                    id: 1<br />
+                    player_id: 3<br />
+                    fps: 30<br />
+                    time: 12.34567<br />
+                    memory: 20.3 MB<br />
+                    health:<br />
+                        current: 50<br />
+                        max: 80<br />
+                    components:<br />
+                        name: Cannon<br />
+                        damage: 3.4<br />
+                        name: Tracked<br />
+                        health:<br />
+                            current: 10<br />
+                            max: 20<br />
+                    processes:<br />
+                        Smelting:<br />
+                        in:<br />
+                            Coal:<br />
+                            consumption: 4<br />
+                            Iron Ore:<br />
+                            consumption: 2<br />
+                        out:<br />
+                            Iron:<br />
+                            production: 1<br />
+                            Pollution:<br />
+                            production: 0.2<br />
+                    resources:<br />
+                        items:<br />
+                        Coal:<br />
+                            maximal: 10<br />
+                        Iron:<br />
+                            maximal: 10
+                    </pre>
+            </div>
+        </div>
+
+        <!-- Layers -->
+        <div id="layers" class="card ui layer-top panel panel-medium">
+            <div class="card-header header">Layers</div>
+
+            <div class="card-body">
+                <div class="container body">
+                    <div class="placeholder">
+                        <div class="row">
+                            <div class="col-4">Air
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" data-layer-name="Air" data-data-layer-name="None" id="Air_None" name="Air" checked="checked" />
+                                    <label class="form-check-label" for="Air_None">None</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" data-layer-name="Air" data-data-layer-name="Pollution" id="Air_Pollution" name="Air" />
+                                    <label class="form-check-label" for="Air_Pollution">Pollution</label>
+                                </div>
+                            </div>
+                            <div class="col-4">Terrain
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" data-layer-name="Terrain" data-data-layer-name="None" id="Terrain_None" name="Terrain" />
+                                    <label class="form-check-label" for="Terrain_None">None</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" data-layer-name="Terrain" data-data-layer-name="Height" id="Terrain_Height" name="Terrain" />
+                                    <label class="form-check-label" for="Terrain_Height">Height</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" data-layer-name="Terrain" data-data-layer-name="Navigation" id="Terrain_Navigation" name="Terrain" />
+                                    <label class="form-check-label" for="Terrain_Navigation">Navigation</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" data-layer-name="Terrain" data-data-layer-name="Type" id="Terrain_Type" name="Terrain" checked="checked" />
+                                    <label class="form-check-label" for="Terrain_Type">Type</label>
+                                </div>
+                            </div>
+                            <div class="col-4">Water
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" data-layer-name="Water" data-data-layer-name="None" id="Water_None" name="Water" />
+                                    <label class="form-check-label" for="Water_None">None</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" data-layer-name="Water" data-data-layer-name="Height" id="Water_Height" name="Water" checked="checked" />
+                                    <label class="form-check-label" for="Water_Height">Height</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" data-layer-name="Water" data-data-layer-name="Pollution" id="Water_Pollution" name="Water" />
+                                    <label class="form-check-label" for="Water_Pollution">Pollution</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" data-layer-name="Water" data-data-layer-name="Type" id="Water_Type" name="Water" />
+                                    <label class="form-check-label" for="Water_Type">Type</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <button class="btn btn-light button-close">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Load Menu -->
+        <div id="load-menu" class="card ui centered layer-top panel">
+            <div class="card-header header">Load</div>
+            <div class="card-body body">
+                <button class="button-continue btn btn-light">Continue</button>
+                <div class="placeholder">
+                    <button class="btn btn-light" data-name="2017_10_12_12_51_41">2017_10_12_12_51_41</button>
+                    <button class="btn btn-light" data-name="2018_10_12_12_51_41">2018_10_12_12_51_41</button>
+                    <button class="btn btn-light" data-name="2019_10_12_12_51_41">2019_10_12_12_51_41</button>
+                    <button class="btn btn-light" data-name="2020_10_03_12_51_19">2020_10_03_12_51_19</button>
+                    <button class="btn btn-light" data-name="2020_11_10_13_21_33">2020_11_10_13_21_33</button>
+                </div>
+                <button class="button-quit-game btn btn-light">Quit to menu</button>
+                <button class="button-quit-application btn btn-light">Quit to desktop</button>
+            </div>
+        </div>
+
+        <!-- Log -->
+        <div id="log" class="card ui layer-middle">
+            <div class="card-body body placeholder">
+                <p class="error" data-id="8">13:22:24 Power plant destroyed</p>
+                <p class="info" data-id="2">13:22:24 Tank created</p>
+                <p class="info">13:22:24 Game started</p>
+            </div>
+        </div>
+
+        <!-- Main Menu -->
+        <div id="main-menu" class="card ui centered layer-top panel">
+            <div class="card-header header">Menu</div>
+            <div class="card-body body">
+                <button class="button-continue btn btn-light">Continue</button>
+                <button class="button-new-game btn btn-light">New game</button>
+                <button class="button-save btn btn-light">Save</button>
+                <button class="button-load btn btn-light">Load</button>
+                <button class="button-options btn btn-light">Options</button>
+                <button class="button-quit-game btn btn-light">Quit to menu</button>
+                <button class="button-quit-application btn btn-light">Quit to desktop</button>
+            </div>
+        </div>
+
+        <!-- Map Menu -->
+        <div id="map-menu" class="card ui centered layer-top panel">
+            <div class="card-header header">Maps</div>
+            <div class="card-body body">
+                <button class="button-continue btn btn-light">Continue</button>
+                <div class="placeholder">
+                    <button class="btn btn-light" data-name="tutorial #1">tutorial #1</button>
+                    <button class="btn btn-light" data-name="tutorial #2">tutorial #2</button>
+                    <button class="btn btn-light" data-name="level #1">level #1</button>
+                    <button class="btn btn-light" data-name="level #2">level #2</button>
+                    <button class="btn btn-light" data-name="level #3">level #3</button>
+                </div>
+                <button class="button-quit-game btn btn-light">Quit to menu</button>
+                <button class="button-quit-application btn btn-light">Quit to desktop</button>
+            </div>
+        </div>
+
+        <!-- Minimap-->
+        <div id="minimap" class="card panel ui draggable layer-bottom ui-draggable">
+            <div class="card-header header ui-draggable-handle">Minimap
+                <img class="button-collapse" src="icons/arrow-up-short.png" />
+                <img class="button-expand" src="icons/arrow-down-short.png" />
+            </div>
+
+            <div class="card-body body"></div>
+        </div>
+
+        <!-- Objects (admin) -->
+        <div id="objects-admin" class="card ui layer-top panel panel-medium">
+            <div class="card-header header">Objects</div>
+            <div class="card-body body">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th class="number" data-column="id">ID</th>
+                            <th data-column="name">Name</th>
+                            <th class="number" data-column="order_count">Order count</th>
+                            <th data-column="current_order">Current order</th>
+                        </tr>
+                    </thead>
+                    <tbody class="placeholder"></tbody>
+                </table>
+
+                <div class="buttons">
+                    <button class="btn btn-light button-close">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Options -->
+        <div id="options" class="card ui layer-top panel panel-medium">
+            <div class="card-header header">Options</div>
+            <div class="card-body body">
+                <form>
+                    <div class="form-group row">
+                        <label for="input_mouse_sensivity_x" class="col-sm-4 col-form-label">Mouse sensivity X</label>
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control" id="input_mouse_sensivity_x" name="input_mouse_sensivity_x" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="input_mouse_sensivity_y" class="col-sm-4 col-form-label">Mouse sensivity Y</label>
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control" id="input_mouse_sensivity_y" name="input_mouse_sensivity_y" />
+                        </div>
+                    </div>
+
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-form-label col-sm-4 pt-0">Fog of war type</legend>
+                            <div class="col-sm-8">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="fog_of_war_type" id="fog_of_war_type_fuzzy" value="fuzzy" />
+                                    <label class="form-check-label" for="fog_of_war_type_fuzzy">fuzzy</label>
+                                </div>
+
+                                <div class="form-check disabled">
+                                    <input class="form-check-input" type="radio" name="fog_of_war_type" id="fog_of_war_type_solid" value="solid" />
+                                    <label class="form-check-label" for="fog_of_war_type_solid">solid</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="fog_of_war_type" id="fog_of_war_type_none" value="none" />
+                                    <label class="form-check-label" for="fog_of_war_type_none">none</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-form-label col-sm-4 pt-0">Minimap</legend>
+                            <div class="col-sm-8">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ui_minimap_visible" id="ui_minimap_visible" value="visible" />
+                                    <label class="form-check-label" for="ui_minimap_visible">visible</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ui_minimap_visible" id="ui_minimap_hidden" value="hidden" />
+                                    <label class="form-check-label" for="ui_minimap_hidden">hidden</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-form-label col-sm-4 pt-0">Preview</legend>
+                            <div class="col-sm-8">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ui_preview_visible" id="ui_preview_visible" value="visible" />
+                                    <label class="form-check-label" for="ui_preview_visible">visible</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ui_preview_visible" id="ui_preview_hidden" value="hidden" />
+                                    <label class="form-check-label" for="ui_preview_hidden">hidden</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="col-sm-12 buttons">
+                        <button type="submit" class="btn btn-light">Save</button>
+                        <button class="btn btn-light button-close">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Orders -->
+        <div id="orders" class="card panel ui draggable layer-bottom ui-draggable">
+            <div class="card-header header ui-draggable-handle">Orders - None
+                <img class="button-collapse" src="icons/arrow-up-short.png" />
+                <img class="button-expand" src="icons/arrow-down-short.png" />
+            </div>
+
+            <div class="card-body body placeholder">
+                <button type="button" class="btn btn-light" data-name="Attack">Attack</button>
+                <button type="button" class="btn btn-light" data-name="Move">Move</button>
+                <button type="button" class="btn btn-light" data-name="Stop">Stop</button>
+            </div>
+        </div>
+
+        <!-- Orders (admin) -->
+        <div id="orders-admin" class="card ui layer-top panel panel-medium">
+            <div class="card-header header">Orders</div>
+            <div class="card-body body">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th class="number" data-column="id">ID</th>
+                            <th class="number" data-column="sender_id">Sender</th>
+                            <th class="number" data-column="receiver_id">Receiver</th>
+                            <th data-column="type">Type</th>
+                        </tr>
+                    </thead>
+                    <tbody class="placeholder"></tbody>
+                </table>
+
+                <div class="buttons">
+                    <button class="btn btn-light button-close">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Players -->
+        <div id="players" class="card panel ui draggable layer-bottom ui-draggable">
+            <div class="card-header header ui-draggable-handle">Players
+                <img class="button-collapse" src="icons/arrow-up-short.png" />
+                <img class="button-expand" src="icons/arrow-down-short.png" />
+            </div>
+
+            <div class="card-body body">
+                <table class="table table-condensed no-header">
+                    <tbody class="placeholder"><tr data-id="1"><td class="id number">1</td><td class="color">green</td><td class="name">CPU 1</td></tr><tr data-id="2"><td class="id number">2</td><td class="color">yellow</td><td class="name">CPU 2</td></tr><tr data-id="3"><td class="id number">3</td><td class="color">red</td><td class="name">Human</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Preview -->
+        <div id="preview" class="card panel ui draggable layer-bottom ui-draggable">
+            <div class="card-header header ui-draggable-handle">Preview
+                <img class="button-collapse" src="icons/arrow-up-short.png" />
+                <img class="button-expand" src="icons/arrow-down-short.png" />
+            </div>
+
+            <div class="card-body body"></div>
+        </div>
+
+        <!-- Resources -->
+        <div id="resources" class="card panel ui draggable layer-bottom ui-draggable">
+            <div class="card-header header ui-draggable-handle">Resources
+                <img class="button-collapse" src="icons/arrow-up-short.png" />
+                <img class="button-expand" src="icons/arrow-down-short.png" />
+            </div>
+
+            <div class="card-body body">
+                <table class="table table-condensed no-header">
+                    <tbody class="placeholder"><tr><td class="name">Coal</td><td class="production number">10</td><td class="max number">100</td><td class="per_second number green">2.0</td></tr><tr><td class="name">Energy</td><td class="production number">2</td><td class="max number">200</td><td class="per_second number red">-2.5</td></tr><tr><td class="name">Iron</td><td class="production number">2</td><td class="max number">200</td><td class="per_second number green">3.5</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Skills -->
+        <div id="skills" class="card panel ui draggable layer-bottom ui-draggable">
+            <div class="card-header header ui-draggable-handle">Skills - none
+                <img class="button-collapse" src="icons/arrow-up-short.png" />
+                <img class="button-expand" src="icons/arrow-down-short.png" />
+            </div>
+
+            <div class="card-body body placeholder"><button type="button" class="btn btn-light" data-name="first_aid_kit">First Aid Kit</button> <button type="button" class="btn btn-light" data-name="rage">Rage</button> <button type="button" class="btn btn-light" data-name="repair">Repair</button> </div>
+        </div>
+
+        <!-- Statistics -->
+        <div id="statistics" class="card ui layer-top panel panel-medium">
+            <div class="card-header header">Statistics</div>
+            <div class="card-body body">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th data-column="name">Name</th>
+                            <th class="number" data-column="value">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody class="placeholder"><tr><td class="name">Mouse clicks</td><td class="value number">30</td></tr><tr><td class="name">Objects created</td><td class="value number">250</td></tr><tr><td class="name">Orders completed</td><td class="value number">1080</td></tr><tr><td class="name">Distance driven</td><td class="value number">1080.35</td></tr></tbody>
+                </table>
+
+                <div class="buttons">
+                    <button class="btn btn-light button-close">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technologies -->
+        <div id="technologies" class="card ui layer-top panel panel-medium">
+            <div class="card-header header">Technologies</div>
+            <div class="card-body body">
+                <div class="placeholder"><button class="button-quit-game btn btn-light" data-name="basic_warfare">Basic Warfare</button><button class="button-quit-game btn btn-light" data-name="optics">Optics</button><button class="button-quit-game btn btn-light" data-name="lasers">Lasers</button><button class="button-quit-game btn btn-light btn-outline-secondary" data-name="laser_force_field">Laser Force Field</button><button class="button-quit-game btn btn-light btn-outline-secondary" data-name="laser_wall">Laser Wall</button><button class="button-quit-game btn btn-light btn-outline-secondary" data-name="laser_gun">Laser Gun</button><button class="button-quit-game btn btn-light btn-outline-secondary" data-name="Advanced Warfare">Advanced Warfare</button></div>
+                <div class="buttons">
+                    <button class="btn btn-light button-close">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="centered floating-description" id="object_1" style="left: 350px; top: 400px;"><div class="text name">Tank</div><div class="bar health"><div class="background"></div><div class="current" style="width: 90%;"></div></div><div class="bar fuel"><div class="background"></div><div class="current" style="width: 20%;"></div></div><div class="bar ammunition"><div class="background"></div><div class="current" style="width: 25%;"></div></div><div class="bar reload"><div class="background"></div><div class="current" style="width: 30%;"></div></div></div><div class="centered floating-description" id="object_2" style="left: 650px; top: 300px;"><div class="text name">Truck</div><div class="bar health"><div class="background"></div><div class="current" style="width: 40%;"></div></div><div class="bar fuel"><div class="background"></div><div class="current" style="width: 50%;"></div></div></div><div class="centered floating-description" id="object_7" style="left: 490px; top: 440px;"><div class="text name">House</div><div class="bar health"><div class="background"></div><div class="current" style="width: 70%;"></div></div></div><div class="centered floating-description" id="object_8" style="left: 250px; top: 480px;"><div class="text name">Solar Power Plant</div><div class="bar health"><div class="background"></div><div class="current" style="width: 30%;"></div></div></div>
+</body>
+</rml>

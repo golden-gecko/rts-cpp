@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Components/Component.hpp"
+#include <Gecko/Components/Component.hpp>
 
 TEST(component, new_component_is_empty)
 {

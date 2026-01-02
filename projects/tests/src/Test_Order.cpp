@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Orders/Order.hpp"
+#include <Gecko/Orders/Order.hpp>
 
 TEST(order, new_order_is_empty)
 {

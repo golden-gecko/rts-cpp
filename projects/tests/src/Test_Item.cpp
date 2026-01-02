@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "Configuration.hpp"
-#include "Item.hpp"
+#include <Gecko/Configuration.hpp>
+#include <Gecko/Item.hpp>
 
 namespace
 {

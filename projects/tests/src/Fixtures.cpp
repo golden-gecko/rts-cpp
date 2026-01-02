@@ -1,15 +1,15 @@
 #include "Fixtures.hpp"
 
-#include "Gecko/Games/Game.hpp"
-#include "Gecko/Managers/ComponentManager.hpp"
-#include "Gecko/Managers/ConfigurationManager.hpp"
-#include "Gecko/Managers/MapManager.hpp"
-#include "Gecko/Managers/ObjectManager.hpp"
-#include "Gecko/Managers/OrderManager.hpp"
-#include "Gecko/Managers/PlayerManager.hpp"
-#include "Gecko/Managers/SkillManager.hpp"
-#include "Gecko/Statistics.hpp"
-#include "Gecko/UI/UI.hpp"
+#include <Gecko/Games/Game.hpp>
+#include <Gecko/Managers/ComponentManager.hpp>
+#include <Gecko/Managers/ConfigurationManager.hpp>
+#include <Gecko/Managers/MapManager.hpp>
+#include <Gecko/Managers/ObjectManager.hpp>
+#include <Gecko/Managers/OrderManager.hpp>
+#include <Gecko/Managers/PlayerManager.hpp>
+#include <Gecko/Managers/SkillManager.hpp>
+#include <Gecko/Statistics.hpp>
+#include <Gecko/UI/UI.hpp>
 
 init_game::init_game(init_game_config config)
 {

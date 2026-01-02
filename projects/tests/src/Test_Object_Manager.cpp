@@ -1,9 +1,10 @@
 #include <gtest/gtest.h>
 
-#include "Configuration.hpp"
+#include <Gecko/Configuration.hpp>
+#include <Gecko/Managers/ObjectManager.hpp>
+#include <Gecko/Objects/Vehicle.hpp>
+
 #include "Fixtures.hpp"
-#include "Managers/ObjectManager.hpp"
-#include "Objects/Vehicle.hpp"
 
 TEST(object_manager, new_object_manager_is_empty)
 {

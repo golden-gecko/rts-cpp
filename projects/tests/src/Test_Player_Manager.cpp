@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "Configuration.hpp"
-#include "Managers/PlayerManager.hpp"
-#include "Players/Player.hpp"
+#include <Gecko/Configuration.hpp>
+#include <Gecko/Managers/PlayerManager.hpp>
+#include <Gecko/Players/Player.hpp>
 
 TEST(player_manager, new_player_manager_is_empty)
 {

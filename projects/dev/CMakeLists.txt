@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 4.2)
 
 project(Dev)
 
-file(GLOB HEADER_FILES "src/*.hpp" "src/*/*.hpp")
-file(GLOB SOURCE_FILES "src/*.cpp" "src/*/*.cpp")
+# Create target and add source files
+file(GLOB_RECURSE HEADER_FILES ${PROJECT_SOURCE_DIR}/src/*.hpp)
+file(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
 

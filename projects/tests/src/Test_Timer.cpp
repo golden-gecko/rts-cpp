@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Timer.hpp"
+#include <Gecko/Timer.hpp>
 
 TEST(timer, new_timer_is_empty)
 {
