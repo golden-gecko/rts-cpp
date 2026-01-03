@@ -303,12 +303,12 @@ namespace Gecko::Utils::Convert
         );
     }
 
-    std::string to_string(const Json::Value& value)
+    std::string to_string(const Json::Value& value, const std::string& indentation)
     {
         Json::StreamWriterBuilder builder;
 
         builder["commentStyle"] = "None";
-        builder["indentation"] = "";
+        builder["indentation"] = indentation;
 
         return Json::writeString(builder, value);
     }

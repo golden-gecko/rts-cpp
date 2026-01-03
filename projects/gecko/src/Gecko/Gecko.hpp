@@ -13,6 +13,7 @@
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/program_options.hpp>
+#include <boost/regex.hpp>
 
 #include <json/json.h>
 
@@ -68,6 +69,7 @@ namespace Gecko
     class Preview;
     class Process;
     class Processes;
+    class RenderInterface;
     class Resource;
     class Resources;
     class Search;
@@ -76,6 +78,7 @@ namespace Gecko
     class SelectionBox;
     class Skill;
     class Skills;
+    class SystemInterface;
     class Technology;
     class Tile;
     class Window;

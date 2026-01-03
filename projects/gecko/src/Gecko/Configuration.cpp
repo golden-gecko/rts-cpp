@@ -134,9 +134,9 @@ namespace Gecko
         Utils::json_to_file(m_cache, value_cache_path);
     }
 
-    std::string Configuration::to_string() const
+    std::string Configuration::to_string(const std::string& indentation) const
     {
-        return Utils::Convert::to_string(m_value);
+        return Utils::Convert::to_string(m_value, indentation);
     }
 
     bool Configuration::get_bool() const

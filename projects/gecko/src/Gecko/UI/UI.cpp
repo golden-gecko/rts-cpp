@@ -21,7 +21,9 @@
 #include "Gecko/UI/Cursor.hpp"
 #include "Gecko/UI/Minimap.hpp"
 #include "Gecko/UI/Preview.hpp"
+#include "Gecko/UI/RenderInterface.hpp"
 #include "Gecko/UI/SelectionBox.hpp"
+#include "Gecko/UI/SystemInterface.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Window.hpp"
 
@@ -29,251 +31,6 @@ Gecko::UI* Ogre::Singleton<Gecko::UI>::msSingleton = nullptr;
 
 namespace Gecko
 {
-    RenderInterface::RenderInterface(unsigned int window_width, unsigned int window_height)
-    {
-        mRenderSystem = Ogre::Root::getSingletonPtr()->getRenderSystem();
-
-        mColourBlendMode.blendType = Ogre::LBT_COLOUR;
-        mColourBlendMode.source1 = Ogre::LBS_DIFFUSE;
-        mColourBlendMode.source2 = Ogre::LBS_TEXTURE;
-        mColourBlendMode.operation = Ogre::LBX_MODULATE;
-
-        mAlphaBlendMode.blendType = Ogre::LBT_ALPHA;
-        mAlphaBlendMode.source1 = Ogre::LBS_DIFFUSE;
-        mAlphaBlendMode.source2 = Ogre::LBS_TEXTURE;
-        mAlphaBlendMode.operation = Ogre::LBX_MODULATE;
-
-        mScissorEnable = false;
-
-        mScissorRect[0] = 0;
-        mScissorRect[1] = 0;
-        mScissorRect[2] = window_width;
-        mScissorRect[3] = window_height;
-
-        mGroup = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
-    }
-
-    Rml::CompiledGeometryHandle RenderInterface::CompileGeometry(Rml::Span<const Rml::Vertex> vertices, Rml::Span<const int> indices)
-    {
-        RocketCompiledGeometry* geometry = new RocketCompiledGeometry();
-        // geometry->mTexture = (texture == NULL) ? NULL : (RocketTexture*)texture;
-
-        // Add vertex buffer
-        geometry->mRenderOperation.vertexData = new Ogre::VertexData();
-        geometry->mRenderOperation.vertexData->vertexStart = 0;
-        geometry->mRenderOperation.vertexData->vertexCount = vertices.size();
-
-        // Add index buffer
-        geometry->mRenderOperation.indexData = new Ogre::IndexData();
-        geometry->mRenderOperation.indexData->indexStart = 0;
-        geometry->mRenderOperation.indexData->indexCount = indices.size();
-
-        geometry->mRenderOperation.operationType = Ogre::RenderOperation::OT_TRIANGLE_LIST;
-
-        // Set up the vertex declaration.
-        Ogre::VertexDeclaration* vertex_declaration = geometry->mRenderOperation.vertexData->vertexDeclaration;
-        size_t element_offset = 0;
-        vertex_declaration->addElement(0, element_offset, Ogre::VET_FLOAT3, Ogre::VES_POSITION);
-        element_offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
-        vertex_declaration->addElement(0, element_offset, Ogre::VET_COLOUR, Ogre::VES_DIFFUSE);
-        element_offset += Ogre::VertexElement::getTypeSize(Ogre::VET_COLOUR);
-        vertex_declaration->addElement(0, element_offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES);
-
-        // Create the vertex buffer.
-        Ogre::HardwareVertexBufferSharedPtr vertex_buffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(vertex_declaration->getVertexSize(0), vertices.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-        geometry->mRenderOperation.vertexData->vertexBufferBinding->setBinding(0, vertex_buffer);
-
-        // Fill the vertex buffer.
-        RocketVertex* ogre_vertices = (RocketVertex*)vertex_buffer->lock(0, vertex_buffer->getSizeInBytes(), Ogre::HardwareBuffer::HBL_NORMAL);
-
-        for (int i = 0; i < vertices.size(); ++i)
-        {
-            ogre_vertices[i].x = vertices[i].position.x;
-            ogre_vertices[i].y = vertices[i].position.y;
-            ogre_vertices[i].z = 0;
-
-            Ogre::ColourValue diffuse(vertices[i].colour.red / 255.0f, vertices[i].colour.green / 255.0f, vertices[i].colour.blue / 255.0f, vertices[i].colour.alpha / 255.0f);
-            mRenderSystem->convertColourValue(diffuse, &ogre_vertices[i].diffuse);
-
-            ogre_vertices[i].u = vertices[i].tex_coord[0];
-            ogre_vertices[i].v = vertices[i].tex_coord[1];
-        }
-        vertex_buffer->unlock();
-
-        // Create the index buffer.
-        Ogre::HardwareIndexBufferSharedPtr index_buffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, indices.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-        geometry->mRenderOperation.indexData->indexBuffer = index_buffer;
-        geometry->mRenderOperation.useIndexes = true;
-
-        // Fill the index buffer.
-        void* ogre_indices = index_buffer->lock(0, index_buffer->getSizeInBytes(), Ogre::HardwareBuffer::HBL_NORMAL);
-        memcpy(ogre_indices, indices.data(), sizeof(unsigned int) * indices.size());
-        index_buffer->unlock();
-
-        return reinterpret_cast<Rml::CompiledGeometryHandle>(geometry);
-    }
-
-    void RenderInterface::RenderGeometry(Rml::CompiledGeometryHandle geometry, Rml::Vector2f translation, Rml::TextureHandle texture)
-    {
-        Ogre::Matrix4 transform;
-        transform.makeTrans(translation.x, translation.y, 0);
-        mRenderSystem->_setWorldMatrix(transform);
-        RocketCompiledGeometry* ogre3d_geometry = reinterpret_cast<RocketCompiledGeometry*>(geometry);
-
-        //*
-        auto ogre_resource = Ogre::TextureManager::getSingleton().getByHandle(texture);
-
-        if (ogre_resource.isNull())
-        {
-            mRenderSystem->_disableTextureUnit(0);
-        }
-        else
-        {
-            auto ogre_texture = static_pointer_cast<Ogre::Texture>(ogre_resource);
-
-            mRenderSystem->_setTexture(0, true, ogre_texture);
-            mRenderSystem->_setTextureBlendMode(0, mColourBlendMode);
-            mRenderSystem->_setTextureBlendMode(0, mAlphaBlendMode);
-        }
-
-        mRenderSystem->_render(ogre3d_geometry->mRenderOperation);
-        //*/
-    }
-
-    void RenderInterface::ReleaseGeometry(Rml::CompiledGeometryHandle geometry)
-    {
-        int i = 0;
-
-        /*
-        RocketCompiledGeometry* ogre3d_geometry = reinterpret_cast<RocketCompiledGeometry*>(geometry);
-        delete ogre3d_geometry->mRenderOperation.vertexData;
-        delete ogre3d_geometry->mRenderOperation.indexData;
-        delete ogre3d_geometry;
-        */
-    }
-
-    Rml::TextureHandle RenderInterface::LoadTexture(Rml::Vector2i& texture_dimensions, const Rml::String& source)
-    {
-        std::filesystem::path path(source);
-        std::string filename = path.filename().string();
-
-        Ogre::TextureManager* texture_manager = Ogre::TextureManager::getSingletonPtr();
-
-        /*
-        // Get the file name
-        Rocket::Core::String::size_type lc = source.RFind("/");
-        Rocket::Core::String::size_type lc_win = source.RFind("\\");
-        if (lc_win != Rocket::Core::String::npos && (lc == Rocket::Core::String::npos || lc < lc_win))
-            lc = lc_win;
-        Ogre::String file = (lc != Rocket::Core::String::npos) ? source.Substring(lc + 1).CString() : source.CString();
-
-        // Try to find resource group
-        Ogre::String group = Ogre::ResourceGroupManager::getSingletonPtr()->findGroupContainingResource(file);
-
-        // If mGroup is set to autodetect use the resource group of the given texture as default group
-        if (mGroup == Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME && !group.empty()) mGroup = group;
-        */
-
-        // Try to get loaded texture
-        Ogre::TexturePtr ogre_texture = texture_manager->getByName(filename);
-
-        // Try to load texture if necessary
-        if (ogre_texture.isNull())
-        {
-            ogre_texture = texture_manager->load(filename, "General", Ogre::TEX_TYPE_2D, 0);
-        }
-
-        // Error
-        if (ogre_texture.isNull())
-        {
-            return 0;
-        }
-
-        // Texture size
-        texture_dimensions.x = ogre_texture->getWidth();
-        texture_dimensions.y = ogre_texture->getHeight();
-
-        // Create handle for the texture
-        // texture_handle = reinterpret_cast<Rocket::Core::TextureHandle>(new RocketTexture(ogre_texture));
-
-        return ogre_texture->getHandle(); // reinterpret_cast<Rml::TextureHandle>(ogre_texture.get());
-    }
-
-    Rml::TextureHandle RenderInterface::GenerateTexture(Rml::Span<const Rml::byte> source, Rml::Vector2i source_dimensions)
-    {
-        static int texture_id = 1;
-        std::string texture_name = std::format("generated_texture_{}", texture_id++);
-
-        // Create a memory file
-        Ogre::DataStreamPtr dataStream(new Ogre::MemoryDataStream((void*)source.data(), source_dimensions.x * source_dimensions.y * sizeof(unsigned int)));
-
-        // Try to create texture from memory
-        Ogre::TexturePtr ogre_texture = Ogre::TextureManager::getSingleton().loadRawData(
-            texture_name,
-            mGroup,
-            dataStream,
-            source_dimensions.x,
-            source_dimensions.y,
-            Ogre::PF_A8B8G8R8,
-            Ogre::TEX_TYPE_2D,
-            0);
-
-        // Error
-        if (ogre_texture.isNull())
-        {
-            return 0;
-        }
-
-        return ogre_texture->getHandle(); // reinterpret_cast<Rml::TextureHandle>(ogre_texture.get());
-    }
-
-    void RenderInterface::ReleaseTexture(Rml::TextureHandle texture)
-    {
-        int i = 0;
-
-        // delete ((RocketTexture*)texture);
-    }
-
-    void RenderInterface::EnableScissorRegion(bool enable)
-    {
-        mScissorEnable = enable;
-
-        if (!mScissorEnable)
-            mRenderSystem->setScissorTest(false);
-        else
-            mRenderSystem->setScissorTest(true, mScissorRect[0], mScissorRect[1], mScissorRect[2], mScissorRect[3]);
-    }
-
-    void RenderInterface::SetScissorRegion(Rml::Rectanglei region)
-    {
-        mScissorRect[0] = std::max<int>(0, region.Position().x);
-        mScissorRect[1] = std::max<int>(0, region.Position().y);
-
-        /*
-        mScissorRect[2] = x + width;
-        mScissorRect[3] = y + height;
-
-        if (mScissorEnable)
-            mRenderSystem->setScissorTest(true, mScissorRect[0], mScissorRect[1], mScissorRect[2], mScissorRect[3]);
-        */
-    }
-
-
-
-
-
-
-
-
-    UI::UI(const std::shared_ptr<Configuration>& configuration) :
-        configuration(configuration)
-    {
-    }
-
-    UI::~UI()
-    {
-    }
-
     void UI::init()
     {
         // TODO: Get window size.
@@ -329,91 +86,6 @@ namespace Gecko
         selection_box.reset();
 
         Rml::Shutdown();
-    }
-
-    void UI::render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
-    {
-        if (queueGroupId != Ogre::RENDER_QUEUE_OVERLAY)
-        {
-            return;
-        }
-
-        if (Ogre::Root::getSingleton().getRenderSystem()->_getViewport()->getOverlaysEnabled() == false)
-        {
-            return;
-        }
-
-        Ogre::RenderSystem* render_system = Game::getSingleton().get_root()->getRenderSystem();
-
-        if (render_system == nullptr)
-        {
-            return;
-        }
-
-        auto window = Game::getSingleton().get_window(Gecko::Settings::Window::MainName);
-
-        if (window == nullptr)
-        {
-            return;
-        }
-
-        auto render_window = window->get_render_window();
-
-        if (render_window == nullptr)
-        {
-            return;
-        }
-
-        context->Update();
-
-        // Set up the projection and view matrices.
-        float z_near = -1;
-        float z_far = 1;
-
-        Ogre::Matrix4 projection_matrix = Ogre::Matrix4::ZERO;
-
-        projection_matrix[0][0] = 2.0f / (Ogre::Real)render_window->getWidth();
-        projection_matrix[0][3] = -1.0000000f;
-        projection_matrix[1][1] = -2.0f / (Ogre::Real)render_window->getHeight();
-        projection_matrix[1][3] = 1.0000000f;
-        projection_matrix[2][2] = -2.0f / (z_far - z_near);
-        projection_matrix[3][3] = 1.0000000f;
-        
-        render_system->_setProjectionMatrix(projection_matrix);
-        render_system->_setViewMatrix(Ogre::Matrix4::IDENTITY);
-
-        render_system->setLightingEnabled(false);
-        render_system->_setDepthBufferParams(false, false);
-        render_system->_setCullingMode(Ogre::CULL_CLOCKWISE);
-        render_system->_setFog(Ogre::FOG_NONE);
-        render_system->_setColourBufferWriteEnabled(true, true, true, true);
-        render_system->unbindGpuProgram(Ogre::GPT_FRAGMENT_PROGRAM);
-        render_system->unbindGpuProgram(Ogre::GPT_VERTEX_PROGRAM);
-
-        // TODO: Investigate.
-        /*
-        Ogre::TextureUnitState::UVWAddressingMode addressing_mode;
-
-        addressing_mode.u = Ogre::TextureUnitState::TAM_CLAMP;
-        addressing_mode.v = Ogre::TextureUnitState::TAM_CLAMP;
-        addressing_mode.w = Ogre::TextureUnitState::TAM_CLAMP;
-
-        render_system->_setTextureAddressingMode(0, addressing_mode);
-        */
-
-        render_system->_setTextureCoordSet(0, 0);
-        render_system->_setTextureCoordCalculation(0, Ogre::TEXCALC_NONE);
-
-        // TODO: Investigate.
-        // render_system->_setTextureUnitFiltering(0, Ogre::FO_LINEAR, Ogre::FO_LINEAR, Ogre::FO_POINT);
-
-        render_system->_setTextureMatrix(0, Ogre::Matrix4::IDENTITY);
-        render_system->_setAlphaRejectSettings(Ogre::CMPF_GREATER, 0, false);
-        render_system->_disableTextureUnitsFrom(1);
-        render_system->_setSceneBlending(Ogre::SBF_SOURCE_ALPHA, Ogre::SBF_ONE_MINUS_SOURCE_ALPHA);
-        render_system->_setDepthBias(0, 0);
-
-        context->Render();
     }
 
     void UI::update(float time)
@@ -519,6 +191,96 @@ namespace Gecko
             get_minimap().update();
             get_preview().update();
         }
+    }
+
+    UI::UI(const std::shared_ptr<Configuration>& configuration) :
+        configuration(configuration)
+    {
+    }
+
+    void UI::render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
+    {
+        if (queueGroupId != Ogre::RENDER_QUEUE_OVERLAY)
+        {
+            return;
+        }
+
+        if (Ogre::Root::getSingleton().getRenderSystem()->_getViewport()->getOverlaysEnabled() == false)
+        {
+            return;
+        }
+
+        Ogre::RenderSystem* render_system = Game::getSingleton().get_root()->getRenderSystem();
+
+        if (render_system == nullptr)
+        {
+            return;
+        }
+
+        auto window = Game::getSingleton().get_window(Gecko::Settings::Window::MainName);
+
+        if (window == nullptr)
+        {
+            return;
+        }
+
+        auto render_window = window->get_render_window();
+
+        if (render_window == nullptr)
+        {
+            return;
+        }
+
+        context->Update();
+
+        // Set up the projection and view matrices.
+        float z_near = -1;
+        float z_far = 1;
+
+        Ogre::Matrix4 projection_matrix = Ogre::Matrix4::ZERO;
+
+        projection_matrix[0][0] = 2.0f / (Ogre::Real)render_window->getWidth();
+        projection_matrix[0][3] = -1.0000000f;
+        projection_matrix[1][1] = -2.0f / (Ogre::Real)render_window->getHeight();
+        projection_matrix[1][3] = 1.0000000f;
+        projection_matrix[2][2] = -2.0f / (z_far - z_near);
+        projection_matrix[3][3] = 1.0000000f;
+        
+        render_system->_setProjectionMatrix(projection_matrix);
+        render_system->_setViewMatrix(Ogre::Matrix4::IDENTITY);
+
+        render_system->setLightingEnabled(false);
+        render_system->_setDepthBufferParams(false, false);
+        render_system->_setCullingMode(Ogre::CULL_CLOCKWISE);
+        render_system->_setFog(Ogre::FOG_NONE);
+        render_system->_setColourBufferWriteEnabled(true, true, true, true);
+        render_system->unbindGpuProgram(Ogre::GPT_FRAGMENT_PROGRAM);
+        render_system->unbindGpuProgram(Ogre::GPT_VERTEX_PROGRAM);
+
+        // TODO: Investigate.
+        /*
+        Ogre::TextureUnitState::UVWAddressingMode addressing_mode;
+
+        addressing_mode.u = Ogre::TextureUnitState::TAM_CLAMP;
+        addressing_mode.v = Ogre::TextureUnitState::TAM_CLAMP;
+        addressing_mode.w = Ogre::TextureUnitState::TAM_CLAMP;
+
+        render_system->_setTextureAddressingMode(0, addressing_mode);
+        */
+
+        render_system->_setTextureCoordSet(0, 0);
+        render_system->_setTextureCoordCalculation(0, Ogre::TEXCALC_NONE);
+
+        // TODO: Investigate.
+        // render_system->_setTextureUnitFiltering(0, Ogre::FO_LINEAR, Ogre::FO_LINEAR, Ogre::FO_POINT);
+
+        render_system->_setTextureMatrix(0, Ogre::Matrix4::IDENTITY);
+        render_system->_setAlphaRejectSettings(Ogre::CMPF_GREATER, 0, false);
+        render_system->_disableTextureUnitsFrom(1);
+        render_system->_setSceneBlending(Ogre::SBF_SOURCE_ALPHA, Ogre::SBF_ONE_MINUS_SOURCE_ALPHA);
+        render_system->_setDepthBias(0, 0);
+
+        context->Render();
     }
 
     void UI::change_visibility(const std::string& type, bool visible)
@@ -847,7 +609,7 @@ namespace Gecko
 
     bool UI::is_mouse_inside(std::size_t x, std::size_t y)
     {
-        return true;
+        return false;
 
         /*
         static std::stringstream stream;
@@ -919,7 +681,7 @@ namespace Gecko
 
         if (minimap_state != state.end())
         {
-            get_minimap().set_visible(minimap_state->second);
+            // get_minimap().set_visible(minimap_state->second);
         }
 
         auto preview_state = state.find("preview");
@@ -972,7 +734,6 @@ namespace Gecko
         show_layers(visible);
 
         get_cursor().set_visible(visible);
-        get_minimap().set_visible(visible);
         get_preview().set_visible(visible);
     }
 
@@ -1009,6 +770,12 @@ namespace Gecko
 
     void UI::set_configurations(const std::set<std::string>& configurations)
     {
+        // TODO: Remove
+        if (configurations_element == nullptr)
+        {
+            return;
+        }
+
         // Update cache.
         static std::set<std::string> configurations_cache;
 
@@ -1019,23 +786,18 @@ namespace Gecko
 
         configurations_cache = configurations;
 
-        // Create JSON.
-        Json::Value json_configurations;
+        // Create RML.
+        Rml::String rml;
 
-        for (const auto& configuration : configurations)
+        for (const std::string& _configuration : configurations)
         {
-            json_configurations.append(configuration);
+            std::string title = Utils::format_title(_configuration);
+
+            rml += std::vformat(configuration->get_string("ui.templates.configurations"), std::make_format_args(_configuration, title));
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.configurations.set(";
-        stream << Utils::Convert::to_string(json_configurations);
-        stream << ")";
-
-        evaluate_with_timeout(stream.str());
+        configurations_element->SetInnerRML(rml);
     }
 
     void UI::set_configurations_header(const std::string& _configuration_name)
@@ -1055,8 +817,6 @@ namespace Gecko
         stream << "app.configurations.set_header('";
         stream << _configuration_name;
         stream << "')";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_floating_descriptions(const std::vector<Id>& objects)
@@ -1112,8 +872,6 @@ namespace Gecko
         stream << "app.ui.set_floating_descriptions(";
         stream << Utils::Convert::to_string(json_floating_descriptions);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
         */
     }
 
@@ -1155,8 +913,6 @@ namespace Gecko
         stream << "app.layers.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_maps(const std::vector<std::string>& maps)
@@ -1186,8 +942,6 @@ namespace Gecko
         stream << "app.map_menu.set_maps(";
         stream << Utils::Convert::to_string(json_maps);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_hovered_object_id(Id object_id)
@@ -1207,15 +961,23 @@ namespace Gecko
 
         info_cache = info;
 
+        // Create RML.
+        std::string rml = info->to_string("  ");
+
+        boost::algorithm::replace_all(rml, "\"", "");
+        boost::algorithm::replace_all(rml, "{", "");
+        boost::algorithm::replace_all(rml, "}", "");
+        boost::algorithm::replace_all(rml, " [", "");
+        boost::algorithm::replace_all(rml, "]", "");
+        boost::algorithm::replace_all(rml, ",", "");
+        boost::algorithm::replace_all(rml, " :", ":");
+
+        rml = boost::regex_replace(rml, boost::regex(" +\n"), "\n");
+        rml = boost::regex_replace(rml, boost::regex("\n+"), "\n");
+        rml = boost::regex_replace(rml, boost::regex("\n  "), "\n");
+
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.info.set(";
-        stream << info_cache->to_string();
-        stream << ")";
-
-        evaluate_with_timeout(stream.str());
+        info_element->SetInnerRML(rml);
     }
 
     void UI::set_objects_admin()
@@ -1272,8 +1034,6 @@ namespace Gecko
         stream << "app.objects.set(";
         stream << Utils::Convert::to_string(json_objects);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_orders_admin()
@@ -1316,8 +1076,6 @@ namespace Gecko
         stream << "app.orders.set(";
         stream << Utils::Convert::to_string(json_orders);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_players()
@@ -1356,8 +1114,6 @@ namespace Gecko
         stream << "app.players.set(";
         stream << Utils::Convert::to_string(json_players);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_order_name(order_type::Value _order_name)
@@ -1372,6 +1128,12 @@ namespace Gecko
 
     void UI::set_orders(const std::set<std::string>& orders)
     {
+        // TODO: Remove.
+        if (orders_element == nullptr)
+        {
+            return;
+        }
+
         // Update cache.
         static std::set<std::string> orders_cache;
 
@@ -1382,23 +1144,18 @@ namespace Gecko
 
         orders_cache = orders;
 
-        // Create JSON.
-        Json::Value json_orders;
+        // Create RML.
+        Rml::String rml;
 
-        for (const auto& order : orders)
+        for (const std::string& order : orders)
         {
-            json_orders.append(order);
+            std::string title = Utils::format_title(order);
+
+            rml += std::vformat(configuration->get_string("ui.templates.orders"), std::make_format_args(order, title));
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.orders.set(";
-        stream << Utils::Convert::to_string(json_orders);
-        stream << ")";
-
-        evaluate_with_timeout(stream.str());
+        orders_element->SetInnerRML(rml);
     }
 
     void UI::set_orders_header(order_type::Value order_type)
@@ -1420,8 +1177,6 @@ namespace Gecko
         stream << "app.orders.set_header('";
         stream << order_type::to_string(order_type);
         stream << "')";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_resources(std::shared_ptr<Resources> resources)
@@ -1436,21 +1191,22 @@ namespace Gecko
 
         resources_cache = (*(resources.get()));
 
-        // Create JSON.
+        // Create RML.
         std::string rml;
 
-        for (const auto& resource : resources_cache)
+        for (const auto& resource : (*(resources.get())))
         {
-            rml += std::format("<p><span class=\"name\">{}</span>: <span class=\"value\">{}/{}</span></p>",
-                resource.first, resource.second.get_current(), resource.second.get_max()
-            );
+            float current = resource.second.get_current();
+            float max = resource.second.get_max();
+            float ratio = resource.second.get_consumption() - resource.second.get_production();
 
-            // json_resource["consumption"] = resource.second.get_consumption();
-            // json_resource["production"] = resource.second.get_production();
+            std::string class_name = (resource.second.get_consumption() - resource.second.get_production()) > 0.0f ? "green" : "red";
+
+            rml += std::vformat(configuration->get_string("ui.templates.resources"), std::make_format_args(resource.first, current, max, class_name, ratio));
         }
 
         // Update UI.
-        // this->resources->GetElementById("title")->SetInnerRML(rml);
+        resources_element->SetInnerRML(rml);
     }
 
     void UI::set_saves(const std::vector<std::string>& saves)
@@ -1480,8 +1236,6 @@ namespace Gecko
         stream << "app.load_menu.set_saves(";
         stream << Utils::Convert::to_string(json_saves);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_skill_name(const std::string& _skill_name)
@@ -1506,23 +1260,18 @@ namespace Gecko
 
         skills_cache = skills;
 
-        // Create JSON.
-        Json::Value json_skills;
+        // Create RML.
+        Rml::String rml;
 
-        for (const auto& i : skills)
+        for (const std::string& skill : skills)
         {
-            json_skills.append(i);
+            std::string title = Utils::format_title(skill);
+
+            rml += std::vformat(configuration->get_string("ui.templates.skills"), std::make_format_args(skill, title));
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.skills.set(";
-        stream << Utils::Convert::to_string(json_skills);
-        stream << ")";
-
-        evaluate_with_timeout(stream.str());
+        skills_element->SetInnerRML(rml);
     }
 
     void UI::set_skills_header(const std::string& skill_name)
@@ -1544,8 +1293,6 @@ namespace Gecko
         stream << "app.skills.set_header('";
         stream << skill_name;
         stream << "')";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_statistics(const std::map<std::string, std::string>& statistics)
@@ -1580,8 +1327,6 @@ namespace Gecko
         stream << "app.statistics.set(";
         stream << Utils::Convert::to_string(json_statistics);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_terrain_layers(const std::set<std::string>& layers)
@@ -1609,8 +1354,6 @@ namespace Gecko
         stream << "app.terrain.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_water_layers(const std::set<std::string>& layers)
@@ -1638,8 +1381,6 @@ namespace Gecko
         stream << "app.water.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::init_components()
@@ -1652,72 +1393,35 @@ namespace Gecko
 
     void UI::init_documents()
     {
+        // TODO: Warning on first call.
         Rml::Debugger::Shutdown();
 
         context->UnloadAllDocuments();
 
-        // TODO: Move list of documents to configuration.
-        /*
-        std::vector<std::string> documents = {
-            "configurations", "info", "log", "menu", "minimap", "orders", "resources", "skills"
-        };
-
-        for (const std::string& document_name : documents)
-        {
-            context->LoadDocument(std::format("../ui/{}.rml", document_name))->Show();
-        }
-        */
-
-        document = context->LoadDocument("../ui/ui.rml");
+        document = context->LoadDocument(configuration->get_string("ui.layout"));
         document->Show();
 
         Rml::Debugger::Initialise(context);
-    }
 
-    void UI::init_events()
-    {
-        /*
-        events = std::make_shared<Events>();
-        instancer = std::make_shared<Instancer>();
-
-        Rml::Factory::RegisterEventListenerInstancer(instancer.get());
-
-        document->AddEventListener(Rml::EventId::Blur, events.get());
-        document->AddEventListener(Rml::EventId::Focus, events.get());
-
-        document->AddEventListener(Rml::EventId::Keydown, events.get());
-        document->AddEventListener(Rml::EventId::Keyup, events.get());
-
-        document->AddEventListener(Rml::EventId::Mousedown, events.get());
-        document->AddEventListener(Rml::EventId::Mouseup, events.get());
-
-        document->AddEventListener(Rml::EventId::Mousemove, events.get());
-
-        document->AddEventListener(Rml::EventId::Drag, events.get());
-        document->AddEventListener(Rml::EventId::Dragstart, events.get());
-        document->AddEventListener(Rml::EventId::Dragend, events.get());
-        */
+        configurations_element = get_placeholder("configurations");
+        info_element = get_placeholder("info");
+        layers_element = get_placeholder("layers");
+        log_element = get_placeholder("log");
+        maps_element = get_placeholder("maps");
+        objects_element = get_placeholder("objects");
+        orders_element = get_placeholder("orders");
+        resources_element = get_placeholder("resources");
+        skills_element = get_placeholder("skills");
+        statistics_element = get_placeholder("statistics");
     }
 
     void UI::init_fonts()
     {
-        // TODO: Move to configuration.
-        Rml::String directory = "../ui/fonts";
-
-        // TODO: Move to configuration.
-        std::vector<Rml::String> fonts =
-        {
-            "LatoLatin-Regular.ttf",
-            "LatoLatin-Italic.ttf",
-            "LatoLatin-Bold.ttf",
-            "LatoLatin-BoldItalic.ttf",
-            "NotoEmoji-Regular.ttf",
-        };
+        std::set<Rml::String> fonts = configuration->get_string_array<std::set<Rml::String>>("ui.fonts");
 
         for (const Rml::String& font : fonts)
         {
-            // TODO: Use STL to join paths.
-            Rml::LoadFontFace(directory + "/" + font, false);
+            Rml::LoadFontFace(font, false);
         }
     }
 
@@ -1735,14 +1439,10 @@ namespace Gecko
         */
     }
 
-    void UI::evaluate_with_timeout(const std::string& js)
-    {
-        // view->EvaluateScript(("setTimeout(() => {" + js + ";}, 0)").c_str());
-    }
-
     void UI::log_write(const std::string& text, const std::string& type, Id id)
     {
         // TODO: Refactor. Make class.
+        // TODO: Implement id argument.
         static std::vector<std::string> lines;
 
         lines.push_back(text);
@@ -1758,17 +1458,31 @@ namespace Gecko
 
             for (const std::string& line : lines)
             {
-                rml += std::format("<p class=\"{}\">{}</p>", type, line);
+                rml += std::vformat(configuration->get_string("ui.templates.log"), std::make_format_args(type, line));
             }
 
-            Rml::ElementList elements;
-
-            document->GetElementById("log")->GetElementsByClassName(elements, "placeholder");
-            
-            if (elements.size() > 0)
-            {
-                elements[0]->SetInnerRML(rml);
-            }
+            log_element->SetInnerRML(rml);
         }
+    }
+
+    Rml::Element* UI::get_placeholder(const std::string& selector) const
+    {
+        Rml::Element* element = document->GetElementById(selector);
+
+        if (element == nullptr)
+        {
+            return nullptr;
+        }
+
+        Rml::ElementList elements;
+
+        element->GetElementsByClassName(elements, "placeholder");
+
+        if (elements.size() == 0)
+        {
+            return nullptr;
+        }
+
+        return elements[0];
     }
 }

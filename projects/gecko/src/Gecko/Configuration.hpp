@@ -69,7 +69,7 @@ namespace Gecko
             return m_value.size();
         }
 
-        std::string to_string() const;
+        std::string to_string(const std::string& indentation = "") const;
 
     public:
         bool get_bool() const;

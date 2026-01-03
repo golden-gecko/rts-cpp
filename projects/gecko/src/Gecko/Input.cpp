@@ -153,11 +153,10 @@ namespace Gecko
         auto y = static_cast<float>(arg.state.Y.rel);
 
         UI::getSingleton().inject_mouse_move(arg.state.X.abs, arg.state.Y.abs);
-        // TODO: Fix.
-        // UI::getSingleton().get_cursor().set_visible(false);
+        UI::getSingleton().get_cursor().set_visible(false);
 
+        // TODO: Hardcoded map.
         auto camera = MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::MainName);
-        camera->get_camera_node()->translate(Ogre::Vector3::NEGATIVE_UNIT_Z * static_cast<float>(arg.state.Z.rel) * 0.1f);
 
         if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
         {
@@ -170,15 +169,13 @@ namespace Gecko
             selection_box.set_end(Utils::Convert::to_screen_coordinates(arg));
             selection_box.update();
 
-            // TODO: Fix.
-            // UI::getSingleton().get_cursor().set_visible(true);
+            UI::getSingleton().get_cursor().set_visible(true);
         }
         else if (is_mouse_button_pressed(OIS::MouseButtonID::MB_Middle))
         {
             camera->rotate(Ogre::Degree(x * mouse_sensitivity.x), Ogre::Degree(y * mouse_sensitivity.y));
 
-            // TODO: Fix.
-            // UI::getSingleton().get_cursor().set_visible(true);
+            UI::getSingleton().get_cursor().set_visible(true);
         }
         else
         {
@@ -186,22 +183,19 @@ namespace Gecko
 
             if (object_cast)
             {
-                // TODO: Fix.
-                // UI::getSingleton().set_hovered_object_id(object_cast->first);
-                // UI::getSingleton().get_cursor().set_visible(true);
+                UI::getSingleton().set_hovered_object_id(object_cast->first);
+                UI::getSingleton().get_cursor().set_visible(true);
             }
             else
             {
-                // TODO: Fix.
-                // UI::getSingleton().set_hovered_object_id(Id::Empty);
+                UI::getSingleton().set_hovered_object_id(Id::Empty);
 
                 auto layer_cast = Utils::Raycast::to_layer(arg);
 
                 if (layer_cast)
                 {
-                    // TODO: Fix.
-                    // UI::getSingleton().get_cursor().update(layer_cast.value());
-                    // UI::getSingleton().get_cursor().set_visible(true);
+                    UI::getSingleton().get_cursor().update(layer_cast.value());
+                    UI::getSingleton().get_cursor().set_visible(true);
                 }
             }
         }
@@ -219,8 +213,7 @@ namespace Gecko
         }
         else if (id == OIS::MouseButtonID::MB_Left)
         {
-            // TODO: Fix.
-            // UI::getSingleton().get_selection_box().set_start(Utils::Convert::to_screen_coordinates(arg));
+            UI::getSingleton().get_selection_box().set_start(Utils::Convert::to_screen_coordinates(arg));
         }
 
         return true;
@@ -234,13 +227,11 @@ namespace Gecko
         }
         else if (id == OIS::MouseButtonID::MB_Left)
         {
-            // TODO: Fix.
-            // handle_left_mouse_button(arg);
+            handle_left_mouse_button(arg);
         }
         else if (id == OIS::MouseButtonID::MB_Right)
         {
-            // TODO: Fix.
-            // handle_right_mouse_button(arg);
+            handle_right_mouse_button(arg);
         }
 
         Statistics::getSingleton().add("Mouse clicks", 1.0f);
@@ -537,6 +528,7 @@ namespace Gecko
 
     void Input::process_idle_order(const OIS::MouseEvent& arg)
     {
+        // TODO: Enable.
         /*
         if (id == OIS::MouseButtonID::MB_Left)
         {
@@ -759,9 +751,6 @@ namespace Gecko
 
     void Input::handle_left_mouse_button(const OIS::MouseEvent& arg)
     {
-        // TODO: Fix.
-        return;
-
         auto& ui = UI::getSingleton();
         auto& selection_box = ui.get_selection_box();
 
@@ -876,9 +865,6 @@ namespace Gecko
 
     void Input::handle_right_mouse_button(const OIS::MouseEvent& arg)
     {
-        // TODO: Fix.
-        return;
-
         auto player = Game::getSingleton().get_active_player();
 
         if (player == nullptr)

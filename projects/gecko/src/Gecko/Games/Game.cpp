@@ -417,7 +417,7 @@ namespace Gecko
             {
                 bool visible = (key_value[1] == "visible");
 
-                UI::getSingleton().get_minimap().set_visible(visible);
+                // UI::getSingleton().get_minimap().set_visible(visible);
             }
             else if (key_value[0] == "ui_preview_visible")
             {

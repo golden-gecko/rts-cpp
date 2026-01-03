@@ -4,6 +4,8 @@
 #include "Gecko/Containers/Diplomacy.hpp"
 #include "Gecko/Containers/Resources.hpp"
 #include "Gecko/Containers/Selected.hpp"
+#include "Gecko/Managers/ObjectManager.hpp"
+#include "Gecko/Objects/Object.hpp"
 
 namespace Gecko
 {
@@ -84,5 +86,19 @@ namespace Gecko
 
     void Player::update(float time)
     {
+        m_resources->clear();
+
+        for (const auto& [_, object] : ObjectManager::getSingleton())
+        {
+            if (get_id() == object->get_player_id())
+            {
+                // TODO: Replace with merge method.
+                // TODO: Does not work because player resources are not initialized.
+                for (const auto& [_, resource] : (*object->get_resources().get()))
+                {
+                    m_resources->add(resource.get_name(), resource.get_current());
+                }
+            }
+        }
     }
 }

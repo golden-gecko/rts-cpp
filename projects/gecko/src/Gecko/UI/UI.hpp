@@ -1,80 +1,32 @@
 #pragma once
 
 #include "Gecko/Interfaces/Initializable.hpp"
-#include "Gecko/Log.hpp"
+#include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Timer.hpp"
-#include "Gecko/UI/Events.hpp"
 
 namespace Gecko
 {
-    class SystemInterface :
-        public Rml::SystemInterface
-    {
-    public:
-        // From Rml::SystemInterface.
-        bool LogMessage(Rml::Log::Type type, const Rml::String& message) override
-        {
-            L_INFO << "RmlUI: " << message;
-
-            return Rml::SystemInterface::LogMessage(type, message);
-        }
-    };
-
-    struct RocketCompiledGeometry
-    {
-        Ogre::RenderOperation mRenderOperation;
-        Rml::Texture* mTexture = nullptr;
-        std::string           mTextureName;
-    };
-
-    struct RocketVertex
-    {
-        Ogre::Real x, y, z;
-        Ogre::uint32 diffuse;
-        Ogre::Real u, v;
-    };
-
-    class RenderInterface :
-        public Rml::RenderInterface
-    {
-    public:
-        // From Rml::RenderInterface.
-        Rml::CompiledGeometryHandle CompileGeometry(Rml::Span<const Rml::Vertex> vertices, Rml::Span<const int> indices) override;
-        void RenderGeometry(Rml::CompiledGeometryHandle geometry, Rml::Vector2f translation, Rml::TextureHandle texture) override;
-        void ReleaseGeometry(Rml::CompiledGeometryHandle geometry) override;
-        Rml::TextureHandle LoadTexture(Rml::Vector2i& texture_dimensions, const Rml::String& source) override;
-        Rml::TextureHandle GenerateTexture(Rml::Span<const Rml::byte> source, Rml::Vector2i source_dimensions) override;
-        void ReleaseTexture(Rml::TextureHandle texture) override;
-        void EnableScissorRegion(bool enable) override;
-        void SetScissorRegion(Rml::Rectanglei region) override;
-
-    public:
-        RenderInterface(unsigned int window_width, unsigned int window_height);
-
-    private:
-        Ogre::RenderSystem*    mRenderSystem = nullptr;
-        Ogre::LayerBlendModeEx mColourBlendMode;
-        Ogre::LayerBlendModeEx mAlphaBlendMode;
-        bool                   mScissorEnable = false;
-        size_t                 mScissorRect[4] = { 0, 0, 0, 0 };
-        Ogre::String           mGroup;
-    };
-
     class UI :
         public Ogre::Singleton<UI>,
-        public Initializable
+        public Initializable,
+        public Updatable
     {
     public:
-        explicit UI(const std::shared_ptr<Configuration>& configuration);
-
-        virtual ~UI();
-
+        // From Initializable.
         void init() override;
         void deinit() override;
 
+    public:
+        // From Updatable.
+        void update(float time) override;
+
+    public:
+        explicit UI(const std::shared_ptr<Configuration>& configuration);
+
+        ~UI() override = default;
+
         void render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation);
-        void update(float time);
 
     public:
         void change_visibility(const std::string& type, bool visible);
@@ -221,9 +173,17 @@ namespace Gecko
 
         Rml::Context* context = nullptr;
         Rml::ElementDocument* document = nullptr;
-
-        std::shared_ptr<Events> events;
-        std::shared_ptr<Instancer> instancer;
+        
+        Rml::Element* configurations_element = nullptr;
+        Rml::Element* info_element = nullptr;
+        Rml::Element* layers_element = nullptr;
+        Rml::Element* log_element = nullptr;
+        Rml::Element* maps_element = nullptr;
+        Rml::Element* objects_element = nullptr;
+        Rml::Element* orders_element = nullptr;
+        Rml::Element* resources_element = nullptr;
+        Rml::Element* skills_element = nullptr;
+        Rml::Element* statistics_element = nullptr;
 
         std::unique_ptr<Cursor> cursor;
         std::unique_ptr<Minimap> minimap;
@@ -243,11 +203,11 @@ namespace Gecko
 
         void init_components();
         void init_documents();
-        void init_events();
         void init_fonts();
         void init_visibility_types();
 
-        void evaluate_with_timeout(const std::string& js);
         void log_write(const std::string& text, const std::string& type, Id id = Id::Empty);
+
+        Rml::Element* get_placeholder(const std::string& selector) const;
     };
 }
