@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Managers/Manager.hpp"
+#include <Gecko/Managers/Manager.hpp>
 
 namespace
 {

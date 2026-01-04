@@ -1,43 +1,40 @@
 #pragma once
 
 #include "Gecko/Interfaces/Initializable.hpp"
+#include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Timer.hpp"
-#include "Gecko/UI/OgreSurface.hpp"
 
 namespace Gecko
 {
+    // TODO: Move to Gecko.hpp.
+    class EventInstancer;
+
     class UI :
         public Ogre::Singleton<UI>,
-        public ultralight::LoadListener,
-        public ultralight::Logger,
-        public ultralight::ViewListener,
-        public Initializable
+        public Initializable,
+        public Updatable
     {
     public:
-        // From ultralight::LoadListener.
-        void OnFinishLoading(ultralight::View* caller, uint64_t frame_id, bool is_main_frame, const ultralight::String& url) override;
-        void OnDOMReady(ultralight::View* caller, uint64_t frame_id, bool is_main_frame, const ultralight::String& url) override;
+        // From Initializable.
+        void init() override;
+        void deinit() override;
 
-        // From ultralight::Logger.
-        void LogMessage(ultralight::LogLevel log_level, const ultralight::String& message) override;
-
-        // From ultralight::ViewListener.
-        void OnAddConsoleMessage(ultralight::View* caller, const ultralight::ConsoleMessage& message) override;
+    public:
+        // From Updatable.
+        void update(float time) override;
 
     public:
         explicit UI(const std::shared_ptr<Configuration>& configuration);
 
-        virtual ~UI();
+        ~UI() override = default;
 
-        void init() override;
-        void deinit() override;
-
-        void update(float time);
+        void render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation);
 
     public:
         void change_visibility(const std::string& type, bool visible);
 
+        /*
         void engine_application_save_options(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
         void engine_application_quit(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
         void engine_game_new(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
@@ -59,6 +56,7 @@ namespace Gecko
         void engine_ui_set_configuration(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
         void engine_ui_set_order(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
         void engine_ui_set_skill(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
+        */
 
         void inject_key_press(char key_code);
         void inject_key_release(char key_code);
@@ -67,11 +65,6 @@ namespace Gecko
         void inject_mouse_release(std::size_t x, std::size_t y, OIS::MouseButtonID id);
 
         bool is_mouse_inside(std::size_t x, std::size_t y);
-
-        bool is_ready() const
-        {
-            return is_dom_ready && is_loaded;
-        }
 
         bool is_visible() const
         {
@@ -108,6 +101,11 @@ namespace Gecko
         const auto& get_cursor() const
         {
             return *cursor.get();
+        }
+
+        Rml::ElementDocument* get_document() const
+        {
+            return document;
         }
 
         auto& get_minimap()
@@ -165,7 +163,7 @@ namespace Gecko
         void set_order_name(order_type::Value _order_name);
         void set_orders(const std::set<std::string>& orders);
         void set_orders_header(order_type::Value order_type);
-        void set_resources(const Resources& resources);
+        void set_resources(std::shared_ptr<Resources> resources);
         void set_saves(const std::vector<std::string>& saves);
         void set_skill_name(const std::string& _order_name);
         void set_skills(const std::set<std::string>& skills);
@@ -178,15 +176,29 @@ namespace Gecko
     private:
         std::shared_ptr<Configuration> configuration;
 
-        bool is_loaded = false;
-        bool is_dom_ready = false;
+        std::shared_ptr<RenderInterface> render_interface;
+        std::shared_ptr<SystemInterface> system_interface;
 
-        ultralight::RefPtr<ultralight::Renderer> renderer;
-        ultralight::RefPtr<ultralight::View> view;
+        Rml::Context* context = nullptr;
+        Rml::ElementDocument* document = nullptr;
+
+        // TODO: Rename element to body.
+        Rml::Element* configurations_header = nullptr;
+        Rml::Element* configurations_element = nullptr;
+        Rml::Element* info_element = nullptr;
+        Rml::Element* layers_element = nullptr;
+        Rml::Element* log_element = nullptr;
+        Rml::Element* maps_element = nullptr;
+        Rml::Element* objects_element = nullptr;
+        Rml::Element* orders_header = nullptr;
+        Rml::Element* orders_element = nullptr;
+        Rml::Element* resources_element = nullptr;
+        Rml::Element* skills_header = nullptr;
+        Rml::Element* skills_element = nullptr;
+        Rml::Element* statistics_element = nullptr;
 
         std::unique_ptr<Cursor> cursor;
         std::unique_ptr<Minimap> minimap;
-        std::unique_ptr<OgreSurface> ogre_surface;
         std::unique_ptr<Preview> preview;
         std::unique_ptr<SelectionBox> selection_box;
 
@@ -201,11 +213,18 @@ namespace Gecko
         order_type::Value order_name = order_type::Value::None;
         std::string skill_name = "none";
 
+        std::shared_ptr<EventInstancer> event_listener_instancer;
+
         void init_components();
+        void init_documents();
+        void init_events();
+        void init_fonts();
         void init_visibility_types();
 
-        void evaluate_with_timeout(const std::string& js);
         void log_write(const std::string& text, const std::string& type, Id id = Id::Empty);
-        void wait_until_ready();
+
+        Rml::Element* get_header(const std::string& selector) const;
+        // TODO: Rename to get_body.
+        Rml::Element* get_placeholder(const std::string& selector) const;
     };
 }

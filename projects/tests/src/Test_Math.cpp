@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Utils/Math.hpp"
+#include <Gecko/Utils/Math.hpp>
 
 TEST(math, number_is_not_power_of_two)
 {

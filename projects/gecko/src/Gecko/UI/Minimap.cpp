@@ -1,14 +1,20 @@
 #include "Gecko/UI/Minimap.hpp"
 
+#include "Gecko/Cameras/Camera.hpp"
 #include "Gecko/Games/Game.hpp"
+#include "Gecko/Layers/Layer.hpp"
 #include "Gecko/Log.hpp"
+#include "Gecko/Managers/MapManager.hpp"
+#include "Gecko/Maps/Map.hpp"
+#include "Gecko/Settings.hpp"
+#include "Gecko/UI/UI.hpp"
+#include "Gecko/Window.hpp"
 
 namespace Gecko
 {
     Minimap::Minimap()
     {
-        /*
-        Ogre::TexturePtr rttTexture = Ogre::TextureManager::getSingleton().createManual(
+        rttTexture = Ogre::TextureManager::getSingleton().createManual(
             "texture_minimap",
             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
             Ogre::TEX_TYPE_2D,
@@ -18,105 +24,62 @@ namespace Gecko
             Ogre::TU_RENDERTARGET
         );
 
-        auto camera = Game::getSingleton().get_camera("Minimap")->get_camera();
-        auto map = ;
+        // TODO: Hardcoded map and camera.
+        auto map = MapManager::getSingleton().begin()->second;
+        auto camera = map->get_camera("Minimap");
 
-        camera->setAutoAspectRatio(false);
-        camera->setAspectRatio(1.0f);
+        camera->get_camera()->setAutoAspectRatio(false);
+        camera->get_camera()->setAspectRatio(1.0f);
 
-        if (map->get_terrain_ptr())
+        auto terrain = map->get_layer("Terrain");
+
+        if (terrain)
         {
-            auto size_x = map->get_terrain().get_size() * map->get_terrain().get_scale().x;
-            auto size_z = map->get_terrain().get_size() * map->get_terrain().get_scale().z;
+            auto size_x = terrain->get_size() * terrain->get_scale().x;
+            auto size_z = terrain->get_size() * terrain->get_scale().z;
 
             // TODO: Move to settings.
             // TODO: Refactor 320.0f.
-            camera->setPosition(size_x / 2.0f, 320.0f, size_z / 2.0f);
-            camera->lookAt(size_x / 2.0f, 0.0f, (size_z / 2.0f) - 0.01f);
-            camera->setOrthoWindow(size_x, size_z);
+            camera->get_camera_node()->setPosition(Ogre::Vector3(size_x / 2.0f, 320.0f, size_z / 2.0f));
+            camera->get_camera_node()->lookAt(Ogre::Vector3(size_x / 2.0f, 0.0f, (size_z / 2.0f) - 0.01f), Ogre::Node::TransformSpace::TS_PARENT);
+            camera->get_camera()->setOrthoWindow(size_x, size_z);
         }
 
         renderTexture = rttTexture->getBuffer()->getRenderTarget();
 
-        viewport = renderTexture->addViewport(camera);
+        viewport = renderTexture->addViewport(camera->get_camera());
         viewport->setAutoUpdated(false);
         viewport->setClearEveryFrame(false);
         viewport->setOverlaysEnabled(false);
         viewport->setShadowsEnabled(false);
         viewport->setSkiesEnabled(false);
-
-        renderMaterial = 
-            Ogre::MaterialManager::getSingleton().create(
-            "material_minimap",
-            Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME
-        );
-
-        renderMaterial->getTechnique(0)->getPass(0)->setLightingEnabled(false);
-
-        auto texture_unit_state = renderMaterial->getTechnique(0)->getPass(0)->createTextureUnitState("texture_minimap");
-
-        texture_unit_state->setTextureFiltering(
-            Ogre::FilterOptions::FO_NONE,
-            Ogre::FilterOptions::FO_NONE,
-            Ogre::FilterOptions::FO_NONE
-        );
-
-        rectangle = new Ogre::Rectangle2D(true);
-
-        float minimap_size = static_cast<float>(size);
-
-        auto window = Game::getSingleton().get_window(Settings::Window::MainName);
-
-        float w = window->get_width();
-        float h = window->get_height();
-
-        // TODO: Move to settings.
-        float l =  (w / 2.0f - minimap_size - 18.0f) / (w / 2.0f);
-        float t = -(h / 2.0f - minimap_size - 18.0f) / (h / 2.0f);
-        float r =  (w / 2.0f -                18.0f) / (w / 2.0f);
-        float b = -(h / 2.0f -                18.0f) / (h / 2.0f);
-
-        rectangle = new Ogre::Rectangle2D(true);
-        rectangle->setBoundingBox(Ogre::AxisAlignedBox::BOX_INFINITE);
-        rectangle->setCorners(l, t, r, b, false);
-        rectangle->setMaterial(renderMaterial);
-
-        // Create scene node.
-        scene_node = Game::getSingleton().create_scene_node();
-        scene_node->attachObject(rectangle);
-        */
     }
 
     Minimap::~Minimap()
     {
-        Game::getSingleton().destroy_scene_node(scene_node);
-
-        delete rectangle;
     }
 
     void Minimap::update()
     {
-        /*
-        TODO: Restore and fix.
-        auto map = ;
+        // TODO: Hardcoded map.
+        auto map = MapManager::getSingleton().begin()->second;
         auto ui = UI::getSingletonPtr();
 
         // Save state.
-        auto grid_visibility = map->is_grid_visible();
-        auto ui_visibility = ui->save_visibility();
+        // auto grid_visibility = map->is_grid_visible();
+        // auto ui_visibility = ui->save_visibility();
 
         // Disable.
-        map->show_grid(false);
-        ui->set_visible(false);
+        // map->show_grid(false);
+        // ui->set_visible(false);
 
         // Render.
         viewport->clear();
         viewport->update();
 
         // Enable.
-        map->show_grid(grid_visibility);
-        ui->restore_visibility(ui_visibility);
-        */
+        // map->show_grid(grid_visibility);
+        // ui->restore_visibility(ui_visibility);
     }
 
     void Minimap::click(int x, int y)
@@ -211,6 +174,8 @@ namespace Gecko
     {
         L_TRACE << "Minimap::zoom_in()";
 
+        /*
+        TODO: Fix.
         auto texture_unit_state = renderMaterial->getTechnique(0)->getPass(0)->getTextureUnitState(0);
 
         auto u_scale = texture_unit_state->getTextureUScale();
@@ -220,12 +185,15 @@ namespace Gecko
         v_scale = std::clamp(v_scale * zoom_sensivity, min_zoom, max_zoom);
 
         texture_unit_state->setTextureScale(u_scale, v_scale);
+        */
     }
 
     void Minimap::zoom_out()
     {
         L_TRACE << "Minimap::zoom_out()";
 
+        /*
+        TODO: Fix.
         auto texture_unit_state = renderMaterial->getTechnique(0)->getPass(0)->getTextureUnitState(0);
 
         auto u_scale = texture_unit_state->getTextureUScale();
@@ -237,5 +205,6 @@ namespace Gecko
         L_DEBUG << "zoom: " << u_scale << ":" << v_scale;
 
         texture_unit_state->setTextureScale(u_scale, v_scale);
+        */
     }
 }

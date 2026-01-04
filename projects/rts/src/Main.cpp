@@ -59,9 +59,10 @@ int main(int argc, char* argv[])
     main_window->on_resize();
 
     // Initialize other system.
-    technology_tree->init();
     ui->init();
+    technology_tree->init();
 
+    // Run game.
     game->load_options();
     game->run();
 

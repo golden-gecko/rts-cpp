@@ -13,6 +13,7 @@
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/program_options.hpp>
+#include <boost/regex.hpp>
 
 #include <json/json.h>
 
@@ -27,12 +28,16 @@
 
 #include <OIS.h>
 
-#include <AppCore/App.h>
-#include <AppCore/AppCore.h>
-#include <AppCore/JSHelpers.h>
-#include <AppCore/Window.h>
-#include <JavaScriptCore/JavaScript.h>
-#include <Ultralight/Ultralight.h>
+#include <RmlUi/Core/Context.h>
+#include <RmlUi/Core/Element.h>
+#include <RmlUi/Core/ElementDocument.h>
+#include <RmlUi/Core/EventListener.h>
+#include <RmlUi/Core/EventListenerInstancer.h>
+#include <RmlUi/Core/Factory.h>
+#include <RmlUi/Core/RenderInterface.h>
+#include <RmlUi/Core/SystemInterface.h>
+#include <RmlUi/Core/Types.h>
+#include <RmlUi/Debugger.h>
 
 #pragma warning(pop)
 
@@ -64,6 +69,7 @@ namespace Gecko
     class Preview;
     class Process;
     class Processes;
+    class RenderInterface;
     class Resource;
     class Resources;
     class Search;
@@ -72,6 +78,7 @@ namespace Gecko
     class SelectionBox;
     class Skill;
     class Skills;
+    class SystemInterface;
     class Technology;
     class Tile;
     class Window;

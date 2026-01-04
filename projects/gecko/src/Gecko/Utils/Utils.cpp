@@ -8,6 +8,16 @@
 
 namespace Gecko::Utils
 {
+    std::string format_title(const std::string& value)
+    {
+        std::string result = value;
+        
+        boost::algorithm::replace_all(result, "_", " ");
+        boost::algorithm::to_upper(result);
+
+        return result;
+    }
+
     Ogre::Vector3 get_node_direction(Ogre::SceneNode& scene_node)
     {
         return scene_node._getDerivedOrientation() * Ogre::Vector3::NEGATIVE_UNIT_Z;

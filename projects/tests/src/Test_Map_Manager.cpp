@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "Configuration.hpp"
-#include "Managers/MapManager.hpp"
-#include "Maps/Map.hpp"
+#include <Gecko/Configuration.hpp>
+#include <Gecko/Managers/MapManager.hpp>
+#include <Gecko/Maps/Map.hpp>
 
 TEST(map_manager, new_map_manager_is_empty)
 {

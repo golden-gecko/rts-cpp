@@ -16,20 +16,8 @@ namespace Gecko
         void zoom_in();
         void zoom_out();
 
-        bool is_visible() const
-        {
-            return rectangle->isVisible();
-        }
-
-        void set_visible(bool visible)
-        {
-            scene_node->setVisible(visible);
-        }
-
     private:
-        Ogre::Rectangle2D* rectangle { nullptr };
-        Ogre::SceneNode* scene_node { nullptr };
-        Ogre::MaterialPtr renderMaterial;
+        Ogre::TexturePtr rttTexture{ nullptr };
         Ogre::RenderTexture* renderTexture { nullptr };
         Ogre::Viewport* viewport { nullptr };
 

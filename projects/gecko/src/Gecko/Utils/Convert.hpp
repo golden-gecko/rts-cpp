@@ -13,16 +13,15 @@ namespace Gecko::Utils::Convert
 
     Ogre::RealRect to_rectangle_coordinates(const Ogre::RealRect& rect);
 
+    int to_rmlui_button(OIS::MouseButtonID button);
+    Rml::Input::KeyIdentifier to_rmlui_key(char key);
+
     Ogre::Vector2 to_screen_coordinates(const OIS::MouseEvent& arg);
     Ogre::Vector2 to_screen_coordinates(std::uint32_t left, std::uint32_t top, std::uint32_t width, std::uint32_t height);
 
-    std::string to_string(const Json::Value& value);
-    std::string to_string(const ultralight::JSValue& value);
-    std::string to_string(const ultralight::String& value);
+    std::string to_string(const Json::Value& value, const std::string& indentation = "");
     std::string to_string(const Ogre::ColourValue& value, std::uint8_t precision = 1);
     std::string to_string(const Ogre::Vector3& value, std::uint8_t precision = 1);
-    std::string to_string(ultralight::MessageLevel level);
-    std::string to_string(ultralight::MessageSource source);
 
     template<typename Type>
     std::string to_string(const Type& value, std::uint8_t precision = 1)

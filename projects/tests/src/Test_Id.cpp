@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Id.hpp"
+#include <Gecko/Id.hpp>
 
 TEST(id, new_id_is_empty_and_invalid)
 {

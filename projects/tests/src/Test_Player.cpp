@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "Configuration.hpp"
-#include "Containers/Selected.hpp"
-#include "Players/Player.hpp"
+#include <Gecko/Configuration.hpp>
+#include <Gecko/Containers/Selected.hpp>
+#include <Gecko/Players/Player.hpp>
 
 TEST(player, new_player_is_empty)
 {

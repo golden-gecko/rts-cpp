@@ -53,6 +53,11 @@ Gecko::Game* Ogre::Singleton<Gecko::Game>::msSingleton = nullptr;
 
 namespace Gecko
 {
+    void Game::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
+    {
+        UI::getSingleton().render(queueGroupId, cameraName, skipThisInvocation);
+    }
+
     Game::Game(const std::shared_ptr<Configuration>& configuration) :
         m_configuration(configuration)
     {
@@ -306,9 +311,7 @@ namespace Gecko
         ObjectManager::getSingleton().update(time);
         OrderManager::getSingleton().update(time);
         PlayerManager::getSingleton().update(time);
-
-        // TODO: Fix.
-        // UI::getSingleton().update(time);
+        UI::getSingleton().update(time);
     }
 
     void Game::update_input(float time)
@@ -414,7 +417,7 @@ namespace Gecko
             {
                 bool visible = (key_value[1] == "visible");
 
-                UI::getSingleton().get_minimap().set_visible(visible);
+                // UI::getSingleton().get_minimap().set_visible(visible);
             }
             else if (key_value[0] == "ui_preview_visible")
             {
@@ -592,6 +595,7 @@ namespace Gecko
             + Utils::Convert::to_string(active_player_id)
             + " to "
             + Utils::Convert::to_string(id)
+            + "."
         );
 
         // Get current active player.
@@ -1106,6 +1110,7 @@ namespace Gecko
     {
         // TODO: Use "OctreeSceneManager".
         scene_manager = root->createSceneManager();
+        scene_manager->addRenderQueueListener(this);
         scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::White));
 
         // TODO: Move materials to bin directory.

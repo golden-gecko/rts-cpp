@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
 
-#include "Configuration.hpp"
+#include <Gecko/Configuration.hpp>
+#include <Gecko/Maps/Map.hpp>
+
 #include "Fixtures.hpp"
-#include "Maps/Map.hpp"
 
 TEST(map, new_map_is_empty)
 {

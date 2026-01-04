@@ -219,6 +219,77 @@ namespace Gecko::Utils::Convert
         return Ogre::RealRect(left, top, right, bottom);
     }
 
+    int Convert::to_rmlui_button(OIS::MouseButtonID button)
+    {
+        switch (button)
+        {
+            case OIS::MouseButtonID::MB_Left  : return 0;
+            case OIS::MouseButtonID::MB_Right : return 1;
+            case OIS::MouseButtonID::MB_Middle: return 2;
+        }
+
+        return OIS::MouseButtonID::MB_Left;
+    }
+
+    Rml::Input::KeyIdentifier Convert::to_rmlui_key(char key)
+    {
+        switch (key)
+        {
+            case 'a': return Rml::Input::KeyIdentifier::KI_A;
+            case 'b': return Rml::Input::KeyIdentifier::KI_B;
+            case 'c': return Rml::Input::KeyIdentifier::KI_C;
+            case 'd': return Rml::Input::KeyIdentifier::KI_D;
+            case 'e': return Rml::Input::KeyIdentifier::KI_E;
+            case 'f': return Rml::Input::KeyIdentifier::KI_F;
+            case 'g': return Rml::Input::KeyIdentifier::KI_G;
+            case 'h': return Rml::Input::KeyIdentifier::KI_H;
+            case 'i': return Rml::Input::KeyIdentifier::KI_I;
+            case 'j': return Rml::Input::KeyIdentifier::KI_J;
+            case 'k': return Rml::Input::KeyIdentifier::KI_K;
+            case 'l': return Rml::Input::KeyIdentifier::KI_L;
+            case 'm': return Rml::Input::KeyIdentifier::KI_M;
+            case 'n': return Rml::Input::KeyIdentifier::KI_N;
+            case 'o': return Rml::Input::KeyIdentifier::KI_O;
+            case 'p': return Rml::Input::KeyIdentifier::KI_P;
+            case 'q': return Rml::Input::KeyIdentifier::KI_Q;
+            case 'r': return Rml::Input::KeyIdentifier::KI_R;
+            case 's': return Rml::Input::KeyIdentifier::KI_S;
+            case 't': return Rml::Input::KeyIdentifier::KI_T;
+            case 'u': return Rml::Input::KeyIdentifier::KI_U;
+            case 'v': return Rml::Input::KeyIdentifier::KI_V;
+            case 'w': return Rml::Input::KeyIdentifier::KI_W;
+            case 'x': return Rml::Input::KeyIdentifier::KI_X;
+            case 'y': return Rml::Input::KeyIdentifier::KI_Y;
+            case 'z': return Rml::Input::KeyIdentifier::KI_Z;
+
+            case '0': return Rml::Input::KeyIdentifier::KI_0;
+            case '1': return Rml::Input::KeyIdentifier::KI_1;
+            case '2': return Rml::Input::KeyIdentifier::KI_2;
+            case '3': return Rml::Input::KeyIdentifier::KI_3;
+            case '4': return Rml::Input::KeyIdentifier::KI_4;
+            case '5': return Rml::Input::KeyIdentifier::KI_5;
+            case '6': return Rml::Input::KeyIdentifier::KI_6;
+            case '7': return Rml::Input::KeyIdentifier::KI_7;
+            case '8': return Rml::Input::KeyIdentifier::KI_8;
+            case '9': return Rml::Input::KeyIdentifier::KI_9;
+
+            case 59: return Rml::Input::KI_F1;
+            case 60: return Rml::Input::KI_F2;
+            case 61: return Rml::Input::KI_F3;
+            case 62: return Rml::Input::KI_F4;
+            case 63: return Rml::Input::KI_F5;
+            case 64: return Rml::Input::KI_F6;
+            case 65: return Rml::Input::KI_F7;
+            case 66: return Rml::Input::KI_F8;
+            case 67: return Rml::Input::KI_F9;
+            case 68: return Rml::Input::KI_F10;
+            case 69: return Rml::Input::KI_F11;
+            case 70: return Rml::Input::KI_F12;
+        }
+
+        return Rml::Input::KeyIdentifier::KI_UNKNOWN;
+    }
+
     Ogre::Vector2 to_screen_coordinates(const OIS::MouseEvent& arg)
     {
         return to_screen_coordinates(arg.state.X.abs, arg.state.Y.abs, arg.state.width, arg.state.height);
@@ -232,24 +303,14 @@ namespace Gecko::Utils::Convert
         );
     }
 
-    std::string to_string(const Json::Value& value)
+    std::string to_string(const Json::Value& value, const std::string& indentation)
     {
         Json::StreamWriterBuilder builder;
 
         builder["commentStyle"] = "None";
-        builder["indentation"] = "";
+        builder["indentation"] = indentation;
 
         return Json::writeString(builder, value);
-    }
-
-    std::string to_string(const ultralight::JSValue& value)
-    {
-        return to_string(ultralight::String(value));
-    }
-
-    std::string to_string(const ultralight::String& value)
-    {
-        return value.utf8().data();
     }
 
     std::string to_string(const Ogre::ColourValue& value, std::uint8_t precision)
@@ -270,76 +331,6 @@ namespace Gecko::Utils::Convert
         stream << value.x << ":" << value.y << ":" << value.z;
 
         return stream.str();
-    }
-
-    std::string to_string(ultralight::MessageLevel level)
-    {
-        using namespace ultralight;
-
-        switch (level)
-        {
-            case kMessageLevel_Log:
-                return "Log";
-
-            case kMessageLevel_Warning:
-                return "Warning";
-
-            case kMessageLevel_Error:
-                return "Error";
-
-            case kMessageLevel_Debug:
-                return "Debug";
-
-            case kMessageLevel_Info:
-                return "Info";
-
-            default:
-                return "";
-        }
-    }
-
-    std::string to_string(ultralight::MessageSource source)
-    {
-        using namespace ultralight;
-
-        switch (source)
-        {
-            case kMessageSource_XML:
-                return "XML";
-
-            case kMessageSource_JS:
-                return "JS";
-
-            case kMessageSource_Network:
-                return "Network";
-
-            case kMessageSource_ConsoleAPI:
-                return "ConsoleAPI";
-
-            case kMessageSource_Storage:
-                return "Storage";
-
-            case kMessageSource_AppCache:
-                return "AppCache";
-
-            case kMessageSource_Rendering:
-                return "Rendering";
-
-            case kMessageSource_CSS:
-                return "CSS";
-
-            case kMessageSource_Security:
-                return "Security";
-
-            case kMessageSource_ContentBlocker:
-                return "ContentBlocker";
-
-            case kMessageSource_Other:
-                return "Other";
-
-            default:
-                return "";
-        }
     }
 
     /*

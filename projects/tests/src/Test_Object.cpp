@@ -1,9 +1,10 @@
 #include <gtest/gtest.h>
 
-#include "Configuration.hpp"
-#include "Containers/Components.hpp"
+#include <Gecko/Configuration.hpp>
+#include <Gecko/Containers/Components.hpp>
+#include <Gecko/Objects/Object.hpp>
+
 #include "Fixtures.hpp"
-#include "Objects/Object.hpp"
 
 TEST(object, new_object_is_empty)
 {

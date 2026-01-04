@@ -19,174 +19,64 @@
 #include "Gecko/System.hpp"
 #include "Gecko/Technologies/TechnologyTree.hpp"
 #include "Gecko/UI/Cursor.hpp"
+#include "Gecko/UI/Events.hpp"
 #include "Gecko/UI/Minimap.hpp"
 #include "Gecko/UI/Preview.hpp"
+#include "Gecko/UI/RenderInterface.hpp"
 #include "Gecko/UI/SelectionBox.hpp"
+#include "Gecko/UI/SystemInterface.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Window.hpp"
 
 Gecko::UI* Ogre::Singleton<Gecko::UI>::msSingleton = nullptr;
 
-namespace
-{
-    ultralight::MouseEvent::Button convert_button_id(OIS::MouseButtonID id)
-    {
-        switch (id)
-        {
-            case OIS::MouseButtonID::MB_Middle:
-                return ultralight::MouseEvent::Button::kButton_Middle;
-
-            case OIS::MouseButtonID::MB_Right:
-                return ultralight::MouseEvent::Button::kButton_Right;
-
-            default:
-                return ultralight::MouseEvent::Button::kButton_Left;
-        }
-    }
-}
-
 namespace Gecko
 {
-    void UI::OnFinishLoading(ultralight::View* caller, uint64_t frame_id, bool is_main_frame, const ultralight::String& url)
-    {
-        is_loaded = true;
-    }
-
-    void UI::OnDOMReady(ultralight::View* caller, uint64_t frame_id, bool is_main_frame, const ultralight::String& url)
-    {
-        using namespace ultralight;
-
-        // SetJSContext(caller->LockJSContext().get());
-
-        auto global = JSGlobalObject();
-
-        global["engine_application_save_options"] = BindJSCallback(&UI::engine_application_save_options);
-        global["engine_application_quit"] = BindJSCallback(&UI::engine_application_quit);
-        global["engine_game_load"] = BindJSCallback(&UI::engine_game_load);
-        global["engine_game_new"] = BindJSCallback(&UI::engine_game_new);
-        global["engine_game_save"] = BindJSCallback(&UI::engine_game_save);
-        global["engine_game_quit"] = BindJSCallback(&UI::engine_game_quit);
-        global["engine_map_set_data_layer"] = BindJSCallback(&UI::engine_map_set_data_layer);
-        global["engine_minimap_click"] = BindJSCallback(&UI::engine_minimap_click);
-        global["engine_minimap_move"] = BindJSCallback(&UI::engine_minimap_move);
-        global["engine_minimap_zoom_in"] = BindJSCallback(&UI::engine_minimap_zoom_in);
-        global["engine_minimap_zoom_out"] = BindJSCallback(&UI::engine_minimap_zoom_out);
-        global["engine_preview_hide"] = BindJSCallback(&UI::engine_preview_hide);
-        global["engine_preview_set_position"] = BindJSCallback(&UI::engine_preview_set_position);
-        global["engine_preview_show"] = BindJSCallback(&UI::engine_preview_show);
-        global["engine_technology_research"] = BindJSCallback(&UI::engine_technology_research);
-        global["engine_ui_change_visibility"] = BindJSCallback(&UI::engine_ui_change_visibility);
-        global["engine_ui_look_at_object"] = BindJSCallback(&UI::engine_ui_look_at_object);
-        global["engine_ui_select_object"] = BindJSCallback(&UI::engine_ui_select_object);
-        global["engine_ui_set_configuration"] = BindJSCallback(&UI::engine_ui_set_configuration);
-        global["engine_ui_set_order"] = BindJSCallback(&UI::engine_ui_set_order);
-        global["engine_ui_set_skill"] = BindJSCallback(&UI::engine_ui_set_skill);
-
-        is_dom_ready = true;
-    }
-
-    void UI::LogMessage(ultralight::LogLevel log_level, const ultralight::String& message)
-    {
-        switch (log_level)
-        {
-            case ultralight::LogLevel::Error:
-                L_ERROR << Utils::Convert::to_string(message);
-                break;
-
-            case ultralight::LogLevel::Info:
-                L_INFO << Utils::Convert::to_string(message);
-                break;
-
-            case ultralight::LogLevel::Warning:
-                L_WARNING << Utils::Convert::to_string(message);
-                break;
-
-            default:
-                L_DEBUG << Utils::Convert::to_string(message);
-        }
-    }
-
-    void UI::OnAddConsoleMessage(ultralight::View* caller, const ultralight::ConsoleMessage& message)
-    {
-        L_ERROR
-            << "[Console]: [" << Utils::Convert::to_string(message.source())
-            << "] [" << Utils::Convert::to_string(message.level())
-            << "] " << Utils::Convert::to_string(message.message());
-
-        if (message.source() == ultralight::kMessageSource_JS)
-        {
-            L_ERROR
-                << " (" << Utils::Convert::to_string(message.source_id())
-                << " @ line " << Utils::Convert::to_string(message.line_number())
-                << ", col " << Utils::Convert::to_string(message.column_number())
-                << ")";
-        }
-    }
-
-    UI::UI(const std::shared_ptr<Configuration>& configuration) :
-        configuration(configuration)
-    {
-    }
-
-    UI::~UI()
-    {
-        view = nullptr;
-        renderer = nullptr;
-
-        ogre_surface.reset();
-    }
-
     void UI::init()
     {
+        // TODO: Get window size.
+        render_interface = std::make_shared<RenderInterface>(1920, 1200);
+        system_interface = std::make_shared<SystemInterface>();
+
+        Rml::SetRenderInterface(render_interface.get());
+        Rml::SetSystemInterface(system_interface.get());
+
+        Rml::Initialise();
+
+        // TODO: Get window size.
+        context = Rml::CreateContext("main", Rml::Vector2i(1920, 1200));
+
+        // TODO: Move to configuration.
+        if (false)
+        {
+            Rml::Debugger::Initialise(context);
+        }
+
+        // Load fonts.
+        init_fonts();
+
+        // Setup events.
+        // DemoEventListenerInstancer event_listener_instancer{ &demo_window };
+        // Rml::Factory::RegisterEventListenerInstancer(&event_listener_instancer);
+
+        // demo_window.GetDocument()->AddEventListener(Rml::EventId::Keydown, &demo_window);
+        // demo_window.GetDocument()->AddEventListener(Rml::EventId::Keyup, &demo_window);
+        // demo_window.GetDocument()->AddEventListener(Rml::EventId::Animationend, &demo_window);
+
+        // Load cursor.
         /*
-        auto width = configuration->get_int<std::size_t>("ui.width", 1024);
-        auto height = configuration->get_int<std::size_t>("ui.height", 768);
+        Rml::ElementDocument* cursor = context->LoadMouseCursor(getResourceFullPath("cursor.rml").c_str());
 
-        auto scale = configuration->get_float("ui.scale", 1.0);
-        auto font = configuration->get_string("ui.font", "Arial");
-
-        auto current_directory = std::filesystem::path(std::filesystem::current_path());
-        auto layout = std::filesystem::path(configuration->get_string("ui.layout"));
-        auto url = "file:///" + (current_directory / layout).string();
-
-        // Create texture.
-        ogre_surface = std::make_unique<OgreSurface>("ui", width, height);
-
-        // Create configuration.
-        ultralight::Config config;
-
-        config.device_scale = scale;
-        config.font_family_fixed = font.c_str();
-        config.font_family_serif = font.c_str();
-        config.font_family_sans_serif = font.c_str();
-        config.font_family_standard = font.c_str();
-        config.font_hinting = ultralight::FontHinting::kFontHinting_Smooth;
-        config.use_gpu_renderer = false;
-
-        ultralight::Platform::instance().set_config(config);
-        ultralight::Platform::instance().set_font_loader(ultralight::GetPlatformFontLoader());
-        ultralight::Platform::instance().set_file_system(ultralight::GetPlatformFileSystem("."));
-        ultralight::Platform::instance().set_logger(this);
-
-        // Create renderer.
-        renderer = ultralight::Renderer::Create();
-
-        // Create view.
-        ultralight::ViewConfig view_config;
-        
-        view_config.initial_device_scale = 2.0;
-        view_config.is_accelerated = false;
-
-        view = renderer->CreateView(width, height, view_config, nullptr);
-        view->set_load_listener(this);
-        view->set_view_listener(this);
-        view->LoadURL(url.c_str());
+        if (cursor)
+        {
+            // cursor->RemoveReference();
+        }
+        */
 
         init_components();
+        init_events();
+        init_documents();
         init_visibility_types();
-
-        wait_until_ready();
-        */
     }
 
     void UI::deinit()
@@ -196,7 +86,7 @@ namespace Gecko
         preview.reset();
         selection_box.reset();
 
-        ogre_surface.reset();
+        Rml::Shutdown();
     }
 
     void UI::update(float time)
@@ -209,7 +99,7 @@ namespace Gecko
 
             if (hovered_object)
             {
-                set_info(hovered_object->serialize());
+                set_info(hovered_object->get_info());
             }
             else if (Game::getSingleton().get_active_player() && Game::getSingleton().get_active_player()->get_selected()->size())
             {
@@ -220,7 +110,7 @@ namespace Gecko
 
                     if (object)
                     {
-                        set_info(object->serialize());
+                        set_info(object->get_info());
 
                         break;
                     }
@@ -283,37 +173,114 @@ namespace Gecko
 
             // TODO: Optimize.
             // set_floating_descriptions(objects);
-            auto& game = Game::getSingleton();
 
             // TODO: First map.
             set_layers(MapManager::getSingleton().begin()->second->get_layers());
-            set_maps(game.get_maps());
+            set_maps(Game::getSingleton().get_maps());
             set_objects_admin();
             set_orders_admin();
             set_players();
 
             if (Game::getSingleton().get_active_player())
             {
-                // TODO: Fix.
-                // set_resources(Game::getSingleton().get_active_player()->get_resources());
+                set_resources(Game::getSingleton().get_active_player()->get_resources());
             }
 
             set_saves(Game::getSingleton().get_saves());
 
             get_minimap().update();
             get_preview().update();
-
-            renderer->Update();
-            renderer->Render();
-
-            auto bitmap_surface = dynamic_cast<ultralight::BitmapSurface*>(view->surface());
-            auto bitmap = bitmap_surface->bitmap();
-
-            if (bitmap_surface->dirty_bounds().IsEmpty() == false)
-            {
-                ogre_surface->update(bitmap);
-            }
         }
+    }
+
+    UI::UI(const std::shared_ptr<Configuration>& configuration) :
+        configuration(configuration)
+    {
+    }
+
+    void UI::render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
+    {
+        if (queueGroupId != Ogre::RENDER_QUEUE_OVERLAY)
+        {
+            return;
+        }
+
+        if (Ogre::Root::getSingleton().getRenderSystem()->_getViewport()->getOverlaysEnabled() == false)
+        {
+            return;
+        }
+
+        Ogre::RenderSystem* render_system = Game::getSingleton().get_root()->getRenderSystem();
+
+        if (render_system == nullptr)
+        {
+            return;
+        }
+
+        auto window = Game::getSingleton().get_window(Gecko::Settings::Window::MainName);
+
+        if (window == nullptr)
+        {
+            return;
+        }
+
+        auto render_window = window->get_render_window();
+
+        if (render_window == nullptr)
+        {
+            return;
+        }
+
+        context->Update();
+
+        // Set up the projection and view matrices.
+        float z_near = -1;
+        float z_far = 1;
+
+        Ogre::Matrix4 projection_matrix = Ogre::Matrix4::ZERO;
+
+        projection_matrix[0][0] = 2.0f / (Ogre::Real)render_window->getWidth();
+        projection_matrix[0][3] = -1.0000000f;
+        projection_matrix[1][1] = -2.0f / (Ogre::Real)render_window->getHeight();
+        projection_matrix[1][3] = 1.0000000f;
+        projection_matrix[2][2] = -2.0f / (z_far - z_near);
+        projection_matrix[3][3] = 1.0000000f;
+        
+        render_system->_setProjectionMatrix(projection_matrix);
+        render_system->_setViewMatrix(Ogre::Matrix4::IDENTITY);
+
+        render_system->setLightingEnabled(false);
+        render_system->_setDepthBufferParams(false, false);
+        render_system->_setCullingMode(Ogre::CULL_CLOCKWISE);
+        render_system->_setFog(Ogre::FOG_NONE);
+        render_system->_setColourBufferWriteEnabled(true, true, true, true);
+        render_system->unbindGpuProgram(Ogre::GPT_FRAGMENT_PROGRAM);
+        render_system->unbindGpuProgram(Ogre::GPT_VERTEX_PROGRAM);
+
+        // TODO: Investigate.
+        /*
+        Ogre::TextureUnitState::UVWAddressingMode addressing_mode;
+
+        addressing_mode.u = Ogre::TextureUnitState::TAM_CLAMP;
+        addressing_mode.v = Ogre::TextureUnitState::TAM_CLAMP;
+        addressing_mode.w = Ogre::TextureUnitState::TAM_CLAMP;
+
+        render_system->_setTextureAddressingMode(0, addressing_mode);
+        */
+
+        render_system->_setTextureCoordSet(0, 0);
+        render_system->_setTextureCoordCalculation(0, Ogre::TEXCALC_NONE);
+
+        // TODO: Investigate.
+        // render_system->_setTextureUnitFiltering(0, Ogre::FO_LINEAR, Ogre::FO_LINEAR, Ogre::FO_POINT);
+
+        render_system->_setTextureMatrix(0, Ogre::Matrix4::IDENTITY);
+        render_system->_setAlphaRejectSettings(Ogre::CMPF_GREATER, 0, false);
+        render_system->_disableTextureUnitsFrom(1);
+        render_system->_setSceneBlending(Ogre::SBF_SOURCE_ALPHA, Ogre::SBF_ONE_MINUS_SOURCE_ALPHA);
+        render_system->_setDepthBias(0, 0);
+
+        context->Render();
     }
 
     void UI::change_visibility(const std::string& type, bool visible)
@@ -328,6 +295,7 @@ namespace Gecko
         */
     }
 
+    /*
     void UI::engine_application_save_options(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args)
     {
         if (args.size() == 1 && args[0].IsString())
@@ -596,71 +564,64 @@ namespace Gecko
             set_skill_name(Utils::Convert::to_string(args[0]));
         }
     }
+    */
 
     void UI::inject_key_press(char key_code)
     {
-        // TODO: Implement.
+        // TODO: Fill the last argument.
+        context->ProcessKeyDown(Utils::Convert::to_rmlui_key(key_code), 0);
+
+        switch (Utils::Convert::to_rmlui_key(key_code))
+        {
+            case Rml::Input::KeyIdentifier::KI_F5:
+                init_documents();
+                break;
+
+            case Rml::Input::KeyIdentifier::KI_F8:
+                Rml::Debugger::SetVisible(!Rml::Debugger::IsVisible());
+                break;
+        }
     }
 
     void UI::inject_key_release(char key_code)
     {
-        // TODO: Implement.
+        // TODO: Fill the last argument.
+        context->ProcessKeyUp(Utils::Convert::to_rmlui_key(key_code), 0);
     }
 
     void UI::inject_mouse_move(std::size_t x, std::size_t y)
     {
-        ultralight::MouseEvent evt;
-
-        evt.type = ultralight::MouseEvent::kType_MouseMoved;
-        evt.x = x;
-        evt.y = y;
-
-        view->FireMouseEvent(evt);
+        // TODO: Convert types and fill the last argument.
+        context->ProcessMouseMove(x, y, 0);
     }
 
     void UI::inject_mouse_press(std::size_t x, std::size_t y, OIS::MouseButtonID id)
     {
-        ultralight::MouseEvent evt;
-
-        evt.type = ultralight::MouseEvent::kType_MouseDown;
-        evt.x = x;
-        evt.y = y;
-        evt.button = convert_button_id(id);
-
-        view->FireMouseEvent(evt);
+        // TODO: Fill the last argument.
+        context->ProcessMouseButtonDown(Utils::Convert::to_rmlui_button(id), 0);
     }
 
     void UI::inject_mouse_release(std::size_t x, std::size_t y, OIS::MouseButtonID id)
     {
-        ultralight::MouseEvent evt;
-
-        evt.type = ultralight::MouseEvent::kType_MouseUp;
-        evt.x = x;
-        evt.y = y;
-        evt.button = convert_button_id(id);
-
-        view->FireMouseEvent(evt);
+        // TODO: Fill the last argument.
+        context->ProcessMouseButtonUp(Utils::Convert::to_rmlui_button(id), 0);
     }
 
     bool UI::is_mouse_inside(std::size_t x, std::size_t y)
     {
-        if (is_ready() == false)
+        Rml::ElementList elements;
+
+        document->GetElementsByClassName(elements, "card");
+
+        for (Rml::Element* element : elements)
         {
-            return false;
+            if (element->IsPointWithinElement(Rml::Vector2f(x, y)))
+            {
+                return true;
+            }
         }
 
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.ui.is_mouse_inside(";
-        stream << x;
-        stream << ", ";
-        stream << y;
-        stream << ")";
-
-        auto value = view->EvaluateScript(stream.str().c_str());
-
-        return Utils::Convert::to_string(value) == "true";
+        return false;
     }
 
     void UI::log_error(const std::string& text, Id id)
@@ -717,7 +678,7 @@ namespace Gecko
 
         if (minimap_state != state.end())
         {
-            get_minimap().set_visible(minimap_state->second);
+            // get_minimap().set_visible(minimap_state->second);
         }
 
         auto preview_state = state.find("preview");
@@ -754,13 +715,8 @@ namespace Gecko
 
     void UI::show_menu()
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update UI.
-        view->EvaluateScript("app.menu.show()");
+        // view->EvaluateScript("app.menu.show()");
     }
 
     void UI::toggle_floating_description()
@@ -775,7 +731,6 @@ namespace Gecko
         show_layers(visible);
 
         get_cursor().set_visible(visible);
-        get_minimap().set_visible(visible);
         get_preview().set_visible(visible);
     }
 
@@ -812,7 +767,8 @@ namespace Gecko
 
     void UI::set_configurations(const std::set<std::string>& configurations)
     {
-        if (is_ready() == false)
+        // TODO: Remove
+        if (configurations_element == nullptr)
         {
             return;
         }
@@ -827,32 +783,22 @@ namespace Gecko
 
         configurations_cache = configurations;
 
-        // Create JSON.
-        Json::Value json_configurations;
+        // Create RML.
+        Rml::String rml;
 
-        for (const auto& configuration : configurations)
+        for (const std::string& _configuration : configurations)
         {
-            json_configurations.append(configuration);
+            std::string title = Utils::format_title(_configuration);
+
+            rml += std::vformat(configuration->get_string("ui.templates.configurations"), std::make_format_args(_configuration, title));
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.configurations.set(";
-        stream << Utils::Convert::to_string(json_configurations);
-        stream << ")";
-
-        evaluate_with_timeout(stream.str());
+        configurations_element->SetInnerRML(rml);
     }
 
     void UI::set_configurations_header(const std::string& _configuration_name)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::string configuration_name_cache = "none";
 
@@ -862,25 +808,13 @@ namespace Gecko
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.configurations.set_header('";
-        stream << _configuration_name;
-        stream << "')";
-
-        evaluate_with_timeout(stream.str());
+        configurations_header->SetInnerRML(Utils::format_title(_configuration_name));
     }
 
     void UI::set_floating_descriptions(const std::vector<Id>& objects)
     {
         // TODO: Refactor? Fix? Remove?
         /*
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::vector<Id> json_floating_descriptions_cache;
 
@@ -930,18 +864,11 @@ namespace Gecko
         stream << "app.ui.set_floating_descriptions(";
         stream << Utils::Convert::to_string(json_floating_descriptions);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
         */
     }
 
     void UI::set_layers(const std::map<std::string, std::shared_ptr<Layer>>& layers)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::map<std::string, std::shared_ptr<Layer>> layers_cache;
 
@@ -978,17 +905,10 @@ namespace Gecko
         stream << "app.layers.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_maps(const std::vector<std::string>& maps)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::vector<std::string> maps_cache;
 
@@ -1014,8 +934,6 @@ namespace Gecko
         stream << "app.map_menu.set_maps(";
         stream << Utils::Convert::to_string(json_maps);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_hovered_object_id(Id object_id)
@@ -1025,11 +943,6 @@ namespace Gecko
 
     void UI::set_info(const std::shared_ptr<Configuration>& info)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::shared_ptr<Configuration> info_cache;
 
@@ -1040,24 +953,27 @@ namespace Gecko
 
         info_cache = info;
 
+        // Create RML.
+        std::string rml = info->to_string("  ");
+
+        boost::algorithm::replace_all(rml, "\"", "");
+        boost::algorithm::replace_all(rml, "{", "");
+        boost::algorithm::replace_all(rml, "}", "");
+        boost::algorithm::replace_all(rml, " [", "");
+        boost::algorithm::replace_all(rml, "]", "");
+        boost::algorithm::replace_all(rml, ",", "");
+        boost::algorithm::replace_all(rml, " :", ":");
+
+        rml = boost::regex_replace(rml, boost::regex(" +\n"), "\n");
+        rml = boost::regex_replace(rml, boost::regex("\n+"), "\n");
+        rml = boost::regex_replace(rml, boost::regex("\n  "), "\n");
+
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.info.set(";
-        stream << info_cache->to_string();
-        stream << ")";
-
-        evaluate_with_timeout(stream.str());
+        info_element->SetInnerRML(rml);
     }
 
     void UI::set_objects_admin()
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // TODO: Fix cache.
         /*
         // Update cache.
@@ -1110,17 +1026,10 @@ namespace Gecko
         stream << "app.objects.set(";
         stream << Utils::Convert::to_string(json_objects);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_orders_admin()
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         /* TODO: Fix cache.
         // Update cache.
         static OrderManager::Container orders_cache;
@@ -1159,17 +1068,10 @@ namespace Gecko
         stream << "app.orders.set(";
         stream << Utils::Convert::to_string(json_orders);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_players()
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // TODO: Fix cache.
         /*
         // Update cache.
@@ -1204,8 +1106,6 @@ namespace Gecko
         stream << "app.players.set(";
         stream << Utils::Convert::to_string(json_players);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_order_name(order_type::Value _order_name)
@@ -1220,7 +1120,8 @@ namespace Gecko
 
     void UI::set_orders(const std::set<std::string>& orders)
     {
-        if (is_ready() == false)
+        // TODO: Remove.
+        if (orders_element == nullptr)
         {
             return;
         }
@@ -1235,32 +1136,22 @@ namespace Gecko
 
         orders_cache = orders;
 
-        // Create JSON.
-        Json::Value json_orders;
+        // Create RML.
+        Rml::String rml;
 
-        for (const auto& order : orders)
+        for (const std::string& order : orders)
         {
-            json_orders.append(order);
+            std::string title = Utils::format_title(order);
+
+            rml += std::vformat(configuration->get_string("ui.templates.orders"), std::make_format_args(order, title));
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.orders.set(";
-        stream << Utils::Convert::to_string(json_orders);
-        stream << ")";
-
-        evaluate_with_timeout(stream.str());
+        orders_element->SetInnerRML(rml);
     }
 
     void UI::set_orders_header(order_type::Value order_type)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static order_type::Value order_type_cache = order_type::Value::None;
 
@@ -1272,67 +1163,41 @@ namespace Gecko
         order_type_cache = order_type;
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.orders.set_header('";
-        stream << order_type::to_string(order_type);
-        stream << "')";
-
-        evaluate_with_timeout(stream.str());
+        orders_header->SetInnerRML(Utils::format_title(order_type::to_string(order_type)));
     }
 
-    void UI::set_resources(const Resources& resources)
+    void UI::set_resources(std::shared_ptr<Resources> resources)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static Resources resources_cache;
 
-        if (resources_cache == resources)
+        if (resources_cache == (*(resources.get())))
         {
             return;
         }
 
-        resources_cache = resources;
+        resources_cache = (*(resources.get()));
 
-        // Create JSON.
-        Json::Value json_resources;
+        // Create RML.
+        std::string rml;
 
-        for (const auto& resource : resources)
+        for (const auto& resource : (*(resources.get())))
         {
-            Json::Value json_resource;
+            float current = resource.second.get_current();
+            float max = resource.second.get_max();
+            float ratio = resource.second.get_consumption() - resource.second.get_production();
 
-            json_resource["name"] = resource.first;
-            json_resource["consumption"] = resource.second.get_consumption();
-            json_resource["production"] = resource.second.get_production();
-            json_resource["current"] = resource.second.get_current();
-            json_resource["maximal"] = resource.second.get_max();
+            std::string class_name = (resource.second.get_consumption() - resource.second.get_production()) > 0.0f ? "green" : "red";
 
-            json_resources.append(json_resource);
+            rml += std::vformat(configuration->get_string("ui.templates.resources"), std::make_format_args(resource.first, current, max, class_name, ratio));
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.resources.set(";
-        stream << Utils::Convert::to_string(json_resources);
-        stream << ")";
-
-        evaluate_with_timeout(stream.str());
+        resources_element->SetInnerRML(rml);
     }
 
     void UI::set_saves(const std::vector<std::string>& saves)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::vector<std::string> saves_cache;
 
@@ -1358,8 +1223,6 @@ namespace Gecko
         stream << "app.load_menu.set_saves(";
         stream << Utils::Convert::to_string(json_saves);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_skill_name(const std::string& _skill_name)
@@ -1374,11 +1237,6 @@ namespace Gecko
 
     void UI::set_skills(const std::set<std::string>& skills)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::set<std::string> skills_cache;
 
@@ -1389,32 +1247,22 @@ namespace Gecko
 
         skills_cache = skills;
 
-        // Create JSON.
-        Json::Value json_skills;
+        // Create RML.
+        Rml::String rml;
 
-        for (const auto& i : skills)
+        for (const std::string& skill : skills)
         {
-            json_skills.append(i);
+            std::string title = Utils::format_title(skill);
+
+            rml += std::vformat(configuration->get_string("ui.templates.skills"), std::make_format_args(skill, title));
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.skills.set(";
-        stream << Utils::Convert::to_string(json_skills);
-        stream << ")";
-
-        evaluate_with_timeout(stream.str());
+        skills_element->SetInnerRML(rml);
     }
 
     void UI::set_skills_header(const std::string& skill_name)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::string skill_name_cache = "none";
 
@@ -1426,23 +1274,11 @@ namespace Gecko
         skill_name_cache = skill_name;
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.skills.set_header('";
-        stream << skill_name;
-        stream << "')";
-
-        evaluate_with_timeout(stream.str());
+        orders_header->SetInnerRML(Utils::format_title(skill_name));
     }
 
     void UI::set_statistics(const std::map<std::string, std::string>& statistics)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::map<std::string, std::string> statistics_cache;
 
@@ -1473,17 +1309,10 @@ namespace Gecko
         stream << "app.statistics.set(";
         stream << Utils::Convert::to_string(json_statistics);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_terrain_layers(const std::set<std::string>& layers)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::set<std::string> layers_cache;
 
@@ -1507,17 +1336,10 @@ namespace Gecko
         stream << "app.terrain.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::set_water_layers(const std::set<std::string>& layers)
     {
-        if (is_ready() == false)
-        {
-            return;
-        }
-
         // Update cache.
         static std::set<std::string> layers_cache;
 
@@ -1541,8 +1363,6 @@ namespace Gecko
         stream << "app.water.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
-
-        evaluate_with_timeout(stream.str());
     }
 
     void UI::init_components()
@@ -1551,6 +1371,50 @@ namespace Gecko
         minimap = std::make_unique<Minimap>();
         preview = std::make_unique<Preview>();
         selection_box = std::make_unique<SelectionBox>();
+    }
+
+    void UI::init_documents()
+    {
+        // TODO: Warning on first call.
+        Rml::Debugger::Shutdown();
+
+        context->UnloadAllDocuments();
+
+        document = context->LoadDocument(configuration->get_string("ui.layout"));
+        document->Show();
+
+        Rml::Debugger::Initialise(context);
+
+        configurations_header = get_placeholder("configurations");
+        configurations_element = get_placeholder("configurations");
+        info_element = get_placeholder("info");
+        layers_element = get_placeholder("layers");
+        log_element = get_placeholder("log");
+        maps_element = get_placeholder("maps");
+        objects_element = get_placeholder("objects");
+        orders_header = get_placeholder("orders");
+        orders_element = get_placeholder("orders");
+        resources_element = get_placeholder("resources");
+        skills_header = get_placeholder("skills");
+        skills_element = get_placeholder("skills");
+        statistics_element = get_placeholder("statistics");
+    }
+
+    void UI::init_events()
+    {
+        event_listener_instancer = std::make_shared<EventInstancer>();
+
+    	Rml::Factory::RegisterEventListenerInstancer(event_listener_instancer.get());
+    }
+
+    void UI::init_fonts()
+    {
+        std::set<Rml::String> fonts = configuration->get_string_array<std::set<Rml::String>>("ui.fonts");
+
+        for (const Rml::String& font : fonts)
+        {
+            Rml::LoadFontFace(font, false);
+        }
     }
 
     void UI::init_visibility_types()
@@ -1567,40 +1431,71 @@ namespace Gecko
         */
     }
 
-    void UI::evaluate_with_timeout(const std::string& js)
-    {
-        view->EvaluateScript(("setTimeout(() => {" + js + ";}, 0)").c_str());
-    }
-
     void UI::log_write(const std::string& text, const std::string& type, Id id)
     {
-        if (is_ready() == false)
+        // TODO: Refactor. Make class.
+        // TODO: Implement id argument.
+        static std::vector<std::string> lines;
+
+        lines.push_back(text);
+
+        if (lines.size() > 3)
         {
-            return;
+            lines.erase(lines.cbegin(), lines.cbegin() + (lines.size() - 3));
         }
 
-        // Update UI.
-        static std::stringstream stream;
+        if (document)
+        {
+            std::string rml;
 
-        stream.str("");
-        stream << "app.log.";
-        stream << type;
-        stream << "('";
-        stream << text;
-        stream << "', ";
-        stream << id;
-        stream << ")";
+            for (const std::string& line : lines)
+            {
+                rml += std::vformat(configuration->get_string("ui.templates.log"), std::make_format_args(type, line));
+            }
 
-        evaluate_with_timeout(stream.str());
+            log_element->SetInnerRML(rml);
+        }
     }
 
-    void UI::wait_until_ready()
+    Rml::Element* UI::get_header(const std::string& selector) const
     {
-        L_INFO << "Waiting for UI..." << std::endl;
+        Rml::Element* element = document->GetElementById(selector);
 
-        while (is_ready() == false)
+        if (element == nullptr)
         {
-            renderer->Update();
+            return nullptr;
         }
+
+        Rml::ElementList elements;
+
+        element->GetElementsByClassName(elements, "card-header");
+
+        if (elements.size() == 0)
+        {
+            return nullptr;
+        }
+
+        return elements[0];
+    }
+
+    Rml::Element* UI::get_placeholder(const std::string& selector) const
+    {
+        Rml::Element* element = document->GetElementById(selector);
+
+        if (element == nullptr)
+        {
+            return nullptr;
+        }
+
+        Rml::ElementList elements;
+
+        element->GetElementsByClassName(elements, "placeholder");
+
+        if (elements.size() == 0)
+        {
+            return nullptr;
+        }
+
+        return elements[0];
     }
 }

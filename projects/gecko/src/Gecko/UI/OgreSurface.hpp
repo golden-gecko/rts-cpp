@@ -2,6 +2,7 @@
 
 namespace Gecko
 {
+    /*
     class OgreSurface
     {
     public:
@@ -30,4 +31,5 @@ namespace Gecko
         Ogre::ManualObject* manual_object = nullptr;
         Ogre::SceneNode* scene_node = nullptr;
     };
+    */
 }

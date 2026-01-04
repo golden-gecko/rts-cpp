@@ -353,6 +353,19 @@ namespace Gecko
         return angle;
     }
 
+    std::shared_ptr<Configuration> Object::get_info() const
+    {
+        std::shared_ptr<Configuration> info = std::make_shared<Configuration>();
+
+        info->set("ID", get_id());
+        info->set("Name", get_name());
+        info->set("Player", PlayerManager::getSingleton().get(get_player_id())->get_name());
+        info->set("Position", get_position());
+        info->set("Heading", get_heading());
+
+        return info;
+    }
+
     Area Object::get_size() const
     {
         const auto& aabb = scene_node->_getWorldAABB();
