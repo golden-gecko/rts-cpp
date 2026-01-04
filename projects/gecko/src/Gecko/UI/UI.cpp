@@ -19,6 +19,7 @@
 #include "Gecko/System.hpp"
 #include "Gecko/Technologies/TechnologyTree.hpp"
 #include "Gecko/UI/Cursor.hpp"
+#include "Gecko/UI/Events.hpp"
 #include "Gecko/UI/Minimap.hpp"
 #include "Gecko/UI/Preview.hpp"
 #include "Gecko/UI/RenderInterface.hpp"
@@ -73,8 +74,8 @@ namespace Gecko
         */
 
         init_components();
+        init_events();
         init_documents();
-        // init_events();
         init_visibility_types();
     }
 
@@ -609,22 +610,19 @@ namespace Gecko
 
     bool UI::is_mouse_inside(std::size_t x, std::size_t y)
     {
+        Rml::ElementList elements;
+
+        document->GetElementsByClassName(elements, "card");
+
+        for (Rml::Element* element : elements)
+        {
+            if (element->IsPointWithinElement(Rml::Vector2f(x, y)))
+            {
+                return true;
+            }
+        }
+
         return false;
-
-        /*
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.ui.is_mouse_inside(";
-        stream << x;
-        stream << ", ";
-        stream << y;
-        stream << ")";
-
-        auto value = view->EvaluateScript(stream.str().c_str());
-
-        return Utils::Convert::to_string(value) == "true";
-        */
     }
 
     void UI::log_error(const std::string& text, Id id)
@@ -1413,6 +1411,13 @@ namespace Gecko
         resources_element = get_placeholder("resources");
         skills_element = get_placeholder("skills");
         statistics_element = get_placeholder("statistics");
+    }
+
+    void UI::init_events()
+    {
+        event_listener_instancer = std::make_shared<EventInstancer>();
+
+    	Rml::Factory::RegisterEventListenerInstancer(event_listener_instancer.get());
     }
 
     void UI::init_fonts()

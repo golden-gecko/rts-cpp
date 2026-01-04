@@ -81,13 +81,11 @@
             left: 50%;
             position: fixed;
             top: 50%;
-            transform: translate(-50%, -50%);
         }
 
         .centered-horizontally {
             left: 50%;
             position: fixed;
-            transform: translate(-50%, 0%);
         }
 
         .card {
@@ -121,6 +119,10 @@
         .card-body {
             flex: 1 1 auto;
             padding: 1rem 1rem;
+        }
+
+        .hidden {
+            display: none;
         }
 
         /* Configurations */
@@ -174,10 +176,7 @@
         }
 
         /* Diplomacy */
-        #diplomacy {
-            display: none;
-        }
-        
+
         #diplomacy .name {
             font-weight: bold;
         }
@@ -185,55 +184,61 @@
         /* Floating description */
 
         .floating-description {
-            background: rgba(255, 255, 255, 0.8);
-            min-width: 50px;
-            position: fixed;
-            z-index: -1;
+            background-color: #fff;
+            display: block;
+            min-width: 100px;
+            position: absolute;
         }
 
         .floating-description .bar {
-            margin-bottom: 2px;
+            display: block;
+            width: 100%;
+        }
+
+        .floating-description .bar .background {
+            width: 100%;
         }
 
         .floating-description .bar .background,
         .floating-description .bar .current {
-            height: 3px;
+            display: flex;
+            height: 5px;
         }
 
         .floating-description .bar .current {
-            margin-top: -3px;
+            margin-top: -5px;
         }
 
         .floating-description .bar.ammunition .background {
-            background: rgba(255, 0, 0, 0.5);
+            background: #800;
         }
 
         .floating-description .bar.ammunition .current {
-            background: rgba(255, 0, 0, 1.0);
+            background: #f00;
         }
 
         .floating-description .bar.fuel .background {
-            background: rgba(255, 165, 0, 0.5);
+            background: #840;
         }
 
         .floating-description .bar.fuel .current {
-            background: rgba(255, 165, 0, 1.0)
+            background: #f80;
         }
 
         .floating-description .bar.health .background {
-            background: rgba(0, 128, 0, 0.5);
+            background: #040;
         }
 
         .floating-description .bar.health .current {
-            background: rgba(0, 128, 0, 1.0);
+            background: #080;
         }
 
         .floating-description .bar.reload .background {
-            background: rgba(0, 0, 255, 0.5);
+            background: #008;
         }
 
         .floating-description .bar.reload .current {
-            background: rgba(0, 0, 255, 1.0);
+            background: #00f;
         }
 
         .floating-description .name {
@@ -256,10 +261,6 @@
         }
 
         /* Layers */
-
-        #layers  {
-            display: none;
-        }
 
         #layers .button {
             margin-bottom: 4px;
@@ -290,15 +291,15 @@
         #load-menu,
         #main-menu,
         #map-menu {
-            display: none;
-            width: 200px;
         }
 
         #load-menu button,
         #main-menu button,
         #map-menu button {
+            display: block;
+            height: 30px;
             margin-bottom: 0.4rem;
-            width: 100%;
+            width: 300px;
         }
 
         #load-menu .button-quit-application,
@@ -312,17 +313,6 @@
         #minimap {
             bottom: 5px;
             right: 5px;
-        }
-
-        /* Objects - Admin */
-
-        #objects-admin {
-            display: none;
-        }
-
-        /* Options */
-        #options {
-            display: none;
         }
 
         /* Orders */
@@ -340,7 +330,6 @@
         /* Players */
 
         #players {
-            display: none;
             left: 700px;
             top: 60px;
         }
@@ -348,7 +337,6 @@
         /* Preview */
 
         #preview {
-            display: none;
             left: 882px;
             top: 60px;
         }
@@ -386,18 +374,8 @@
             left: 620px;
         }
 
-        /* Statistics */
-
-        #statistics {
-            display: none;
-        }
-
         /* Technologies */
         
-        #technologies {
-            display: none;
-        }
-
         #technologies .placeholder button {
             margin: 5px;
         }
@@ -409,7 +387,7 @@
     <div id="container">
 
         <!-- Configurations -->
-        <div id="configurations" class="card panel">
+        <div id="configurations" class="card">
             <div class="card-header">Configurations - none
                 <img class="button-collapse" src="icons/arrow-up-short.png" />
                 <img class="button-expand" src="icons/arrow-down-short.png" />
@@ -421,7 +399,7 @@
         </div>
 
         <!-- Diplomacy -->
-        <div id="diplomacy" class="card">
+        <div id="diplomacy" class="card hidden">
             <div class="card-header">Diplomacy</div>
             <div class="card-body">
                 <table class="table table-condensed">
@@ -438,20 +416,20 @@
         </div>
 
         <!-- Game Menu -->
-        <div id="game-menu" class="card ui layer-bottom">
+        <div id="game-menu" class="card">
             <div class="card-body">
-                <button class="button button-diplomacy">Diplomacy</button>
-                <button class="button button-layers">Layers</button>
-                <button class="button button-main-menu">Menu</button>
-                <button class="button button-objects">Objects</button>   
-                <button class="button button-orders">Orders</button>
-                <button class="button button-statistics">Statistics</button>
-                <button class="button button-technologies">Technologies</button>
+                <button class="button button-diplomacy" onclick="open:diplomacy">Diplomacy</button>
+                <button class="button button-layers" onclick="open:layers">Layers</button>
+                <button class="button button-main-menu" onclick="open:main-menu">Menu</button>
+                <button class="button button-objects" onclick="open:objects">Objects</button>   
+                <button class="button button-orders" onclick="open:orders">Orders</button>
+                <button class="button button-statistics" onclick="open:statistics">Statistics</button>
+                <button class="button button-technologies" onclick="open:technologies">Technologies</button>
             </div>
         </div>
 
         <!-- Info -->
-        <div id="info" class="card panel">
+        <div id="info" class="card">
             <div class="card-header">Info
                 <img class="button-collapse" src="icons/arrow-up-short.png" />
                 <img class="button-expand" src="icons/arrow-down-short.png" />
@@ -463,7 +441,7 @@
         </div>
 
         <!-- Layers -->
-        <div id="layers" class="card">
+        <div id="layers" class="card hidden">
             <div class="card-header">Layers</div>
 
             <div class="card-body">
@@ -526,7 +504,7 @@
         </div>
 
         <!-- Load Menu -->
-        <div id="load-menu" class="card ui centered">
+        <div id="load-menu" class="card hidden centered">
             <div class="card-header">Load</div>
             <div class="card-body">
                 <button class="button-continue button">Continue</button>
@@ -543,28 +521,28 @@
         </div>
 
         <!-- Log -->
-        <div id="log" class="card ui layer-middle">
+        <div id="log" class="card">
             <div class="card-body placeholder">
                 <!-- <p class="info">13:22:24 Tank created</p> -->
             </div>
         </div>
 
         <!-- Main Menu -->
-        <div id="main-menu" class="card ui centered">
+        <div id="main-menu" class="card hidden centered">
             <div class="card-header">Menu</div>
             <div class="card-body">
-                <button class="button button-continue">Continue</button>
-                <button class="button button-new-game">New game</button>
-                <button class="button button-save">Save</button>
-                <button class="button button-load">Load</button>
-                <button class="button button-options">Options</button>
-                <button class="button button-quit-game">Quit to menu</button>
-                <button class="button button-quit-application">Quit to desktop</button>
+                <button class="button button-continue" onclick="open:continue">Continue</button>
+                <button class="button button-new-game" onclick="open:new-game">New game</button>
+                <button class="button button-save" onclick="open:save">Save</button>
+                <button class="button button-load" onclick="open:load">Load</button>
+                <button class="button button-options" onclick="open:options">Options</button>
+                <button class="button button-quit-game" onclick="call:quit-to-menu">Quit to menu</button>
+                <button class="button button-quit-application" onclick="call:quit-to-desktop">Quit to desktop</button>
             </div>
         </div>
 
         <!-- Map Menu -->
-        <div id="map-menu" class="card ui centered">
+        <div id="map-menu" class="card hidden centered">
             <div class="card-header">Maps</div>
             <div class="card-body">
                 <button class="button-continue button">Continue</button>
@@ -581,7 +559,7 @@
         </div>
 
         <!-- Minimap-->
-        <div id="minimap" class="card panel">
+        <div id="minimap" class="card">
             <div class="card-header">Minimap
                 <img class="button-collapse" src="icons/arrow-up-short.png" />
                 <img class="button-expand" src="icons/arrow-down-short.png" />
@@ -593,7 +571,7 @@
         </div>
 
         <!-- Objects (admin) -->
-        <div id="objects-admin" class="card">
+        <div id="objects-admin" class="card hidden">
             <div class="card-header">Objects</div>
             <div class="card-body">
                 <table class="table table-condensed">
@@ -615,7 +593,7 @@
         </div>
 
         <!-- Options -->
-        <div id="options" class="card">
+        <div id="options" class="card hidden">
             <div class="card-header">Options</div>
             <div class="card-body">
                 <form>
@@ -698,7 +676,7 @@
         </div>
 
         <!-- Orders -->
-        <div id="orders" class="card panel">
+        <div id="orders" class="card">
             <div class="card-header">Orders - None
                 <img class="button-collapse" src="icons/arrow-up-short.png" />
                 <img class="button-expand" src="icons/arrow-down-short.png" />
@@ -710,7 +688,7 @@
         </div>
 
         <!-- Orders (admin) -->
-        <div id="orders-admin" class="card">
+        <div id="orders-admin" class="card hidden">
             <div class="card-header">Orders</div>
             <div class="card-body">
                 <table class="table table-condensed">
@@ -732,7 +710,7 @@
         </div>
 
         <!-- Players -->
-        <div id="players" class="card panel">
+        <div id="players" class="card hidden">
             <div class="card-header">Players
                 <img class="button-collapse" src="icons/arrow-up-short.png" />
                 <img class="button-expand" src="icons/arrow-down-short.png" />
@@ -750,7 +728,7 @@
         </div>
 
         <!-- Preview -->
-        <div id="preview" class="card panel">
+        <div id="preview" class="card hidden">
             <div class="card-header">Preview
                 <img class="button-collapse" src="icons/arrow-up-short.png" />
                 <img class="button-expand" src="icons/arrow-down-short.png" />
@@ -762,7 +740,7 @@
         </div>
 
         <!-- Resources -->
-        <div id="resources" class="card panel">
+        <div id="resources" class="card">
             <div class="card-header">Resources
                 <img class="button-collapse" src="icons/arrow-up-short.png" />
                 <img class="button-expand" src="icons/arrow-down-short.png" />
@@ -778,7 +756,7 @@
         </div>
 
         <!-- Skills -->
-        <div id="skills" class="card panel">
+        <div id="skills" class="card">
             <div class="card-header">Skills - none
                 <img class="button-collapse" src="icons/arrow-up-short.png" />
                 <img class="button-expand" src="icons/arrow-down-short.png" />
@@ -790,7 +768,7 @@
         </div>
 
         <!-- Statistics -->
-        <div id="statistics" class="card">
+        <div id="statistics" class="card hidden">
             <div class="card-header">Statistics</div>
             <div class="card-body">
                 <table class="table table-condensed">
@@ -815,7 +793,7 @@
         </div>
 
         <!-- Technologies -->
-        <div id="technologies" class="card">
+        <div id="technologies" class="card hidden">
             <div class="card-header">Technologies</div>
             <div class="card-body">
                 <div class="placeholder">
@@ -828,6 +806,7 @@
         </div>
     </div>
 
+    <!--
     <div class="centered floating-description" id="object_1" style="left: 350px; top: 400px;">
         <div class="text name">Tank</div>
         <div class="bar health"><div class="background"></div><div class="current" style="width: 90%;"></div></div>
@@ -835,5 +814,6 @@
         <div class="bar ammunition"><div class="background"></div><div class="current" style="width: 25%;"></div></div>
         <div class="bar reload"><div class="background"></div><div class="current" style="width: 30%;"></div></div>
     </div>
+    -->
 </body>
 </rml>
