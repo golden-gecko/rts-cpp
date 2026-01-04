@@ -181,15 +181,19 @@ namespace Gecko
 
         Rml::Context* context = nullptr;
         Rml::ElementDocument* document = nullptr;
-        
+
+        // TODO: Rename element to body.
+        Rml::Element* configurations_header = nullptr;
         Rml::Element* configurations_element = nullptr;
         Rml::Element* info_element = nullptr;
         Rml::Element* layers_element = nullptr;
         Rml::Element* log_element = nullptr;
         Rml::Element* maps_element = nullptr;
         Rml::Element* objects_element = nullptr;
+        Rml::Element* orders_header = nullptr;
         Rml::Element* orders_element = nullptr;
         Rml::Element* resources_element = nullptr;
+        Rml::Element* skills_header = nullptr;
         Rml::Element* skills_element = nullptr;
         Rml::Element* statistics_element = nullptr;
 
@@ -219,6 +223,8 @@ namespace Gecko
 
         void log_write(const std::string& text, const std::string& type, Id id = Id::Empty);
 
+        Rml::Element* get_header(const std::string& selector) const;
+        // TODO: Rename to get_body.
         Rml::Element* get_placeholder(const std::string& selector) const;
     };
 }

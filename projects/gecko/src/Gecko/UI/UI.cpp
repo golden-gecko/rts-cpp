@@ -99,7 +99,7 @@ namespace Gecko
 
             if (hovered_object)
             {
-                set_info(hovered_object->serialize());
+                set_info(hovered_object->get_info());
             }
             else if (Game::getSingleton().get_active_player() && Game::getSingleton().get_active_player()->get_selected()->size())
             {
@@ -110,7 +110,7 @@ namespace Gecko
 
                     if (object)
                     {
-                        set_info(object->serialize());
+                        set_info(object->get_info());
 
                         break;
                     }
@@ -173,11 +173,10 @@ namespace Gecko
 
             // TODO: Optimize.
             // set_floating_descriptions(objects);
-            auto& game = Game::getSingleton();
 
             // TODO: First map.
             set_layers(MapManager::getSingleton().begin()->second->get_layers());
-            set_maps(game.get_maps());
+            set_maps(Game::getSingleton().get_maps());
             set_objects_admin();
             set_orders_admin();
             set_players();
@@ -809,12 +808,7 @@ namespace Gecko
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.configurations.set_header('";
-        stream << _configuration_name;
-        stream << "')";
+        configurations_header->SetInnerRML(Utils::format_title(_configuration_name));
     }
 
     void UI::set_floating_descriptions(const std::vector<Id>& objects)
@@ -1169,12 +1163,7 @@ namespace Gecko
         order_type_cache = order_type;
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.orders.set_header('";
-        stream << order_type::to_string(order_type);
-        stream << "')";
+        orders_header->SetInnerRML(Utils::format_title(order_type::to_string(order_type)));
     }
 
     void UI::set_resources(std::shared_ptr<Resources> resources)
@@ -1285,12 +1274,7 @@ namespace Gecko
         skill_name_cache = skill_name;
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.skills.set_header('";
-        stream << skill_name;
-        stream << "')";
+        orders_header->SetInnerRML(Utils::format_title(skill_name));
     }
 
     void UI::set_statistics(const std::map<std::string, std::string>& statistics)
@@ -1401,14 +1385,17 @@ namespace Gecko
 
         Rml::Debugger::Initialise(context);
 
+        configurations_header = get_placeholder("configurations");
         configurations_element = get_placeholder("configurations");
         info_element = get_placeholder("info");
         layers_element = get_placeholder("layers");
         log_element = get_placeholder("log");
         maps_element = get_placeholder("maps");
         objects_element = get_placeholder("objects");
+        orders_header = get_placeholder("orders");
         orders_element = get_placeholder("orders");
         resources_element = get_placeholder("resources");
+        skills_header = get_placeholder("skills");
         skills_element = get_placeholder("skills");
         statistics_element = get_placeholder("statistics");
     }
@@ -1468,6 +1455,27 @@ namespace Gecko
 
             log_element->SetInnerRML(rml);
         }
+    }
+
+    Rml::Element* UI::get_header(const std::string& selector) const
+    {
+        Rml::Element* element = document->GetElementById(selector);
+
+        if (element == nullptr)
+        {
+            return nullptr;
+        }
+
+        Rml::ElementList elements;
+
+        element->GetElementsByClassName(elements, "card-header");
+
+        if (elements.size() == 0)
+        {
+            return nullptr;
+        }
+
+        return elements[0];
     }
 
     Rml::Element* UI::get_placeholder(const std::string& selector) const
