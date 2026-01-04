@@ -1,0 +1,10 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "include": [
+        "../tests/include/plant.json"
+    ],
+    "property_from_plant": "this is tree",
+    "unique_property_from_tree": "tree name"
+}

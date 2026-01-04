@@ -2,7 +2,12 @@
 
 int main(int argc, char* argv[])
 {
-    testing::InitGoogleTest(&argc, argv);
+    ::testing::InitGoogleTest(&argc, argv);
+    ::testing::GTEST_FLAG(filter) = "*.*";
 
-    return RUN_ALL_TESTS();
+    int result = RUN_ALL_TESTS();
+
+    std::cin.get();
+
+    return result;
 }

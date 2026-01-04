@@ -1,8 +1,5 @@
 #include "Gecko/System.hpp"
 
-#include <Psapi.h>
-#include <Windows.h>
-
 namespace Gecko
 {
     float System::get_cpu_usage()

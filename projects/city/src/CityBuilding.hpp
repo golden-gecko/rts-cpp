@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Gecko/Objects/Object.hpp"
-#include "Gecko/Rectangle.hpp"
+#include <Gecko/Objects/Object.hpp>
+#include <Gecko/Rectangle.hpp>
 
 namespace City
 {

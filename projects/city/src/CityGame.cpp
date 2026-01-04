@@ -1,3 +1,5 @@
+#include "CityGame.hpp"
+
 #include <Gecko/Log.hpp>
 #include <Gecko/Managers/ConfigurationManager.hpp>
 #include <Gecko/Managers/MapManager.hpp>
@@ -6,7 +8,6 @@
 
 #include "Citizen.hpp"
 #include "CityBuilding.hpp"
-#include "CityGame.hpp"
 #include "CityMap.hpp"
 #include "Depot.hpp"
 

@@ -1,8 +1,9 @@
+#include "CityBuilding.hpp"
+
 #include <Gecko/Games/Game.hpp>
 #include <Gecko/Validators/RoadPosition.hpp>
 
 #include "Citizen.hpp"
-#include "CityBuilding.hpp"
 
 namespace City
 {

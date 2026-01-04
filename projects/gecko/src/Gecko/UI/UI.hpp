@@ -4,6 +4,7 @@
 #include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Timer.hpp"
+#include "Gecko/UI/SelectionBox.hpp"
 
 namespace Gecko
 {
@@ -27,7 +28,7 @@ namespace Gecko
     public:
         explicit UI(const std::shared_ptr<Configuration>& configuration);
 
-        ~UI() override = default;
+        ~UI() override;
 
         void render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation);
 

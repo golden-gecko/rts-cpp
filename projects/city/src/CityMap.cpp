@@ -1,3 +1,5 @@
+#include "CityMap.hpp"
+
 #include <Gecko/Configuration.hpp>
 #include <Gecko/DataLayers/DataLayer.hpp>
 #include <Gecko/Exception.hpp>
@@ -11,7 +13,6 @@
 
 #include "Citizen.hpp"
 #include "CityBuilding.hpp"
-#include "CityMap.hpp"
 
 namespace City
 {

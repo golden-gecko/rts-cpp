@@ -1,0 +1,7 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "property_from_plant": "this is plant",
+    "unique_property_from_plant": "plant name"
+}

@@ -54,4 +54,5 @@ TEST(item, item_is_deserialized_after_deinitialization)
     item->deinit();
 
     EXPECT_EQ(item->get_configuration()->get_name(), "tree");
+    EXPECT_EQ(item->get_id().is_valid(), false);
 }

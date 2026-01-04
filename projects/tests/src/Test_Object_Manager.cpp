@@ -28,11 +28,10 @@ TEST(object_manager, new_object_manager_can_register_types)
 
 TEST(object_manager, new_object_manager_can_allocate_memory)
 {
-    init_game init_game({});
+    init_game init_game;
 
     // TODO: Decouple.
     Gecko::ObjectManager::getSingletonPtr()->unregister_all();
-    // TODO: End.
 
     auto object_manager = Gecko::ObjectManager::getSingletonPtr();
     auto object_configuration = std::make_shared<Gecko::Configuration>("../objects/vehicles/civilian/truck.json");

@@ -76,7 +76,7 @@ namespace Gecko
 
         auto switch_player = [](std::uint8_t player_id)
         {
-            Game::getSingleton().set_active_player_id(player_id);
+            Game::getSingleton().set_active_player_id(Id(player_id));
         };
 
         static const std::map<Command::Value, std::function<void()>> commands =

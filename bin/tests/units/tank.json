@@ -1,5 +1,6 @@
 {
     "creatable": {
         "by_game": true
-    }
+    },
+    "name": "Tank"
 }

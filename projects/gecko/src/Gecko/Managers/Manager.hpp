@@ -377,6 +377,6 @@ namespace Gecko
     protected:
         Collections m_collections;
         Items m_items;
-        TypeId m_last_id = 0;
+        TypeId m_last_id;
     };
 }

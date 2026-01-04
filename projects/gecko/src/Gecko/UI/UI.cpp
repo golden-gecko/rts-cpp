@@ -198,6 +198,10 @@ namespace Gecko
     {
     }
 
+    UI::~UI()
+    {
+    }
+
     void UI::render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
     {
         if (queueGroupId != Ogre::RENDER_QUEUE_OVERLAY)

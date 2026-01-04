@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Gecko/Games/Game.hpp"
+#include <Gecko/Games/Game.hpp>
 
 namespace City
 {

@@ -2,9 +2,11 @@
 
 #pragma warning(push, 0)
 
+// STL
 #include <filesystem>
 #include <random>
 
+// Boost
 #include <boost/algorithm/string.hpp>
 #include <boost/assign.hpp>
 #include <boost/bimap.hpp>
@@ -15,8 +17,10 @@
 #include <boost/program_options.hpp>
 #include <boost/regex.hpp>
 
+// JsonCpp
 #include <json/json.h>
 
+// Ogre
 #include <Ogre.h>
 #include <OgreBitesConfigDialog.h>
 #include <OgreBitwise.h>
@@ -26,8 +30,10 @@
 
 #include <Bites/OgreApplicationContext.h>
 
+// OIS
 #include <OIS.h>
 
+// RmlUi
 #include <RmlUi/Core/Context.h>
 #include <RmlUi/Core/Element.h>
 #include <RmlUi/Core/ElementDocument.h>
@@ -38,6 +44,10 @@
 #include <RmlUi/Core/SystemInterface.h>
 #include <RmlUi/Core/Types.h>
 #include <RmlUi/Debugger.h>
+
+// Windows
+#include <Windows.h>
+#include <Psapi.h>
 
 #pragma warning(pop)
 

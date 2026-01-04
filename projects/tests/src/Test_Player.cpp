@@ -9,7 +9,7 @@ TEST(player, new_player_is_empty)
     auto player = std::make_shared<Gecko::Player>();
 
     EXPECT_EQ(player->get_configuration().get(), nullptr);
-    EXPECT_EQ(player->get_id(), 0);
+    EXPECT_EQ(player->get_id(), Gecko::Id::Empty);
     EXPECT_EQ(player->get_color(), "");
     EXPECT_EQ(player->get_name(), "");
     EXPECT_EQ(player->get_selected()->size(), 0);
@@ -23,7 +23,7 @@ TEST(player, player_deserialized_from_configuration_is_loaded)
     player->deserialize(player_configuration);
 
     EXPECT_EQ(player->get_configuration()->get_name(), "human");
-    EXPECT_EQ(player->get_id(), 0);
+    EXPECT_EQ(player->get_id(), Gecko::Id::Empty);
     EXPECT_EQ(player->get_color(), "blue");
     EXPECT_EQ(player->get_name(), "Human");
     EXPECT_EQ(player->get_selected()->size(), 0);
@@ -38,7 +38,7 @@ TEST(player, player_deserialized_and_initialized_from_configuration_is_loaded)
     player->init();
 
     EXPECT_EQ(player->get_configuration()->get_name(), "human");
-    EXPECT_EQ(player->get_id(), 0);
+    EXPECT_EQ(player->get_id(), Gecko::Id::Empty);
     EXPECT_EQ(player->get_color(), "blue");
     EXPECT_EQ(player->get_name(), "Human");
     EXPECT_EQ(player->get_selected()->size(), 0);

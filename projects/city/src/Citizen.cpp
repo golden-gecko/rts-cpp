@@ -1,3 +1,5 @@
+#include "Citizen.hpp"
+
 #include <Gecko/Containers/Orders.hpp>
 #include <Gecko/Containers/Resources.hpp>
 #include <Gecko/Games/Game.hpp>
@@ -11,8 +13,6 @@
 #include <Gecko/Orders/OrderUnload.hpp>
 #include <Gecko/Search/FollowRoadsSearch.hpp>
 #include <Gecko/Utils/Utils.hpp>
-
-#include "Citizen.hpp"
 
 namespace City
 {

@@ -139,21 +139,13 @@ namespace Gecko
         std::map<std::string, std::shared_ptr<Window>> windows;
 
         void init_meshes();
-        void init_resources();
         void init_root();
-        void init_shader_system();
-        void init_shader_system_cache();
         void init_scene();
         void init_windows();
 
         void deinit_maps();
-        void deinit_resources();
         void deinit_root();
         void deinit_scene();
-        void deinit_shader_system();
-        void deinit_shader_system_cache();
         void deinit_windows();
-
-        void process_events();
     };
 }

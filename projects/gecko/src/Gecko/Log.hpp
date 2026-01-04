@@ -12,6 +12,6 @@ namespace Gecko
     class Log
     {
     public:
-        static void setup(const std::string& file_name = "Gecko.log", int max_size = 10 * 1024 * 1024);
+        static void setup(const std::string& file_name = "Gecko.log", int max_size = 10 * 1024 * 1024, bool write_to_console = true, bool write_to_file = true);
     };
 }

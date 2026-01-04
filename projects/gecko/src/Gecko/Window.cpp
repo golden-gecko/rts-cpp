@@ -20,48 +20,6 @@ namespace Gecko
         auto fullscreen = configuration->get_bool("fullscreen", Settings::Window::Fullscreen);
 
         m_render_window = Game::getSingletonPtr()->context->getRenderWindow();
-
-        /*
-        TODO: Fix.
-
-        if (SDL_WasInit(SDL_INIT_VIDEO) == 0)
-        {
-            if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0)
-            {
-                throw Exception("SDL_InitSubSystem() failed.");
-            }
-        }
-
-        Uint32 flags = SDL_WINDOW_SHOWN;
-
-        if (fullscreen)
-        {
-            flags |= SDL_WINDOW_FULLSCREEN;
-        }
-        else
-        {
-            flags |= SDL_WINDOW_RESIZABLE;
-        }
-
-        m_sdl_window = SDL_CreateWindow(m_name.c_str(), left, top, width, height, flags);
-
-        SDL_SetWindowData(m_sdl_window, "window", this);
-
-        SDL_SysWMinfo wmInfo;
-        SDL_VERSION(&wmInfo.version);
-
-        if (SDL_GetWindowWMInfo(m_sdl_window, &wmInfo) == SDL_FALSE)
-        {
-            throw Exception("SDL_GetWindowWMInfo() failed.");
-        }
-
-        Ogre::NameValuePairList params =
-        {
-            { "externalWindowHandle", Ogre::StringConverter::toString(reinterpret_cast<std::size_t>(wmInfo.info.win.window)) }
-        };
-
-        m_render_window = Ogre::Root::getSingleton().createRenderWindow(m_name, width, height, fullscreen, &params);
-        */
     }
 
     Window::~Window()
@@ -71,9 +29,7 @@ namespace Gecko
 
     void Window::on_close()
     {
-        Ogre::Root::getSingleton().destroyRenderTarget(get_render_window());
-
-        // SDL_DestroyWindow(m_sdl_window);
+        // Ogre::Root::getSingleton().destroyRenderTarget(get_render_window());
     }
 
     void Window::on_resize()

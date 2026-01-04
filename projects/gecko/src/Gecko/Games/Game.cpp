@@ -67,7 +67,6 @@ namespace Gecko
     {
         init_root();
         init_windows();
-        init_resources();
         init_scene();
         init_meshes();
 
@@ -82,9 +81,8 @@ namespace Gecko
     void Game::deinit()
     {
         deinit_scene();
-        deinit_resources();
         deinit_windows();
-        deinit_root();       
+        deinit_root();
     }
 
     void Game::load_map(const std::string& map_name)
@@ -316,8 +314,6 @@ namespace Gecko
 
     void Game::update_input(float time)
     {
-        process_events();
-
         Input::getSingleton().update(time);
     }
 
@@ -995,36 +991,9 @@ namespace Gecko
         }
     }
 
-    void Game::init_resources()
-    {
-        /*
-        TODO: Restore.
-
-        auto resources_configuration = m_configuration->get_child("resources");
-
-        for (auto i = resources_configuration->begin(); i != resources_configuration->end(); i++)
-        {
-            auto path = i->get("path", "").asString();
-            auto type = i->get("type", "").asString();
-
-            if (path.empty() || type.empty())
-            {
-                throw Exception("Resource path or type is empty.");
-            }
-
-            Ogre::ResourceGroupManager::getSingleton().addResourceLocation(path, type);
-        }
-
-        // TODO: Fix.
-        // init_shader_system();
-        // init_shader_system_cache();
-
-        Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-        */
-    }
-
     void Game::init_root()
     {
+        // TODO: Replace with smart pointer.
         context = new OgreBites::ApplicationContext();
         context->initApp();
 
@@ -1034,76 +1003,6 @@ namespace Gecko
         }
 
         root = context->getRoot();
-
-        /*
-        TODO: Fix.
-
-        root = OGRE_NEW Ogre::Root(
-            Settings::Game::OgrePluginsFile,
-            Settings::Game::OgreConfigurationFile,
-            Settings::Game::OgreLogFile
-        );
-
-        if (root->restoreConfig() == false && root->showConfigDialog(OgreBites::getNativeConfigDialog()) == false)
-        {
-            throw Exception("Ogre::Root::restoreConfig() or Ogre::Root::showConfigDialog() failed.");
-        }
-
-        root->initialise(false);
-        root->saveConfig();
-        */
-    }
-
-    void Game::init_shader_system()
-    {
-        if (Ogre::RTShader::ShaderGenerator::initialize() == false)
-        {
-            throw Exception("Failed to initialize shader system.");
-        }
-
-        material_listener = OGRE_NEW OgreBites::SGTechniqueResolverListener(
-            Ogre::RTShader::ShaderGenerator::getSingletonPtr()
-        );
-
-        Ogre::MaterialManager::getSingleton().addListener(material_listener);
-    }
-
-    void Game::init_shader_system_cache()
-    {
-        using namespace std::filesystem;
-
-        if (m_configuration->get_bool("options.cache.gpu.enabled", true) == false)
-        {
-            return;
-        }
-
-        Ogre::GpuProgramManager::getSingleton().setSaveMicrocodesToCache(true);
-
-        auto cache_path = m_configuration->get_string("options.cache.gpu.path", Settings::Cache::GpuPath);
-        auto directory = path(cache_path).parent_path();
-
-        if (exists(directory) == false)
-        {
-            if (create_directories(directory) == false)
-            {
-                L_ERROR << "Failed to create '" << directory << "' file.";
-
-                return;
-            }
-        }
-
-        std::ifstream cache_file(cache_path, std::ios::binary);
-
-        if (cache_file.is_open() == false)
-        {
-            L_ERROR << "Failed to open '" << cache_path << "' file.";
-
-            return;
-        }
-
-        // TODO: Should Ogre::FileStreamDataStream be deleted?
-        Ogre::DataStreamPtr istream(new Ogre::FileStreamDataStream(cache_path, &cache_file, false));
-        Ogre::GpuProgramManager::getSingleton().loadMicrocodeCache(istream);
     }
 
     void Game::init_scene()
@@ -1155,16 +1054,11 @@ namespace Gecko
         }
     }
 
-    void Game::deinit_resources()
-    {
-        deinit_shader_system();
-    }
-
     void Game::deinit_root()
     {
-        delete context;
+        context->closeApp();
 
-        // OGRE_DELETE root;
+        delete context;
     }
 
     void Game::deinit_scene()
@@ -1174,102 +1068,8 @@ namespace Gecko
         root->destroySceneManager(scene_manager);
     }
 
-    void Game::deinit_shader_system()
-    {
-        Ogre::MaterialManager::getSingleton().removeListener(material_listener);
-
-        OGRE_DELETE material_listener;
-
-        Ogre::RTShader::ShaderGenerator::destroy();
-    }
-
-    void Game::deinit_shader_system_cache()
-    {
-        using namespace std::filesystem;
-
-        if (Ogre::GpuProgramManager::getSingleton().getSaveMicrocodesToCache() == false)
-        {
-            return;
-        }
-
-        if (Ogre::GpuProgramManager::getSingleton().isCacheDirty() == false)
-        {
-            return;
-        }
-
-        auto cache_path = m_configuration->get_string("options.cache.gpu.path", Settings::Cache::GpuPath);
-        auto directory = path(cache_path).parent_path();
-
-        if (exists(directory) == false)
-        {
-            if (create_directories(directory) == false)
-            {
-                L_ERROR << "Failed to create '" << directory << "' file.";
-
-                return;
-            }
-        }
-
-        std::fstream cache_file(cache_path, std::ios::binary | std::ios::out);
-
-        if (cache_file.is_open() == false)
-        {
-            L_ERROR << "Failed to open '" << cache_path << "' file.";
-
-            return;
-        }
-
-        // TODO: Should Ogre::FileStreamDataStream be deleted?
-        Ogre::DataStreamPtr ostream(new Ogre::FileStreamDataStream(cache_path, &cache_file, false));
-        Ogre::GpuProgramManager::getSingleton().saveMicrocodeCache(ostream);
-    }
-
     void Game::deinit_windows()
     {
         windows.clear();
-    }
-
-    void Game::process_events()
-    {
-        /*
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event))
-        {
-            switch (event.type)
-            {
-                case SDL_QUIT:
-                {
-                    shutdown();
-
-                    break;
-                }
-
-                case SDL_WINDOWEVENT:
-                {
-                    switch (event.window.event)
-                    {
-                        case SDL_WINDOWEVENT_CLOSE:
-                        {
-                            auto window = Utils::Convert::to_window(event);
-
-                            window->on_close();
-
-                            break;
-                        }
-
-                        case SDL_WINDOWEVENT_RESIZED:
-                        {
-                            auto window = Utils::Convert::to_window(event);
-
-                            window->on_resize();
-
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        */
     }
 }

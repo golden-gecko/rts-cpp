@@ -10,87 +10,31 @@ namespace Gecko
         static const Id Max;
 
     public:
-        Id(int value = 0);
+        explicit Id(int value = 0);
 
         bool is_valid() const;
 
         std::string to_string() const;
 
     public:
-        auto get() const
-        {
-            return m_value;
-        }
+        int get() const;
 
     public:
-        Id& operator=(int value)
-        {
-            m_value = value;
+        Id& operator=(int value);
 
-            return *this;
-        }
+        bool operator==(const Id& other) const;
+        bool operator<(const Id& other) const;
+        bool operator<=(const Id& other) const;
+        bool operator>(const Id& other) const;
+        bool operator>=(const Id& other) const;
 
-        bool operator==(const Id& other) const
-        {
-            return m_value == other.m_value;
-        }
+        Id& operator++();
+        Id& operator--();
 
-        bool operator<(const Id& other) const
-        {
-            return m_value < other.m_value;
-        }
+        Id operator++(int);
+        Id operator--(int);
 
-        bool operator<=(const Id& other) const
-        {
-            return m_value <= other.m_value;
-        }
-
-        bool operator>(const Id& other) const
-        {
-            return m_value > other.m_value;
-        }
-
-        bool operator>=(const Id& other) const
-        {
-            return m_value >= other.m_value;
-        }
-
-        Id& operator++()
-        {
-            m_value++;
-
-            return *this;
-        }
-
-        Id operator++(int)
-        {
-            Id previous(*this);
-
-            ++(*this);
-
-            return previous;
-        }
-
-        Id& operator--()
-        {
-            m_value--;
-
-            return *this;
-        }
-
-        Id operator--(int)
-        {
-            Id previous(*this);
-
-            --(*this);
-
-            return previous;
-        }
-
-        operator Json::Value() const
-        {
-            return m_value;
-        }
+        operator Json::Value() const;
 
     private:
         int m_value = 0;

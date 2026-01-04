@@ -178,9 +178,14 @@ namespace Gecko
         Ogre::Vector3 get_vector3(const std::string& path) const;
         Ogre::Vector3 get_vector3(const std::string& path, const Ogre::Vector3& default_value) const;
 
-        const auto& get_name() const
+        const std::string& get_name() const
         {
             return m_name;
+        }
+
+        const std::string& get_file_name() const
+        {
+            return m_file_name;
         }
 
     public:
