@@ -175,7 +175,7 @@ namespace Gecko
         void set_water_layers(const std::set<std::string>& layers);
 
     private:
-        std::shared_ptr<Configuration> configuration;
+        std::shared_ptr<Configuration> m_configuration;
 
         std::shared_ptr<RenderInterface> render_interface;
         std::shared_ptr<SystemInterface> system_interface;

@@ -364,23 +364,26 @@ namespace Gecko
         }
     }
 
-    void Game::save_options(const std::string& options)
+    void Game::save_options(const std::string& _options)
     {
-        L_TRACE << "Game::save_options(" << options << ")";
+        L_TRACE << "Game::save_options(" << _options << ")";
 
-        std::vector<std::string> settings;
-        boost::algorithm::split(settings, options, boost::is_any_of("&"), boost::token_compress_on);
+        /*
+        TODO: Fix.
 
-        for (const auto& setting : settings)
+        std::vector<std::string> options;
+        boost::algorithm::split(options, _options, boost::is_any_of("&"), boost::token_compress_on);
+
+        for (const auto& option : options)
         {
-            L_DEBUG << "setting: " << setting;
+            L_DEBUG << "option: " << option;
 
             std::vector<std::string> key_value;
-            boost::algorithm::split(key_value, setting, boost::is_any_of("="), boost::token_compress_on);
+            boost::algorithm::split(key_value, option, boost::is_any_of("="), boost::token_compress_on);
 
             if (key_value.size() != 2)
             {
-                L_WARNING << "Setting " << setting << " is incorrect.";
+                L_WARNING << "Option " << option << " is incorrect.";
 
                 continue;
             }
@@ -413,8 +416,6 @@ namespace Gecko
                 UI::getSingleton().get_preview().set_visible(visible);
             }
 
-            /*
-            // TODO: Fix.
             if (key_value[0] == "fog_of_war_type")
             {
                 auto terrain_texture = Ogre::MaterialManager::getSingleton().getByName("Terrain")
@@ -451,47 +452,53 @@ namespace Gecko
                     // get_scene_manager()->getSkyBoxNode()->setVisible(false);
                 }
             }
-            */
         }
+        */
     }
 
     void Game::load_options()
     {
-        // TODO: Read options from game file.
-        // Configuration options("../settings/options.json");
+        std::shared_ptr<Configuration> options = m_configuration->get_child("options");
 
         /*
-        // TODO: Implement.
+        TODO: Implement.
+
         Game::getSingleton().set_fog_of_war_color(
-            options.get<std::string>("fog_of_war.color.r"),
-            options.get<std::string>("fog_of_war.color.g"),
-            options.get<std::string>("fog_of_war.color.b"),
-            options.get<std::string>("fog_of_war.color.a")
+            options.get<std::string>("scene.fog_of_war.color.r"),
+            options.get<std::string>("scene.fog_of_war.color.g"),
+            options.get<std::string>("scene.fog_of_war.color.b"),
+            options.get<std::string>("scene.fog_of_war.color.a")
         );
 
         Game::getSingleton().set_fog_of_war_type(
             options.get<std::string>("fog_of_war.type")
         );
+        */
 
         Input::getSingleton().set_mouse_sensitivity(
-            options.get_vector2("input.mouse.sensitivity")
+            options->get_vector2("input.mouse.sensitivity")
         );
 
         UI::getSingleton().get_cursor().set_visible(
-            options.get_bool("ui.cursor.visible", Settings::UI::Default::CursorVisibility)
+            options->get_bool("ui.cursor.visible", Settings::UI::CursorVisibility)
         );
+
+        /*
+        TODO: Implement.
 
         UI::getSingleton().get_minimap().set_visible(
-            options.get_bool("ui.minimap.visible", Settings::UI::Default::MinimapVisibility)
+            options->get_bool("ui.minimap.visible", Settings::UI::MinimapVisibility)
         );
+        */
 
         UI::getSingleton().get_preview().set_visible(
-            options.get_bool("ui.preview.visible", Settings::UI::Default::PreviewVisibility)
+            options->get_bool("ui.preview.visible", Settings::UI::PreviewVisibility)
         );
 
-        TODO: Fix.
-        auto configuration = ConfigurationManager::getSingleton().get(configuration_name);
-        const auto fog_of_war_type = configuration->get_string("options.map.fog_of_war.type", "fuzzy");
+        /*
+        TODO: Implement.
+
+        const auto fog_of_war_type = options->get_string("scene.map.fog_of_war.type", "fuzzy");
 
         auto terrain_texture = Ogre::MaterialManager::getSingleton().getByName("Terrain_RTS")
             ->getTechnique(0)
@@ -523,26 +530,24 @@ namespace Gecko
 
     std::vector<std::string> Game::get_maps() const
     {
-        using namespace std::filesystem;
+        auto maps_path = m_configuration->get_string("options.maps.path", Settings::Game::SavesPath);
+
+        if (std::filesystem::exists(maps_path) == false)
+        {
+            return {};
+        }
 
         std::vector<std::string> maps;
 
-        // TODO: Move to configuration.
-        if (exists("../maps"))
+        for (auto directory = std::filesystem::directory_iterator(maps_path); directory != std::filesystem::directory_iterator(); ++directory)
         {
-            // TODO: Move to configuration.
-            for (auto directory = directory_iterator("../maps"); directory != directory_iterator(); ++directory)
+            if (std::filesystem::is_directory(directory->path()))
             {
-                if (is_directory(directory->path()))
+                for (auto file = std::filesystem::directory_iterator(directory->path()); file != std::filesystem::directory_iterator(); ++file)
                 {
-                    // TODO: Iterate recursively.
-                    for (auto file = directory_iterator(directory->path()); file != directory_iterator(); ++file)
+                    if (file->path().extension() == Settings::Configuration::Extension)
                     {
-                        // TODO: Move to configuration.
-                        if (file->path().extension() == ".json")
-                        {
-                            maps.emplace_back(file->path().stem().string());
-                        }
+                        maps.emplace_back(file->path().stem().string());
                     }
                 }
             }
@@ -553,20 +558,18 @@ namespace Gecko
 
     std::vector<std::string> Game::get_saves() const
     {
-        using namespace std::filesystem;
-
         auto saves_path = m_configuration->get_string("options.saves.path", Settings::Game::SavesPath);
 
-        if (exists(saves_path) == false)
+        if (std::filesystem::exists(saves_path) == false)
         {
             return {};
         }
 
         std::vector<std::string> saves;
 
-        for (auto file = directory_iterator(saves_path); file != directory_iterator(); ++file)
+        for (auto file = std::filesystem::directory_iterator(saves_path); file != std::filesystem::directory_iterator(); ++file)
         {
-            if (file->path().extension() == ".json")
+            if (file->path().extension() == Settings::Configuration::Extension)
             {
                 saves.emplace_back(file->path().stem().string());
             }

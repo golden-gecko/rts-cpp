@@ -3,9 +3,9 @@
         "by_game": true
     },
     "include": [
-        "../settings/commands.json",
-        "../settings/options.json",
-        "../settings/resources.json"
+        "../options/input.json",
+        "../options/options.json",
+        "../options/ui.json"
     ],
     "memory": {
         "components": 10,
@@ -13,7 +13,7 @@
         "objects": 10,
         "orders": 10,
         "players": 10,
-        "skills": 1200
+        "skills": 10
     },
     "name": "City",
     "scene": {
@@ -26,22 +26,15 @@
         },
         "directional": {
             "color": {
-                "b": 0.2,
-                "g": 0.2,
-                "r": 0.2
+                "b": 1.0,
+                "g": 1.0,
+                "r": 1.0
             },
             "direction": {
-                "x": -0.19,
-                "y": -0.65,
-                "z": -0.85
+                "x": -1.0,
+                "y": -1.0,
+                "z": -1.0
             }
         }
-    },
-    "ui": {
-        "font": "Arial",
-        "height": 960,
-        "layout": "../ui/ui.html",
-        "scale": 1.0,
-        "width": 1280
     }
 }

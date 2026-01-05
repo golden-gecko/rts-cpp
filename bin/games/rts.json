@@ -3,9 +3,9 @@
         "by_game": true
     },
     "include": [
-        "../settings/commands.json",
-        "../settings/options.json",
-        "../settings/resources.json"
+        "../options/input.json",
+        "../options/options.json",
+        "../options/ui.json"
     ],
     "memory": {
         "components": 1200,
@@ -19,9 +19,9 @@
     "scene": {
         "ambient": {
             "color": {
-                "b": 0.5,
-                "g": 0.5,
-                "r": 0.5
+                "b": 1.0,
+                "g": 1.0,
+                "r": 1.0
             }
         },
         "directional": {
@@ -35,23 +35,6 @@
                 "y": -1.0,
                 "z": -1.0
             }
-        }
-    },
-    "ui": {
-        "fonts": [
-            "../ui/fonts/LatoLatin-Regular.ttf",
-            "../ui/fonts/LatoLatin-Italic.ttf",
-            "../ui/fonts/LatoLatin-Bold.ttf",
-            "../ui/fonts/LatoLatin-BoldItalic.ttf"
-        ],
-        "layout": "../ui/ui.rml",
-        "templates": {
-            "configurations": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>",
-            "log": "<p class=\"{}\">{}</p>",
-            "orders": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>",
-            "resources": "<tr><td class=\"name\">{}</td><td class=\"production number\">{}</td><td class=\"max number\">{}</td><td class=\"per_second number {}\">{}</td></tr>",
-            "skills": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>",
-            "technologies": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>"
         }
     }
 }

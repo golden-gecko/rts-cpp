@@ -27,58 +27,69 @@ namespace Gecko
         auto map = MapManager::getSingleton().begin()->second;
         auto camera = map->get_camera("Minimap");
 
-        camera->get_camera()->setAutoAspectRatio(false);
-        camera->get_camera()->setAspectRatio(1.0f);
-
-        auto terrain = map->get_layer("Terrain");
-
-        if (terrain)
+        if (camera)
         {
-            auto size_x = terrain->get_size() * terrain->get_scale().x;
-            auto size_z = terrain->get_size() * terrain->get_scale().z;
+            camera->get_camera()->setAutoAspectRatio(false);
+            camera->get_camera()->setAspectRatio(1.0f);
 
-            // TODO: Move to settings.
-            // TODO: Refactor 320.0f.
-            camera->get_camera_node()->setPosition(Ogre::Vector3(size_x / 2.0f, 320.0f, size_z / 2.0f));
-            camera->get_camera_node()->lookAt(Ogre::Vector3(size_x / 2.0f, 0.0f, (size_z / 2.0f) - 0.01f), Ogre::Node::TransformSpace::TS_PARENT);
-            camera->get_camera()->setOrthoWindow(size_x, size_z);
+            auto terrain = map->get_layer("Terrain");
+
+            if (terrain)
+            {
+                auto size_x = terrain->get_size() * terrain->get_scale().x;
+                auto size_z = terrain->get_size() * terrain->get_scale().z;
+
+                // TODO: Move to settings.
+                // TODO: Refactor 320.0f.
+                camera->get_camera_node()->setPosition(Ogre::Vector3(size_x / 2.0f, 320.0f, size_z / 2.0f));
+                camera->get_camera_node()->lookAt(Ogre::Vector3(size_x / 2.0f, 0.0f, (size_z / 2.0f) - 0.01f), Ogre::Node::TransformSpace::TS_PARENT);
+                camera->get_camera()->setOrthoWindow(size_x, size_z);
+            }
+
+            renderTexture = rttTexture->getBuffer()->getRenderTarget();
+
+            viewport = renderTexture->addViewport(camera->get_camera());
+            viewport->setAutoUpdated(false);
+            viewport->setClearEveryFrame(false);
+            viewport->setOverlaysEnabled(false);
+            viewport->setShadowsEnabled(false);
+            viewport->setSkiesEnabled(false);
         }
-
-        renderTexture = rttTexture->getBuffer()->getRenderTarget();
-
-        viewport = renderTexture->addViewport(camera->get_camera());
-        viewport->setAutoUpdated(false);
-        viewport->setClearEveryFrame(false);
-        viewport->setOverlaysEnabled(false);
-        viewport->setShadowsEnabled(false);
-        viewport->setSkiesEnabled(false);
     }
 
     Minimap::~Minimap()
     {
+        Ogre::TextureManager::getSingleton().remove(rttTexture);
     }
 
     void Minimap::update()
     {
-        // TODO: Hardcoded map.
+        // TODO: Hardcoded map and camera.
         auto map = MapManager::getSingleton().begin()->second;
-        auto ui = UI::getSingletonPtr();
+        auto camera = map->get_camera("Minimap");
 
-        // Save state.
-        // auto grid_visibility = map->is_grid_visible();
-        // auto ui_visibility = ui->save_visibility();
+        if (camera)
+        {
+            // TODO: Hardcoded map.
+            auto map = MapManager::getSingleton().begin()->second;
+            auto ui = UI::getSingletonPtr();
 
-        // Disable.
-        // map->show_grid(false);
-        // ui->set_visible(false);
+            // Save state.
+            // auto grid_visibility = map->is_grid_visible();
+            // auto ui_visibility = ui->save_visibility();
 
-        // Render.
-        viewport->clear();
-        viewport->update();
+            // Disable.
+            // map->show_grid(false);
+            // ui->set_visible(false);
 
-        // Enable.
-        // map->show_grid(grid_visibility);
-        // ui->restore_visibility(ui_visibility);
+            // Render.
+            viewport->clear();
+            viewport->update();
+
+            // Enable.
+            // map->show_grid(grid_visibility);
+            // ui->restore_visibility(ui_visibility);
+        }
     }
 
     void Minimap::click(int x, int y)

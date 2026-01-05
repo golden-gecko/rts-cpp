@@ -189,7 +189,7 @@ namespace Gecko
     }
 
     UI::UI(const std::shared_ptr<Configuration>& configuration) :
-        configuration(configuration)
+        m_configuration(configuration)
     {
     }
 
@@ -782,7 +782,7 @@ namespace Gecko
         {
             std::string title = Utils::format_title(_configuration);
 
-            rml += std::vformat(configuration->get_string("ui.templates.configurations"), std::make_format_args(_configuration, title));
+            rml += std::vformat(m_configuration->get_string("templates.configurations"), std::make_format_args(_configuration, title));
         }
 
         // Update UI.
@@ -1135,7 +1135,7 @@ namespace Gecko
         {
             std::string title = Utils::format_title(order);
 
-            rml += std::vformat(configuration->get_string("ui.templates.orders"), std::make_format_args(order, title));
+            rml += std::vformat(m_configuration->get_string("templates.orders"), std::make_format_args(order, title));
         }
 
         // Update UI.
@@ -1181,7 +1181,7 @@ namespace Gecko
 
             std::string class_name = (resource.second.get_consumption() - resource.second.get_production()) > 0.0f ? "green" : "red";
 
-            rml += std::vformat(configuration->get_string("ui.templates.resources"), std::make_format_args(resource.first, current, max, class_name, ratio));
+            rml += std::vformat(m_configuration->get_string("templates.resources"), std::make_format_args(resource.first, current, max, class_name, ratio));
         }
 
         // Update UI.
@@ -1246,7 +1246,7 @@ namespace Gecko
         {
             std::string title = Utils::format_title(skill);
 
-            rml += std::vformat(configuration->get_string("ui.templates.skills"), std::make_format_args(skill, title));
+            rml += std::vformat(m_configuration->get_string("templates.skills"), std::make_format_args(skill, title));
         }
 
         // Update UI.
@@ -1372,7 +1372,7 @@ namespace Gecko
 
         context->UnloadAllDocuments();
 
-        document = context->LoadDocument(configuration->get_string("ui.layout"));
+        document = context->LoadDocument(m_configuration->get_string("layout"));
         document->Show();
 
         Rml::Debugger::Initialise(context);
@@ -1401,7 +1401,7 @@ namespace Gecko
 
     void UI::init_fonts()
     {
-        std::set<Rml::String> fonts = configuration->get_string_array<std::set<Rml::String>>("ui.fonts");
+        std::set<Rml::String> fonts = m_configuration->get_string_array<std::set<Rml::String>>("fonts");
 
         for (const Rml::String& font : fonts)
         {
@@ -1442,7 +1442,7 @@ namespace Gecko
 
             for (const std::string& line : lines)
             {
-                rml += std::vformat(configuration->get_string("ui.templates.log"), std::make_format_args(type, line));
+                rml += std::vformat(m_configuration->get_string("templates.log"), std::make_format_args(type, line));
             }
 
             log_element->SetInnerRML(rml);

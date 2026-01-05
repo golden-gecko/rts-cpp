@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     // Create global objects.
     auto component_manager = std::make_unique<Gecko::ComponentManager>();
     auto game = std::make_unique<Gecko::Game>(configuration);
-    auto input = std::make_unique<Gecko::Input>(configuration);
+    auto input = std::make_unique<Gecko::Input>(configuration->get_child("input"));
     auto job_manager = std::make_unique<Gecko::JobManager>();
     auto map_manager = std::make_unique<Gecko::MapManager>();
     auto object_manager = std::make_unique<Gecko::ObjectManager>();
@@ -42,12 +42,11 @@ int main(int argc, char* argv[])
     auto skill_manager = std::make_unique<Gecko::SkillManager>();
     auto statistics = std::make_unique<Gecko::Statistics>();
     auto technology_tree = std::make_unique<Gecko::TechnologyTree>();
-    auto ui = std::make_unique<Gecko::UI>(configuration);
+    auto ui = std::make_unique<Gecko::UI>(configuration->get_child("ui"));
 
     // Initialize game and load map.
     game->init();
-    game->load_map("tutorial");
-    game->load_options();
+    game->load_map("menu");
 
     // Initialize input system.
     input->set_render_window_handle(Gecko::Utils::get_window_handle(game->get_context()->getRenderWindow()));
@@ -58,6 +57,7 @@ int main(int argc, char* argv[])
     ui->init();
 
     // Run game.
+    game->load_options();
     game->run();
 
     // Deinitialize other system.

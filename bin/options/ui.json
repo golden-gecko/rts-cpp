@@ -1,0 +1,19 @@
+{
+    "ui": {
+        "fonts": [
+            "../ui/fonts/LatoLatin-Regular.ttf",
+            "../ui/fonts/LatoLatin-Italic.ttf",
+            "../ui/fonts/LatoLatin-Bold.ttf",
+            "../ui/fonts/LatoLatin-BoldItalic.ttf"
+        ],
+        "layout": "../ui/ui.rml",
+        "templates": {
+            "configurations": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>",
+            "log": "<p class=\"{}\">{}</p>",
+            "orders": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>",
+            "resources": "<tr><td class=\"name\">{}</td><td class=\"production number\">{}</td><td class=\"max number\">{}</td><td class=\"per_second number {}\">{}</td></tr>",
+            "skills": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>",
+            "technologies": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>"
+        }
+    }
+}

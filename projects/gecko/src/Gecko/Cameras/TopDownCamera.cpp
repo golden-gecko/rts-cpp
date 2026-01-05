@@ -50,22 +50,25 @@ namespace Gecko
         // TODO: Hardcoded layer name.
         auto layer = MapManager::getSingleton().begin()->second->get_layer("Terrain");
 
-        auto camera_position = get_position();
-        auto layer_position = layer->get_position(camera_position);
+        if (layer)
+        {
+            auto camera_position = get_position();
+            auto layer_position = layer->get_position(camera_position);
 
-        auto min_x = layer->get_scale().x;
-        auto max_x = layer->get_size() * layer->get_scale().x - layer->get_scale().x;
+            auto min_x = layer->get_scale().x;
+            auto max_x = layer->get_size() * layer->get_scale().x - layer->get_scale().x;
 
-        auto min_y = layer_position.y + Settings::Camera::MinHeight;
-        auto max_y = layer_position.y + Settings::Camera::MaxHeight;
+            auto min_y = layer_position.y + Settings::Camera::MinHeight;
+            auto max_y = layer_position.y + Settings::Camera::MaxHeight;
 
-        auto min_z = layer->get_scale().z;
-        auto max_z = layer->get_size() * layer->get_scale().z - layer->get_scale().z;
+            auto min_z = layer->get_scale().z;
+            auto max_z = layer->get_size() * layer->get_scale().z - layer->get_scale().z;
 
-        camera_position.x = std::clamp(camera_position.x, min_x, max_x);
-        camera_position.y = std::clamp(camera_position.y, min_y, max_y);
-        camera_position.z = std::clamp(camera_position.z, min_z, max_z);
+            camera_position.x = std::clamp(camera_position.x, min_x, max_x);
+            camera_position.y = std::clamp(camera_position.y, min_y, max_y);
+            camera_position.z = std::clamp(camera_position.z, min_z, max_z);
 
-        set_position(camera_position);
+            set_position(camera_position);
+        }
     }
 }

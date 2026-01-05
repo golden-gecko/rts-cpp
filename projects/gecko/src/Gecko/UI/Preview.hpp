@@ -25,6 +25,7 @@ namespace Gecko
         Ogre::Rectangle2D* rectangle { nullptr };
         Ogre::SceneNode* scene_node { nullptr };
         Ogre::MaterialPtr renderMaterial;
+        Ogre::TexturePtr* rttTexture { nullptr };
         Ogre::RenderTexture* renderTexture { nullptr };
         Ogre::Viewport* viewport { nullptr };
 

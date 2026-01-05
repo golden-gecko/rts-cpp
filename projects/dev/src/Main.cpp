@@ -611,8 +611,6 @@ std::shared_ptr<GLRenderer> create(int p1)
 }
 */
 
-// https://www.bfilipek.com/2016/03/nice-c-factory-implementation-2.html
-
 /*
 class vertex_t
 {
@@ -652,18 +650,8 @@ typedef boost::graph_traits<graph_t>::vertex_descriptor vertex_descriptor;
 typedef std::pair<int, int> Edge;
 */
 
-#include <Gecko/Configuration.hpp>
-#include <Gecko/Utils/Convert.hpp>
-
 int main()
 {
-    Gecko::Configuration c("../games/rts.json");
-
-    // Gecko::Utils::Convert::to_yaml();
-
-    // std::cout << c.to_string() << std::endl;
-    // std::cout << c.to_yaml() << std::endl;
-
     /*
     for (int i = 0; i < 40; i++)
     {

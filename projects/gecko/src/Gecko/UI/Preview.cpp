@@ -7,7 +7,7 @@ namespace Gecko
     Preview::Preview()
     {
         /*
-        Ogre::TexturePtr rttTexture = Ogre::TextureManager::getSingleton().createManual(
+        rttTexture = Ogre::TextureManager::getSingleton().createManual(
             "texture_preview",
             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
             Ogre::TEX_TYPE_2D,
@@ -66,6 +66,8 @@ namespace Gecko
         Game::getSingleton().destroy_scene_node(scene_node);
 
         delete rectangle;
+
+        Ogre::TextureManager::getSingleton().remove(rttTexture);
         */
     }
 

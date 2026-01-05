@@ -18,15 +18,6 @@
                 "path": "../cache/values"
             }
         },
-        "fog_of_war": {
-            "color": {
-                "a": 255,
-                "b": 64,
-                "g": 64,
-                "r": 64
-            },
-            "type": "fuzzy"
-        },
         "input": {
             "mouse": {
                 "sensitivity": {
@@ -35,8 +26,22 @@
                 }
             }
         },
+        "maps": {
+            "path": "../maps"
+        },
         "saves": {
             "path": "../saves"
+        },
+        "scene": {
+            "fog_of_war": {
+                "color": {
+                    "a": 255,
+                    "b": 64,
+                    "g": 64,
+                    "r": 64
+                },
+                "type": "fuzzy"
+            },
         },
         "ui": {
             "cursor": {

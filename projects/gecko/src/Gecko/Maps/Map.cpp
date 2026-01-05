@@ -144,7 +144,9 @@ namespace Gecko
 
         if (layer == m_layers.end())
         {
-            throw Exception("Map '" + get_name() + "' has no '" + name + "' layer.");
+            L_WARNING << "Map '" << get_name() << "' has no '" << name << "' layer.";
+
+            return nullptr;
         }
 
         return layer->second;
@@ -156,7 +158,9 @@ namespace Gecko
 
         if (season == m_seasons.end())
         {
-            throw Exception("Map '" + get_name() + "' has no '" + name + "' season.");
+            L_WARNING << "Map '" << get_name() << "' has no '" << name << "' season.";
+
+            return nullptr;
         }
 
         return season->second;

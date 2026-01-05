@@ -3,12 +3,17 @@
     "cameras": [
         {
             "name": "Main",
-            "type": "TopDown"
+            "type": "Free"
         }
     ],
     "creatable": {
         "by_game": true
     },
     "name": "Menu",
+    "players": [
+        {
+            "configuration": "human"
+        }
+    ],
     "type": "Map"
 }
