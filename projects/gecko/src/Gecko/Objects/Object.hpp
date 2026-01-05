@@ -169,20 +169,20 @@ namespace Gecko
         virtual void update_skills(float time);
 
         // TODO: Move to order resolver.
-        virtual order_status on_attack(Order* order, float time);
-        virtual order_status on_create(Order* order, float time);
-        virtual order_status on_destroy(Order* order, float time);
-        virtual order_status on_disable(Order* order, float time);
-        virtual order_status on_enable(Order* order, float time);
-        virtual order_status on_follow(Order* order, float time);
-        virtual order_status on_guard(Order* order, float time);
-        virtual order_status on_load(Order* order, float time);
-        virtual order_status on_move(Order* order, float time);
-        virtual order_status on_patrol(Order* order, float time);
-        virtual order_status on_rally(Order* order, float time);
-        virtual order_status on_stop(Order* order, float time);
-        virtual order_status on_unload(Order* order, float time);
-        virtual order_status on_wait(Order* order, float time);
+        virtual OrderStatus on_attack(Order* order, float time);
+        virtual OrderStatus on_create(Order* order, float time);
+        virtual OrderStatus on_destroy(Order* order, float time);
+        virtual OrderStatus on_disable(Order* order, float time);
+        virtual OrderStatus on_enable(Order* order, float time);
+        virtual OrderStatus on_follow(Order* order, float time);
+        virtual OrderStatus on_guard(Order* order, float time);
+        virtual OrderStatus on_load(Order* order, float time);
+        virtual OrderStatus on_move(Order* order, float time);
+        virtual OrderStatus on_patrol(Order* order, float time);
+        virtual OrderStatus on_rally(Order* order, float time);
+        virtual OrderStatus on_stop(Order* order, float time);
+        virtual OrderStatus on_unload(Order* order, float time);
+        virtual OrderStatus on_wait(Order* order, float time);
         // TODO: End.
 
     private:

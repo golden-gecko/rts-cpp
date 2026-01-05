@@ -189,22 +189,22 @@ namespace Gecko
         }
 
     public:
-        void set(const std::string& path, const std::shared_ptr<Configuration>& _value);
-        void set(const std::string& path, const Ogre::ColourValue& _value);
-        void set(const std::string& path, const Path& _value);
-        void set(const std::string& path, const Ogre::Vector2& _value);
-        void set(const std::string& path, const Ogre::Vector3& _value);
-        void set(const std::string& path, const std::map<std::string, float>& _value);
-        void set(const std::string& path, const std::set<std::string>& _value);
-        void set(const std::string& path, const std::vector<std::string>& _value);
+        void set(const std::string& path, const std::shared_ptr<Configuration>& value);
+        void set(const std::string& path, const Ogre::ColourValue& value);
+        void set(const std::string& path, const Path& value);
+        void set(const std::string& path, const Ogre::Vector2& value);
+        void set(const std::string& path, const Ogre::Vector3& value);
+        void set(const std::string& path, const std::map<std::string, float>& value);
+        void set(const std::string& path, const std::set<std::string>& value);
+        void set(const std::string& path, const std::vector<std::string>& value);
 
         template<typename Type>
-        void set(const std::string& path, const Type& _value)
+        void set(const std::string& path, const Type& value)
         {
             // OPTIMIZATION: If path has one segment then skip rest.
             if (path.find('.') == std::string::npos)
             {
-                m_value[path] = _value;
+                m_value[path] = value;
 
                 return;
             }
@@ -214,7 +214,7 @@ namespace Gecko
             std::ranges::reverse(segments);
 
             Json::Value new_value;
-            new_value[segments.front()] = _value;
+            new_value[segments.front()] = value;
 
             for (auto i = 1; i < segments.size(); i++)
             {

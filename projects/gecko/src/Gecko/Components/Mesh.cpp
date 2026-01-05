@@ -94,7 +94,7 @@ namespace Gecko
     void Mesh::load_from_file()
     {
         entity = Game::getSingleton().create_entity(m_configuration->get_string("mesh.name"));
-        entity->setQueryFlags(QueryFlags::QF_OBJECT);
+        entity->setQueryFlags(QueryFlags::QF_Object);
         entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
     }
 
@@ -250,7 +250,7 @@ namespace Gecko
         }
 
         entity = Game::getSingleton().create_entity(mesh_name);
-        entity->setQueryFlags(QueryFlags::QF_OBJECT);
+        entity->setQueryFlags(QueryFlags::QF_Object);
         entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
     }
 }

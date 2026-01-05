@@ -119,7 +119,7 @@ namespace Gecko
 
         m_entity = Game::getSingleton().create_entity(mesh_name);
         m_entity->setCastShadows(false);
-        m_entity->setQueryFlags(QueryFlags::QF_LAYER);
+        m_entity->setQueryFlags(QueryFlags::QF_Layer);
         m_entity->getUserObjectBindings().setUserAny(m_owner); // TODO: Set to this?
 
         // Create scene node.

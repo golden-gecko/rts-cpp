@@ -120,15 +120,12 @@ namespace Gecko
 
     void Configuration::save_cache() const
     {
-        // TODO: Create function json_to_file.
-        using namespace std::filesystem;
+        std::string value_cache_path = get_value_cache_file_path();
+        std::filesystem::path directory = std::filesystem::path(value_cache_path).parent_path();
 
-        auto value_cache_path = get_value_cache_file_path();
-        auto directory = path(value_cache_path).parent_path();
-
-        if (exists(directory) == false)
+        if (std::filesystem::exists(directory) == false)
         {
-            create_directories(directory);
+            std::filesystem::create_directories(directory);
         }
 
         Utils::json_to_file(m_cache, value_cache_path);
@@ -295,58 +292,51 @@ namespace Gecko
         set<Json::Value>(path, value->m_value);
     }
 
-    // TODO: Add tests.
-    void Configuration::set(const std::string& path, const Ogre::ColourValue& _value)
+    void Configuration::set(const std::string& path, const Ogre::ColourValue& value)
     {
-        set<decltype(Ogre::ColourValue::r)>(path + ".r", _value.r);
-        set<decltype(Ogre::ColourValue::g)>(path + ".g", _value.g);
-        set<decltype(Ogre::ColourValue::b)>(path + ".b", _value.b);
-        set<decltype(Ogre::ColourValue::a)>(path + ".a", _value.a);
+        set<decltype(Ogre::ColourValue::r)>(path + ".r", value.r);
+        set<decltype(Ogre::ColourValue::g)>(path + ".g", value.g);
+        set<decltype(Ogre::ColourValue::b)>(path + ".b", value.b);
+        set<decltype(Ogre::ColourValue::a)>(path + ".a", value.a);
     }
 
-    // TODO: Add tests.
-    void Configuration::set(const std::string& path, const Path& _value)
+    void Configuration::set(const std::string& path, const Path& value)
     {
         // TODO: Implement.
     }
 
-    // TODO: Add tests.
-    void Configuration::set(const std::string& path, const Ogre::Vector2& _value)
+    void Configuration::set(const std::string& path, const Ogre::Vector2& value)
     {
-        set<decltype(Ogre::Vector2::x)>(path + ".x", _value.x);
-        set<decltype(Ogre::Vector2::y)>(path + ".y", _value.y);
+        set<decltype(Ogre::Vector2::x)>(path + ".x", value.x);
+        set<decltype(Ogre::Vector2::y)>(path + ".y", value.y);
     }
 
-    // TODO: Add tests.
-    void Configuration::set(const std::string& path, const Ogre::Vector3& _value)
+    void Configuration::set(const std::string& path, const Ogre::Vector3& value)
     {
-        set<decltype(Ogre::Vector3::x)>(path + ".x", _value.x);
-        set<decltype(Ogre::Vector3::y)>(path + ".y", _value.y);
-        set<decltype(Ogre::Vector3::z)>(path + ".z", _value.z);
+        set<decltype(Ogre::Vector3::x)>(path + ".x", value.x);
+        set<decltype(Ogre::Vector3::y)>(path + ".y", value.y);
+        set<decltype(Ogre::Vector3::z)>(path + ".z", value.z);
     }
 
-    // TODO: Add tests.
-    void Configuration::set(const std::string& path, const std::map<std::string, float>& _value)
+    void Configuration::set(const std::string& path, const std::map<std::string, float>& value)
     {
-        for (const auto& [key, value] : _value)
+        for (const auto& [key, value] : value)
         {
-
+            // TODO: Implement.
         }
     }
 
-    // TODO: Add tests.
-    void Configuration::set(const std::string& path, const std::set<std::string>& _value)
+    void Configuration::set(const std::string& path, const std::set<std::string>& value)
     {
-        for (const auto& i : _value)
+        for (const auto& i : value)
         {
             append(path, i);
         }
     }
 
-    // TODO: Add tests.
-    void Configuration::set(const std::string& path, const std::vector<std::string>& _value)
+    void Configuration::set(const std::string& path, const std::vector<std::string>& value)
     {
-        for (const auto& i : _value)
+        for (const auto& i : value)
         {
             append(path, i);
         }

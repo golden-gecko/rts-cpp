@@ -36,7 +36,7 @@ namespace Gecko
         }
     }
 
-    enum class order_status :
+    enum class OrderStatus :
         std::uint8_t
     {
         complete,

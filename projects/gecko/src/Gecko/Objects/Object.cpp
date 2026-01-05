@@ -541,7 +541,7 @@ namespace Gecko
 
         // TODO: Optimize. Do not create on each function call.
         // Get handler for order.
-        const std::map<order_type::Value, std::function<order_status(Order*, float)>> handlers =
+        const std::map<order_type::Value, std::function<OrderStatus(Order*, float)>> handlers =
         {
             { order_type::Value::Destroy, std::bind(&Object::on_destroy, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Follow, std::bind(&Object::on_follow, this, std::placeholders::_1, std::placeholders::_2) },
@@ -566,7 +566,7 @@ namespace Gecko
         // Process order.
         switch (handler->second(order, time))
         {
-            case order_status::complete:
+            case OrderStatus::complete:
             {
                 std::stringstream stream;
 
@@ -579,7 +579,7 @@ namespace Gecko
                 break;
             }
 
-            case order_status::complete_and_retry:
+            case OrderStatus::complete_and_retry:
             {
                 std::stringstream stream;
 
@@ -593,7 +593,7 @@ namespace Gecko
                 break;
             }
 
-            case order_status::fail:
+            case OrderStatus::fail:
             {
                 std::stringstream stream;
 
@@ -606,12 +606,12 @@ namespace Gecko
                 break;
             }
 
-            case order_status::in_progress:
+            case OrderStatus::in_progress:
             {
                 break;
             }
 
-            case order_status::retry:
+            case OrderStatus::retry:
             {
                 if (order->has_reached_max_attempts_to_complete())
                 {
@@ -664,76 +664,76 @@ namespace Gecko
         }
     }
 
-    order_status Object::on_attack(Order* order, float time)
+    OrderStatus Object::on_attack(Order* order, float time)
     {
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_create(Order* order, float time)
+    OrderStatus Object::on_create(Order* order, float time)
     {
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_destroy(Order* order, float time)
+    OrderStatus Object::on_destroy(Order* order, float time)
     {
         ObjectManager::getSingleton().destroy(get_id());
 
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_disable(Order* order, float time)
+    OrderStatus Object::on_disable(Order* order, float time)
     {
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_enable(Order* order, float time)
+    OrderStatus Object::on_enable(Order* order, float time)
     {
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_follow(Order* order, float time)
+    OrderStatus Object::on_follow(Order* order, float time)
     {
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_guard(Order* order, float time)
+    OrderStatus Object::on_guard(Order* order, float time)
     {
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_load(Order* order, float time)
+    OrderStatus Object::on_load(Order* order, float time)
     {
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_move(Order* order, float time)
+    OrderStatus Object::on_move(Order* order, float time)
     {
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_patrol(Order* order, float time)
+    OrderStatus Object::on_patrol(Order* order, float time)
     {
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_rally(Order* order, float time)
+    OrderStatus Object::on_rally(Order* order, float time)
     {
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_stop(Order* order, float time)
+    OrderStatus Object::on_stop(Order* order, float time)
     {
         get_orders()->remove_all_orders();
 
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_unload(Order* order, float time)
+    OrderStatus Object::on_unload(Order* order, float time)
     {
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Object::on_wait(Order* order, float time)
+    OrderStatus Object::on_wait(Order* order, float time)
     {
         auto wait_order = dynamic_cast<OrderWait*>(order);
 
@@ -741,15 +741,15 @@ namespace Gecko
         {
             L_WARNING << "Order not exists or has invalid type.";
 
-            return order_status::fail;
+            return OrderStatus::fail;
         }
 
         if (wait_order->get_wait_timer().update(time))
         {
-            return order_status::complete;
+            return OrderStatus::complete;
         }
 
-        return order_status::in_progress;
+        return OrderStatus::in_progress;
     }
 
     void Object::create_selection_mesh()

@@ -28,7 +28,7 @@ namespace Gecko
         return map;
     }
 
-    order_status Vehicle::on_attack(Order* order, float time)
+    OrderStatus Vehicle::on_attack(Order* order, float time)
     {
         // Get order.
         auto attack_order = dynamic_cast<OrderAttack*>(order);
@@ -37,17 +37,17 @@ namespace Gecko
         {
             L_WARNING << "Order not exists or has invalid type.";
 
-            return order_status::fail;
+            return OrderStatus::fail;
         }
 
         // Find weapons and assign target to them.
         // TODO: Implement.
         // for (const auto& i : *(get_components()))
 
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Vehicle::on_load(Order* order, float time)
+    OrderStatus Vehicle::on_load(Order* order, float time)
     {
         // Get order.
         auto load_order = dynamic_cast<OrderLoad*>(order);
@@ -56,7 +56,7 @@ namespace Gecko
         {
             L_WARNING << "Order not exists or has invalid type.";
 
-            return order_status::fail;
+            return OrderStatus::fail;
         }
 
         // Check if target exists.
@@ -66,7 +66,7 @@ namespace Gecko
         {
             L_WARNING << "Object " << load_order->get_target_id() << " does not exist.";
 
-            return order_status::fail;
+            return OrderStatus::fail;
         }
 
         // Check for distance to target object.
@@ -74,7 +74,7 @@ namespace Gecko
         {
             L_WARNING << "Object " << load_order->get_target_id() << " is too far to load.";
 
-            return order_status::fail;
+            return OrderStatus::fail;
         }
 
         // Check if target has enough resources.
@@ -94,7 +94,7 @@ namespace Gecko
         {
             L_WARNING << capacity_available_to_fill << " " << resource_name << " is not enough to load.";
 
-            return order_status::retry;
+            return OrderStatus::retry;
         }
 
         // Load resource.
@@ -102,10 +102,10 @@ namespace Gecko
 
         L_DEBUG << "Ordered: " << resource_ordered << ", available: " << resource_available_to_load << ", capacity:" << capacity_available_to_fill;
 
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 
-    order_status Vehicle::on_move(Order* order, float time)
+    OrderStatus Vehicle::on_move(Order* order, float time)
     {
         auto move_order = dynamic_cast<OrderMove*>(order);
 
@@ -113,7 +113,7 @@ namespace Gecko
         {
             L_WARNING << "Order not exists or has invalid type.";
 
-            return order_status::fail;
+            return OrderStatus::fail;
         }
 
         // Is order completed?
@@ -138,14 +138,14 @@ namespace Gecko
                 {
                     L_WARNING << "Cannot move. Path from " << position << " to " << target_position << " is empty.";
 
-                    return order_status::complete;
+                    return OrderStatus::complete;
                 }
             }
             else
             {
                 L_WARNING << "Cannot move. Path from " << position << " to " << target_position << " does not exist.";
 
-                return order_status::retry;
+                return OrderStatus::retry;
             }
 
             move_order->get_path().set_points(points.value());
@@ -179,7 +179,7 @@ namespace Gecko
 
             if (current_index != next_index && navigation_layer->get_data(next_index.x, next_index.z) > 0)
             {
-                return order_status::in_progress;
+                return OrderStatus::in_progress;
             }
             else
             {
@@ -195,14 +195,14 @@ namespace Gecko
 
             if (move_order->get_points().empty())
             {
-                return order_status::complete;
+                return OrderStatus::complete;
             }
         }
 
-        return order_status::in_progress;
+        return OrderStatus::in_progress;
     }
 
-    order_status Vehicle::on_unload(Order* order, float time)
+    OrderStatus Vehicle::on_unload(Order* order, float time)
     {
         // Get order.
         auto unload_order = dynamic_cast<OrderUnload*>(order);
@@ -211,7 +211,7 @@ namespace Gecko
         {
             L_WARNING << "Order not exists or has invalid type.";
 
-            return order_status::fail;
+            return OrderStatus::fail;
         }
 
         // Check if target exists.
@@ -221,7 +221,7 @@ namespace Gecko
         {
             L_WARNING << "Object " << unload_order->get_target_id() << " does not exist.";
 
-            return order_status::fail;
+            return OrderStatus::fail;
         }
 
         // Check for distance to target object.
@@ -229,7 +229,7 @@ namespace Gecko
         {
             L_WARNING << "Object " << unload_order->get_target_id() << " is too far to unload.";
 
-            return order_status::fail;
+            return OrderStatus::fail;
         }
 
         // Check if target has enough storage.
@@ -249,7 +249,7 @@ namespace Gecko
         {
             L_WARNING << capacity_available_to_fill << " " << resource_name << " is not enough to unload.";
 
-            return order_status::retry;
+            return OrderStatus::retry;
         }
 
         // Unload resource.
@@ -257,6 +257,6 @@ namespace Gecko
 
         L_DEBUG << "Ordered: " << resource_ordered << ", available: " << resource_available_to_unload << ", capacity:" << capacity_available_to_fill;
 
-        return order_status::complete;
+        return OrderStatus::complete;
     }
 }

@@ -219,13 +219,13 @@ namespace Gecko::Utils::Raycast
 
     std::optional<std::pair<Layer*, Ogre::Vector3>> to_layer(const Ogre::Ray& ray)
     {
-        auto result = from_point(ray, QueryFlags::QF_LAYER);
+        auto result = from_point(ray, QueryFlags::QF_Layer);
 
         static auto m_pray_scene_query = Game::getSingleton().create_ray_scene_query(ray);
 
         m_pray_scene_query->setRay(ray);
         m_pray_scene_query->setSortByDistance(true);
-        m_pray_scene_query->setQueryMask(QueryFlags::QF_LAYER);
+        m_pray_scene_query->setQueryMask(QueryFlags::QF_Layer);
 
         auto& query_result = m_pray_scene_query->execute();
 
@@ -348,7 +348,7 @@ namespace Gecko::Utils::Raycast
 
         m_pray_scene_query->setRay(ray);
         m_pray_scene_query->setSortByDistance(true);
-        m_pray_scene_query->setQueryMask(QueryFlags::QF_OBJECT);
+        m_pray_scene_query->setQueryMask(QueryFlags::QF_Object);
 
         auto& query_result = m_pray_scene_query->execute();
 
@@ -465,6 +465,6 @@ namespace Gecko::Utils::Raycast
 
     std::set<Id> to_objects(const Ogre::Vector2& start, const Ogre::Vector2& end)
     {
-        return from_plane(start, end, QueryFlags::QF_OBJECT);
+        return from_plane(start, end, QueryFlags::QF_Object);
     }
 }

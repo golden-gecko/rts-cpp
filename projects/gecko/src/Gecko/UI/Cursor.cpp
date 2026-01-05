@@ -15,7 +15,7 @@ namespace Gecko
     Cursor::Cursor()
     {
         square = Game::getSingleton().create_manual_object();
-        square->setQueryFlags(QueryFlags::QF_CURSOR);
+        square->setQueryFlags(QueryFlags::QF_Cursor);
 
         scene_node = Game::getSingleton().create_scene_node();
         scene_node->attachObject(square);
