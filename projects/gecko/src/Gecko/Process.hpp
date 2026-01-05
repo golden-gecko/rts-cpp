@@ -5,7 +5,8 @@
 
 namespace Gecko
 {
-    class Process : public Serializable
+    class Process :
+        public Serializable
     {
     public:
         explicit Process(const std::string& name);

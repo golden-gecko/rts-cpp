@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class HexCenterPosition : public PositionValidator
+    class HexCenterPosition :
+        public PositionValidator
     {
     private:
         using base_type = PositionValidator;

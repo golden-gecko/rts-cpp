@@ -6,7 +6,8 @@
 
 namespace Gecko
 {
-    class Processes : public Serializable
+    class Processes :
+        public Serializable
     {
     public:
         typedef std::map<std::string, Process> Map;

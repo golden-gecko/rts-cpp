@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class FollowRoadsSearch : public Search
+    class FollowRoadsSearch :
+        public Search
     {
     private:
         using base_type = Search;

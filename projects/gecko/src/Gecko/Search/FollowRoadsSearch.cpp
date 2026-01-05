@@ -65,7 +65,8 @@ namespace Gecko
             //Coordinate( 1,  1)
         //};
 
-        enum class PathPointSnapType : std::uint8_t
+        enum class PathPointSnapType :
+            std::uint8_t
         {
             Center,
             Road

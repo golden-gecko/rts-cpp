@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class SquareCenterPosition : public PositionValidator
+    class SquareCenterPosition :
+        public PositionValidator
     {
     private:
         using base_type = PositionValidator;

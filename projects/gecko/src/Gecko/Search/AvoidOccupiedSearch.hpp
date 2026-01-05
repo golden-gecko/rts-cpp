@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class AvoidOccupiedSearch : public Search
+    class AvoidOccupiedSearch :
+        public Search
     {
     private:
         using base_type = Search;

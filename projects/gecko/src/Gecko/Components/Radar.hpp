@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Radar : public Component
+    class Radar :
+        public Component
     {
     private:
         using base_type = Component;

@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Armour : public Component
+    class Armour :
+        public Component
     {
     private:
         using base_type = Component;

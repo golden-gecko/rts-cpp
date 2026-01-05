@@ -2,7 +2,8 @@
 
 namespace Gecko
 {
-    class Statistics : public Ogre::Singleton<Statistics>
+    class Statistics :
+        public Ogre::Singleton<Statistics>
     {
     public:
         void add(const std::string& name, float value);

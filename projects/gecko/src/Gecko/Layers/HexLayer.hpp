@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class HexLayer : public Layer
+    class HexLayer :
+        public Layer
     {
     };
 }

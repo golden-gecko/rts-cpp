@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class ConfigurationManager : public Ogre::Singleton<ConfigurationManager>
+    class ConfigurationManager :
+        public Ogre::Singleton<ConfigurationManager>
     {
     public:
         void parse_configuration_files();

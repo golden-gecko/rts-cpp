@@ -66,7 +66,13 @@ int main(int argc, char* argv[])
     game->load_options();
     game->run();
 
-    // TODO: Free memory here.
+    // Deinitialize other system.
+    input->deinit();
+    technology_tree->deinit();
+    ui->deinit();
+
+    // Denitialize game.
+    game->deinit();
 
     return 0;
 }

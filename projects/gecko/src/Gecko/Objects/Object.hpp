@@ -9,7 +9,8 @@
 
 namespace Gecko
 {
-    class Object : public Item
+    class Object :
+        public Item
     {
     private:
         using base_type = Item;

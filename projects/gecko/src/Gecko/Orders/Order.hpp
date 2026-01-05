@@ -7,7 +7,8 @@ namespace Gecko
 {
     namespace order_type
     {
-        enum class Value : std::int8_t
+        enum class Value :
+            std::int8_t
         {
             None,
 
@@ -35,7 +36,8 @@ namespace Gecko
         }
     }
 
-    enum class order_status : std::uint8_t
+    enum class order_status :
+        std::uint8_t
     {
         complete,
         complete_and_retry,
@@ -44,7 +46,8 @@ namespace Gecko
         retry
     };
 
-    class Order : public Item
+    class Order :
+        public Item
     {
     private:
         using base_type = Item;

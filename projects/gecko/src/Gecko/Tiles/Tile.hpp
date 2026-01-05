@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Tile : public Initializable
+    class Tile :
+        public Initializable
     {
     public:
         void set_owner(Layer* owner)

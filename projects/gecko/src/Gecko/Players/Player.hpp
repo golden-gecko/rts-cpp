@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Player : public Item
+    class Player :
+        public Item
     {
     private:
         using base_type = Item;

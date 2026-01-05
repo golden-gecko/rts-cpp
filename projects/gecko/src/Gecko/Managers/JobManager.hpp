@@ -14,7 +14,8 @@ namespace Gecko
         explicit Request(const Id& requester_id, const std::string& resource_name, float resource_value, float resource_priority);
     };
 
-    class JobManager : public Ogre::Singleton<JobManager>
+    class JobManager :
+        public Ogre::Singleton<JobManager>
     {
     public:
         void add_in(const Id& requester, const std::string& resource_name, float resource_value, float resource_priority);

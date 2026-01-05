@@ -49,7 +49,8 @@ namespace
         std::uint16_t id = 0;
     };
 
-    class Car : public Object
+    class Car :
+        public Object
     {
     private:
         using base_type = Object;
@@ -81,7 +82,8 @@ namespace
         }
     };
 
-    class Tank : public Object
+    class Tank :
+        public Object
     {
     private:
         using base_type = Object;

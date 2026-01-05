@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Debug : public Component
+    class Debug :
+        public Component
     {
     private:
         using base_type = Component;

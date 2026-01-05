@@ -5,7 +5,8 @@
 
 namespace Gecko
 {
-    class Orders : public Serializable
+    class Orders :
+        public Serializable
     {
     public:
         typedef std::set<order_type::Value> Available;

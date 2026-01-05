@@ -6,7 +6,8 @@
 
 namespace Gecko
 {
-    class SquareLayer : public Layer
+    class SquareLayer :
+        public Layer
     {
     private:
         using base_type = Layer;

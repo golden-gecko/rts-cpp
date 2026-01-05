@@ -4,10 +4,12 @@
 
 namespace Gecko
 {
-    class Diplomacy : public Serializable
+    class Diplomacy :
+        public Serializable
     {
     public:
-        enum class State : std::int8_t
+        enum class State :
+            std::int8_t
         {
             Ally,
             Enemy

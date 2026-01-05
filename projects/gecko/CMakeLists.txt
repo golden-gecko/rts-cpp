@@ -10,6 +10,7 @@ file(GLOB_RECURSE BINARY_FILES
     ${CMAKE_SOURCE_DIR}/bin/*.jpg
     ${CMAKE_SOURCE_DIR}/bin/*.json
     ${CMAKE_SOURCE_DIR}/bin/*.material
+    ${CMAKE_SOURCE_DIR}/bin/*.particle
     ${CMAKE_SOURCE_DIR}/bin/*.png
     ${CMAKE_SOURCE_DIR}/bin/*.rcss
     ${CMAKE_SOURCE_DIR}/bin/*.rml

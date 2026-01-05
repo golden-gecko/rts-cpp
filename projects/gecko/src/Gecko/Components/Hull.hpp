@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Hull : public Mesh
+    class Hull :
+        public Mesh
     {
     private:
         using base_type = Mesh;

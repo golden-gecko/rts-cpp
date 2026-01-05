@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class RoadPosition : public PositionValidator
+    class RoadPosition :
+        public PositionValidator
     {
     private:
         using base_type = PositionValidator;

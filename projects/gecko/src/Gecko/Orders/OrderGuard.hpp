@@ -5,7 +5,8 @@
 
 namespace Gecko
 {
-    class OrderGuard : public Order
+    class OrderGuard :
+        public Order
     {
     private:
         using base_type = Order;

@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Factory : public Object
+    class Factory :
+        public Object
     {
     private:
         using base_type = Object;

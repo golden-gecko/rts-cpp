@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Configurations : public Serializable
+    class Configurations :
+        public Serializable
     {
     public:
         typedef std::set<std::string> Available;

@@ -2,7 +2,8 @@
 
 namespace Gecko::Command
 {
-    enum class Value : std::uint8_t
+    enum class Value :
+        std::uint8_t
     {
         Assign_To_Group_0,
         Assign_To_Group_1,

@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class MinimapCamera : public Camera
+    class MinimapCamera :
+        public Camera
     {
     private:
         using base_type = Camera;

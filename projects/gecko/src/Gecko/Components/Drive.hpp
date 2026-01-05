@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Drive : public Mesh
+    class Drive :
+        public Mesh
     {
     private:
         using base_type = Mesh;

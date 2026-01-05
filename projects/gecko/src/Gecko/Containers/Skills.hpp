@@ -5,7 +5,8 @@
 namespace Gecko
 {
     // TODO: Refactor to serialize from map instead of array, to allow overriding.
-    class Skills : public Serializable
+    class Skills :
+        public Serializable
     {
     public:
         typedef std::vector<Skill*> Items;

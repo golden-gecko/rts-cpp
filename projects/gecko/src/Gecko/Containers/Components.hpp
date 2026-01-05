@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Components : public Serializable
+    class Components :
+        public Serializable
     {
     public:
         typedef std::vector<Component*> Items;

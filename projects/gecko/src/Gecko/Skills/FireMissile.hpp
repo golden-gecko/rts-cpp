@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class FireMissile : public Skill
+    class FireMissile :
+        public Skill
     {
     private:
         using base_type = Skill;

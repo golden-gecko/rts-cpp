@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Shield : public Component
+    class Shield :
+        public Component
     {
     private:
         using base_type = Component;

@@ -5,7 +5,8 @@
 
 namespace Gecko
 {
-    class Component : public Item
+    class Component :
+        public Item
     {
     private:
         using base_type = Item;

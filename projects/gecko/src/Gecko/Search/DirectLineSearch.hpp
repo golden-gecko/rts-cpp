@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class DirectLineSearch : public Search
+    class DirectLineSearch :
+        public Search
     {
     private:
         using base_type = Search;

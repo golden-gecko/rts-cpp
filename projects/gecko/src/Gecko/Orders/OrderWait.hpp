@@ -5,7 +5,8 @@
 
 namespace Gecko
 {
-    class OrderWait : public Order
+    class OrderWait :
+        public Order
     {
     private:
         using base_type = Order;

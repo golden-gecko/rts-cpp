@@ -12,7 +12,8 @@
 namespace Gecko
 {
     Layer::Layer(Map* owner, const std::string& name, const Configuration& configuration) :
-        m_owner(owner), m_name(name)
+        m_owner(owner),
+        m_name(name)
     {
         deserialize_position_validator(configuration);
         deserialize_search(configuration);

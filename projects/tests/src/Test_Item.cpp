@@ -5,7 +5,8 @@
 
 namespace
 {
-    class Character : public Gecko::Item
+    class Character :
+        public Gecko::Item
     {
     public:
         void update(float time) override

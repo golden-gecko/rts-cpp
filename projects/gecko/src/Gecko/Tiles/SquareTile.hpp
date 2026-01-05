@@ -6,7 +6,8 @@
 
 namespace Gecko
 {
-    class SquareTile : public Tile
+    class SquareTile :
+        public Tile
     {
     public:
         void init() override;

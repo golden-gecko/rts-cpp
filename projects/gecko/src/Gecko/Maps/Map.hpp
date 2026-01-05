@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Map : public Item
+    class Map :
+        public Item
     {
     private:
         using base_type = Item;

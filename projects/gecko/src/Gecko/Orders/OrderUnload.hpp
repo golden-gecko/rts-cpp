@@ -5,7 +5,8 @@
 
 namespace Gecko
 {
-    class OrderUnload : public Order
+    class OrderUnload :
+        public Order
     {
     private:
         using base_type = Order;

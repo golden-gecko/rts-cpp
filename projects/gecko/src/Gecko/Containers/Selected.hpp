@@ -5,7 +5,8 @@
 
 namespace Gecko
 {
-    class Selected : public Serializable
+    class Selected :
+        public Serializable
     {
     public:
         typedef std::set<Id> Items;

@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Layers : public Serializable
+    class Layers :
+        public Serializable
     {
     public:
         typedef std::set<std::string> Items;

@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Missile : public Object
+    class Missile :
+        public Object
     {
     private:
         using base_type = Object;

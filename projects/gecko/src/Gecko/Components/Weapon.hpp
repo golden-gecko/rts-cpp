@@ -6,7 +6,8 @@
 
 namespace Gecko
 {
-    class Weapon : public Mesh
+    class Weapon :
+        public Mesh
     {
     private:
         using base_type = Mesh;

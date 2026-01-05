@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Timer : public Serializable
+    class Timer :
+        public Serializable
     {
     public:
         explicit Timer(float maximal = std::numeric_limits<float>::max());

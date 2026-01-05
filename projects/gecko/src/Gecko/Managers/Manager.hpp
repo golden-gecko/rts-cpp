@@ -24,7 +24,8 @@ namespace Gecko
     };
 
     template<typename BaseType, typename Type>
-    class Collection : public CollectionBase<BaseType>
+    class Collection :
+        public CollectionBase<BaseType>
     {
     public:
         explicit Collection(std::function<BaseType* (Type*)> factory) :

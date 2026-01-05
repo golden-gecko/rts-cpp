@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Storage : public Component
+    class Storage :
+        public Component
     {
     private:
         using base_type = Component;

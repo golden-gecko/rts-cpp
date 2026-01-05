@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class HexTile : public Tile
+    class HexTile :
+        public Tile
     {
     };
 }

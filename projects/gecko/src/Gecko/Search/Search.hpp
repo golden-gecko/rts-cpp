@@ -8,7 +8,8 @@ namespace Gecko
     class Search
     {
     public:
-        enum class Type : std::uint8_t
+        enum class Type :
+            std::uint8_t
         {
             AvoidOccupied,
             DirectLine,

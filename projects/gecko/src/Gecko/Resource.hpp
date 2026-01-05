@@ -5,7 +5,8 @@
 
 namespace Gecko
 {
-    class Resource : public Serializable
+    class Resource :
+        public Serializable
     {
     public:
         Resource(const std::string& name);

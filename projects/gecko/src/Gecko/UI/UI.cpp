@@ -221,7 +221,7 @@ namespace Gecko
             return;
         }
 
-        auto window = Game::getSingleton().get_window(Gecko::Settings::Window::MainName);
+        auto window = Game::getSingleton().get_window(Settings::Window::MainName);
 
         if (window == nullptr)
         {

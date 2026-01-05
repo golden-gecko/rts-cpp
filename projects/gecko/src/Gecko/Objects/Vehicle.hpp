@@ -6,7 +6,8 @@
 
 namespace Gecko
 {
-    class Vehicle : public Object
+    class Vehicle :
+        public Object
     {
     private:
         using base_type = Object;

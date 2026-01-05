@@ -6,7 +6,8 @@
 namespace Gecko
 {
     // TODO: Add costs.
-    class Skill : public Item
+    class Skill :
+        public Item
     {
     private:
         using base_type = Item;

@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class TopDownCamera : public Camera
+    class TopDownCamera :
+        public Camera
     {
     private:
         using base_type = Camera;

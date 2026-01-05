@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class Repair : public Skill
+    class Repair :
+        public Skill
     {
     private:
         using base_type = Skill;

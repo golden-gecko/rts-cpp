@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class ObjectFollowCamera : public Camera
+    class ObjectFollowCamera :
+        public Camera
     {
     private:
         using base_type = Camera;

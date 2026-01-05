@@ -4,7 +4,8 @@
 
 namespace Gecko
 {
-    class OrderRally : public Order
+    class OrderRally :
+        public Order
     {
     private:
         using base_type = Order;
