@@ -5,6 +5,14 @@
 
 namespace Gecko
 {
+    class ApplicationContext :
+        public OgreBites::ApplicationContext
+    {
+    public:
+        // From OgreBites::ApplicationContext.
+        void windowResized(Ogre::RenderWindow* rw) override;
+    };
+
     class Game :
         public Ogre::Singleton<Game>,
         public Ogre::RenderQueueListener,
@@ -48,6 +56,11 @@ namespace Gecko
         void load_options();
 
     public:
+        std::shared_ptr<ApplicationContext> get_context() const
+        {
+            return m_context;
+        }
+
         Player* get_active_player() const;
 
         auto get_active_player_id() const
@@ -62,7 +75,7 @@ namespace Gecko
 
         auto get_frame_number() const
         {
-            return root->getNextFrameNumber() - 1;
+            return m_context->getRoot()->getNextFrameNumber() - 1;
         }
 
         std::vector<std::string> get_maps() const;
@@ -72,33 +85,16 @@ namespace Gecko
             return name;
         }
 
-        auto get_root() const
+        Ogre::Root* get_root() const
         {
-            return root;
+            return m_context->getRoot();
         }
 
         std::vector<std::string> get_saves() const;
 
-        auto get_scene_manager() const
+        Ogre::SceneManager* get_scene_manager() const
         {
             return scene_manager;
-        }
-
-        std::shared_ptr<Window> get_window(const std::string& name) const
-        {
-            auto window = windows.find(name);
-
-            if (window == windows.end())
-            {
-                return nullptr;
-            }
-
-            return window->second;
-        }
-
-        const auto& get_windows() const
-        {
-            return windows;
         }
 
     public:
@@ -113,39 +109,27 @@ namespace Gecko
         virtual void init_skills(std::size_t max_size);
 
     private:
-        std::shared_ptr<Configuration> m_configuration;
+        std::shared_ptr<ApplicationContext> m_context;
 
-        bool active = true;
+        std::shared_ptr<Configuration> m_configuration;
 
         std::string name;
 
         Id active_map_id;
         Id active_player_id;
 
-    // TODO: Make private.
-    public:
-        OgreBites::ApplicationContext* context = nullptr;
-
     private:
-        Ogre::Root* root = nullptr;
-
-        OgreBites::SGTechniqueResolverListener* material_listener = nullptr;
-
         Ogre::SceneManager* scene_manager = nullptr;
 
         Ogre::Light* light = nullptr;
         Ogre::SceneNode* light_scene_node = nullptr;
 
-        std::map<std::string, std::shared_ptr<Window>> windows;
-
         void init_meshes();
         void init_root();
         void init_scene();
-        void init_windows();
 
         void deinit_maps();
         void deinit_root();
         void deinit_scene();
-        void deinit_windows();
     };
 }

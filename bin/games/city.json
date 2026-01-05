@@ -43,16 +43,5 @@
         "layout": "../ui/ui.html",
         "scale": 1.0,
         "width": 1280
-    },
-    "windows": [
-        {
-            "camera": "Main",
-            "fullscreen": false,
-            "height": 960,
-            "left": 10,
-            "name": "Main",
-            "top": 40,
-            "width": 1280
-        }
-    ]
+    }
 }

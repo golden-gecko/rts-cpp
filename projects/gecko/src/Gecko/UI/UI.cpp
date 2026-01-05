@@ -26,7 +26,6 @@
 #include "Gecko/UI/SelectionBox.hpp"
 #include "Gecko/UI/SystemInterface.hpp"
 #include "Gecko/Utils/Convert.hpp"
-#include "Gecko/Window.hpp"
 
 Gecko::UI* Ogre::Singleton<Gecko::UI>::msSingleton = nullptr;
 
@@ -123,15 +122,11 @@ namespace Gecko
 
                 Json::Value info;
 
-                if (game.get_windows().empty() == false)
-                {
-                    const auto& window_statistics = game.get_windows().begin()->second->get_statistics();
+                const Ogre::RenderTarget::FrameStats& window_statistics = Game::getSingleton().get_context()->getRenderWindow()->getStatistics();
 
-                    info["Average FPS"] = Utils::Convert::to_string(window_statistics.avgFPS, 2);
-                    info["Last FPS"] = Utils::Convert::to_string(window_statistics.lastFPS, 2);
-                    info["Triangles"] = window_statistics.triangleCount;
-                }
-
+                info["Average FPS"] = Utils::Convert::to_string(window_statistics.avgFPS, 2);
+                info["Last FPS"] = Utils::Convert::to_string(window_statistics.lastFPS, 2);
+                info["Triangles"] = window_statistics.triangleCount;
                 info["Active player ID"] = Game::getSingleton().get_active_player_id();
                 info["Cursor"] = get_cursor().get_position().to_string();
                 info["Maps"] = MapManager::getSingleton().size();
@@ -221,14 +216,7 @@ namespace Gecko
             return;
         }
 
-        auto window = Game::getSingleton().get_window(Settings::Window::MainName);
-
-        if (window == nullptr)
-        {
-            return;
-        }
-
-        auto render_window = window->get_render_window();
+        auto render_window = Game::getSingleton().get_context()->getRenderWindow();
 
         if (render_window == nullptr)
         {

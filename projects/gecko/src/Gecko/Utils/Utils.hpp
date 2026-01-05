@@ -19,6 +19,8 @@ namespace Gecko::Utils
 
     std::optional<Ogre::Vector2> get_screenspace_coords(const Ogre::Entity& object, Ogre::Camera* camera, bool convert);
 
+    std::size_t get_window_handle(Ogre::RenderWindow* render_window);
+
     void rotate_node_towards_position(Ogre::SceneNode& scene_node, const Ogre::Vector3& position, float time);
 
     bool is_close_enough(const Ogre::Vector3& position, const Ogre::Vector3& target, float distance = Settings::Game::DistanceComparisionMinValue);

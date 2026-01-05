@@ -8,7 +8,6 @@
 #include "Gecko/Maps/Map.hpp"
 #include "Gecko/Settings.hpp"
 #include "Gecko/UI/UI.hpp"
-#include "Gecko/Window.hpp"
 
 namespace Gecko
 {

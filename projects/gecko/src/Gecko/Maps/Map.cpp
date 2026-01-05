@@ -15,7 +15,6 @@
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/Players/Player.hpp"
 #include "Gecko/Season.hpp"
-#include "Gecko/Window.hpp"
 
 namespace Gecko
 {
@@ -211,6 +210,9 @@ namespace Gecko
                 throw Exception("Unknown camera type '" + camera_type + "'.");
             }
         }
+
+        // TODO: Move to configuration.
+        Game::getSingleton().get_context()->getRenderWindow()->addViewport(get_camera(Settings::Camera::MainName)->get_camera())->setBackgroundColour(Ogre::ColourValue(0.25f, 0.5f, 0.75f));
     }
 
     void Map::init_layers()

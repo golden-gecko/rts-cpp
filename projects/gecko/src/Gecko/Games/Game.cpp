@@ -47,12 +47,30 @@
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Mesh.hpp"
 #include "Gecko/Utils/Time.hpp"
-#include "Gecko/Window.hpp"
 
 Gecko::Game* Ogre::Singleton<Gecko::Game>::msSingleton = nullptr;
 
 namespace Gecko
 {
+    void ApplicationContext::windowResized(Ogre::RenderWindow* rw)
+    {
+        OgreBites::ApplicationContext::windowResized(rw);
+
+        unsigned int width, height;
+        int top, left;
+
+        rw->getMetrics(width, height, left, top);
+
+        for (unsigned short i = 0; i < rw->getNumViewports(); i++)
+        {
+            rw->getViewport(i)->getCamera()->setAspectRatio(
+                static_cast<Ogre::Real>(rw->getViewport(i)->getActualWidth()) / static_cast<Ogre::Real>(rw->getViewport(i)->getActualHeight())
+            );
+        }
+
+        Input::getSingleton().set_window_size(static_cast<int>(width), static_cast<int>(height));
+    }
+
     void Game::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
     {
         UI::getSingleton().render(queueGroupId, cameraName, skipThisInvocation);
@@ -66,7 +84,6 @@ namespace Gecko
     void Game::init()
     {
         init_root();
-        init_windows();
         init_scene();
         init_meshes();
 
@@ -81,7 +98,6 @@ namespace Gecko
     void Game::deinit()
     {
         deinit_scene();
-        deinit_windows();
         deinit_root();
     }
 
@@ -113,30 +129,6 @@ namespace Gecko
         }
 
         UI::getSingleton().set_configurations(configurations);
-
-        auto windows_configuration = m_configuration->get_child("windows");
-
-        for (auto i = windows_configuration->begin(); i != windows_configuration->end(); i++)
-        {
-            auto window_configuration = std::make_shared<Configuration>(*i);
-            auto window_name = window_configuration->get_string("name");
-            auto window = Game::getSingleton().get_window(window_name);
-
-            if (window == nullptr)
-            {
-                throw Exception("Window '" + window_name + "' not found.");
-            }
-
-            auto camera_name = i->get("camera", "").asString();
-            auto camera = map->get_camera(camera_name);
-
-            if (camera == nullptr)
-            {
-                throw Exception("Camera '" + camera_name + "' not found.");
-            }
-
-            window->set_camera(camera);
-        }
     }
 
     void Game::load_save(const std::string& save_name)
@@ -157,32 +149,33 @@ namespace Gecko
 
     void Game::run()
     {
-        auto previous_time = Utils::Time::get();
-        auto elasped_time = 0.0f;
+        // HACK: Must be called once before the main loop.
+        m_context->windowResized(m_context->getRenderWindow());
 
-        while (active)
+        Gecko::Utils::Time::Value previous_time = Utils::Time::get();
+        float elasped_time = 0.0f;
+
+        while (m_context->getRoot()->endRenderingQueued() == false)
         {
-            auto current_time = Utils::Time::get();
-            auto frame_time = Utils::Time::get_duration(previous_time, current_time);
+            Gecko::Utils::Time::Value current_time = Utils::Time::get();
+            float frame_time = Utils::Time::get_duration(previous_time, current_time);
 
             elasped_time += frame_time;
 
             if (elasped_time >= Settings::Game::FrameTime)
             {
+                m_context->pollEvents();
+
                 update_input(Settings::Game::FrameTime);
                 update(Settings::Game::FrameTime);
 
-                root->renderOneFrame();
+                m_context->getRoot()->renderOneFrame();
 
                 elasped_time -= std::floor((elasped_time / Settings::Game::FrameTime)) * Settings::Game::FrameTime;
             }
 
             previous_time = current_time;
         }
-
-        // TODO: Fix those methods.
-        deinit_maps();
-        quit();
     }
 
     void Game::save()
@@ -297,9 +290,7 @@ namespace Gecko
 
     void Game::shutdown()
     {
-        active = false;
-
-        windows.clear();
+        m_context->getRoot()->queueEndRendering();
     }
 
     // TODO: Optimize to reach 60 frames.
@@ -993,22 +984,19 @@ namespace Gecko
 
     void Game::init_root()
     {
-        // TODO: Replace with smart pointer.
-        context = new OgreBites::ApplicationContext();
-        context->initApp();
+        m_context = std::make_shared<ApplicationContext>();
+        m_context->initApp();
 
-        if (context->getRoot()->restoreConfig() == false)
+        if (m_context->getRoot()->restoreConfig() == false)
         {
-            context->getRoot()->showConfigDialog(OgreBites::getNativeConfigDialog());
+            m_context->getRoot()->showConfigDialog(OgreBites::getNativeConfigDialog());
         }
-
-        root = context->getRoot();
     }
 
     void Game::init_scene()
     {
         // TODO: Use "OctreeSceneManager".
-        scene_manager = root->createSceneManager();
+        scene_manager = m_context->getRoot()->createSceneManager();
         scene_manager->addRenderQueueListener(this);
         scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::White));
 
@@ -1032,20 +1020,6 @@ namespace Gecko
         // light_scene_node->setDirection(m_configuration->get_vector3("scene.directional.direction"));
     }
 
-    void Game::init_windows()
-    {
-        std::shared_ptr<Configuration> windows_configuration = m_configuration->get_child("windows");
-
-        for (Json::ValueConstIterator i = windows_configuration->begin(); i != windows_configuration->end(); i++)
-        {
-            auto window_configuration = std::make_shared<Configuration>(*i);
-            auto window_name = window_configuration->get_string("name");
-            auto window = std::make_shared<Window>(window_configuration);
-
-            windows.emplace(window_name, std::move(window));
-        }
-    }
-
     void Game::deinit_maps()
     {
         for (const auto& [_, map] : MapManager::getSingleton())
@@ -1056,20 +1030,13 @@ namespace Gecko
 
     void Game::deinit_root()
     {
-        context->closeApp();
-
-        delete context;
+        m_context->closeApp();
     }
 
     void Game::deinit_scene()
     {
         Ogre::RTShader::ShaderGenerator::getSingleton().removeSceneManager(scene_manager);
 
-        root->destroySceneManager(scene_manager);
-    }
-
-    void Game::deinit_windows()
-    {
-        windows.clear();
+        m_context->getRoot()->destroySceneManager(scene_manager);
     }
 }

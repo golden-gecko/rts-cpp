@@ -53,16 +53,5 @@
             "skills": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>",
             "technologies": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>"
         }
-    },
-    "windows": [
-        {
-            "camera": "Main",
-            "fullscreen": false,
-            "height": 960,
-            "left": 10,
-            "name": "Main",
-            "top": 40,
-            "width": 1280
-        }
-    ]
+    }
 }

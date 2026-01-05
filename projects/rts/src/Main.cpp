@@ -15,7 +15,7 @@
 #include <Gecko/Statistics.hpp>
 #include <Gecko/Technologies/TechnologyTree.hpp>
 #include <Gecko/UI/UI.hpp>
-#include <Gecko/Window.hpp>
+#include <Gecko/Utils/Utils.hpp>
 
 int main(int argc, char* argv[])
 {
@@ -47,23 +47,17 @@ int main(int argc, char* argv[])
     // Initialize game and load map.
     game->init();
     game->load_map("tutorial");
-
-    // TODO: Refactor.
-    auto main_window = game->get_window(Gecko::Settings::Window::MainName);
+    game->load_options();
 
     // Initialize input system.
-    input->set_render_window_handle(main_window->get_handle());
+    input->set_render_window_handle(Gecko::Utils::get_window_handle(game->get_context()->getRenderWindow()));
     input->init();
 
-    // TODO: Refactor.
-    main_window->on_resize();
-
     // Initialize other system.
-    ui->init();
     technology_tree->init();
+    ui->init();
 
     // Run game.
-    game->load_options();
     game->run();
 
     // Deinitialize other system.

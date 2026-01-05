@@ -88,6 +88,15 @@ namespace Gecko::Utils
         return result;
     }
 
+    std::size_t get_window_handle(Ogre::RenderWindow* render_window)
+    {
+        std::size_t render_window_handle = 0;
+
+        render_window->getCustomAttribute("WINDOW", &render_window_handle);
+
+        return render_window_handle;
+    }
+
     void rotate_node_towards_position(Ogre::SceneNode& scene_node, const Ogre::Vector3& position, float time)
     {
         auto current_position = get_node_position(scene_node);
