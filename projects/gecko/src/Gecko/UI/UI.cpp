@@ -19,7 +19,7 @@
 #include "Gecko/System.hpp"
 #include "Gecko/Technologies/TechnologyTree.hpp"
 #include "Gecko/UI/Cursor.hpp"
-#include "Gecko/UI/Events.hpp"
+#include "Gecko/UI/EventListenerInstancer.hpp"
 #include "Gecko/UI/Minimap.hpp"
 #include "Gecko/UI/Preview.hpp"
 #include "Gecko/UI/RenderInterface.hpp"
@@ -122,7 +122,7 @@ namespace Gecko
 
                 Json::Value info;
 
-                const Ogre::RenderTarget::FrameStats& window_statistics = Game::getSingleton().get_context()->getRenderWindow()->getStatistics();
+                const Ogre::RenderTarget::FrameStats& window_statistics = Game::getSingleton().getRenderWindow()->getStatistics();
 
                 info["Average FPS"] = Utils::Convert::to_string(window_statistics.avgFPS, 2);
                 info["Last FPS"] = Utils::Convert::to_string(window_statistics.lastFPS, 2);
@@ -209,14 +209,14 @@ namespace Gecko
             return;
         }
 
-        Ogre::RenderSystem* render_system = Game::getSingleton().get_root()->getRenderSystem();
+        Ogre::RenderSystem* render_system = Game::getSingleton().getRoot()->getRenderSystem();
 
         if (render_system == nullptr)
         {
             return;
         }
 
-        auto render_window = Game::getSingleton().get_context()->getRenderWindow();
+        auto render_window = Game::getSingleton().getRenderWindow();
 
         if (render_window == nullptr)
         {
@@ -1394,7 +1394,7 @@ namespace Gecko
 
     void UI::init_events()
     {
-        event_listener_instancer = std::make_shared<EventInstancer>();
+        event_listener_instancer = std::make_shared<EventListenerInstancer>();
 
     	Rml::Factory::RegisterEventListenerInstancer(event_listener_instancer.get());
     }

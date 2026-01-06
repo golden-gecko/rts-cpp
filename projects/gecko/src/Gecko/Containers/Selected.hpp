@@ -9,12 +9,13 @@ namespace Gecko
         public Serializable
     {
     public:
-        typedef std::set<Id> Items;
-        typedef std::map<std::uint16_t, Items> Groups;
-
-    public:
+        // From Serializable.
         std::shared_ptr<Configuration> serialize() const override;
         void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+
+    public:
+        typedef std::set<Id> Items;
+        typedef std::map<std::uint16_t, Items> Groups;
 
     public:
         void apply_current_selection(bool select);

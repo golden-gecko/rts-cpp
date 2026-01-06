@@ -11,13 +11,16 @@ namespace Gecko
         public Updatable
     {
     public:
-        typedef std::map<std::string, Resource> Map;
-
-    public:
+        // From Serializable.
         std::shared_ptr<Configuration> serialize() const override;
         void deserialize(const std::shared_ptr<Configuration>& configuration) override;
 
+    public:
+        // From Updatable.
         void update(float time) override;
+
+    public:
+        typedef std::map<std::string, Resource> Map;
 
     public:
         float add(const std::string& name, float value);

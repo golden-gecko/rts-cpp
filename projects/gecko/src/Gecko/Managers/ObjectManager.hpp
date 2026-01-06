@@ -15,12 +15,14 @@ namespace Gecko
         using base_type = Manager<Object, std::string, Id>;
 
     public:
+        // From Updatable.
+        void update(float time) override;
+
+    public:
         using ObjectsInRange = std::vector<std::pair<Object*, float>>;
 
     public:
         Object* create(const std::string& name);
-
-        void update(float time) override;
 
     public:
         ObjectsInRange get_in_range(const Ogre::Vector3& position, float range = std::numeric_limits<float>::max());

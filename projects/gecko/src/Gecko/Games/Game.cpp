@@ -52,7 +52,12 @@ Gecko::Game* Ogre::Singleton<Gecko::Game>::msSingleton = nullptr;
 
 namespace Gecko
 {
-    void ApplicationContext::windowResized(Ogre::RenderWindow* rw)
+    void Game::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
+    {
+        UI::getSingleton().render(queueGroupId, cameraName, skipThisInvocation);
+    }
+
+    void Game::windowResized(Ogre::RenderWindow* rw)
     {
         OgreBites::ApplicationContext::windowResized(rw);
 
@@ -71,16 +76,6 @@ namespace Gecko
         Input::getSingleton().set_window_size(static_cast<int>(width), static_cast<int>(height));
     }
 
-    void Game::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
-    {
-        UI::getSingleton().render(queueGroupId, cameraName, skipThisInvocation);
-    }
-
-    Game::Game(const std::shared_ptr<Configuration>& configuration) :
-        m_configuration(configuration)
-    {
-    }
-
     void Game::init()
     {
         init_root();
@@ -97,15 +92,39 @@ namespace Gecko
 
     void Game::deinit()
     {
+        MapManager::getSingleton().destroy_all();
+        ObjectManager::getSingleton().destroy_all();
+        PlayerManager::getSingleton().destroy_all();
+        OrderManager::getSingleton().destroy_all();
+        ComponentManager::getSingleton().destroy_all();
+        SkillManager::getSingleton().destroy_all();
+
         deinit_scene();
         deinit_root();
+    }
+
+    void Game::update(float time)
+    {
+        // TODO: Optimize to reach 60 frames.
+
+        MapManager::getSingleton().update(time);
+        ObjectManager::getSingleton().update(time);
+        OrderManager::getSingleton().update(time);
+        PlayerManager::getSingleton().update(time);
+        UI::getSingleton().update(time);
+    }
+
+    Game::Game(const std::shared_ptr<Configuration>& configuration) :
+        m_configuration(configuration)
+    {
     }
 
     void Game::load_map(const std::string& map_name)
     {
         L_TIME("Game::load_map(" + map_name + ")");
 
-        quit();
+        // TODO: Should be possible to load multiple maps.
+        unload_map();
 
         auto map = MapManager::getSingleton().create(map_name);
 
@@ -140,36 +159,36 @@ namespace Gecko
 
     void Game::quit()
     {
-        ComponentManager::getSingleton().destroy_all();
-        MapManager::getSingleton().destroy_all();
-        ObjectManager::getSingleton().destroy_all();
-        OrderManager::getSingleton().destroy_all();
-        PlayerManager::getSingleton().destroy_all();
+        getRoot()->queueEndRendering();
     }
 
     void Game::run()
     {
         // HACK: Must be called once before the main loop.
-        m_context->windowResized(m_context->getRenderWindow());
+        windowResized(getRenderWindow());
 
         Gecko::Utils::Time::Value previous_time = Utils::Time::get();
-        float elasped_time = 0.0f;
+        Gecko::Utils::Time::Value current_time;
 
-        while (m_context->getRoot()->endRenderingQueued() == false)
+        float elasped_time = 0.0f;
+        float frame_time;
+
+        while (getRoot()->endRenderingQueued() == false)
         {
-            Gecko::Utils::Time::Value current_time = Utils::Time::get();
-            float frame_time = Utils::Time::get_duration(previous_time, current_time);
+            current_time = Utils::Time::get();
+
+            frame_time = Utils::Time::get_duration(previous_time, current_time);
 
             elasped_time += frame_time;
 
             if (elasped_time >= Settings::Game::FrameTime)
             {
-                m_context->pollEvents();
+                pollEvents();
 
                 update_input(Settings::Game::FrameTime);
                 update(Settings::Game::FrameTime);
 
-                m_context->getRoot()->renderOneFrame();
+                getRoot()->renderOneFrame();
 
                 elasped_time -= std::floor((elasped_time / Settings::Game::FrameTime)) * Settings::Game::FrameTime;
             }
@@ -290,17 +309,16 @@ namespace Gecko
 
     void Game::shutdown()
     {
-        m_context->getRoot()->queueEndRendering();
+        getRoot()->queueEndRendering();
     }
 
-    // TODO: Optimize to reach 60 frames.
-    void Game::update(float time)
+    void Game::unload_map()
     {
-        MapManager::getSingleton().update(time);
-        ObjectManager::getSingleton().update(time);
-        OrderManager::getSingleton().update(time);
-        PlayerManager::getSingleton().update(time);
-        UI::getSingleton().update(time);
+        ComponentManager::getSingleton().destroy_all();
+        MapManager::getSingleton().destroy_all();
+        ObjectManager::getSingleton().destroy_all();
+        OrderManager::getSingleton().destroy_all();
+        PlayerManager::getSingleton().destroy_all();
     }
 
     void Game::update_input(float time)
@@ -987,19 +1005,18 @@ namespace Gecko
 
     void Game::init_root()
     {
-        m_context = std::make_shared<ApplicationContext>();
-        m_context->initApp();
+        initApp();
 
-        if (m_context->getRoot()->restoreConfig() == false)
+        if (getRoot()->restoreConfig() == false)
         {
-            m_context->getRoot()->showConfigDialog(OgreBites::getNativeConfigDialog());
+            getRoot()->showConfigDialog(OgreBites::getNativeConfigDialog());
         }
     }
 
     void Game::init_scene()
     {
         // TODO: Use "OctreeSceneManager".
-        scene_manager = m_context->getRoot()->createSceneManager();
+        scene_manager = getRoot()->createSceneManager();
         scene_manager->addRenderQueueListener(this);
         scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::White));
 
@@ -1033,13 +1050,13 @@ namespace Gecko
 
     void Game::deinit_root()
     {
-        m_context->closeApp();
+        closeApp();
     }
 
     void Game::deinit_scene()
     {
         Ogre::RTShader::ShaderGenerator::getSingleton().removeSceneManager(scene_manager);
 
-        m_context->getRoot()->destroySceneManager(scene_manager);
+        getRoot()->destroySceneManager(scene_manager);
     }
 }

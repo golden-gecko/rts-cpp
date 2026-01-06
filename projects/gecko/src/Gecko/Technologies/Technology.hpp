@@ -11,12 +11,16 @@ namespace Gecko
         public Updatable
     {
     public:
-        explicit Technology() = default;
-
+        // From Serializable.
         std::shared_ptr<Configuration> serialize() const override;
         void deserialize(const std::shared_ptr<Configuration>& configuration) override;
 
+    public:
+        // From Updatable.
         void update(float time) override;
+
+    public:
+        explicit Technology() = default;
 
     public:
         bool is_locked() const

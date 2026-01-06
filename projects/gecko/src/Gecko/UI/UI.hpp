@@ -8,9 +8,6 @@
 
 namespace Gecko
 {
-    // TODO: Move to Gecko.hpp.
-    class EventInstancer;
-
     class UI :
         public Ogre::Singleton<UI>,
         public Initializable,
@@ -214,7 +211,7 @@ namespace Gecko
         order_type::Value order_name = order_type::Value::None;
         std::string skill_name = "none";
 
-        std::shared_ptr<EventInstancer> event_listener_instancer;
+        std::shared_ptr<EventListenerInstancer> event_listener_instancer;
 
         void init_components();
         void init_documents();

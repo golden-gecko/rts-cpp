@@ -12,10 +12,11 @@ namespace Gecko
         public Manager<Order, std::string, Id>,
         public Updatable
     {
-    public:
+    private:
         using base_type = Manager<Order, std::string, Id>;
 
     public:
+        // From Updatable.
         void update(float time) override;
 
     public:

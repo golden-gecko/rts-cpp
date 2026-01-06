@@ -37,14 +37,18 @@ namespace Gecko
         bool mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id) override;
 
     public:
-        explicit Input(const std::shared_ptr<Configuration>& configuration);
-
-        virtual ~Input() = default;
-
+        // From Initializable.
         void init() override;
         void deinit() override;
 
+    public:
+        // From Updatable.
         void update(float time) override;
+
+    public:
+        explicit Input(const std::shared_ptr<Configuration>& configuration);
+
+        virtual ~Input() = default;
 
     public:
         bool is_key_pressed(Command::Value command) const;

@@ -15,6 +15,7 @@ namespace Gecko
         using base_type = Manager<Player, std::string, Id>;
 
     public:
+        // From Updatable.
         void update(float time) override;
     };
 }

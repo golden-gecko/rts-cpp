@@ -8,6 +8,11 @@ namespace Gecko
         public Serializable
     {
     public:
+        // From Serializable.
+        std::shared_ptr<Configuration> serialize() const override;
+        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+
+    public:
         enum class State :
             std::int8_t
         {
@@ -16,10 +21,6 @@ namespace Gecko
         };
 
         static State from_name(const std::string& name);
-
-    public:
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
 
     /*
     public:

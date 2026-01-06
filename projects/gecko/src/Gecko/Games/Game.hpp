@@ -1,21 +1,16 @@
 #pragma once
 
 #include "Gecko/Id.hpp"
+#include "Gecko/Interfaces/Initializable.hpp"
 #include "Gecko/Interfaces/Updatable.hpp"
 
 namespace Gecko
 {
-    class ApplicationContext :
-        public OgreBites::ApplicationContext
-    {
-    public:
-        // From OgreBites::ApplicationContext.
-        void windowResized(Ogre::RenderWindow* rw) override;
-    };
-
     class Game :
         public Ogre::Singleton<Game>,
         public Ogre::RenderQueueListener,
+        public OgreBites::ApplicationContext,
+        public Initializable,
         public Updatable
     {
     public:
@@ -23,12 +18,22 @@ namespace Gecko
         void renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation) override;
 
     public:
+        // From OgreBites::ApplicationContext.
+        void windowResized(Ogre::RenderWindow* rw) override;
+
+    public:
+        // From Initializable.
+        void init() override;
+        void deinit() override;
+
+    public:
+        // From Updatable.
+        void update(float time) override;
+
+    public:
         explicit Game(const std::shared_ptr<Configuration>& configuration);
 
         virtual ~Game() = default;
-
-        virtual void init();
-        virtual void deinit();
 
     public:
         void load_map(const std::string& map_name);
@@ -37,7 +42,7 @@ namespace Gecko
         void run();
         void save();
         void shutdown();
-        void update(float time) override;
+        void unload_map();
         void update_input(float time);
 
         Ogre::Entity* create_entity(const std::string& name) const;
@@ -56,11 +61,6 @@ namespace Gecko
         void load_options();
 
     public:
-        std::shared_ptr<ApplicationContext> get_context() const
-        {
-            return m_context;
-        }
-
         Player* get_active_player() const;
 
         auto get_active_player_id() const
@@ -75,7 +75,7 @@ namespace Gecko
 
         auto get_frame_number() const
         {
-            return m_context->getRoot()->getNextFrameNumber() - 1;
+            return getRoot()->getNextFrameNumber() - 1;
         }
 
         std::vector<std::string> get_maps() const;
@@ -83,11 +83,6 @@ namespace Gecko
         const auto& get_name() const
         {
             return name;
-        }
-
-        Ogre::Root* get_root() const
-        {
-            return m_context->getRoot();
         }
 
         std::vector<std::string> get_saves() const;
@@ -109,8 +104,6 @@ namespace Gecko
         virtual void init_skills(std::size_t max_size);
 
     private:
-        std::shared_ptr<ApplicationContext> m_context;
-
         std::shared_ptr<Configuration> m_configuration;
 
         std::string name;

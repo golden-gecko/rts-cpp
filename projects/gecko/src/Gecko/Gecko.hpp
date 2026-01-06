@@ -64,6 +64,7 @@ namespace Gecko
     class Cursor;
     class DataLayer;
     class Diplomacy;
+    class EventListenerInstancer;
     class Game;
     class Id;
     class Layer;

@@ -1,20 +1,26 @@
 #pragma once
 
 #include "Gecko/Interfaces/Serializable.hpp"
+#include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Settings.hpp"
 
 namespace Gecko
 {
     class Resource :
-        public Serializable
+        public Serializable,
+        public Updatable
     {
     public:
-        Resource(const std::string& name);
-
+        // From Serializable.
         std::shared_ptr<Configuration> serialize() const override;
         void deserialize(const std::shared_ptr<Configuration>& configuration) override;
 
-        void update(float time);
+    public:
+        // From Updatable.
+        void update(float time) override;
+
+    public:
+        Resource(const std::string& name);
 
     public:
         float add(float value);

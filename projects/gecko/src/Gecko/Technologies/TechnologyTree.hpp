@@ -11,12 +11,16 @@ namespace Gecko
         public Updatable
     {
     public:
-        explicit TechnologyTree() = default;
-
+        // From Initializable.
         void init() override;
         void deinit() override;
 
+    public:
+        // From Updatable.
         void update(float time) override;
+
+    public:
+        explicit TechnologyTree() = default;
 
     public:
         bool is_locked(const std::string& name) const;

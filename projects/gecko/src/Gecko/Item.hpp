@@ -14,16 +14,20 @@ namespace Gecko
         public Updatable
     {
     public:
+        // From Initializable.
+        void init() override;
+        void deinit() override;
+
+    public:
+        // From Serializable.
+        std::shared_ptr<Configuration> serialize() const override;
+        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+
+    public:
         explicit Item() = default;
         explicit Item(const Item& other);
 
         virtual ~Item() = default;
-
-        void init() override;
-        void deinit() override;
-
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
 
     public:
         const auto& get_configuration() const

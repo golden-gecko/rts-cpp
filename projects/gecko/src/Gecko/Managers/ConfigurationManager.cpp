@@ -3,6 +3,7 @@
 #include "Gecko/Exception.hpp"
 #include "Gecko/Log.hpp"
 #include "Gecko/Settings.hpp"
+#include "Gecko/Utils/Time.hpp"
 
 Gecko::ConfigurationManager* Ogre::Singleton<Gecko::ConfigurationManager>::msSingleton = nullptr;
 
@@ -10,6 +11,8 @@ namespace Gecko
 {
     void ConfigurationManager::parse_configuration_files()
     {
+        L_TIME("Gecko::ConfigurationManager::parse_configuration_files()");
+
         for (const std::string& directory : Settings::Configuration::Directories)
         {
             parse_directory(directory);

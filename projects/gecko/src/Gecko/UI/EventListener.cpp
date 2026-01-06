@@ -1,4 +1,4 @@
-#include "Gecko/UI/Events.hpp"
+#include "Gecko/UI/EventListener.hpp"
 
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Log.hpp"
@@ -6,14 +6,9 @@
 
 namespace Gecko
 {
-    Rml::EventListener* EventInstancer::InstanceEventListener(const Rml::String& value, Rml::Element * element)
-    {
-        return new Event(value);
-    }
-
-	void Event::ProcessEvent(Rml::Event& event)
+	void EventListener::ProcessEvent(Rml::Event& event)
 	{
-		L_TRACE << "Event::ProcessEvent(): value=" << value;
+		L_TRACE << "EventListener::ProcessEvent()";
 
 		std::vector<std::string> segments;
 
@@ -55,16 +50,16 @@ namespace Gecko
 		}
 	}
 
-	void Event::OnAttach(Rml::Element* element)
+	void EventListener::OnAttach(Rml::Element* element)
 	{
 	}
 
-	void Event::OnDetach(Rml::Element* element)
+	void EventListener::OnDetach(Rml::Element* element)
 	{
 		delete this;
 	}
 
-	Event::Event(const Rml::String& value) :
+	EventListener::EventListener(const Rml::String& value) :
 		value(value)
 	{
 	}

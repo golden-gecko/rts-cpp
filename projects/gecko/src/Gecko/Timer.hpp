@@ -8,11 +8,13 @@ namespace Gecko
         public Serializable
     {
     public:
-        explicit Timer(float maximal = std::numeric_limits<float>::max());
-        explicit Timer(const Timer& other);
-
+        // From Serializable.
         std::shared_ptr<Configuration> serialize() const override;
         void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+
+    public:
+        explicit Timer(float maximal = std::numeric_limits<float>::max());
+        explicit Timer(const Timer& other);
 
         Timer& update(float time);
 

@@ -188,25 +188,25 @@ namespace Gecko
             if (camera_type == "Free")
             {
                 m_cameras.emplace(camera_name, std::make_shared<FreeCamera>(
-                    Game::getSingleton().get_root(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
+                    Game::getSingleton().getRoot(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
                 ));
             }
             else if (camera_type == "Minimap")
             {
                 m_cameras.emplace(camera_name, std::make_shared<MinimapCamera>(
-                    Game::getSingleton().get_root(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
+                    Game::getSingleton().getRoot(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
                 ));
             }
             else if (camera_type == "ObjectFollow")
             {
                 m_cameras.emplace(camera_name, std::make_shared<ObjectFollowCamera>(
-                    Game::getSingleton().get_root(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
+                    Game::getSingleton().getRoot(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
                 ));
             }
             else if (camera_type == "TopDown")
             {
                 m_cameras.emplace(camera_name, std::make_shared<TopDownCamera>(
-                    Game::getSingleton().get_root(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
+                    Game::getSingleton().getRoot(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
                 ));
             }
             else
@@ -216,7 +216,7 @@ namespace Gecko
         }
 
         // TODO: Move to configuration.
-        Game::getSingleton().get_context()->getRenderWindow()->addViewport(get_camera(Settings::Camera::MainName)->get_camera())->setBackgroundColour(Ogre::ColourValue(0.25f, 0.5f, 0.75f));
+        Game::getSingleton().getRenderWindow()->addViewport(get_camera(Settings::Camera::MainName)->get_camera())->setBackgroundColour(Ogre::ColourValue(0.25f, 0.5f, 0.75f));
     }
 
     void Map::init_layers()

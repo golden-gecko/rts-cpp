@@ -19,6 +19,7 @@
 
 int main(int argc, char* argv[])
 {
+    // Setup log.
     Gecko::Log::setup("rts.log");
 
     // Parse configuration files.
@@ -49,7 +50,7 @@ int main(int argc, char* argv[])
     game->load_map("menu");
 
     // Initialize input system.
-    input->set_render_window_handle(Gecko::Utils::get_window_handle(game->get_context()->getRenderWindow()));
+    input->set_render_window_handle(Gecko::Utils::get_window_handle(game->getRenderWindow()));
     input->init();
 
     // Initialize other system.

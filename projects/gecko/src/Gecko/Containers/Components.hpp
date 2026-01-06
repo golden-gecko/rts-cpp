@@ -8,14 +8,16 @@ namespace Gecko
         public Serializable
     {
     public:
+        // From Serializable.
+        std::shared_ptr<Configuration> serialize() const override;
+        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+
+    public:
         typedef std::vector<Component*> Items;
 
     public:
         explicit Components() = default;
         explicit Components(const Components& other);
-
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
 
     public:
         void clear()

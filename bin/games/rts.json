@@ -4,37 +4,10 @@
     },
     "include": [
         "../options/input.json",
+        "../options/memory.json",
         "../options/options.json",
+        "../options/scene.json",
         "../options/ui.json"
     ],
-    "memory": {
-        "components": 1200,
-        "maps": 10,
-        "objects": 30,
-        "orders": 1000,
-        "players": 10,
-        "skills": 1200
-    },
-    "name": "RTS",
-    "scene": {
-        "ambient": {
-            "color": {
-                "b": 1.0,
-                "g": 1.0,
-                "r": 1.0
-            }
-        },
-        "directional": {
-            "color": {
-                "b": 1.0,
-                "g": 1.0,
-                "r": 1.0
-            },
-            "direction": {
-                "x": -1.0,
-                "y": -1.0,
-                "z": -1.0
-            }
-        }
-    }
+    "name": "RTS"
 }

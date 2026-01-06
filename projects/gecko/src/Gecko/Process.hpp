@@ -9,10 +9,12 @@ namespace Gecko
         public Serializable
     {
     public:
-        explicit Process(const std::string& name);
-
+        // From Serializable.
         std::shared_ptr<Configuration> serialize() const override;
         void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+
+    public:
+        explicit Process(const std::string& name);
 
         void update(float time, Id id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources);
 

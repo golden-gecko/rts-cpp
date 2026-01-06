@@ -11,12 +11,16 @@ namespace Gecko
         public Updatable
     {
     public:
-        explicit Season(const std::string& name, const Configuration& configuration);
-
+        // From Initializable.
         void init() override;
         void deinit() override;
 
+    public:
+        // From Updatable.
         void update(float time) override;
+
+    public:
+        explicit Season(const std::string& name, const Configuration& configuration);
 
     public:
         void apply();

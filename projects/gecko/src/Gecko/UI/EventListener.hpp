@@ -2,15 +2,7 @@
 
 namespace Gecko
 {
-	class EventInstancer :
-		public Rml::EventListenerInstancer
-	{
-	public:
-		// From Rml::EventListenerInstancer.
-		Rml::EventListener* InstanceEventListener(const Rml::String& value, Rml::Element * element) override;
-	};
-
-	class Event :
+	class EventListener :
 		public Rml::EventListener
 	{
 	public:
@@ -21,7 +13,7 @@ namespace Gecko
 		void OnDetach(Rml::Element* element) override;
 
 	public:
-		Event(const Rml::String& value);
+		EventListener(const Rml::String& value);
 
 	private:
 		Rml::String value;
