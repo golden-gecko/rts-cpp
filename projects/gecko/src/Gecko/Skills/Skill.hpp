@@ -18,8 +18,8 @@ namespace Gecko
 
         virtual ~Skill() = default;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
         void update(float time) override;
 

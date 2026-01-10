@@ -13,7 +13,7 @@ namespace Gecko
         using base_type = Object;
 
     public:
-        static Vehicle* create(Vehicle* memory, const std::shared_ptr<Configuration>& configuration);
+        static Vehicle* create(Vehicle* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Vehicle() = default;

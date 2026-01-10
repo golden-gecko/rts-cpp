@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Gecko/Components/Component.hpp"
-#include "Gecko/Utils/Utils.hpp"
 
 namespace Gecko
 {
@@ -12,7 +11,7 @@ namespace Gecko
         using base_type = Component;
 
     public:
-        static Mesh* create(Mesh* memory, const std::shared_ptr<Configuration>& configuration);
+        static Mesh* create(Mesh* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Mesh() = default;
@@ -29,10 +28,7 @@ namespace Gecko
         }
 
     public:
-        Ogre::Vector3 get_direction() const override
-        {
-            return Utils::get_node_direction(*scene_node);
-        }
+        Ogre::Vector3 get_direction() const override;
 
         auto& get_entity()
         {

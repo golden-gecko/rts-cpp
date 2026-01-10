@@ -26,10 +26,11 @@
 #include "Gecko/Skills/Skill.hpp"
 #include "Gecko/UI/UI.hpp"
 #include "Gecko/Utils/Mesh.hpp"
+#include "Gecko/Utils/Utils.hpp"
 
 namespace Gecko
 {
-    Object* Object::create(Object* memory, const std::shared_ptr<Configuration>& configuration)
+    Object* Object::create(Object* memory, const ConfigurationPtr& configuration)
     {
         auto object = new (memory) Object();
 
@@ -146,7 +147,7 @@ namespace Gecko
         set_visible(false);
     }
 
-    std::shared_ptr<Configuration> Object::serialize() const
+    ConfigurationPtr Object::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -169,7 +170,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Object::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Object::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 
@@ -268,6 +269,11 @@ namespace Gecko
         }
     }
 
+    Ogre::Vector3 Object::get_direction() const
+    {
+        return Utils::get_node_direction(*scene_node);
+    }
+
     Entrance Object::get_entrance() const
     {
         // TODO: Fix get_size() function.
@@ -353,9 +359,9 @@ namespace Gecko
         return angle;
     }
 
-    std::shared_ptr<Configuration> Object::get_info() const
+    ConfigurationPtr Object::get_info() const
     {
-        std::shared_ptr<Configuration> info = std::make_shared<Configuration>();
+        ConfigurationPtr info = std::make_shared<Configuration>();
 
         info->set("ID", get_id());
         info->set("Name", get_name());
@@ -467,6 +473,11 @@ namespace Gecko
                 data_layer->add(new_index, Area(), 1);
             }
         }
+    }
+
+    const Ogre::Vector3& Object::get_position() const
+    {
+        return Utils::get_node_position(*scene_node);
     }
 
     std::map<std::string, float> Object::get_progress_bars() const

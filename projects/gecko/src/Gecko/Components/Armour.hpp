@@ -11,14 +11,14 @@ namespace Gecko
         using base_type = Component;
 
     public:
-        static Armour* create(Armour* memory, const std::shared_ptr<Configuration>& configuration);
+        static Armour* create(Armour* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Armour() = default;
         explicit Armour(const Armour& other);
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     private:
         float m_defence = 0.0f;

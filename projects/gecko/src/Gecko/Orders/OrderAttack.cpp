@@ -15,7 +15,7 @@ namespace Gecko
         return new (memory) OrderAttack();
     }
 
-    OrderAttack* OrderAttack::create(OrderAttack* memory, const std::shared_ptr<Configuration>& configuration)
+    OrderAttack* OrderAttack::create(OrderAttack* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderAttack();
 
@@ -37,7 +37,7 @@ namespace Gecko
         target_position = Ogre::Vector3::ZERO;
     }
 
-    std::shared_ptr<Configuration> OrderAttack::serialize() const
+    ConfigurationPtr OrderAttack::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -47,7 +47,7 @@ namespace Gecko
         return configuration;
     }
 
-    void OrderAttack::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void OrderAttack::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

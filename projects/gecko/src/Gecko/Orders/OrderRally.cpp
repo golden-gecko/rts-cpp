@@ -14,7 +14,7 @@ namespace Gecko
         return new (memory) OrderRally();
     }
 
-    OrderRally* OrderRally::create(OrderRally* memory, const std::shared_ptr<Configuration>& configuration)
+    OrderRally* OrderRally::create(OrderRally* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderRally();
 
@@ -35,7 +35,7 @@ namespace Gecko
         set_target_position(Ogre::Vector3::ZERO);
     }
 
-    std::shared_ptr<Configuration> OrderRally::serialize() const
+    ConfigurationPtr OrderRally::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -45,7 +45,7 @@ namespace Gecko
         return configuration;
     }
 
-    void OrderRally::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void OrderRally::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

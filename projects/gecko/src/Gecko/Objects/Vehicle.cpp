@@ -19,7 +19,7 @@
 
 namespace Gecko
 {
-    Vehicle* Vehicle::create(Vehicle* memory, const std::shared_ptr<Configuration>& configuration)
+    Vehicle* Vehicle::create(Vehicle* memory, const ConfigurationPtr& configuration)
     {
         auto map = new (memory) Vehicle();
 

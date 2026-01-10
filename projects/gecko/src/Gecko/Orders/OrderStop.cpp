@@ -12,7 +12,7 @@ namespace Gecko
         return new (memory) OrderStop();
     }
 
-    OrderStop* OrderStop::create(OrderStop* memory, const std::shared_ptr<Configuration>& configuration)
+    OrderStop* OrderStop::create(OrderStop* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderStop();
 

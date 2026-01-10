@@ -39,12 +39,12 @@ namespace Gecko
     {
     }
 
-    void Configuration::append(const std::shared_ptr<Configuration>& value)
+    void Configuration::append(const ConfigurationPtr& value)
     {
         append<Json::Value>(value->m_value);
     }
 
-    void Configuration::append(const std::string& path, const std::shared_ptr<Configuration>& value)
+    void Configuration::append(const std::string& path, const ConfigurationPtr& value)
     {
         append<Json::Value>(path, value->m_value);
     }
@@ -112,7 +112,7 @@ namespace Gecko
         }
     }
 
-    void Configuration::merge(const std::shared_ptr<Configuration>& other)
+    void Configuration::merge(const ConfigurationPtr& other)
     {
         // TODO: Make function const.
         merge_json_objects(m_value, other->m_value);
@@ -156,12 +156,12 @@ namespace Gecko
         return default_value;
     }
 
-    std::shared_ptr<Configuration> Configuration::get_child(const std::string& path) const
+    ConfigurationPtr Configuration::get_child(const std::string& path) const
     {
         return std::make_shared<Configuration>(get(path));
     }
 
-    std::optional<std::shared_ptr<Configuration>> Configuration::get_child_optional(const std::string& path) const
+    std::optional<ConfigurationPtr> Configuration::get_child_optional(const std::string& path) const
     {
         if (has_member(path))
         {
@@ -191,7 +191,7 @@ namespace Gecko
         );
     }
 
-    std::shared_ptr<Configuration> Configuration::get_element(Json::Value::ArrayIndex index) const
+    ConfigurationPtr Configuration::get_element(Json::Value::ArrayIndex index) const
     {
         // TODO: Add assert.
         return std::make_shared<Configuration>(m_value[index]);
@@ -287,7 +287,7 @@ namespace Gecko
         );
     }
 
-    void Configuration::set(const std::string& path, const std::shared_ptr<Configuration>& value)
+    void Configuration::set(const std::string& path, const ConfigurationPtr& value)
     {
         set<Json::Value>(path, value->m_value);
     }

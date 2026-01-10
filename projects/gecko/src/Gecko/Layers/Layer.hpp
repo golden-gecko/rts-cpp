@@ -4,7 +4,6 @@
 #include "Gecko/Interfaces/Initializable.hpp"
 #include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Path.hpp"
-#include "Gecko/Types.hpp"
 
 namespace Gecko
 {

@@ -14,7 +14,7 @@ namespace Gecko
         return new (memory) OrderGuard();
     }
 
-    OrderGuard* OrderGuard::create(OrderGuard* memory, const std::shared_ptr<Configuration>& configuration)
+    OrderGuard* OrderGuard::create(OrderGuard* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderGuard();
 
@@ -37,7 +37,7 @@ namespace Gecko
         set_path(Path());
     }
 
-    std::shared_ptr<Configuration> OrderGuard::serialize() const
+    ConfigurationPtr OrderGuard::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -48,7 +48,7 @@ namespace Gecko
         return configuration;
     }
 
-    void OrderGuard::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void OrderGuard::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

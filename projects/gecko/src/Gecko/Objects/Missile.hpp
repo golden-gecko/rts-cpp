@@ -11,14 +11,14 @@ namespace Gecko
         using base_type = Object;
 
     public:
-        static Missile* create(Missile* memory, const std::shared_ptr<Configuration>& configuration);
+        static Missile* create(Missile* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Missile() = default;
         explicit Missile(const Missile& other);
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
         void update(float time) override;
 

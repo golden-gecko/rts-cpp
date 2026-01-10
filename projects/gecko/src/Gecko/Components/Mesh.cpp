@@ -6,10 +6,11 @@
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/QueryFlags.hpp"
 #include "Gecko/Utils/Mesh.hpp"
+#include "Gecko/Utils/Utils.hpp"
 
 namespace Gecko
 {
-    Mesh* Mesh::create(Mesh* memory, const std::shared_ptr<Configuration>& m_configuration)
+    Mesh* Mesh::create(Mesh* memory, const ConfigurationPtr& m_configuration)
     {
         auto component = new (memory) Mesh();
 
@@ -47,6 +48,11 @@ namespace Gecko
             Game::getSingleton().destroy_scene_node(scene_node);
             Game::getSingleton().destroy_entity(entity);
         }
+    }
+
+    Ogre::Vector3 Mesh::get_direction() const
+    {
+        return Utils::get_node_direction(*scene_node);
     }
 
     void Mesh::init()

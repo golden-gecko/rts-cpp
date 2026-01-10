@@ -5,7 +5,6 @@
 #include "Gecko/Item.hpp"
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Timer.hpp"
-#include "Gecko/Utils/Utils.hpp"
 
 namespace Gecko
 {
@@ -16,7 +15,7 @@ namespace Gecko
         using base_type = Item;
 
     public:
-        static Object* create(Object* memory, const std::shared_ptr<Configuration>& configuration);
+        static Object* create(Object* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Object();
@@ -27,8 +26,8 @@ namespace Gecko
         void init() override;
         void deinit() override;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
         void update(float time) override;
 
@@ -59,16 +58,13 @@ namespace Gecko
             return configurations;
         }
 
-        auto get_direction() const
-        {
-            return Utils::get_node_direction(*scene_node);
-        }
+        Ogre::Vector3 get_direction() const;
 
         virtual Entrance get_entrance() const;
 
         float get_heading() const;
 
-        std::shared_ptr<Configuration> get_info() const;
+        ConfigurationPtr get_info() const;
 
         const auto& get_name() const
         {
@@ -90,10 +86,7 @@ namespace Gecko
             return player_id;
         }
 
-        const Ogre::Vector3& get_position() const
-        {
-            return Utils::get_node_position(*scene_node);
-        }
+        const Ogre::Vector3& get_position() const;
 
         auto get_processes() const
         {

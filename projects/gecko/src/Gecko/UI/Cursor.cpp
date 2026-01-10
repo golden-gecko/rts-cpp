@@ -28,7 +28,7 @@ namespace Gecko
         Game::getSingleton().destroy_manual_object(square);
     }
 
-    void Cursor::set_mesh(const std::shared_ptr<Configuration>& configuration)
+    void Cursor::set_mesh(const ConfigurationPtr& configuration)
     {
         set_visible(false);
 

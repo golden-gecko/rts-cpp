@@ -4,7 +4,7 @@
 
 namespace Gecko
 {
-    Drive* Drive::create(Drive* memory, const std::shared_ptr<Configuration>& configuration)
+    Drive* Drive::create(Drive* memory, const ConfigurationPtr& configuration)
     {
         auto component = new (memory) Drive();
 
@@ -20,7 +20,7 @@ namespace Gecko
         distance_driven = other.distance_driven;
     }
 
-    std::shared_ptr<Configuration> Drive::serialize() const
+    ConfigurationPtr Drive::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -30,7 +30,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Drive::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Drive::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

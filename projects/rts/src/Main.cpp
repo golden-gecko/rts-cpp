@@ -10,7 +10,6 @@
 #include <Gecko/Managers/OrderManager.hpp>
 #include <Gecko/Managers/PlayerManager.hpp>
 #include <Gecko/Managers/SkillManager.hpp>
-#include <Gecko/Maps/Map.hpp>
 #include <Gecko/NVIDIA.hpp>
 #include <Gecko/Statistics.hpp>
 #include <Gecko/Technologies/TechnologyTree.hpp>
@@ -47,7 +46,7 @@ int main(int argc, char* argv[])
 
     // Initialize game and load map.
     game->init();
-    game->load_map("menu");
+    game->load_map("tutorial");
 
     // Initialize input system.
     input->set_render_window_handle(Gecko::Utils::get_window_handle(game->getRenderWindow()));

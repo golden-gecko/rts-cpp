@@ -40,7 +40,7 @@ namespace Gecko
         }
 
     public:
-        void set_mesh(const std::shared_ptr<Configuration>& configuration);
+        void set_mesh(const ConfigurationPtr& configuration);
         void set_type(Type type);
         void set_visible(bool visible);
 

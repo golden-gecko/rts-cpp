@@ -19,7 +19,7 @@ namespace Gecko
         return new (memory) Player();
     }
 
-    Player* Player::create(const std::shared_ptr<Configuration>& configuration)
+    Player* Player::create(const ConfigurationPtr& configuration)
     {
         auto player = new Player();
 
@@ -28,7 +28,7 @@ namespace Gecko
         return player;
     }
 
-    Player* Player::create(Player* memory, const std::shared_ptr<Configuration>& configuration)
+    Player* Player::create(Player* memory, const ConfigurationPtr& configuration)
     {
         auto player = new (memory) Player();
 
@@ -66,7 +66,7 @@ namespace Gecko
         }
     }
 
-    std::shared_ptr<Configuration> Player::serialize() const
+    ConfigurationPtr Player::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -76,7 +76,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Player::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Player::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

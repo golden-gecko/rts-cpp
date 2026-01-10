@@ -23,7 +23,7 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        explicit UI(const std::shared_ptr<Configuration>& configuration);
+        explicit UI(const ConfigurationPtr& configuration);
 
         ~UI() override;
 
@@ -152,7 +152,7 @@ namespace Gecko
         void set_configurations_header(const std::string& _configuration_name);
         void set_floating_descriptions(const std::vector<Id>& objects);
         void set_hovered_object_id(Id object_id);
-        void set_info(const std::shared_ptr<Configuration>& info);
+        void set_info(const ConfigurationPtr& info);
         void set_layers(const std::map<std::string, std::shared_ptr<Layer>>& layers);
         void set_maps(const std::vector<std::string>& maps);
         void set_objects_admin();
@@ -172,7 +172,7 @@ namespace Gecko
         void set_water_layers(const std::set<std::string>& layers);
 
     private:
-        std::shared_ptr<Configuration> m_configuration;
+        ConfigurationPtr m_configuration;
 
         std::shared_ptr<RenderInterface> render_interface;
         std::shared_ptr<SystemInterface> system_interface;

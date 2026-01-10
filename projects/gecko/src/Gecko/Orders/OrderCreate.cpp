@@ -14,7 +14,7 @@ namespace Gecko
         return new (memory) OrderCreate();
     }
 
-    OrderCreate* OrderCreate::create(OrderCreate* memory, const std::shared_ptr<Configuration>& configuration)
+    OrderCreate* OrderCreate::create(OrderCreate* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderCreate();
 
@@ -37,7 +37,7 @@ namespace Gecko
         set_position(Ogre::Vector3::ZERO);
     }
 
-    std::shared_ptr<Configuration> OrderCreate::serialize() const
+    ConfigurationPtr OrderCreate::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -48,7 +48,7 @@ namespace Gecko
         return configuration;
     }
 
-    void OrderCreate::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void OrderCreate::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

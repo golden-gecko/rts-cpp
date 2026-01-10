@@ -4,7 +4,7 @@
 
 namespace Gecko
 {
-    Buff* Buff::create(Buff* memory, const std::shared_ptr<Configuration>& configuration)
+    Buff* Buff::create(Buff* memory, const ConfigurationPtr& configuration)
     {
         auto component = new (memory) Buff();
 
@@ -13,7 +13,7 @@ namespace Gecko
         return component;
     }
 
-    std::shared_ptr<Configuration> Buff::serialize() const
+    ConfigurationPtr Buff::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -22,7 +22,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Buff::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Buff::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

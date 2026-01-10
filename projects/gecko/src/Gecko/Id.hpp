@@ -34,12 +34,14 @@ namespace Gecko
         Id operator++(int);
         Id operator--(int);
 
+        // TODO: Move outside Id.
         operator Json::Value() const;
 
     private:
         int m_value = 0;
     };
 
+    // TODO: Move outside Id.
     inline std::ostream& operator<<(std::ostream& out, const Id& id)
     {
         return out << id.get();

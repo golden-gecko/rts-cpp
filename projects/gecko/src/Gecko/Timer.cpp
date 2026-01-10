@@ -15,7 +15,7 @@ namespace Gecko
         maximal = other.maximal;
     }
 
-    std::shared_ptr<Configuration> Timer::serialize() const
+    ConfigurationPtr Timer::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -25,7 +25,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Timer::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Timer::deserialize(const ConfigurationPtr& configuration)
     {
         current = configuration->get_float("current", 0.0f);
         maximal = configuration->get_float("maximal", std::numeric_limits<decltype(maximal)>::max());

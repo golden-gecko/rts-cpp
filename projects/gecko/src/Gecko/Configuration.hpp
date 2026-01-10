@@ -16,7 +16,7 @@ namespace Gecko
 
     public:
         // TODO: Write test for this method.
-        void append(const std::shared_ptr<Configuration>& value);
+        void append(const ConfigurationPtr& value);
 
         template<typename Type>
         void append(const Type& value)
@@ -25,7 +25,7 @@ namespace Gecko
         }
 
         // TODO: Write test for this method.
-        void append(const std::string& path, const std::shared_ptr<Configuration>& value);
+        void append(const std::string& path, const ConfigurationPtr& value);
 
         // TODO: Write test for this method.
         template<typename Type>
@@ -60,7 +60,7 @@ namespace Gecko
 
         void load_includes();
 
-        void merge(const std::shared_ptr<Configuration>& other);
+        void merge(const ConfigurationPtr& other);
 
         void save_cache() const;
 
@@ -76,14 +76,14 @@ namespace Gecko
         bool get_bool(const std::string& path) const;
         bool get_bool(const std::string& path, bool default_value) const;
 
-        std::shared_ptr<Configuration> get_child(const std::string& path) const;
+        ConfigurationPtr get_child(const std::string& path) const;
 
-        std::optional<std::shared_ptr<Configuration>> get_child_optional(const std::string& path) const;
+        std::optional<ConfigurationPtr> get_child_optional(const std::string& path) const;
 
         Ogre::ColourValue get_color(const std::string& path) const;
         Ogre::ColourValue get_color(const std::string& path, const Ogre::ColourValue& default_value) const;
 
-        std::shared_ptr<Configuration> get_element(Json::Value::ArrayIndex index) const;
+        ConfigurationPtr get_element(Json::Value::ArrayIndex index) const;
 
         float get_float() const;
         float get_float(const std::string& path) const;
@@ -189,7 +189,7 @@ namespace Gecko
         }
 
     public:
-        void set(const std::string& path, const std::shared_ptr<Configuration>& value);
+        void set(const std::string& path, const ConfigurationPtr& value);
         void set(const std::string& path, const Ogre::ColourValue& value);
         void set(const std::string& path, const Path& value);
         void set(const std::string& path, const Ogre::Vector2& value);

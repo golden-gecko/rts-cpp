@@ -14,7 +14,7 @@ namespace Gecko
         return new (memory) OrderWait();
     }
 
-    OrderWait* OrderWait::create(OrderWait* memory, const std::shared_ptr<Configuration>& configuration)
+    OrderWait* OrderWait::create(OrderWait* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderWait();
 
@@ -35,7 +35,7 @@ namespace Gecko
         wait_timer.reset();
     }
 
-    std::shared_ptr<Configuration> OrderWait::serialize() const
+    ConfigurationPtr OrderWait::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -44,7 +44,7 @@ namespace Gecko
         return configuration;
     }
 
-    void OrderWait::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void OrderWait::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

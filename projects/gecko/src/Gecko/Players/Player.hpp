@@ -12,16 +12,16 @@ namespace Gecko
 
     public:
         static Player* create();
-        static Player* create(const std::shared_ptr<Configuration>& configuration);
+        static Player* create(const ConfigurationPtr& configuration);
         static Player* create(Player* memory);
-        static Player* create(Player* memory, const std::shared_ptr<Configuration>& configuration);
+        static Player* create(Player* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Player();
         explicit Player(const Player& other);
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
         void update(float time) override;
 

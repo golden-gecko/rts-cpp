@@ -7,7 +7,6 @@
 
 namespace Gecko
 {
-    // TODO: This class probably should be removed or converted to interfaces.
     class Item :
         public Initializable,
         public Serializable,
@@ -20,8 +19,8 @@ namespace Gecko
 
     public:
         // From Serializable.
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         explicit Item() = default;
@@ -41,7 +40,7 @@ namespace Gecko
         }
 
     public:
-        void set_configuration(const std::shared_ptr<Configuration>& configuration)
+        void set_configuration(const ConfigurationPtr& configuration)
         {
             m_configuration = configuration;
         }
@@ -52,7 +51,7 @@ namespace Gecko
         }
 
     protected:
-        std::shared_ptr<Configuration> m_configuration;
+        ConfigurationPtr m_configuration;
 
     private:
         Id m_id;

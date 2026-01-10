@@ -11,7 +11,7 @@ namespace Gecko
         using base_type = Component;
 
     public:
-        static Storage* create(Storage* memory, const std::shared_ptr<Configuration>& configuration);
+        static Storage* create(Storage* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Storage() = default;

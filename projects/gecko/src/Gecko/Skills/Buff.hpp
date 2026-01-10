@@ -11,13 +11,13 @@ namespace Gecko
         using base_type = Skill;
 
     public:
-        static Buff* create(Buff* memory, const std::shared_ptr<Configuration>& configuration);
+        static Buff* create(Buff* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Buff() = default;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         void activate(const Id& id) override;

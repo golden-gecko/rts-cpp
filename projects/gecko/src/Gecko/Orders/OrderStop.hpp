@@ -13,7 +13,7 @@ namespace Gecko
     public:
         static OrderStop* create();
         static OrderStop* create(OrderStop* memory);
-        static OrderStop* create(OrderStop* memory, const std::shared_ptr<Configuration>& configuration);
+        static OrderStop* create(OrderStop* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderStop();

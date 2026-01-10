@@ -4,7 +4,7 @@
 
 namespace Gecko
 {
-    Armour* Armour::create(Armour* memory, const std::shared_ptr<Configuration>& configuration)
+    Armour* Armour::create(Armour* memory, const ConfigurationPtr& configuration)
     {
         auto component = new (memory) Armour();
 
@@ -19,7 +19,7 @@ namespace Gecko
         m_defence = other.m_defence;
     }
 
-    std::shared_ptr<Configuration> Armour::serialize() const
+    ConfigurationPtr Armour::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -28,7 +28,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Armour::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Armour::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

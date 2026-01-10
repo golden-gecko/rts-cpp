@@ -2,7 +2,7 @@
 
 namespace Gecko
 {
-    Factory* Factory::create(Factory* memory, const std::shared_ptr<Configuration>& configuration)
+    Factory* Factory::create(Factory* memory, const ConfigurationPtr& configuration)
     {
         auto map = new (memory) Factory();
 

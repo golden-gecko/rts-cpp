@@ -11,7 +11,7 @@ namespace Gecko
         using base_type = Object;
 
     public:
-        static Factory* create(Factory* memory, const std::shared_ptr<Configuration>& configuration);
+        static Factory* create(Factory* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Factory() = default;

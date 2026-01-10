@@ -11,7 +11,7 @@ namespace Gecko
         using base_type = Component;
 
     public:
-        static Debug* create(Debug* memory, const std::shared_ptr<Configuration>& configuration);
+        static Debug* create(Debug* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Debug();

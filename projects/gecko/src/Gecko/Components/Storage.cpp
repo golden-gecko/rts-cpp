@@ -2,7 +2,7 @@
 
 namespace Gecko
 {
-    Storage* Storage::create(Storage* memory, const std::shared_ptr<Configuration>& configuration)
+    Storage* Storage::create(Storage* memory, const ConfigurationPtr& configuration)
     {
         auto component = new (memory) Storage();
 

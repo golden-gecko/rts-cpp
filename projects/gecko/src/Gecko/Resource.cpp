@@ -10,7 +10,7 @@ namespace Gecko
 
     }
 
-    std::shared_ptr<Configuration> Resource::serialize() const
+    ConfigurationPtr Resource::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -32,7 +32,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Resource::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Resource::deserialize(const ConfigurationPtr& configuration)
     {
         current = configuration->get_float("current", 0.0f);
         maximal = configuration->get_float("maximal", 0.0f);

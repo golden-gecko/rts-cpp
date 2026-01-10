@@ -11,15 +11,15 @@ namespace Gecko
     {
     public:
         // From Serializable.
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         // From Updatable.
         void update(float time) override;
 
     public:
-        explicit Camera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const std::shared_ptr<Configuration>& configuration);
+        explicit Camera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration);
 
         ~Camera() override;
 

@@ -7,7 +7,7 @@
 
 namespace Gecko
 {
-    Camera::Camera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const std::shared_ptr<Configuration>& configuration) :
+    Camera::Camera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration) :
         m_scene_manager(scene_manager)
     {
         auto near_clip_distance = configuration->get_float(
@@ -18,7 +18,7 @@ namespace Gecko
         m_camera->setAutoAspectRatio(true);
         m_camera->setNearClipDistance(near_clip_distance);
 
-        m_camera_scene_node = m_scene_manager->createSceneNode(name);
+        m_camera_scene_node = m_scene_manager->getRootSceneNode()->createChildSceneNode(name);
         m_camera_scene_node->attachObject(m_camera);
 
         // TODO: Use deserialize instead of constructor.
@@ -66,10 +66,11 @@ namespace Gecko
 
     Camera::~Camera()
     {
+        m_scene_manager->destroySceneNode(m_camera_scene_node);
         m_scene_manager->destroyCamera(m_camera);
     }
 
-    std::shared_ptr<Configuration> Camera::serialize() const
+    ConfigurationPtr Camera::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -80,7 +81,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Camera::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Camera::deserialize(const ConfigurationPtr& configuration)
     {
         m_camera_scene_node->setPosition(configuration->get_vector3("position", Ogre::Vector3::ZERO));
         m_camera_scene_node->lookAt(configuration->get_vector3("look_at", Ogre::Vector3::ZERO), Ogre::Node::TransformSpace::TS_PARENT);

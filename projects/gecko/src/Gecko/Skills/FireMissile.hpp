@@ -11,13 +11,13 @@ namespace Gecko
         using base_type = Skill;
 
     public:
-        static FireMissile* create(FireMissile* memory, const std::shared_ptr<Configuration>& configuration);
+        static FireMissile* create(FireMissile* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit FireMissile() = default;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         void activate(const Id& id) override;

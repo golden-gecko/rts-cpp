@@ -56,7 +56,8 @@ namespace Gecko
 
     ULONGLONG System::SubtractTimes(const FILETIME& ftA, const FILETIME& ftB)
     {
-        LARGE_INTEGER a, b;
+        LARGE_INTEGER a;
+        LARGE_INTEGER b;
 
         a.LowPart = ftA.dwLowDateTime;
         a.HighPart = ftA.dwHighDateTime;

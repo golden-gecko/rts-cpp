@@ -13,7 +13,7 @@ namespace Gecko
         remove_all_orders();
     }
 
-    std::shared_ptr<Configuration> Orders::serialize() const
+    ConfigurationPtr Orders::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -35,7 +35,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Orders::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Orders::deserialize(const ConfigurationPtr& configuration)
     {
         clear();
 

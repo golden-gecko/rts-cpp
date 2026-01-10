@@ -9,8 +9,8 @@ namespace Gecko
     {
     public:
         // From Serializable.
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         typedef std::vector<Component*> Items;
@@ -90,6 +90,6 @@ namespace Gecko
     private:
         Items m_items;
 
-        void add_component(const std::string& configuration, const std::shared_ptr<Configuration>& component_configuration);
+        void add_component(const std::string& configuration, const ConfigurationPtr& component_configuration);
     };
 }

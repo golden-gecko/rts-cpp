@@ -8,7 +8,7 @@
 
 namespace Gecko
 {
-    Missile* Missile::create(Missile* memory, const std::shared_ptr<Configuration>& configuration)
+    Missile* Missile::create(Missile* memory, const ConfigurationPtr& configuration)
     {
         auto map = new (memory) Missile();
 
@@ -24,7 +24,7 @@ namespace Gecko
         speed = other.speed;
     }
 
-    std::shared_ptr<Configuration> Missile::serialize() const
+    ConfigurationPtr Missile::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -34,7 +34,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Missile::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Missile::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

@@ -4,7 +4,7 @@
 
 namespace Gecko
 {
-    std::shared_ptr<Configuration> Technology::serialize() const
+    ConfigurationPtr Technology::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -19,7 +19,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Technology::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Technology::deserialize(const ConfigurationPtr& configuration)
     {
         name = configuration->get_string("name");
         costs = configuration->get_map<std::string, float>("costs");

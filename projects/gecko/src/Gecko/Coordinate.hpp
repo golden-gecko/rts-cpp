@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Gecko/Index.hpp"
-
 namespace Gecko
 {
     class Coordinate

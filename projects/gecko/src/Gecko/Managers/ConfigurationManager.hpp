@@ -15,7 +15,7 @@ namespace Gecko
         void save_cache() const;
 
     public:
-        std::shared_ptr<Configuration> get(const std::string& name) const;
+        ConfigurationPtr get(const std::string& name) const;
 
         const auto& get_configurations() const
         {
@@ -44,6 +44,6 @@ namespace Gecko
         }
 
     private:
-        std::map<std::string, std::shared_ptr<Configuration>> configurations;
+        std::map<std::string, ConfigurationPtr> configurations;
     };
 }

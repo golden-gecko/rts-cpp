@@ -5,7 +5,7 @@
 
 namespace Gecko
 {
-    Repair* Repair::create(Repair* memory, const std::shared_ptr<Configuration>& configuration)
+    Repair* Repair::create(Repair* memory, const ConfigurationPtr& configuration)
     {
         auto component = new (memory) Repair();
 
@@ -14,7 +14,7 @@ namespace Gecko
         return component;
     }
 
-    std::shared_ptr<Configuration> Repair::serialize() const
+    ConfigurationPtr Repair::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -24,7 +24,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Repair::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Repair::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

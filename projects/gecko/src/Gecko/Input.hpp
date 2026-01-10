@@ -46,7 +46,7 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        explicit Input(const std::shared_ptr<Configuration>& configuration);
+        explicit Input(const ConfigurationPtr& configuration);
 
         virtual ~Input() = default;
 
@@ -60,7 +60,7 @@ namespace Gecko
         void set_window_size(int width, int height);
 
     private:
-        std::shared_ptr<Configuration> m_configuration;
+        ConfigurationPtr m_configuration;
 
         unsigned long m_render_window_handle = 0;
 

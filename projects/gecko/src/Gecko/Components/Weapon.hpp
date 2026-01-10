@@ -2,8 +2,6 @@
 
 #include "Gecko/Components/Mesh.hpp"
 
-#include "Gecko/Timer.hpp"
-
 namespace Gecko
 {
     class Weapon :
@@ -13,7 +11,7 @@ namespace Gecko
         using base_type = Mesh;
 
     public:
-        static Weapon* create(Weapon* memory, const std::shared_ptr<Configuration>& configuration);
+        static Weapon* create(Weapon* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Weapon() = default;
@@ -21,8 +19,8 @@ namespace Gecko
 
         void init() override;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
         void update(float time) override;
 

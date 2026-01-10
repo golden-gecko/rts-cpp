@@ -28,7 +28,7 @@ namespace Gecko
         }
     }
 
-    std::shared_ptr<Configuration> Components::serialize() const
+    ConfigurationPtr Components::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -40,7 +40,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Components::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Components::deserialize(const ConfigurationPtr& configuration)
     {
         clear();
 
@@ -52,10 +52,10 @@ namespace Gecko
             add_component(configuration, component_configuration);
         }
 
-        add_component("debug", std::shared_ptr<Configuration>());
+        add_component("debug", ConfigurationPtr());
     }
 
-    void Components::add_component(const std::string& configuration, const std::shared_ptr<Configuration>& component_configuration)
+    void Components::add_component(const std::string& configuration, const ConfigurationPtr& component_configuration)
     {
         auto component = ComponentManager::getSingleton().create(configuration);
 

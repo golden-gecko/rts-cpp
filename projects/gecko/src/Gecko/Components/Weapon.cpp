@@ -5,7 +5,7 @@
 
 namespace Gecko
 {
-    Weapon* Weapon::create(Weapon* memory, const std::shared_ptr<Configuration>& configuration)
+    Weapon* Weapon::create(Weapon* memory, const ConfigurationPtr& configuration)
     {
         auto component = new (memory) Weapon();
 
@@ -30,7 +30,7 @@ namespace Gecko
         reload_timer.reset();
     }
 
-    std::shared_ptr<Configuration> Weapon::serialize() const
+    ConfigurationPtr Weapon::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -42,7 +42,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Weapon::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Weapon::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

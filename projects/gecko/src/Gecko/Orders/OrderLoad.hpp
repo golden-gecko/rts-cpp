@@ -14,7 +14,7 @@ namespace Gecko
     public:
         static OrderLoad* create();
         static OrderLoad* create(OrderLoad* memory);
-        static OrderLoad* create(OrderLoad* memory, const std::shared_ptr<Configuration>& configuration);
+        static OrderLoad* create(OrderLoad* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderLoad();
@@ -22,8 +22,8 @@ namespace Gecko
 
         void init() override;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         auto get_target_id() const

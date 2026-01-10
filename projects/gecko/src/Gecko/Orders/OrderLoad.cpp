@@ -14,7 +14,7 @@ namespace Gecko
         return new (memory) OrderLoad();
     }
 
-    OrderLoad* OrderLoad::create(OrderLoad* memory, const std::shared_ptr<Configuration>& configuration)
+    OrderLoad* OrderLoad::create(OrderLoad* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderLoad();
 
@@ -37,7 +37,7 @@ namespace Gecko
         set_resource_value(0.0f);
     }
 
-    std::shared_ptr<Configuration> OrderLoad::serialize() const
+    ConfigurationPtr OrderLoad::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -48,7 +48,7 @@ namespace Gecko
         return configuration;
     }
 
-    void OrderLoad::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void OrderLoad::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

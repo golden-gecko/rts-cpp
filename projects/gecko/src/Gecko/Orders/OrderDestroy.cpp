@@ -12,7 +12,7 @@ namespace Gecko
         return new (memory) OrderDestroy();
     }
 
-    OrderDestroy* OrderDestroy::create(OrderDestroy* memory, const std::shared_ptr<Configuration>& configuration)
+    OrderDestroy* OrderDestroy::create(OrderDestroy* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderDestroy();
 

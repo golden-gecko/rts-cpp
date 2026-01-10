@@ -28,7 +28,7 @@ namespace Gecko
         return new (memory) Map();
     }
 
-    Map* Map::create(const std::shared_ptr<Configuration>& configuration)
+    Map* Map::create(const ConfigurationPtr& configuration)
     {
         auto map = new Map();
 
@@ -37,7 +37,7 @@ namespace Gecko
         return map;
     }
 
-    Map* Map::create(Map* memory, const std::shared_ptr<Configuration>& configuration)
+    Map* Map::create(Map* memory, const ConfigurationPtr& configuration)
     {
         auto map = new (memory) Map();
 
@@ -93,7 +93,7 @@ namespace Gecko
         set_visible(false);
     }
 
-    std::shared_ptr<Configuration> Map::serialize() const
+    ConfigurationPtr Map::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -102,7 +102,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Map::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Map::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 
@@ -341,6 +341,8 @@ namespace Gecko
 
     void Map::deinit_cameras()
     {
+        Game::getSingleton().getRenderWindow()->removeAllViewports();
+
         m_cameras.clear();
     }
 
@@ -354,10 +356,24 @@ namespace Gecko
 
     void Map::deinit_objects()
     {
+        auto deinit = [](Item& item)
+        {
+            item.deinit();
+        };
+
+        ObjectManager::getSingleton().iterate(std::bind(deinit, std::placeholders::_1));
+        ObjectManager::getSingleton().destroy_all();
     }
 
     void Map::deinit_players()
     {
+        auto deinit = [](Item& item)
+        {
+            item.deinit();
+        };
+
+        PlayerManager::getSingleton().iterate(std::bind(deinit, std::placeholders::_1));
+        PlayerManager::getSingleton().destroy_all();
     }
 
     void Map::deinit_seasons()

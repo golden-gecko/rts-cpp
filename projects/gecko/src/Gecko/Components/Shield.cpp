@@ -4,7 +4,7 @@
 
 namespace Gecko
 {
-    Shield* Shield::create(Shield* memory, const std::shared_ptr<Configuration>& configuration)
+    Shield* Shield::create(Shield* memory, const ConfigurationPtr& configuration)
     {
         auto component = new (memory) Shield();
 
@@ -19,7 +19,7 @@ namespace Gecko
         defence = other.defence;
     }
 
-    std::shared_ptr<Configuration> Shield::serialize() const
+    ConfigurationPtr Shield::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -28,7 +28,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Shield::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Shield::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

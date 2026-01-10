@@ -14,7 +14,7 @@ namespace Gecko
         return new (memory) OrderMove();
     }
 
-    OrderMove* OrderMove::create(OrderMove* memory, const std::shared_ptr<Configuration>& configuration)
+    OrderMove* OrderMove::create(OrderMove* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderMove();
 
@@ -36,7 +36,7 @@ namespace Gecko
         set_path(Path());
     }
 
-    std::shared_ptr<Configuration> OrderMove::serialize() const
+    ConfigurationPtr OrderMove::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -46,7 +46,7 @@ namespace Gecko
         return configuration;
     }
 
-    void OrderMove::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void OrderMove::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

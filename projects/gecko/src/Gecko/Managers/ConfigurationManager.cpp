@@ -71,7 +71,7 @@ namespace Gecko
         }
     }
 
-    std::shared_ptr<Configuration> ConfigurationManager::get(const std::string& name) const
+    ConfigurationPtr ConfigurationManager::get(const std::string& name) const
     {
         auto configuration = configurations.find(name);
 

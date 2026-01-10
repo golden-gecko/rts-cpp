@@ -6,7 +6,7 @@
 
 namespace Gecko
 {
-    Debug* Debug::create(Debug* memory, const std::shared_ptr<Configuration>& configuration)
+    Debug* Debug::create(Debug* memory, const ConfigurationPtr& configuration)
     {
         auto component = new (memory) Debug();
 

@@ -14,7 +14,7 @@ namespace Gecko
     public:
         static OrderWait* create();
         static OrderWait* create(OrderWait* memory);
-        static OrderWait* create(OrderWait* memory, const std::shared_ptr<Configuration>& configuration);
+        static OrderWait* create(OrderWait* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderWait();
@@ -22,8 +22,8 @@ namespace Gecko
 
         void init() override;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         auto& get_wait_timer()

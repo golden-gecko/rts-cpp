@@ -12,9 +12,9 @@ namespace Gecko
 
     public:
         static Map* create();
-        static Map* create(const std::shared_ptr<Configuration>& configuration);
+        static Map* create(const ConfigurationPtr& configuration);
         static Map* create(Map* memory);
-        static Map* create(Map* memory, const std::shared_ptr<Configuration>& configuration);
+        static Map* create(Map* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Map() = default;
@@ -23,8 +23,8 @@ namespace Gecko
         void init() override;
         void deinit() override;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
         void update(float time) override;
 

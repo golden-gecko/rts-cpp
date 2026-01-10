@@ -11,7 +11,7 @@ namespace Gecko
         using base_type = Component;
 
     public:
-        static Radar* create(Radar* memory, const std::shared_ptr<Configuration>& configuration);
+        static Radar* create(Radar* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Radar() = default;

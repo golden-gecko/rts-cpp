@@ -14,7 +14,7 @@
 
 namespace Gecko
 {
-    std::shared_ptr<Configuration> Selected::serialize() const
+    ConfigurationPtr Selected::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -34,7 +34,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Selected::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Selected::deserialize(const ConfigurationPtr& configuration)
     {
         clear();
 

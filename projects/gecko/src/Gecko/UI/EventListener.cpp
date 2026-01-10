@@ -19,18 +19,21 @@ namespace Gecko
 			return;
 		}
 
-		if (segments[0] == "call")
+		const std::string function = segments[0];
+		const std::string argument = segments[1];
+
+		if (function == "call")
 		{
-			if (segments[1] == "quit-to-menu")
+			if (argument == "quit-to-menu")
 			{
-				// TODO: Implement.
+				Game::getSingleton().load_map("menu");
 			}
-			else if (segments[1] == "quit-to-desktop")
+			else if (argument == "quit-to-desktop")
 			{
 				Game::getSingleton().quit();
 			}
 		}
-		else if (segments[0] == "open")
+		else if (function == "open")
 		{
 			Rml::ElementDocument* document = UI::getSingleton().get_document();
 
@@ -39,7 +42,7 @@ namespace Gecko
 				return;
 			}
 
-			Rml::Element* element = document->GetElementById(segments[1]);
+			Rml::Element* element = document->GetElementById(argument);
 
 			if (element == nullptr)
 			{

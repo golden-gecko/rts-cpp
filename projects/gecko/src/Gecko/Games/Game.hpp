@@ -31,7 +31,7 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        explicit Game(const std::shared_ptr<Configuration>& configuration);
+        explicit Game(const ConfigurationPtr& configuration);
 
         virtual ~Game() = default;
 
@@ -104,7 +104,7 @@ namespace Gecko
         virtual void init_skills(std::size_t max_size);
 
     private:
-        std::shared_ptr<Configuration> m_configuration;
+        ConfigurationPtr m_configuration;
 
         std::string name;
 

@@ -4,7 +4,7 @@
 
 namespace Gecko
 {
-    Hull* Hull::create(Hull* memory, const std::shared_ptr<Configuration>& configuration)
+    Hull* Hull::create(Hull* memory, const ConfigurationPtr& configuration)
     {
         auto component = new (memory) Hull();
 

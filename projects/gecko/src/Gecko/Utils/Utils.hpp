@@ -7,9 +7,6 @@
 
 namespace Gecko::Utils
 {
-    // TODO: Move to Utils::String.
-    std::string format_title(const std::string& value);
-
     Ogre::Vector3 get_node_direction(Ogre::SceneNode& scene_node);
 
     const Ogre::Vector3& get_node_position(Ogre::SceneNode& scene_node);

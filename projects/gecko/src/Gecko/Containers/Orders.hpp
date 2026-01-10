@@ -10,8 +10,8 @@ namespace Gecko
     {
     public:
         // From Serializable.
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         typedef std::set<order_type::Value> Available;

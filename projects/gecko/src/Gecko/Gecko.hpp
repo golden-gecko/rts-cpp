@@ -51,7 +51,7 @@
 
 #pragma warning(pop)
 
-// TODO: Remove or add all classes.
+// TODO: Add all classes.
 namespace Gecko
 {
     class Application;
@@ -64,9 +64,11 @@ namespace Gecko
     class Cursor;
     class DataLayer;
     class Diplomacy;
+    class Entrance;
     class EventListenerInstancer;
     class Game;
     class Id;
+    class Initializable;
     class Layer;
     class Layers;
     class Map;
@@ -87,10 +89,26 @@ namespace Gecko
     class Season;
     class Selected;
     class SelectionBox;
+    class Serializable;
     class Skill;
     class Skills;
     class SystemInterface;
     class Technology;
     class Tile;
+    class Updatable;
     class Window;
+
+    using CameraPtr = std::shared_ptr<Camera>;
+    using ConfigurationPtr = std::shared_ptr<Configuration>;
+    using LayerPtr = std::shared_ptr<Layer>;
+    using ResourcePtr = std::shared_ptr<Resource>;
+    using SeasonPtr = std::shared_ptr<Season>;
+    using TechnologyPtr = std::shared_ptr<Technology>;
+
+    typedef std::vector<Ogre::uint32> Indices;
+    typedef std::vector<std::vector<Ogre::Vector3>> Normals;
+    typedef std::vector<std::vector<std::vector<Ogre::Vector2>>> TextureCoordinates;
+    typedef std::vector<std::vector<Ogre::Vector3>> Vertices;
+
+    typedef int Index;
 }

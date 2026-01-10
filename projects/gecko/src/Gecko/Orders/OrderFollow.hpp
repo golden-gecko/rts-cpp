@@ -14,7 +14,7 @@ namespace Gecko
     public:
         static OrderFollow* create();
         static OrderFollow* create(OrderFollow* memory);
-        static OrderFollow* create(OrderFollow* memory, const std::shared_ptr<Configuration>& configuration);
+        static OrderFollow* create(OrderFollow* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderFollow();
@@ -22,8 +22,8 @@ namespace Gecko
 
         void init() override;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         const auto& get_path() const

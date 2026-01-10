@@ -14,7 +14,7 @@ namespace Gecko
     public:
         static OrderMove* create();
         static OrderMove* create(OrderMove* memory);
-        static OrderMove* create(OrderMove* memory, const std::shared_ptr<Configuration>& configuration);
+        static OrderMove* create(OrderMove* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderMove();
@@ -22,8 +22,8 @@ namespace Gecko
 
         void init() override;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         // TODO: Remove.

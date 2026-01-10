@@ -13,7 +13,7 @@ namespace Gecko
     public:
         static OrderRally* create();
         static OrderRally* create(OrderRally* memory);
-        static OrderRally* create(OrderRally* memory, const std::shared_ptr<Configuration>& configuration);
+        static OrderRally* create(OrderRally* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderRally();
@@ -21,8 +21,8 @@ namespace Gecko
 
         void init() override;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         const auto& get_target_position() const

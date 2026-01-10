@@ -14,7 +14,7 @@ namespace Gecko
         return new (memory) OrderFollow();
     }
 
-    OrderFollow* OrderFollow::create(OrderFollow* memory, const std::shared_ptr<Configuration>& configuration)
+    OrderFollow* OrderFollow::create(OrderFollow* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderFollow();
 
@@ -36,7 +36,7 @@ namespace Gecko
         set_target_id(Id::Empty);
     }
 
-    std::shared_ptr<Configuration> OrderFollow::serialize() const
+    ConfigurationPtr OrderFollow::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -46,7 +46,7 @@ namespace Gecko
         return configuration;
     }
 
-    void OrderFollow::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void OrderFollow::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

@@ -7,7 +7,7 @@ namespace Gecko
     public:
         virtual ~Serializable() = default;
 
-        virtual std::shared_ptr<Configuration> serialize() const = 0;
-        virtual void deserialize(const std::shared_ptr<Configuration>& configuration) = 0;
+        virtual ConfigurationPtr serialize() const = 0;
+        virtual void deserialize(const ConfigurationPtr& configuration) = 0;
     };
 }

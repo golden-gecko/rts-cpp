@@ -26,6 +26,7 @@
 #include "Gecko/UI/SelectionBox.hpp"
 #include "Gecko/UI/SystemInterface.hpp"
 #include "Gecko/Utils/Convert.hpp"
+#include "Gecko/Utils/String.hpp"
 
 Gecko::UI* Ogre::Singleton<Gecko::UI>::msSingleton = nullptr;
 
@@ -188,7 +189,7 @@ namespace Gecko
         }
     }
 
-    UI::UI(const std::shared_ptr<Configuration>& configuration) :
+    UI::UI(const ConfigurationPtr& configuration) :
         m_configuration(configuration)
     {
     }
@@ -780,7 +781,7 @@ namespace Gecko
 
         for (const std::string& _configuration : configurations)
         {
-            std::string title = Utils::format_title(_configuration);
+            std::string title = Utils::String::to_title(_configuration);
 
             rml += std::vformat(m_configuration->get_string("templates.configurations"), std::make_format_args(_configuration, title));
         }
@@ -800,7 +801,7 @@ namespace Gecko
         }
 
         // Update UI.
-        configurations_header->SetInnerRML(Utils::format_title(_configuration_name));
+        configurations_header->SetInnerRML(Utils::String::to_title(_configuration_name));
     }
 
     void UI::set_floating_descriptions(const std::vector<Id>& objects)
@@ -933,10 +934,10 @@ namespace Gecko
         hovered_object_id = object_id;
     }
 
-    void UI::set_info(const std::shared_ptr<Configuration>& info)
+    void UI::set_info(const ConfigurationPtr& info)
     {
         // Update cache.
-        static std::shared_ptr<Configuration> info_cache;
+        static ConfigurationPtr info_cache;
 
         if (info_cache == info)
         {
@@ -1133,7 +1134,7 @@ namespace Gecko
 
         for (const std::string& order : orders)
         {
-            std::string title = Utils::format_title(order);
+            std::string title = Utils::String::to_title(order);
 
             rml += std::vformat(m_configuration->get_string("templates.orders"), std::make_format_args(order, title));
         }
@@ -1155,7 +1156,7 @@ namespace Gecko
         order_type_cache = order_type;
 
         // Update UI.
-        orders_header->SetInnerRML(Utils::format_title(order_type::to_string(order_type)));
+        orders_header->SetInnerRML(Utils::String::to_title(order_type::to_string(order_type)));
     }
 
     void UI::set_resources(std::shared_ptr<Resources> resources)
@@ -1244,7 +1245,7 @@ namespace Gecko
 
         for (const std::string& skill : skills)
         {
-            std::string title = Utils::format_title(skill);
+            std::string title = Utils::String::to_title(skill);
 
             rml += std::vformat(m_configuration->get_string("templates.skills"), std::make_format_args(skill, title));
         }
@@ -1266,7 +1267,7 @@ namespace Gecko
         skill_name_cache = skill_name;
 
         // Update UI.
-        orders_header->SetInnerRML(Utils::format_title(skill_name));
+        orders_header->SetInnerRML(Utils::String::to_title(skill_name));
     }
 
     void UI::set_statistics(const std::map<std::string, std::string>& statistics)

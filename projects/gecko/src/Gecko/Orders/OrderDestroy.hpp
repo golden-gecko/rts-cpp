@@ -13,7 +13,7 @@ namespace Gecko
     public:
         static OrderDestroy* create();
         static OrderDestroy* create(OrderDestroy* memory);
-        static OrderDestroy* create(OrderDestroy* memory, const std::shared_ptr<Configuration>& configuration);
+        static OrderDestroy* create(OrderDestroy* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderDestroy();

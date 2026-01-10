@@ -69,7 +69,7 @@ namespace Gecko
         attempts_to_complete = 0;
     }
 
-    std::shared_ptr<Configuration> Order::serialize() const
+    ConfigurationPtr Order::serialize() const
     {
         auto configuration = base_type::serialize();
 
@@ -81,7 +81,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Order::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Order::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
 

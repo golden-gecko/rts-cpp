@@ -12,7 +12,7 @@ namespace Gecko
         m_activation_count = other.m_activation_count;
     }
 
-    std::shared_ptr<Configuration> Skill::serialize() const
+    ConfigurationPtr Skill::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -23,7 +23,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Skill::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Skill::deserialize(const ConfigurationPtr& configuration)
     {
         m_name = configuration->get_string("name");
 

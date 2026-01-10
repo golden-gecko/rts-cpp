@@ -6,4 +6,14 @@ namespace Gecko::Utils::String
     {
         return boost::algorithm::to_lower_copy(value);
     }
+    
+    std::string to_title(const std::string& value)
+    {
+        std::string result = value;
+        
+        boost::algorithm::replace_all(result, "_", " ");
+        boost::algorithm::to_upper(result);
+
+        return result;
+    }
 }

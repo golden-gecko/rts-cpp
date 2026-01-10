@@ -22,7 +22,7 @@ namespace Gecko
         return State::Enemy;
     }
 
-    std::shared_ptr<Configuration> Diplomacy::serialize() const
+    ConfigurationPtr Diplomacy::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -31,7 +31,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Diplomacy::deserialize(const std::shared_ptr<Configuration>& configuration)
+    void Diplomacy::deserialize(const ConfigurationPtr& configuration)
     {
         // clear();
 

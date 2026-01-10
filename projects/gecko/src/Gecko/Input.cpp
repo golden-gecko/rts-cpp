@@ -239,7 +239,7 @@ namespace Gecko
         return true;
     }
 
-    Input::Input(const std::shared_ptr<Configuration>& configuration) :
+    Input::Input(const ConfigurationPtr& configuration) :
         m_configuration(configuration)
     {
     }

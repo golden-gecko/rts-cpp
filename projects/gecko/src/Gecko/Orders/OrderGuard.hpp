@@ -14,7 +14,7 @@ namespace Gecko
     public:
         static OrderGuard* create();
         static OrderGuard* create(OrderGuard* memory);
-        static OrderGuard* create(OrderGuard* memory, const std::shared_ptr<Configuration>& configuration);
+        static OrderGuard* create(OrderGuard* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderGuard();
@@ -22,8 +22,8 @@ namespace Gecko
 
         void init() override;
 
-        std::shared_ptr<Configuration> serialize() const override;
-        void deserialize(const std::shared_ptr<Configuration>& configuration) override;
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         const auto& get_path() const

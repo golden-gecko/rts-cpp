@@ -114,7 +114,7 @@ namespace Gecko
         UI::getSingleton().update(time);
     }
 
-    Game::Game(const std::shared_ptr<Configuration>& configuration) :
+    Game::Game(const ConfigurationPtr& configuration) :
         m_configuration(configuration)
     {
     }
@@ -123,7 +123,6 @@ namespace Gecko
     {
         L_TIME("Game::load_map(" + map_name + ")");
 
-        // TODO: Should be possible to load multiple maps.
         unload_map();
 
         auto map = MapManager::getSingleton().create(map_name);
@@ -314,11 +313,21 @@ namespace Gecko
 
     void Game::unload_map()
     {
-        ComponentManager::getSingleton().destroy_all();
+        L_TIME("Game::unload_map()");
+
+        auto deinit = [](Item& item)
+        {
+            item.deinit();
+        };
+
+        MapManager::getSingleton().iterate(std::bind(deinit, std::placeholders::_1));
         MapManager::getSingleton().destroy_all();
-        ObjectManager::getSingleton().destroy_all();
+
+        ComponentManager::getSingleton().iterate(std::bind(deinit, std::placeholders::_1));
+        OrderManager::getSingleton().iterate(std::bind(deinit, std::placeholders::_1));
+
+        ComponentManager::getSingleton().destroy_all();
         OrderManager::getSingleton().destroy_all();
-        PlayerManager::getSingleton().destroy_all();
     }
 
     void Game::update_input(float time)
@@ -476,7 +485,7 @@ namespace Gecko
 
     void Game::load_options()
     {
-        std::shared_ptr<Configuration> options = m_configuration->get_child("options");
+        ConfigurationPtr options = m_configuration->get_child("options");
 
         /*
         TODO: Implement.
@@ -719,7 +728,7 @@ namespace Gecko
 
             if (type == "Map")
             {
-                auto function = static_cast<Map*(*)(Map* memory, const std::shared_ptr<Configuration>&)>(&Map::create);
+                auto function = static_cast<Map*(*)(Map* memory, const ConfigurationPtr&)>(&Map::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 map_manager.register_type<Map>(name, factory);
@@ -787,7 +796,7 @@ namespace Gecko
 
             if (type == "Attack")
             {
-                auto function = static_cast<OrderAttack*(*)(OrderAttack* memory, const std::shared_ptr<Configuration>&)>(&OrderAttack::create);
+                auto function = static_cast<OrderAttack*(*)(OrderAttack* memory, const ConfigurationPtr&)>(&OrderAttack::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderAttack>(name, factory);
@@ -795,7 +804,7 @@ namespace Gecko
             }
             else if (type == "Create")
             {
-                auto function = static_cast<OrderCreate*(*)(OrderCreate* memory, const std::shared_ptr<Configuration>&)>(&OrderCreate::create);
+                auto function = static_cast<OrderCreate*(*)(OrderCreate* memory, const ConfigurationPtr&)>(&OrderCreate::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderCreate>(name, factory);
@@ -803,7 +812,7 @@ namespace Gecko
             }
             else if (type == "Destroy")
             {
-                auto function = static_cast<OrderDestroy*(*)(OrderDestroy* memory, const std::shared_ptr<Configuration>&)>(&OrderDestroy::create);
+                auto function = static_cast<OrderDestroy*(*)(OrderDestroy* memory, const ConfigurationPtr&)>(&OrderDestroy::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderDestroy>(name, factory);
@@ -811,7 +820,7 @@ namespace Gecko
             }
             else if (type == "Follow")
             {
-                auto function = static_cast<OrderFollow*(*)(OrderFollow* memory, const std::shared_ptr<Configuration>&)>(&OrderFollow::create);
+                auto function = static_cast<OrderFollow*(*)(OrderFollow* memory, const ConfigurationPtr&)>(&OrderFollow::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderFollow>(name, factory);
@@ -819,7 +828,7 @@ namespace Gecko
             }
             else if (type == "Guard")
             {
-                auto function = static_cast<OrderGuard*(*)(OrderGuard* memory, const std::shared_ptr<Configuration>&)>(&OrderGuard::create);
+                auto function = static_cast<OrderGuard*(*)(OrderGuard* memory, const ConfigurationPtr&)>(&OrderGuard::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderGuard>(name, factory);
@@ -827,7 +836,7 @@ namespace Gecko
             }
             else if (type == "Load")
             {
-                auto function = static_cast<OrderLoad*(*)(OrderLoad* memory, const std::shared_ptr<Configuration>&)>(&OrderLoad::create);
+                auto function = static_cast<OrderLoad*(*)(OrderLoad* memory, const ConfigurationPtr&)>(&OrderLoad::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderLoad>(name, factory);
@@ -835,7 +844,7 @@ namespace Gecko
             }
             else if (type == "Move")
             {
-                auto function = static_cast<OrderMove*(*)(OrderMove* memory, const std::shared_ptr<Configuration>&)>(&OrderMove::create);
+                auto function = static_cast<OrderMove*(*)(OrderMove* memory, const ConfigurationPtr&)>(&OrderMove::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderMove>(name, factory);
@@ -843,7 +852,7 @@ namespace Gecko
             }
             else if (type == "Patrol")
             {
-                auto function = static_cast<OrderPatrol*(*)(OrderPatrol* memory, const std::shared_ptr<Configuration>&)>(&OrderPatrol::create);
+                auto function = static_cast<OrderPatrol*(*)(OrderPatrol* memory, const ConfigurationPtr&)>(&OrderPatrol::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderPatrol>(name, factory);
@@ -851,7 +860,7 @@ namespace Gecko
             }
             else if (type == "Rally")
             {
-                auto function = static_cast<OrderRally*(*)(OrderRally* memory, const std::shared_ptr<Configuration>&)>(&OrderRally::create);
+                auto function = static_cast<OrderRally*(*)(OrderRally* memory, const ConfigurationPtr&)>(&OrderRally::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderRally>(name, factory);
@@ -859,7 +868,7 @@ namespace Gecko
             }
             else if (type == "Stop")
             {
-                auto function = static_cast<OrderStop*(*)(OrderStop* memory, const std::shared_ptr<Configuration>&)>(&OrderStop::create);
+                auto function = static_cast<OrderStop*(*)(OrderStop* memory, const ConfigurationPtr&)>(&OrderStop::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderStop>(name, factory);
@@ -867,7 +876,7 @@ namespace Gecko
             }
             else if (type == "Unload")
             {
-                auto function = static_cast<OrderUnload*(*)(OrderUnload* memory, const std::shared_ptr<Configuration>&)>(&OrderUnload::create);
+                auto function = static_cast<OrderUnload*(*)(OrderUnload* memory, const ConfigurationPtr&)>(&OrderUnload::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderUnload>(name, factory);
@@ -875,7 +884,7 @@ namespace Gecko
             }
             else if (type == "Wait")
             {
-                auto function = static_cast<OrderWait*(*)(OrderWait* memory, const std::shared_ptr<Configuration>&)>(&OrderWait::create);
+                auto function = static_cast<OrderWait*(*)(OrderWait* memory, const ConfigurationPtr&)>(&OrderWait::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 order_manager.register_type<OrderWait>(name, factory);
@@ -899,7 +908,7 @@ namespace Gecko
 
             if (type == "Player")
             {
-                auto function = static_cast<Player*(*)(Player* memory, const std::shared_ptr<Configuration>&)>(&Player::create);
+                auto function = static_cast<Player*(*)(Player* memory, const ConfigurationPtr&)>(&Player::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 player_manager.register_type<Player>(name, factory);
