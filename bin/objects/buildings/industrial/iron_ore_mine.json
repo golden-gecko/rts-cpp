@@ -1,7 +1,7 @@
 {
     "components": [
         {
-            "configuration": "hull",
+            "configuration": "mine_hull",
             "mesh": {
                 "color": {
                     "b": 0.5,

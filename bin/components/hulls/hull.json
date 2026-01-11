@@ -7,7 +7,7 @@
         "maximal": 100.0
     },
     "include": [
-        "../objects/meshes/cube_centered_on_bottom.json"
+        "../components/meshes/cube_centered_on_bottom.json"
     ],
     "name": "Hull",
     "type": "Hull"

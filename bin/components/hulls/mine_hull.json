@@ -9,6 +9,6 @@
     "include": [
         "../components/meshes/cube_centered_on_bottom.json"
     ],
-    "name": "Wall Hull",
+    "name": "Mine Hull",
     "type": "Hull"
 }

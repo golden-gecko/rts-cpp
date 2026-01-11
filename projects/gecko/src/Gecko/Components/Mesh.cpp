@@ -102,6 +102,15 @@ namespace Gecko
         entity = Game::getSingleton().create_entity(m_configuration->get_string("mesh.name"));
         entity->setQueryFlags(QueryFlags::QF_Object);
         entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
+        //entity->setMaterialName("mine_hull");
+
+        if (m_configuration->get_string("mesh.name") == "mine_hull.mesh")
+        {
+            auto c = entity->getMesh()->getNumSubMeshes();
+            //entity->getMesh()->getSubMesh(0)->setMaterialName("mine_hull");
+            auto m = entity->getMesh()->getSubMesh(0)->getMaterial();
+            auto s = entity->getMesh()->getSubMesh(0)->getMaterialName();
+        }
     }
 
     void Mesh::load_from_vertices()

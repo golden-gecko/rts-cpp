@@ -1,0 +1,68 @@
+{
+    "active_player": "human",
+    "cameras": [
+        {
+            "look_at": {
+                "x": 100.0,
+                "y": 50.0,
+                "z": 100.0
+            },
+            "name": "Main",
+            "position": {
+                "x": 0.0,
+                "y": 100.0,
+                "z": 0.0
+            },
+            "speed": {
+                "x": 100.0,
+                "y": 100.0,
+                "z": 100.0
+            },
+            "type": "TopDown"
+        },
+        {
+            "name": "Minimap",
+            "projection_type": "orthographic",
+            "type": "Minimap"
+        },
+        {
+            "name": "Preview",
+            "type": "ObjectFollow"
+        }
+    ],
+    "creatable": {
+        "by_game": true
+    },
+    "layers": {
+        "Terrain": {
+            "data": [
+                [
+                    "test_128x128.png"
+                ]
+            ],
+            "grid": {
+                "scale": {
+                    "x": 8.0,
+                    "z": 8.0
+                }
+            },
+            "material": "test_terrain",
+            "scale": {
+                "x": 8.0,
+                "y": 0.1,
+                "z": 8.0
+            },
+            "shards": 16
+        }
+    },
+    "name": "Test",
+    "players": [
+        {
+            "configuration": "human"
+        },
+        {
+            "configuration": "world"
+        }
+    ],
+    "type": "Map"
+}

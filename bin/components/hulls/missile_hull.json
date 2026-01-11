@@ -7,7 +7,7 @@
         "maximal": 1.0
     },
     "include": [
-        "../objects/meshes/cube_centered.json"
+        "../components/meshes/cube_centered.json"
     ],
     "mesh": {
         "color": {

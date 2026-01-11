@@ -20,6 +20,7 @@ namespace Gecko
 
         m_camera_scene_node = m_scene_manager->getRootSceneNode()->createChildSceneNode(name);
         m_camera_scene_node->attachObject(m_camera);
+        m_camera_scene_node->setFixedYawAxis(true);
 
         // TODO: Use deserialize instead of constructor.
         deserialize(configuration);

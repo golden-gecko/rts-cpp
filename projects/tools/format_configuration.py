@@ -4,7 +4,7 @@ import sys
 
 
 def main():
-    for file_name in glob.iglob('bin/**/*.json', recursive=True):
+    for file_name in glob.iglob('../../bin/**/*.json', recursive=True):
         process_file(file_name)
 
 

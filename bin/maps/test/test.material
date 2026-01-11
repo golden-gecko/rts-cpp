@@ -1,0 +1,22 @@
+material test_terrain
+{
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture test_128x128.png
+                filtering none
+            }
+
+            texture_unit grid
+            {
+                colour_op alpha_blend
+                filtering none
+                tex_coord_set 2
+                texture grid_yellow.png
+            }
+        }
+    }
+}

@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 
     // Initialize game and load map.
     game->init();
-    game->load_map("tutorial");
+    game->load_map("test");
 
     // Initialize input system.
     input->set_render_window_handle(Gecko::Utils::get_window_handle(game->getRenderWindow()));
