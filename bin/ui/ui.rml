@@ -290,8 +290,9 @@
         /* Players */
 
         #players {
-            left: 700px;
-            top: 60px;
+            right: 5px;
+            top: 100px;
+            width: 300px;
         }
 
         /* Preview */
@@ -371,13 +372,14 @@
     <!-- Game Menu -->
     <div id="game-menu" class="card">
         <div class="card-body">
-            <button class="button button-diplomacy" onclick="open:diplomacy">Diplomacy</button>
-            <button class="button button-layers" onclick="open:layers">Layers</button>
-            <button class="button button-main-menu" onclick="open:main-menu">Menu</button>
-            <button class="button button-objects" onclick="open:objects-admin">Objects</button>   
-            <button class="button button-orders" onclick="open:orders-admin">Orders</button>
-            <button class="button button-statistics" onclick="open:statistics">Statistics</button>
-            <button class="button button-technologies" onclick="open:technologies">Technologies</button>
+            <button class="button" onclick="open:diplomacy">Diplomacy</button>
+            <button class="button" onclick="open:layers">Layers</button>
+            <button class="button" onclick="open:main-menu">Menu</button>
+            <button class="button" onclick="open:objects-admin">Objects</button>   
+            <button class="button" onclick="open:orders-admin">Orders</button>
+            <button class="button" onclick="open:players">Players</button>
+            <button class="button" onclick="open:statistics">Statistics</button>
+            <button class="button" onclick="open:technologies">Technologies</button>
         </div>
     </div>
 
@@ -664,7 +666,7 @@
     </div>
 
     <!-- Players -->
-    <div id="players" class="card hidden">
+    <div id="players" class="card">
         <div class="card-header">Players
             <img class="button-collapse" src="icons/arrow-up-short.png" />
             <img class="button-expand" src="icons/arrow-down-short.png" />
@@ -672,11 +674,7 @@
 
         <div class="card-body">
             <table class="table table-condensed no-header">
-                <tbody class="placeholder">
-                    <tr data-id="1"><td class="id number">1</td><td class="color">green</td><td class="name">CPU 1</td></tr>
-                    <tr data-id="2"><td class="id number">2</td><td class="color">yellow</td><td class="name">CPU 2</td></tr>
-                    <tr data-id="3"><td class="id number">3</td><td class="color">red</td><td class="name">Human</td></tr>
-                </tbody>
+                <tbody class="placeholder"></tbody>
             </table>
         </div>
     </div>

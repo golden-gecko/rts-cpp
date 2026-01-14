@@ -191,6 +191,7 @@ namespace Gecko
         Rml::Element* orders_admin_body = nullptr;
         Rml::Element* orders_body = nullptr;
         Rml::Element* orders_header = nullptr;
+        Rml::Element* players_body = nullptr;
         Rml::Element* resources_body = nullptr;
         Rml::Element* skills_header = nullptr;
         Rml::Element* skills_body = nullptr;

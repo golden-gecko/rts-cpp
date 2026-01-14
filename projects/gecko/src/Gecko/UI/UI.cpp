@@ -863,6 +863,9 @@ namespace Gecko
 
     void UI::set_layers(const std::map<std::string, std::shared_ptr<Layer>>& layers)
     {
+        /*
+        TODO: Fix.
+        
         // Update cache.
         static std::map<std::string, std::shared_ptr<Layer>> layers_cache;
 
@@ -899,10 +902,14 @@ namespace Gecko
         stream << "app.layers.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
+        */
     }
 
     void UI::set_maps(const std::vector<std::string>& maps)
     {
+        /*
+        TODO: Fix.
+
         // Update cache.
         static std::vector<std::string> maps_cache;
 
@@ -928,6 +935,7 @@ namespace Gecko
         stream << "app.map_menu.set_maps(";
         stream << Utils::Convert::to_string(json_maps);
         stream << ")";
+        */
     }
 
     void UI::set_hovered_object_id(Id object_id)
@@ -1074,27 +1082,20 @@ namespace Gecko
         players_cache = players;
         */
 
-        // Create JSON.
-        Json::Value json_players;
+        // Create RML.
+        Rml::String rml;
 
         for (const auto& [id, player] : PlayerManager::getSingleton())
         {
-            Json::Value json_player;
+            int id_value = id.get();
+            std::string name = player->get_name();
+            std::string color = player->get_color();
 
-            json_player["id"] = id;
-            json_player["name"] = player->get_name();
-            json_player["color"] = player->get_color();
-
-            json_players.append(json_player);
+            rml += std::vformat(m_configuration->get_string("templates.players"), std::make_format_args(id_value, name, color));
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.players.set(";
-        stream << Utils::Convert::to_string(json_players);
-        stream << ")";
+        players_body->SetInnerRML(rml);
     }
 
     void UI::set_order_name(order_type::Value _order_name)
@@ -1187,6 +1188,9 @@ namespace Gecko
 
     void UI::set_saves(const std::vector<std::string>& saves)
     {
+        /*
+        TODO: Fix.
+
         // Update cache.
         static std::vector<std::string> saves_cache;
 
@@ -1212,6 +1216,7 @@ namespace Gecko
         stream << "app.load_menu.set_saves(";
         stream << Utils::Convert::to_string(json_saves);
         stream << ")";
+        */
     }
 
     void UI::set_skill_name(const std::string& _skill_name)
@@ -1295,6 +1300,9 @@ namespace Gecko
 
     void UI::set_terrain_layers(const std::set<std::string>& layers)
     {
+        /*
+        TODO: Fix.
+
         // Update cache.
         static std::set<std::string> layers_cache;
 
@@ -1318,10 +1326,14 @@ namespace Gecko
         stream << "app.terrain.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
+        */
     }
 
     void UI::set_water_layers(const std::set<std::string>& layers)
     {
+        /*
+        TODO: Fix.
+
         // Update cache.
         static std::set<std::string> layers_cache;
 
@@ -1345,6 +1357,7 @@ namespace Gecko
         stream << "app.water.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
+        */
     }
 
     void UI::init_components()
@@ -1377,6 +1390,7 @@ namespace Gecko
         orders_admin_body = get_body_placeholder("orders-admin");
         orders_body = get_body_placeholder("orders");
         orders_header = get_header_placeholder("orders");
+        players_body = get_body_placeholder("players");
         resources_body = get_body_placeholder("resources");
         skills_body = get_body_placeholder("skills");
         skills_header = get_header_placeholder("skills");
