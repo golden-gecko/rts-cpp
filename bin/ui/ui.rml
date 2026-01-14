@@ -312,11 +312,7 @@
             display: flex;
             left: 5px;
             top: 100px;
-            width: 300px;
-        }
-
-        #resources td {
-            min-width: 50px;
+            width: 400px;
         }
 
         #resources .green {

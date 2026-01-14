@@ -32,8 +32,8 @@ namespace Gecko
             // ui->set_visible(false);
 
             // Render.
-            viewport->clear();
-            viewport->update();
+            // viewport->clear();
+            // viewport->update();
 
             // Enable.
             // map->show_grid(grid_visibility);
@@ -79,8 +79,6 @@ namespace Gecko
             renderTexture = rttTexture->getBuffer()->getRenderTarget();
 
             viewport = renderTexture->addViewport(camera->get_camera());
-            viewport->setAutoUpdated(false);
-            viewport->setClearEveryFrame(false);
             viewport->setOverlaysEnabled(false);
             viewport->setShadowsEnabled(false);
             viewport->setSkiesEnabled(false);

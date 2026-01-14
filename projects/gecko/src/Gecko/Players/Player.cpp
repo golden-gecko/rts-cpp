@@ -92,12 +92,7 @@ namespace Gecko
         {
             if (get_id() == object->get_player_id())
             {
-                // TODO: Replace with merge method.
-                // TODO: Does not work because player resources are not initialized.
-                for (const auto& [_, resource] : (*object->get_resources().get()))
-                {
-                    m_resources->add(resource.get_name(), resource.get_current());
-                }
+                m_resources->merge(*(object->get_resources().get()));
             }
         }
     }

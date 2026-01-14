@@ -45,6 +45,8 @@ namespace Gecko
 
         bool has_storage(const std::string& name, float value) const;
 
+        void merge(Resources& other);
+
         float remove(const std::string& name, float value);
 
         auto size() const
@@ -58,6 +60,11 @@ namespace Gecko
         const auto& get_items() const
         {
             return m_items;
+        }
+
+        float get_max(const std::string& name) const
+        {
+            return m_items.find(name)->second.get_max();
         }
 
         auto get_max_storage() const
@@ -100,5 +107,10 @@ namespace Gecko
     private:
         float max_storage = 0.0f;
         Map m_items;
+
+        Resource& get(const std::string& name)
+        {
+            return m_items.find(name)->second;
+        }
     };
 }

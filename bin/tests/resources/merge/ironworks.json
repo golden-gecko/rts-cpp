@@ -6,7 +6,7 @@
         },
         "Iron Ore": {
             "current": 20.0,
-            "maximal": 80.0
+            "maximal": 60.0
         }
     }
 }

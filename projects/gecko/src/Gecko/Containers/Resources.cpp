@@ -137,6 +137,22 @@ namespace Gecko
         return resource->second.get_max() - resource->second.get_current() >= value;
     }
 
+    void Resources::merge(Resources& other)
+    {
+        for (Map::const_iterator i = other.cbegin(); i != other.cend(); i++)
+        {
+            if (has_resource(i->first) == false)
+            {
+                m_items.emplace(i->first, Resource(i->first));
+            }
+
+            Resource& resource = get(i->first);
+
+            resource.set_current(resource.get_current() + i->second.get_current());
+            resource.set_maximal(resource.get_max() + i->second.get_max());
+        }
+    }
+
     float Resources::remove(const std::string& name, float value)
     {
         auto resource = m_items.find(name);

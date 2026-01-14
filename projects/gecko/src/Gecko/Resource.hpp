@@ -42,6 +42,7 @@ namespace Gecko
             return deposit_range;
         }
 
+        // TODO: Unify naming (max vs maximal).
         auto get_max() const
         {
             return maximal;
@@ -80,6 +81,17 @@ namespace Gecko
         auto get_storage_range() const
         {
             return storage_range;
+        }
+
+    public:
+        void set_current(float _current)
+        {
+            current = _current;
+        }
+
+        void set_maximal(float _maximal)
+        {
+            maximal = _maximal;
         }
 
     public:
