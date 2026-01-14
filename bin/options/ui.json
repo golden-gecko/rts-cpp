@@ -9,6 +9,7 @@
         "layout": "../ui/ui.rml",
         "templates": {
             "configurations": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>",
+            "diplomacy": "<tr><td class=\"number\">{}</td><td>{}</td><td>{}</td></tr>",
             "log": "<p class=\"{}\">{}</p>",
             "objects-admin": "<tr><td class=\"number\">{}</td><td>{}</td><td class=\"number\">{}</td><td>{}</td></tr>",
             "orders": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>",

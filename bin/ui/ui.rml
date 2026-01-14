@@ -28,11 +28,14 @@
         thead {
 	        display: table-row-group;
         }
+        
+        thead {
+            font-weight: bold;
+        }
 
         td {
-	        box-sizing: border-box;
 	        display: table-cell;
-            padding: 0.1rem 0.5rem 0.1rem 0.5rem;
+            padding: 2px 5px;
         }
         
         tr {
@@ -355,9 +358,13 @@
         <div class="card modal">
             <div class="card-header">Diplomacy</div>
             <div class="card-body">
-                <table class="table table-condensed">
+                <table>
                     <thead>
-                        <tr></tr>
+                        <tr>
+                            <td class="number">ID</td>
+                            <td>Name</td>
+                            <td>Color</td>
+                        </tr>
                     </thead>
                     <tbody class="placeholder"></tbody>
                 </table>
@@ -377,7 +384,6 @@
             <button class="button" onclick="open:main-menu">Menu</button>
             <button class="button" onclick="open:objects-admin">Objects</button>   
             <button class="button" onclick="open:orders-admin">Orders</button>
-            <button class="button" onclick="open:players">Players</button>
             <button class="button" onclick="open:statistics">Statistics</button>
             <button class="button" onclick="open:technologies">Technologies</button>
         </div>
@@ -528,7 +534,7 @@
         <div class="card modal">
             <div class="card-header">Objects</div>
             <div class="card-body">
-                <table class="table table-condensed">
+                <table>
                     <thead>
                         <tr>
                             <td class="number">ID</td>
@@ -645,7 +651,7 @@
         <div class="card modal">
             <div class="card-header">Orders</div>
             <div class="card-body">
-                <table class="table table-condensed">
+                <table>
                     <thead>
                         <tr>
                             <td class="number">ID</td>
@@ -720,7 +726,7 @@
         <div class="card modal">
             <div class="card-header">Statistics</div>
             <div class="card-body">
-                <table class="table table-condensed">
+                <table>
                     <thead>
                         <tr>
                             <td>Name</td>

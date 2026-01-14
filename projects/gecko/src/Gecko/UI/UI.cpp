@@ -169,8 +169,9 @@ namespace Gecko
             }
 
             // TODO: Optimize.
-            // set_floating_descriptions(objects);
+            set_floating_descriptions();
 
+            set_diplomacy();
             // TODO: First map.
             set_layers(MapManager::getSingleton().begin()->second->get_layers());
             set_maps(Game::getSingleton().get_maps());
@@ -805,7 +806,38 @@ namespace Gecko
         configurations_header->SetInnerRML(Utils::String::to_title(_configuration_name));
     }
 
-    void UI::set_floating_descriptions(const std::vector<Id>& objects)
+    void UI::set_diplomacy()
+    {
+        // TODO: Fix cache.
+        /*
+        // Update cache.
+        static PlayerManager::Container players_cache;
+
+        if (players_cache == players)
+        {
+            return;
+        }
+
+        players_cache = players;
+        */
+
+        // Create RML.
+        Rml::String rml;
+
+        for (const auto& [id, player] : PlayerManager::getSingleton())
+        {
+            int id_value = id.get();
+            std::string name = player->get_name();
+            std::string color = player->get_color();
+
+            rml += std::vformat(m_configuration->get_string("templates.diplomacy"), std::make_format_args(id_value, name, color));
+        }
+
+        // Update UI.
+        diplomacy_body->SetInnerRML(rml);
+    }
+
+    void UI::set_floating_descriptions()
     {
         // TODO: Refactor? Fix? Remove?
         /*
@@ -1382,6 +1414,7 @@ namespace Gecko
 
         configurations_body = get_body_placeholder("configurations");
         configurations_header = get_header_placeholder("configurations");
+        diplomacy_body = get_body_placeholder("diplomacy");
         info_body = get_body_placeholder("info");
         layers_body = get_body_placeholder("layers");
         log_body = get_body_placeholder("log");

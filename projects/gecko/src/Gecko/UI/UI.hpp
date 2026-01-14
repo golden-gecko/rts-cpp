@@ -150,7 +150,8 @@ namespace Gecko
         void set_configuration_name(const std::string& _configuration_name);
         void set_configurations(const std::set<std::string>& configurations);
         void set_configurations_header(const std::string& _configuration_name);
-        void set_floating_descriptions(const std::vector<Id>& objects);
+        void set_diplomacy();
+        void set_floating_descriptions();
         void set_hovered_object_id(Id object_id);
         void set_info(const ConfigurationPtr& info);
         void set_layers(const std::map<std::string, std::shared_ptr<Layer>>& layers);
@@ -183,6 +184,7 @@ namespace Gecko
         // TODO: Rename element to body.
         Rml::Element* configurations_body = nullptr;
         Rml::Element* configurations_header = nullptr;
+        Rml::Element* diplomacy_body = nullptr;
         Rml::Element* info_body = nullptr;
         Rml::Element* layers_body = nullptr;
         Rml::Element* log_body = nullptr;
