@@ -11,6 +11,36 @@
 
 namespace Gecko
 {
+    void Minimap::update(float time)
+    {
+        // TODO: Hardcoded map and camera.
+        auto map = MapManager::getSingleton().begin()->second;
+        auto camera = map->get_camera("Minimap");
+
+        if (camera)
+        {
+            // TODO: Hardcoded map.
+            auto map = MapManager::getSingleton().begin()->second;
+            auto ui = UI::getSingletonPtr();
+
+            // Save state.
+            // auto grid_visibility = map->is_grid_visible();
+            // auto ui_visibility = ui->save_visibility();
+
+            // Disable.
+            // map->show_grid(false);
+            // ui->set_visible(false);
+
+            // Render.
+            viewport->clear();
+            viewport->update();
+
+            // Enable.
+            // map->show_grid(grid_visibility);
+            // ui->restore_visibility(ui_visibility);
+        }
+    }
+
     Minimap::Minimap()
     {
         rttTexture = Ogre::TextureManager::getSingleton().createManual(
@@ -60,36 +90,6 @@ namespace Gecko
     Minimap::~Minimap()
     {
         Ogre::TextureManager::getSingleton().remove(rttTexture);
-    }
-
-    void Minimap::update()
-    {
-        // TODO: Hardcoded map and camera.
-        auto map = MapManager::getSingleton().begin()->second;
-        auto camera = map->get_camera("Minimap");
-
-        if (camera)
-        {
-            // TODO: Hardcoded map.
-            auto map = MapManager::getSingleton().begin()->second;
-            auto ui = UI::getSingletonPtr();
-
-            // Save state.
-            // auto grid_visibility = map->is_grid_visible();
-            // auto ui_visibility = ui->save_visibility();
-
-            // Disable.
-            // map->show_grid(false);
-            // ui->set_visible(false);
-
-            // Render.
-            viewport->clear();
-            viewport->update();
-
-            // Enable.
-            // map->show_grid(grid_visibility);
-            // ui->restore_visibility(ui_visibility);
-        }
     }
 
     void Minimap::click(int x, int y)

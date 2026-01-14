@@ -16,6 +16,14 @@ namespace Gecko
 		EventListener(const Rml::String& value);
 
 	private:
+		Rml::Element* get_element(const std::string& element) const;
+
+		void on_close(const std::string& value) const;
+		void on_open(const std::string& value) const;
+		void on_quit_to_menu() const;
+		void on_quit_to_desktop() const;
+
+	private:
 		Rml::String value;
 	};
 }

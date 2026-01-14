@@ -1,49 +1,35 @@
 #pragma once
 
-#include "Gecko/Configuration.hpp"
-
 namespace Gecko
 {
     class ConfigurationManager :
         public Ogre::Singleton<ConfigurationManager>
     {
     public:
-        void parse_configuration_files();
+        using Map = std::map<std::string, ConfigurationPtr>;
 
+    public:
+        explicit ConfigurationManager(bool cache = true);
+
+        void parse_configuration_files();
         void parse_directory(const std::string& directory);
 
         void save_cache() const;
 
     public:
         ConfigurationPtr get(const std::string& name) const;
-
-        const auto& get_configurations() const
-        {
-            return configurations;
-        }
+        const Map& get_configurations() const;
 
     public:
-        auto begin() const
-        {
-            return configurations.begin();
-        }
+        Map::iterator begin();
+        Map::iterator end();
 
-        auto end() const
-        {
-            return configurations.end();
-        }
-
-        auto cbegin() const
-        {
-            return configurations.cbegin();
-        }
-
-        auto cend() const
-        {
-            return configurations.cend();
-        }
+        Map::const_iterator cbegin() const;
+        Map::const_iterator cend() const;
 
     private:
-        std::map<std::string, ConfigurationPtr> configurations;
+        Map configurations;
+
+        bool m_cache = true;
     };
 }

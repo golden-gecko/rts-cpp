@@ -107,8 +107,6 @@ namespace Gecko
             merged.removeMember("include");
 
             m_value = merged;
-
-            write_to_cache();
         }
     }
 
@@ -120,15 +118,15 @@ namespace Gecko
 
     void Configuration::save_cache() const
     {
-        std::string value_cache_path = get_value_cache_file_path();
-        std::filesystem::path directory = std::filesystem::path(value_cache_path).parent_path();
+        std::string cache_path = get_cache_file_path();
+        std::filesystem::path directory = std::filesystem::path(cache_path).parent_path();
 
         if (std::filesystem::exists(directory) == false)
         {
             std::filesystem::create_directories(directory);
         }
 
-        Utils::json_to_file(m_cache, value_cache_path);
+        Utils::json_to_file(m_value, cache_path, true);
     }
 
     std::string Configuration::to_string(const std::string& indentation) const
@@ -490,19 +488,5 @@ namespace Gecko
     {
         // TODO: Make function const.
         merge_json_objects(m_value, other);
-    }
-
-    void Configuration::write_to_cache() const
-    {
-        using namespace std::filesystem;
-
-        auto directory = path(get_cache_file_path()).parent_path();
-
-        if (exists(directory) == false)
-        {
-            create_directories(directory);
-        }
-
-        Utils::json_to_file(m_value, get_cache_file_path(), true);
     }
 }

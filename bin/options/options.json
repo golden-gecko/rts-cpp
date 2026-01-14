@@ -1,23 +1,5 @@
 {
     "options": {
-        "cache": {
-            "configurations": {
-                "enabled": true,
-                "path": "../cache/configurations"
-            },
-            "gpu": {
-                "enabled": true,
-                "path": "../cache/gpu_cache.bin"
-            },
-            "meshes": {
-                "enabled": true,
-                "path": "../cache/meshes"
-            },
-            "values": {
-                "enabled": true,
-                "path": "../cache/values"
-            }
-        },
         "input": {
             "mouse": {
                 "sensitivity": {

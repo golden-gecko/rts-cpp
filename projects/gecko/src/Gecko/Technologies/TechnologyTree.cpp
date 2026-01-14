@@ -1,5 +1,6 @@
 #include "Gecko/Technologies/TechnologyTree.hpp"
 
+#include "Gecko/Configuration.hpp"
 #include "Gecko/Managers/ConfigurationManager.hpp"
 #include "Gecko/Technologies/Technology.hpp"
 

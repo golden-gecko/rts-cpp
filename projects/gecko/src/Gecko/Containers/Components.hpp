@@ -90,6 +90,6 @@ namespace Gecko
     private:
         Items m_items;
 
-        void add_component(const std::string& configuration, const ConfigurationPtr& component_configuration);
+        void add_component(const std::string& configuration, const ConfigurationPtr& component_configuration = ConfigurationPtr());
     };
 }

@@ -1,16 +1,22 @@
 #pragma once
 
+#include "Gecko/Interfaces/Updatable.hpp"
+
 namespace Gecko
 {
-    class Minimap
+    class Minimap :
+        public Updatable
     {
+    public:
+        // From Updatable.
+        void update(float time) override;
+
     public:
         explicit Minimap();
 
         virtual ~Minimap();
 
-        void update();
-
+    public:
         void click(int x, int y);
         void move(int x, int y);
         void zoom_in();

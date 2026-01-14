@@ -52,7 +52,8 @@ namespace Gecko
             add_component(configuration, component_configuration);
         }
 
-        add_component("debug", ConfigurationPtr());
+        // TODO: Inject debug information in outer scope.
+        add_component("debug");
     }
 
     void Components::add_component(const std::string& configuration, const ConfigurationPtr& component_configuration)

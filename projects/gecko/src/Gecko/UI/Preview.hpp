@@ -1,31 +1,32 @@
 #pragma once
 
+#include "Gecko/Cameras/ObjectFollowCamera.hpp"
 #include "Gecko/Id.hpp"
+#include "Gecko/Interfaces/Updatable.hpp"
 
 namespace Gecko
 {
-    class Preview
+    class Preview :
+        public Updatable
     {
+    public:
+        // From Updatable.
+        void update(float time) override;
+
     public:
         explicit Preview();
 
         virtual ~Preview();
 
-        void update();
+    public:
+        std::shared_ptr<ObjectFollowCamera> get_camera() const;
 
-        bool is_visible() const
-        {
-            return rectangle->isVisible();
-        }
-
+    public:
         void set_position(std::uint32_t left, std::uint32_t top, const Id& id);
         void set_visible(bool visible);
 
     private:
-        Ogre::Rectangle2D* rectangle { nullptr };
-        Ogre::SceneNode* scene_node { nullptr };
-        Ogre::MaterialPtr renderMaterial;
-        Ogre::TexturePtr* rttTexture { nullptr };
+        Ogre::TexturePtr rttTexture{ nullptr };
         Ogre::RenderTexture* renderTexture { nullptr };
         Ogre::Viewport* viewport { nullptr };
 

@@ -1,4 +1,5 @@
 #include <Gecko/Application.hpp>
+#include <Gecko/Configuration.hpp>
 #include <Gecko/Games/Game.hpp>
 #include <Gecko/Input.hpp>
 #include <Gecko/Log.hpp>
@@ -22,8 +23,10 @@ int main(int argc, char* argv[])
     Gecko::Log::setup("rts.log");
 
     // Parse configuration files.
-    auto configuration_manager = std::make_unique<Gecko::ConfigurationManager>();
+    auto configuration_manager = std::make_unique<Gecko::ConfigurationManager>(false);
+
     configuration_manager->parse_configuration_files();
+    configuration_manager->save_cache();
 
     // Parse command line options.
     auto options = Gecko::Application::parse_options(argc, argv, "rts");
@@ -46,7 +49,7 @@ int main(int argc, char* argv[])
 
     // Initialize game and load map.
     game->init();
-    game->load_map("test");
+    game->load_map("tutorial");
 
     // Initialize input system.
     input->set_render_window_handle(Gecko::Utils::get_window_handle(game->getRenderWindow()));

@@ -1,0 +1,10 @@
+{
+    "Unprocessed Iron Ore": {
+        "current": 200.0,
+        "maximal": 800.0
+    },
+    "Iron Ore": {
+        "current": 20.0,
+        "maximal": 80.0
+    }
+}

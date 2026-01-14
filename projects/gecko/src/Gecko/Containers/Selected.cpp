@@ -1,5 +1,6 @@
 #include "Gecko/Containers/Selected.hpp"
 
+#include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Configurations.hpp"
 #include "Gecko/Containers/Orders.hpp"
 #include "Gecko/Containers/Skills.hpp"

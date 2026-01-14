@@ -181,19 +181,20 @@ namespace Gecko
         Rml::ElementDocument* document = nullptr;
 
         // TODO: Rename element to body.
+        Rml::Element* configurations_body = nullptr;
         Rml::Element* configurations_header = nullptr;
-        Rml::Element* configurations_element = nullptr;
-        Rml::Element* info_element = nullptr;
-        Rml::Element* layers_element = nullptr;
-        Rml::Element* log_element = nullptr;
-        Rml::Element* maps_element = nullptr;
-        Rml::Element* objects_element = nullptr;
+        Rml::Element* info_body = nullptr;
+        Rml::Element* layers_body = nullptr;
+        Rml::Element* log_body = nullptr;
+        Rml::Element* maps_body = nullptr;
+        Rml::Element* objects_admin_body = nullptr;
+        Rml::Element* orders_admin_body = nullptr;
+        Rml::Element* orders_body = nullptr;
         Rml::Element* orders_header = nullptr;
-        Rml::Element* orders_element = nullptr;
-        Rml::Element* resources_element = nullptr;
+        Rml::Element* resources_body = nullptr;
         Rml::Element* skills_header = nullptr;
-        Rml::Element* skills_element = nullptr;
-        Rml::Element* statistics_element = nullptr;
+        Rml::Element* skills_body = nullptr;
+        Rml::Element* statistics_body = nullptr;
 
         std::unique_ptr<Cursor> cursor;
         std::unique_ptr<Minimap> minimap;
@@ -221,8 +222,7 @@ namespace Gecko
 
         void log_write(const std::string& text, const std::string& type, Id id = Id::Empty);
 
-        Rml::Element* get_header(const std::string& selector) const;
-        // TODO: Rename to get_body.
-        Rml::Element* get_placeholder(const std::string& selector) const;
+        Rml::Element* get_header_placeholder(const std::string& selector) const;
+        Rml::Element* get_body_placeholder(const std::string& selector) const;
     };
 }

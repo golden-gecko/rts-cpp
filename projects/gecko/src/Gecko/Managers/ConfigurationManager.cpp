@@ -1,5 +1,6 @@
 #include "Gecko/Managers/ConfigurationManager.hpp"
 
+#include "Gecko/Configuration.hpp"
 #include "Gecko/Exception.hpp"
 #include "Gecko/Log.hpp"
 #include "Gecko/Settings.hpp"
@@ -9,6 +10,11 @@ Gecko::ConfigurationManager* Ogre::Singleton<Gecko::ConfigurationManager>::msSin
 
 namespace Gecko
 {
+    ConfigurationManager::ConfigurationManager(bool cache) :
+        m_cache(cache)
+    {
+    }
+
     void ConfigurationManager::parse_configuration_files()
     {
         L_TIME("Gecko::ConfigurationManager::parse_configuration_files()");
@@ -25,32 +31,31 @@ namespace Gecko
 
         for (auto i = std::filesystem::directory_iterator(directory); i != std::filesystem::directory_iterator(); i++)
         {
-            const auto& path = i->path();
-            auto path_string = path.generic_string();
-            auto name = path.stem().string();
+            std::string path = i->path().generic_string();
+            std::string name = i->path().stem().generic_string();
 
-            L_INFO << "Parsing path '" << path_string << "'.";
+            L_INFO << "Parsing path '" << path << "'.";
 
-            if (is_directory(path))
+            if (std::filesystem::is_directory(i->path()))
             {
-                parse_directory(path_string);
+                parse_directory(path);
 
                 continue;
             }
 
-            if (path.extension() != Settings::Configuration::Extension)
+            if (i->path().extension() != Settings::Configuration::Extension)
             {
-                L_WARNING << "File '" << path_string << "' has invalid extension.";
+                L_WARNING << "File '" << path << "' has invalid extension.";
 
                 continue;
             }
 
             if (configurations.find(name) != configurations.end())
             {
-                throw Exception("Configuration '" + name + "' from '" + path_string + "' already exists.");
+                throw Exception("Configuration '" + name + "' from '" + path + "' already exists.");
             }
 
-            auto configuration = std::make_shared<Configuration>(path_string);
+            ConfigurationPtr configuration = std::make_shared<Configuration>(path);
 
             if (configuration->get_bool("creatable.by_game", false) == false)
             {
@@ -65,15 +70,18 @@ namespace Gecko
 
     void ConfigurationManager::save_cache() const
     {
-        for (const auto& [path, configuration] : configurations)
+        if (m_cache)
         {
-            configuration->save_cache();
+            for (const auto& [path, configuration] : configurations)
+            {
+                configuration->save_cache();
+            }
         }
     }
 
     ConfigurationPtr ConfigurationManager::get(const std::string& name) const
     {
-        auto configuration = configurations.find(name);
+        Map::const_iterator configuration = configurations.find(name);
 
         if (configuration == configurations.end())
         {
@@ -81,5 +89,30 @@ namespace Gecko
         }
 
         return configuration->second;
+    }
+
+    const ConfigurationManager::Map& ConfigurationManager::get_configurations() const
+    {
+        return configurations;
+    }
+
+    ConfigurationManager::Map::iterator ConfigurationManager::begin()
+    {
+        return configurations.begin();
+    }
+
+    ConfigurationManager::Map::iterator ConfigurationManager::end()
+    {
+        return configurations.end();
+    }
+
+    ConfigurationManager::Map::const_iterator ConfigurationManager::cbegin() const
+    {
+        return configurations.cbegin();
+    }
+
+    ConfigurationManager::Map::const_iterator ConfigurationManager::cend() const
+    {
+        return configurations.cend();
     }
 }

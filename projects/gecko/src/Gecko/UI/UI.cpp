@@ -1,6 +1,7 @@
 #include "Gecko/UI/UI.hpp"
 
 #include "Gecko/Cameras/Camera.hpp"
+#include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Orders.hpp"
 #include "Gecko/Containers/Resources.hpp"
 #include "Gecko/Containers/Selected.hpp"
@@ -184,8 +185,8 @@ namespace Gecko
 
             set_saves(Game::getSingleton().get_saves());
 
-            get_minimap().update();
-            get_preview().update();
+            get_minimap().update(time);
+            get_preview().update(time);
         }
     }
 
@@ -227,8 +228,8 @@ namespace Gecko
         context->Update();
 
         // Set up the projection and view matrices.
-        float z_near = -1;
-        float z_far = 1;
+        float z_near = -1.0f;
+        float z_far = 1.0f;
 
         Ogre::Matrix4 projection_matrix = Ogre::Matrix4::ZERO;
 
@@ -761,7 +762,7 @@ namespace Gecko
     void UI::set_configurations(const std::set<std::string>& configurations)
     {
         // TODO: Remove
-        if (configurations_element == nullptr)
+        if (configurations_body == nullptr)
         {
             return;
         }
@@ -787,7 +788,7 @@ namespace Gecko
         }
 
         // Update UI.
-        configurations_element->SetInnerRML(rml);
+        configurations_body->SetInnerRML(rml);
     }
 
     void UI::set_configurations_header(const std::string& _configuration_name)
@@ -962,7 +963,7 @@ namespace Gecko
         rml = boost::regex_replace(rml, boost::regex("\n  "), "\n");
 
         // Update UI.
-        info_element->SetInnerRML(rml);
+        info_body->SetInnerRML(rml);
     }
 
     void UI::set_objects_admin()
@@ -980,45 +981,31 @@ namespace Gecko
         objects_cache = objects;
         */
 
-        // Create JSON.
-        Json::Value json_objects;
+        // Create RML.
+        Rml::String rml;
 
         for (const auto& [id, object] : ObjectManager::getSingleton())
         {
-            Json::Value json_object;
-
-            json_object["id"] = id;
-            json_object["name"] = object->get_name();
-            json_object["order_count"] = object->get_orders()->size();
+            int id_value = id.get();
+            std::string name = object->get_name();
+            std::size_t order_count = object->get_orders()->size();
+            std::string order_name;
 
             if (object->get_orders()->size())
             {
-                auto order = OrderManager::getSingleton().get(object->get_orders()->front());
+                Order* order = OrderManager::getSingleton().get(object->get_orders()->front());
 
                 if (order)
                 {
-                    json_object["current_order"] = order_type::to_string(order->get_type());
+                    order_name = order_type::to_string(order->get_type());
                 }
-                else
-                {
-                    json_object["current_order"] = "-";
-                }
-            }
-            else
-            {
-                json_object["current_order"] = "-";
             }
 
-            json_objects.append(json_object);
+            rml += std::vformat(m_configuration->get_string("templates.objects-admin"), std::make_format_args(id_value, name, order_count, order_name));
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.objects.set(";
-        stream << Utils::Convert::to_string(json_objects);
-        stream << ")";
+        objects_admin_body->SetInnerRML(rml);
     }
 
     void UI::set_orders_admin()
@@ -1035,32 +1022,41 @@ namespace Gecko
         orders_cache = orders;
         */
 
-        // Create JSON.
-        Json::Value json_orders;
+        // Create RML.
+        Rml::String rml;
 
         for (const auto& [id, order] : OrderManager::getSingleton())
         {
-            Json::Value json_order;
+            int id_value = id.get();
+            std::string sender_name;
+            
+            Object* sender = ObjectManager::getSingleton().get(order->get_sender_id());
 
-            json_order["id"] = id;
-            json_order["sender_id"] = order->get_sender_id();
-            json_order["receiver_id"] = order->get_receiver_id();
-            json_order["type"] = order_type::to_string(order->get_type());
-            json_order["attempts_to_complete"]
+            if (sender)
+            {
+                sender_name = sender->get_name();
+            }
+            
+            std::string receiver_name;
+            
+            Object* receiver = ObjectManager::getSingleton().get(order->get_receiver_id());
+
+            if (receiver)
+            {
+                receiver_name = receiver->get_name();
+            }
+
+            std::string order_name = order_type::to_string(order->get_type());
+            std::string attempts
                 = Utils::Convert::to_string(order->get_attempts_to_complete())
                 + "/"
                 + Utils::Convert::to_string(Settings::Game::OrderMaxAttemptsToComplete);
 
-            json_orders.append(json_order);
+            rml += std::vformat(m_configuration->get_string("templates.orders-admin"), std::make_format_args(id_value, sender_name, receiver_name, order_name, attempts));
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.orders.set(";
-        stream << Utils::Convert::to_string(json_orders);
-        stream << ")";
+        orders_admin_body->SetInnerRML(rml);
     }
 
     void UI::set_players()
@@ -1114,7 +1110,7 @@ namespace Gecko
     void UI::set_orders(const std::set<std::string>& orders)
     {
         // TODO: Remove.
-        if (orders_element == nullptr)
+        if (orders_body == nullptr)
         {
             return;
         }
@@ -1140,7 +1136,7 @@ namespace Gecko
         }
 
         // Update UI.
-        orders_element->SetInnerRML(rml);
+        orders_body->SetInnerRML(rml);
     }
 
     void UI::set_orders_header(order_type::Value order_type)
@@ -1186,7 +1182,7 @@ namespace Gecko
         }
 
         // Update UI.
-        resources_element->SetInnerRML(rml);
+        resources_body->SetInnerRML(rml);
     }
 
     void UI::set_saves(const std::vector<std::string>& saves)
@@ -1251,7 +1247,7 @@ namespace Gecko
         }
 
         // Update UI.
-        skills_element->SetInnerRML(rml);
+        skills_body->SetInnerRML(rml);
     }
 
     void UI::set_skills_header(const std::string& skill_name)
@@ -1282,26 +1278,19 @@ namespace Gecko
 
         statistics_cache = statistics;
 
-        // Create JSON.
-        Json::Value json_statistics;
+        // Create RML.
+        Rml::String rml;
 
         for (const auto& i : statistics)
         {
-            Json::Value json_statistics_item;
+            std::string name  = i.first;
+            std::string value = i.second;
 
-            json_statistics_item["name"] = i.first;
-            json_statistics_item["value"] = i.second;
-
-            json_statistics.append(json_statistics_item);
+            rml += std::vformat(m_configuration->get_string("templates.statistics"), std::make_format_args(name, value));
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.statistics.set(";
-        stream << Utils::Convert::to_string(json_statistics);
-        stream << ")";
+        statistics_body->SetInnerRML(rml);
     }
 
     void UI::set_terrain_layers(const std::set<std::string>& layers)
@@ -1378,19 +1367,20 @@ namespace Gecko
 
         Rml::Debugger::Initialise(context);
 
-        configurations_header = get_placeholder("configurations");
-        configurations_element = get_placeholder("configurations");
-        info_element = get_placeholder("info");
-        layers_element = get_placeholder("layers");
-        log_element = get_placeholder("log");
-        maps_element = get_placeholder("maps");
-        objects_element = get_placeholder("objects");
-        orders_header = get_placeholder("orders");
-        orders_element = get_placeholder("orders");
-        resources_element = get_placeholder("resources");
-        skills_header = get_placeholder("skills");
-        skills_element = get_placeholder("skills");
-        statistics_element = get_placeholder("statistics");
+        configurations_body = get_body_placeholder("configurations");
+        configurations_header = get_header_placeholder("configurations");
+        info_body = get_body_placeholder("info");
+        layers_body = get_body_placeholder("layers");
+        log_body = get_body_placeholder("log");
+        maps_body = get_body_placeholder("maps");
+        objects_admin_body = get_body_placeholder("objects-admin");
+        orders_admin_body = get_body_placeholder("orders-admin");
+        orders_body = get_body_placeholder("orders");
+        orders_header = get_header_placeholder("orders");
+        resources_body = get_body_placeholder("resources");
+        skills_body = get_body_placeholder("skills");
+        skills_header = get_header_placeholder("skills");
+        statistics_body = get_body_placeholder("statistics");
     }
 
     void UI::init_events()
@@ -1446,11 +1436,11 @@ namespace Gecko
                 rml += std::vformat(m_configuration->get_string("templates.log"), std::make_format_args(type, line));
             }
 
-            log_element->SetInnerRML(rml);
+            log_body->SetInnerRML(rml);
         }
     }
 
-    Rml::Element* UI::get_header(const std::string& selector) const
+    Rml::Element* UI::get_header_placeholder(const std::string& selector) const
     {
         Rml::Element* element = document->GetElementById(selector);
 
@@ -1461,7 +1451,7 @@ namespace Gecko
 
         Rml::ElementList elements;
 
-        element->GetElementsByClassName(elements, "card-header");
+        element->GetElementsByClassName(elements, "card-header-placeholder");
 
         if (elements.size() == 0)
         {
@@ -1471,7 +1461,7 @@ namespace Gecko
         return elements[0];
     }
 
-    Rml::Element* UI::get_placeholder(const std::string& selector) const
+    Rml::Element* UI::get_body_placeholder(const std::string& selector) const
     {
         Rml::Element* element = document->GetElementById(selector);
 
@@ -1482,6 +1472,7 @@ namespace Gecko
 
         Rml::ElementList elements;
 
+        // TODO: Rename class to card-body-placeholder.
         element->GetElementsByClassName(elements, "placeholder");
 
         if (elements.size() == 0)

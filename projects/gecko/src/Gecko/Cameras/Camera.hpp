@@ -29,6 +29,11 @@ namespace Gecko
 
         virtual void pitch(const Ogre::Degree& angle);
         virtual void yaw(const Ogre::Degree& angle);
+        
+        void look_at(const Ogre::Vector3& position)
+        {
+            m_camera_scene_node->lookAt(position, Ogre::Node::TransformSpace::TS_PARENT);
+        }
 
     public:
         auto get_camera() const

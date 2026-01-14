@@ -248,6 +248,7 @@ namespace Gecko
 
         Json::Value m_value;
 
+        // TODO: Finish implementation and test.
         mutable Json::Value m_cache;
 
         void add_to_cache(const std::string& path, const Json::Value& value) const;
@@ -267,7 +268,5 @@ namespace Gecko
         void load_from_file(const std::string& _file_name);
 
         void merge(const Json::Value& other);
-
-        void write_to_cache() const;
     };
 }

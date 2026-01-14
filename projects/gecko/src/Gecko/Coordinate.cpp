@@ -18,8 +18,6 @@ namespace Gecko
 
     std::string Coordinate::to_string() const
     {
-        using namespace Utils;
-
-        return Convert::to_string(x) + ":" + Convert::to_string(y) + ":" + Convert::to_string(z);
+        return Utils::Convert::to_string(x) + ":" + Utils::Convert::to_string(y) + ":" + Utils::Convert::to_string(z);
     }
 }

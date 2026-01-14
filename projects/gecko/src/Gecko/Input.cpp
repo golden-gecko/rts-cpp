@@ -1,6 +1,7 @@
 #include "Gecko/Input.hpp"
 
 #include "Gecko/Cameras/Camera.hpp"
+#include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Orders.hpp"
 #include "Gecko/Containers/Selected.hpp"
 #include "Gecko/Exception.hpp"
@@ -19,6 +20,7 @@
 #include "Gecko/Containers/Skills.hpp"
 #include "Gecko/UI/UI.hpp"
 #include "Gecko/UI/Cursor.hpp"
+#include "Gecko/UI/Preview.hpp"
 #include "Gecko/UI/SelectionBox.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Raycast.hpp"
@@ -185,6 +187,7 @@ namespace Gecko
             {
                 UI::getSingleton().set_hovered_object_id(object_cast->first);
                 UI::getSingleton().get_cursor().set_visible(true);
+                UI::getSingleton().get_preview().get_camera()->set_target_id(object_cast->first);
             }
             else
             {

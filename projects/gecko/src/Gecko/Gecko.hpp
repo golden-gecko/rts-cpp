@@ -102,6 +102,7 @@ namespace Gecko
     using ConfigurationPtr = std::shared_ptr<Configuration>;
     using LayerPtr = std::shared_ptr<Layer>;
     using ResourcePtr = std::shared_ptr<Resource>;
+    using ResourcesPtr = std::shared_ptr<Resources>;
     using SeasonPtr = std::shared_ptr<Season>;
     using TechnologyPtr = std::shared_ptr<Technology>;
 

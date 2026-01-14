@@ -3,6 +3,7 @@
 #include "Gecko/Components/Mesh.hpp"
 #include "Gecko/Components/Shield.hpp"
 #include "Gecko/Components/Weapon.hpp"
+#include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Components.hpp"
 #include "Gecko/Containers/Configurations.hpp"
 #include "Gecko/Containers/Layers.hpp"
