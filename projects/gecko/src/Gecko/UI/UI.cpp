@@ -101,6 +101,8 @@ namespace Gecko
             if (hovered_object)
             {
                 set_info(hovered_object->get_info());
+
+                UI::getSingleton().get_preview().get_camera()->set_target_id(hovered_object->get_id());
             }
             else if (Game::getSingleton().get_active_player() && Game::getSingleton().get_active_player()->get_selected()->size())
             {
@@ -112,6 +114,8 @@ namespace Gecko
                     if (object)
                     {
                         set_info(object->get_info());
+
+                        UI::getSingleton().get_preview().get_camera()->set_target_id(object->get_id());
 
                         break;
                     }

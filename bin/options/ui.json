@@ -15,7 +15,7 @@
             "orders": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>",
             "orders-admin": "<tr><td class=\"number\">{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>",
             "players": "<tr><td class=\"number\">{}</td><td>{}</td><td>{}</td></tr>",
-            "resources": "<tr><td>{}</td><td class=\"number\">{:.0f}</td><td class=\"number\">{:.0f}</td><td class=\"number {}\">{:.0f}</td></tr>",
+            "resources": "<tr><td>{}</td><td class=\"number\">{:.2f}</td><td class=\"number\">{:.2f}</td><td class=\"number {}\">{:.2f}</td></tr>",
             "skills": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>",
             "statistics": "<tr><td class=\"name\">{}</td><td class=\"value number\">{}</td></tr>",
             "technologies": "<button type=\"button\" class=\"button\" data-name=\"{}\">{}</button>"

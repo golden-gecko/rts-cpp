@@ -59,22 +59,7 @@ namespace Gecko
 
         if (camera)
         {
-            camera->get_camera()->setAutoAspectRatio(false);
             camera->get_camera()->setAspectRatio(1.0f);
-
-            auto terrain = map->get_layer("Terrain");
-
-            if (terrain)
-            {
-                auto size_x = terrain->get_size() * terrain->get_scale().x;
-                auto size_z = terrain->get_size() * terrain->get_scale().z;
-
-                // TODO: Move to settings.
-                // TODO: Refactor 320.0f.
-                camera->get_camera_node()->setPosition(Ogre::Vector3(size_x / 2.0f, 320.0f, size_z / 2.0f));
-                camera->get_camera_node()->lookAt(Ogre::Vector3(size_x / 2.0f, 0.0f, (size_z / 2.0f) - 0.01f), Ogre::Node::TransformSpace::TS_PARENT);
-                camera->get_camera()->setOrthoWindow(size_x, size_z);
-            }
 
             renderTexture = rttTexture->getBuffer()->getRenderTarget();
 

@@ -26,7 +26,17 @@
             "type": "Minimap"
         },
         {
+            "look_at": {
+                "x": 100.0,
+                "y": 50.0,
+                "z": 100.0
+            },
             "name": "Preview",
+            "position": {
+                "x": 0.0,
+                "y": 100.0,
+                "z": 0.0
+            },
             "type": "ObjectFollow"
         }
     ],

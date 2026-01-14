@@ -187,11 +187,11 @@ namespace Gecko
             {
                 UI::getSingleton().set_hovered_object_id(object_cast->first);
                 UI::getSingleton().get_cursor().set_visible(true);
-                UI::getSingleton().get_preview().get_camera()->set_target_id(object_cast->first);
             }
             else
             {
                 UI::getSingleton().set_hovered_object_id(Id::Empty);
+                UI::getSingleton().get_preview().get_camera()->set_target_id(Id::Empty);
 
                 auto layer_cast = Utils::Raycast::to_layer(arg);
 
