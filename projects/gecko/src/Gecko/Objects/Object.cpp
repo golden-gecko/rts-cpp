@@ -26,6 +26,7 @@
 #include "Gecko/Rectangle.hpp"
 #include "Gecko/Skills/Skill.hpp"
 #include "Gecko/UI/UI.hpp"
+#include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Mesh.hpp"
 #include "Gecko/Utils/Utils.hpp"
 
@@ -369,6 +370,15 @@ namespace Gecko
         info->set("Player", PlayerManager::getSingleton().get(get_player_id())->get_name());
         info->set("Position", get_position());
         info->set("Heading", get_heading());
+
+        ConfigurationPtr info_resources = std::make_shared<Configuration>();
+
+        for (Resources::Map::const_iterator i = resources->cbegin(); i != resources->cend(); i++)
+        {
+            info_resources->set(i->first, Utils::Convert::to_string(i->second.get_current()) + "/" + Utils::Convert::to_string(i->second.get_max()));
+        }
+
+        info->set("Resources", info_resources);
 
         return info;
     }

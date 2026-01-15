@@ -32,7 +32,7 @@ namespace Gecko
         namespace Game
         {
             const float       DistanceComparisionMinValue = 0.01f;
-            const float       FrameTime                   = 1.0f / 60.0f;
+            const float       FrameTime                   = 1.0f / 30.0f;
             const float       MinCollisionDistance        = 0.1f;
             const float       MinWeaponAngle              = 1.0f;
             const std::string OgrePluginsFile             = "plugins.cfg";
