@@ -1,6 +1,6 @@
 import sys
 
-from PySide2.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication
 
 from config import Config
 from windows.main import MainWindow
@@ -13,4 +13,4 @@ if __name__ == '__main__':
     window.resize(Config.width, Config.height)
     window.show()
 
-    sys.exit(app.exec_())
+    app.exec()

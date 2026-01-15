@@ -1,7 +1,7 @@
-from PySide2.QtCore import QDir, Qt, Slot
-from PySide2.QtWidgets import QAction, QApplication, QHBoxLayout, QLabel, QLineEdit, QMainWindow, QPushButton, \
-    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QAction, QApplication, QFileSystemModel, QHBoxLayout, \
-    QMainWindow, QLabel, QTableWidget, QTreeView, QVBoxLayout
+import os
+
+from PyQt6.QtGui import QAction, QFileSystemModel
+from PyQt6.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout, QMainWindow, QTreeView, QWidget
 
 
 class Widget(QWidget):
@@ -9,21 +9,21 @@ class Widget(QWidget):
         QWidget.__init__(self)
 
         model = QFileSystemModel()
-        model.setRootPath('D:/Projects/rts/bin')
+        model.setRootPath(os.path.join('..', '..', 'bin'))
 
         tree = QTreeView()
         tree.setModel(model)
-        tree.setRootIndex(model.index('D:/Projects/rts/bin'))
+        tree.setRootIndex(model.index(os.path.join('..', '..', 'bin')))
         tree.hideColumn(1)
         tree.hideColumn(2)
         tree.hideColumn(3)
 
         left = QVBoxLayout()
-        left.setMargin(10)
+        # left.setMargin(10)
         left.addWidget(tree)
 
         right = QVBoxLayout()
-        right.setMargin(10)
+        # right.setMargin(10)
         # right.addWidget(add)
 
         layout = QHBoxLayout()
@@ -58,6 +58,5 @@ class MainWindow(QMainWindow):
         file_menu.addSeparator()
         file_menu.addAction(exit_action)
 
-    @Slot()
     def menu_exit(self, checked):
         QApplication.quit()
