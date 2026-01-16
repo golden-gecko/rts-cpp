@@ -24,7 +24,7 @@ namespace Gecko
             configuration->append("items", i);
         }
 
-        for (const auto& [number, group] : groups)
+        for (const auto& [number, group] : m_groups)
         {
             for (const auto& i : group)
             {
@@ -107,7 +107,7 @@ namespace Gecko
             + Utils::Convert::to_string(group_number) + " group"
         );
 
-        groups[group_number] = m_items;
+        m_groups[group_number] = m_items;
     }
 
     void Selected::select(Id object_id, bool add)
@@ -166,14 +166,14 @@ namespace Gecko
     {
         UI::getSingleton().log_info(
             "Selected "
-            + Utils::Convert::to_string(groups[group_number].size())
+            + Utils::Convert::to_string(m_groups[group_number].size())
             + " objects from "
             + Utils::Convert::to_string(group_number) + " group"
         );
 
         apply_selection(m_items, false);
 
-        select(groups[group_number]);
+        select(m_groups[group_number]);
     }
 
     void Selected::apply_selection(const Items& object_ids, bool select)

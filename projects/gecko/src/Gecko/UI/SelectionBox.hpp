@@ -13,20 +13,20 @@ namespace Gecko
 
         const Ogre::Vector2& get_start() const
         {
-            return start;
+            return m_start;
         }
 
         const Ogre::Vector2& get_end() const
         {
-            return end;
+            return m_end;
         }
 
         bool is_valid() const
         {
-            auto left = start.x;
-            auto top = start.y;
-            auto right = end.x;
-            auto bottom = end.y;
+            auto left = m_start.x;
+            auto top = m_start.y;
+            auto right = m_end.x;
+            auto bottom = m_end.y;
 
             if (left > right)
             {
@@ -43,31 +43,31 @@ namespace Gecko
 
         bool is_visible() const
         {
-            return manual_object->isVisible();
+            return m_manual_object->isVisible();
         }
 
         void set_start(const Ogre::Vector2& _start)
         {
-            start = _start;
+            m_start = _start;
         }
 
         void set_end(const Ogre::Vector2& _end)
         {
-            end = _end;
+            m_end = _end;
         }
 
         void set_visible(bool visible)
         {
-            scene_node->setVisible(visible);
+            m_scene_node->setVisible(visible);
         }
 
         void update();
 
     private:
-        Ogre::ManualObject* manual_object { nullptr };
-        Ogre::SceneNode* scene_node { nullptr };
+        Ogre::ManualObject* m_manual_object { nullptr };
+        Ogre::SceneNode* m_scene_node { nullptr };
 
-        Ogre::Vector2 start { Ogre::Vector2::ZERO };
-        Ogre::Vector2 end { Ogre::Vector2::ZERO };
+        Ogre::Vector2 m_start { Ogre::Vector2::ZERO };
+        Ogre::Vector2 m_end { Ogre::Vector2::ZERO };
     };
 }

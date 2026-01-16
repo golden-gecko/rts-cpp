@@ -28,15 +28,15 @@ namespace Gecko
     public:
         auto& get_wait_timer()
         {
-            return wait_timer;
+            return m_wait_timer;
         }
 
         const auto& get_wait_timer() const
         {
-            return wait_timer;
+            return m_wait_timer;
         }
 
     private:
-        Timer wait_timer;
+        Timer m_wait_timer;
     };
 }

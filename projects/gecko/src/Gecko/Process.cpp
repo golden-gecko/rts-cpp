@@ -11,7 +11,7 @@
 namespace Gecko
 {
     Process::Process(const std::string& name) :
-        name(name)
+        m_name(name)
     {
     }
 
@@ -19,28 +19,28 @@ namespace Gecko
     {
         auto configuration = std::make_shared<Configuration>();
 
-        configuration->set("name", name);
+        configuration->set("name", m_name);
 
-        configuration->set("in", in->serialize());
-        configuration->set("out", out->serialize());
+        configuration->set("in", m_in->serialize());
+        configuration->set("out", m_out->serialize());
 
         return configuration;
     }
 
     void Process::deserialize(const ConfigurationPtr& configuration)
     {
-        in = std::make_shared<Resources>();
+        m_in = std::make_shared<Resources>();
 
         if (configuration->has_member("in"))
         {
-            in->deserialize(configuration->get_child("in"));
+            m_in->deserialize(configuration->get_child("in"));
         }
 
-        out = std::make_shared<Resources>();
+        m_out = std::make_shared<Resources>();
 
         if (configuration->has_member("out"))
         {
-            out->deserialize(configuration->get_child("out"));
+            m_out->deserialize(configuration->get_child("out"));
         }
     }
 
@@ -50,9 +50,9 @@ namespace Gecko
         bool out_resources_available = true;
 
         // Check if input resources are available to remove.
-        if (in->empty() == false)
+        if (m_in->empty() == false)
         {
-            for (const auto& [in_resource_name, in_resource] : *(in))
+            for (const auto& [in_resource_name, in_resource] : *(m_in))
             {
                 if (in_resource.get_need_deposit())
                 {
@@ -63,6 +63,7 @@ namespace Gecko
                         break;
                     }
                 }
+                // TODO: If out_resource.get_consumption() * time is greater than storage this will fail.
                 else if (resources->has_resource(in_resource_name, in_resource.get_consumption() * time) == false)
                 {
                     in_resources_available = false;
@@ -73,9 +74,9 @@ namespace Gecko
         }
 
         // Check if output resources are available to add.
-        if (in_resources_available && out->empty() == false)
+        if (in_resources_available && m_out->empty() == false)
         {
-            for (const auto& [out_resource_name, out_resource] : *(out))
+            for (const auto& [out_resource_name, out_resource] : *(m_out))
             {
                 if (out_resource.get_need_storage())
                 {
@@ -86,6 +87,7 @@ namespace Gecko
                         break;
                     }
                 }
+                // TODO: If out_resource.get_production() * time is greater than storage this will fail.
                 else if (resources->has_storage(out_resource_name, out_resource.get_production() * time) == false)
                 {
                     out_resources_available = false;
@@ -98,7 +100,7 @@ namespace Gecko
         if (in_resources_available && out_resources_available)
         {
             // Remove resources.
-            for (const auto& [in_resource_name, in_resource] : *(in))
+            for (const auto& [in_resource_name, in_resource] : *(m_in))
             {
                 if (in_resource.get_need_deposit())
                 {
@@ -120,7 +122,7 @@ namespace Gecko
             }
 
             // Add resources.
-            for (const auto& [out_resource_name, out_resource] : *(out))
+            for (const auto& [out_resource_name, out_resource] : *(m_out))
             {
                 if (out_resource.get_need_storage())
                 {
@@ -145,7 +147,7 @@ namespace Gecko
         // Notify request manager about available resources.
         auto request_manager = JobManager::getSingletonPtr();
 
-        for (const auto& [in_resource_name, in_resource] : *(in))
+        for (const auto& [in_resource_name, in_resource] : *(m_in))
         {
             auto storage = resources->get_storage(in_resource_name);
 
@@ -159,7 +161,7 @@ namespace Gecko
             }
         }
 
-        for (const auto& [out_resource_name, out_resource] : *(out))
+        for (const auto& [out_resource_name, out_resource] : *(m_out))
         {
             auto current = resources->get_current(out_resource_name);
 
@@ -216,6 +218,6 @@ namespace Gecko
 
     bool Process::operator==(const Process& other) const
     {
-        return name == other.name && in == other.in && out == other.out;
+        return m_name == other.m_name && m_in == other.m_in && m_out == other.m_out;
     }
 }

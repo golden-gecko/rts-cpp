@@ -23,17 +23,17 @@ namespace Gecko
         void zoom_out();
 
     private:
-        Ogre::TexturePtr rttTexture{ nullptr };
-        Ogre::RenderTexture* renderTexture { nullptr };
-        Ogre::Viewport* viewport { nullptr };
+        Ogre::TexturePtr m_texture = nullptr;
+        Ogre::RenderTexture* m_render_texture = nullptr;
+        Ogre::Viewport* m_viewport = nullptr;
 
-        std::uint16_t texture_size { 256 };
-        std::uint16_t size { 128 };
+        std::uint16_t m_texture_size = 256;
+        std::uint16_t m_size = 128;
 
-        float min_zoom { 1.0f };
-        float max_zoom { 16.0f };
+        float m_min_zoom = 1.0f;
+        float m_max_zoom = 16.0f;
 
-        float scroll_sensivity { 0.005f };
-        float zoom_sensivity { 2.0f };
+        float m_scroll_sensivity = 0.005f;
+        float m_zoom_sensivity = 2.0f;
     };
 }

@@ -15,12 +15,12 @@ namespace Gecko::Utils::Time
     }
 
     Scope::Scope(const std::string& name) :
-        name(name) , start(get())
+        m_name(name) , m_start(get())
     {
     }
 
     Scope::~Scope()
     {
-        L_DEBUG << name << ": " << get_duration(start, get());
+        L_DEBUG << m_name << ": " << get_duration(m_start, get());
     }
 }

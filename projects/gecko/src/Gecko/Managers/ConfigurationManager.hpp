@@ -28,7 +28,7 @@ namespace Gecko
         Map::const_iterator cend() const;
 
     private:
-        Map configurations;
+        Map m_configurations;
 
         bool m_cache = true;
     };

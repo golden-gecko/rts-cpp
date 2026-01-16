@@ -43,39 +43,39 @@ namespace Gecko
 
     Object::Object()
     {
-        components = std::make_shared<Components>();
-        configurations = std::make_shared<Configurations>();
-        layers = std::make_shared<Layers>();
-        orders = std::make_shared<Orders>();
-        processes = std::make_shared<Processes>();
-        resources = std::make_shared<Resources>();
-        skills = std::make_shared<Skills>();
+        m_components = std::make_shared<Components>();
+        m_configurations = std::make_shared<Configurations>();
+        m_layers = std::make_shared<Layers>();
+        m_orders = std::make_shared<Orders>();
+        m_processes = std::make_shared<Processes>();
+        m_resources = std::make_shared<Resources>();
+        m_skills = std::make_shared<Skills>();
     }
 
     Object::Object(const Object& other) :
         base_type(other)
     {
-        name = other.name;
-        player_id = other.player_id;
-        alive_timer = other.alive_timer;
+        m_name = other.m_name;
+        m_player_id = other.m_player_id;
+        m_alive_timer = other.m_alive_timer;
 
-        selectable = other.selectable;
-        selected = other.selected;
-        visible = other.visible;
+        m_selectable = other.m_selectable;
+        m_selected = other.m_selected;
+        m_visible = other.m_visible;
 
-        layers = other.layers;
+        m_layers = other.m_layers;
 
-        components = std::make_shared<Components>(*other.components);
-        configurations = std::make_shared<Configurations>(*other.configurations);
-        layers = std::make_shared<Layers>(*other.layers);
-        orders = std::make_shared<Orders>(*other.orders);
-        processes = std::make_shared<Processes>(*other.processes);
-        resources = std::make_shared<Resources>(*other.resources);
-        skills = std::make_shared<Skills>(*other.skills);
+        m_components = std::make_shared<Components>(*other.m_components);
+        m_configurations = std::make_shared<Configurations>(*other.m_configurations);
+        m_layers = std::make_shared<Layers>(*other.m_layers);
+        m_orders = std::make_shared<Orders>(*other.m_orders);
+        m_processes = std::make_shared<Processes>(*other.m_processes);
+        m_resources = std::make_shared<Resources>(*other.m_resources);
+        m_skills = std::make_shared<Skills>(*other.m_skills);
 
-        if (other.scene_node)
+        if (other.m_scene_node)
         {
-            scene_node = Utils::Mesh::copy_scene_node(*other.scene_node);
+            m_scene_node = Utils::Mesh::copy_scene_node(*other.m_scene_node);
         }
 
         // TODO: Does not work, because scene node has to be created from new parent.
@@ -93,7 +93,7 @@ namespace Gecko
 
         if (game)
         {
-            game->destroy_scene_node(scene_node);
+            game->destroy_scene_node(m_scene_node);
         }
     }
 
@@ -101,17 +101,17 @@ namespace Gecko
     {
         base_type::init();
 
-        orders->clear();
+        m_orders->clear();
 
-        alive_timer.reset();
+        m_alive_timer.reset();
 
-        for (const auto& i : *(components))
+        for (const auto& i : *(m_components))
         {
             i->set_owner(this);
             i->init();
         }
 
-        for (const auto& i : *(skills))
+        for (const auto& i : *(m_skills))
         {
             i->set_owner(this);
             i->init();
@@ -140,7 +140,7 @@ namespace Gecko
     {
         base_type::deinit();
 
-        for (const auto& i : *(components))
+        for (const auto& i : *(m_components))
         {
             i->deinit();
         }
@@ -153,21 +153,21 @@ namespace Gecko
     {
         auto configuration = base_type::serialize();
 
-        configuration->set("name", name);
-        configuration->set("player_id", player_id);
-        configuration->set("alive_timer", alive_timer.serialize());
-        configuration->set("selectable", selectable);
-        configuration->set("selected", selected);
-        configuration->set("visible", visible);
+        configuration->set("name", m_name);
+        configuration->set("player_id", m_player_id);
+        configuration->set("alive_timer", m_alive_timer.serialize());
+        configuration->set("selectable", m_selectable);
+        configuration->set("selected", m_selected);
+        configuration->set("visible", m_visible);
         configuration->set("position", get_position());
 
-        configuration->append("components", components->serialize());
-        configuration->append("configurations", configurations->serialize());
-        configuration->append("layers", layers->serialize());
-        configuration->append("orders", orders->serialize());
-        configuration->append("processes", processes->serialize());
-        configuration->append("resources", resources->serialize());
-        configuration->append("skills", skills->serialize());
+        configuration->append("components", m_components->serialize());
+        configuration->append("configurations", m_configurations->serialize());
+        configuration->append("layers", m_layers->serialize());
+        configuration->append("orders", m_orders->serialize());
+        configuration->append("processes", m_processes->serialize());
+        configuration->append("resources", m_resources->serialize());
+        configuration->append("skills", m_skills->serialize());
 
         return configuration;
     }
@@ -176,60 +176,60 @@ namespace Gecko
     {
         base_type::deserialize(configuration);
 
-        name = configuration->get_string("name");
-        player_id = configuration->get_int("player_id", Id::Empty.get());
+        m_name = configuration->get_string("name");
+        m_player_id = configuration->get_int("player_id", Id::Empty.get());
 
         if (configuration->has_member("alive_timer"))
         {
-            alive_timer.deserialize(configuration->get_child("alive_timer"));
+            m_alive_timer.deserialize(configuration->get_child("alive_timer"));
         }
 
-        selectable = configuration->get_bool("selectable", false);
-        selected = configuration->get_bool("selected", false);
-        visible = configuration->get_bool("visible", false);
+        m_selectable = configuration->get_bool("selectable", false);
+        m_selected = configuration->get_bool("selected", false);
+        m_visible = configuration->get_bool("visible", false);
 
         if (configuration->has_member("components"))
         {
-            components->deserialize(configuration->get_child("components"));
+            m_components->deserialize(configuration->get_child("components"));
         }
 
         if (configuration->has_member("configurations"))
         {
-            configurations->deserialize(configuration->get_child("configurations"));
+            m_configurations->deserialize(configuration->get_child("configurations"));
         }
 
         if (configuration->has_member("layers"))
         {
-            layers->deserialize(configuration->get_child("layers"));
+            m_layers->deserialize(configuration->get_child("layers"));
         }
 
         if (configuration->has_member("orders"))
         {
-            orders->deserialize(configuration->get_child("orders"));
+            m_orders->deserialize(configuration->get_child("orders"));
         }
 
         if (configuration->has_member("processes"))
         {
-            processes->deserialize(configuration->get_child("processes"));
+            m_processes->deserialize(configuration->get_child("processes"));
         }
 
         if (configuration->has_member("resources"))
         {
-            resources->deserialize(configuration->get_child("resources"));
+            m_resources->deserialize(configuration->get_child("resources"));
         }
 
         if (configuration->has_member("skills"))
         {
-            skills->deserialize(configuration->get_child("skills"));
+            m_skills->deserialize(configuration->get_child("skills"));
         }
 
-        if (scene_node)
+        if (m_scene_node)
         {
-            Game::getSingleton().destroy_scene_node(scene_node);
+            Game::getSingleton().destroy_scene_node(m_scene_node);
         }
 
-        scene_node = Game::getSingleton().create_scene_node();
-        scene_node->setFixedYawAxis(true);
+        m_scene_node = Game::getSingleton().create_scene_node();
+        m_scene_node->setFixedYawAxis(true);
 
         create_selection_mesh();
 
@@ -240,7 +240,7 @@ namespace Gecko
 
     void Object::update(float time)
     {
-        if (alive_timer.update(time))
+        if (m_alive_timer.update(time))
         {
             auto order = OrderManager::getSingleton().order_destroy(get_id(), get_id());
 
@@ -255,7 +255,7 @@ namespace Gecko
         update_resources(time);
         update_skills(time);
 
-        if (get_orders()->empty() && job_timer.update(time))
+        if (get_orders()->empty() && m_job_timer.update(time))
         {
             auto jobs = JobManager::getSingleton().get_job(get_id(), get_components(), get_resources());
 
@@ -266,14 +266,14 @@ namespace Gecko
                     get_orders()->add_last(job->get_id());
                 }
 
-                job_timer.update(time);
+                m_job_timer.update(time);
             }
         }
     }
 
     Ogre::Vector3 Object::get_direction() const
     {
-        return Utils::get_node_direction(*scene_node);
+        return Utils::get_node_direction(*m_scene_node);
     }
 
     Entrance Object::get_entrance() const
@@ -282,7 +282,7 @@ namespace Gecko
         auto area = get_size();
 
         // TODO: Hardcoded.
-        auto layer = owner->get_layer("Terrain");
+        auto layer = m_owner->get_layer("Terrain");
         auto data_layer = layer->get_data_layer("Navigation");
 
         auto index = layer->get_index(get_position());
@@ -373,7 +373,7 @@ namespace Gecko
 
         ConfigurationPtr info_resources = std::make_shared<Configuration>();
 
-        for (Resources::Map::const_iterator i = resources->cbegin(); i != resources->cend(); i++)
+        for (Resources::Map::const_iterator i = m_resources->cbegin(); i != m_resources->cend(); i++)
         {
             info_resources->set(i->first, Utils::Convert::to_string(i->second.get_current()) + "/" + Utils::Convert::to_string(i->second.get_max()));
         }
@@ -385,14 +385,14 @@ namespace Gecko
 
     Area Object::get_size() const
     {
-        const auto& aabb = scene_node->_getWorldAABB();
+        const auto& aabb = m_scene_node->_getWorldAABB();
         // TODO: Hardcoded.
-        const auto& layer = owner->get_layer("Terrain");
+        const auto& layer = m_owner->get_layer("Terrain");
 
         return Area(); // layer->get_index(aabb.getMinimum()), layer->get_index(aabb.getMaximum()));
     }
 
-    void Object::set_player_id(Id _player_id)
+    void Object::set_player_id(Id player_id)
     {
         /*
         auto player = PlayerManager::getSingleton().get(get_player_id());
@@ -403,7 +403,7 @@ namespace Gecko
         }
         */
 
-        player_id = _player_id;
+        m_player_id = player_id;
 
         /*
         player = PlayerManager::getSingleton().get(get_player_id());
@@ -422,7 +422,7 @@ namespace Gecko
 
         if (player)
         {
-            selection->get_entity().setMaterialName("selection_" + player->get_color());
+            m_selection->get_entity().setMaterialName("selection_" + player->get_color());
         }
     }
 
@@ -430,7 +430,7 @@ namespace Gecko
     {
         auto old_position = get_position();
 
-        if (owner && layers->size())
+        if (m_owner && m_layers->size())
         {
             // TODO: Hardcoded.
             const auto& layer = get_owner()->get_layer("Terrain");
@@ -448,32 +448,32 @@ namespace Gecko
             Ogre::Degree pitch_angle = normal.angleBetween(current_direction);
             Ogre::Degree roll_angle = normal.angleBetween(side_direction);
 
-            scene_node->resetOrientation();
-            scene_node->setPosition(new_position);
-            scene_node->setDirection(current_direction);
-            scene_node->pitch(pitch_angle - Ogre::Degree(90.0f));
-            scene_node->roll(roll_angle - Ogre::Degree(90.0f));
+            m_scene_node->resetOrientation();
+            m_scene_node->setPosition(new_position);
+            m_scene_node->setDirection(current_direction);
+            m_scene_node->pitch(pitch_angle - Ogre::Degree(90.0f));
+            m_scene_node->roll(roll_angle - Ogre::Degree(90.0f));
         }
         else
         {
             auto direction = get_direction();
 
-            scene_node->resetOrientation();
-            scene_node->setPosition(position);
-            scene_node->setDirection(direction * Ogre::Vector3(1.0f, 0.0f, 1.0f));
+            m_scene_node->resetOrientation();
+            m_scene_node->setPosition(position);
+            m_scene_node->setDirection(direction * Ogre::Vector3(1.0f, 0.0f, 1.0f));
         }
 
         auto new_position = get_position();
 
-        if (owner && layers->size())
+        if (m_owner && m_layers->size())
         {
             // TODO: Hardcoded.
-            auto layer = owner->get_layer("Terrain");
+            auto layer = m_owner->get_layer("Terrain");
             auto data_layer = layer->get_data_layer("Navigation");
 
-            scene_node->_update(true, true);
-            scene_node->_updateBounds();
-            const auto& aabb = scene_node->_getWorldAABB();
+            m_scene_node->_update(true, true);
+            m_scene_node->_updateBounds();
+            const auto& aabb = m_scene_node->_getWorldAABB();
 
             auto old_index = layer->get_index(old_position);
             auto new_index = layer->get_index(new_position);
@@ -488,7 +488,7 @@ namespace Gecko
 
     const Ogre::Vector3& Object::get_position() const
     {
-        return Utils::get_node_position(*scene_node);
+        return Utils::get_node_position(*m_scene_node);
     }
 
     std::map<std::string, float> Object::get_progress_bars() const
@@ -510,35 +510,35 @@ namespace Gecko
         return progress_bars;
     }
 
-    void Object::set_selected(bool _selected)
+    void Object::set_selected(bool selected)
     {
-        if (is_selectable() && _selected)
+        if (is_selectable() && selected)
         {
-            selection->set_visible(true);
+            m_selection->set_visible(true);
         }
         else
         {
-            selection->set_visible(false);
+            m_selection->set_visible(false);
         }
 
-        selected = _selected;
+        m_selected = selected;
     }
 
-    void Object::set_visible(bool _visible)
+    void Object::set_visible(bool visible)
     {
-        scene_node->setVisible(_visible);
+        m_scene_node->setVisible(visible);
 
-        if (_visible)
+        if (visible)
         {
-            selection->set_visible(selected);
+            m_selection->set_visible(m_selected);
         }
 
-        visible = _visible;
+        m_visible = visible;
     }
 
     void Object::update_components(float time)
     {
-        for (const auto& i : *(components))
+        for (const auto& i : *(m_components))
         {
             i->update(time);
         }
@@ -680,7 +680,7 @@ namespace Gecko
 
     void Object::update_skills(float time)
     {
-        for (const auto& i : *(skills))
+        for (const auto& i : *(m_skills))
         {
             i->update(time);
         }
@@ -776,27 +776,27 @@ namespace Gecko
 
     void Object::create_selection_mesh()
     {
-        scene_node->_update(true, true);
-        scene_node->_updateBounds();
+        m_scene_node->_update(true, true);
+        m_scene_node->_updateBounds();
 
-        auto selection_scale = scene_node->_getWorldAABB().getSize() * Settings::UI::SelectionScale;
+        auto selection_scale = m_scene_node->_getWorldAABB().getSize() * Settings::UI::SelectionScale;
         selection_scale = Ogre::Vector3(2, 1, 2);
 
-        selection = std::make_unique<Mesh>();
-        selection->deserialize(ConfigurationManager::getSingleton().get("selection"));
-        selection->set_owner(this);
-        selection->init();
-        selection->get_entity().setCastShadows(false);
-        selection->get_scene_node().setScale(selection_scale);
-        selection->set_position(Settings::UI::SelectionOffset);
-        selection->set_visible(false);
+        m_selection = std::make_unique<Mesh>();
+        m_selection->deserialize(ConfigurationManager::getSingleton().get("selection"));
+        m_selection->set_owner(this);
+        m_selection->init();
+        m_selection->get_entity().setCastShadows(false);
+        m_selection->get_scene_node().setScale(selection_scale);
+        m_selection->set_position(Settings::UI::SelectionOffset);
+        m_selection->set_visible(false);
 
         // Set color based on player color.
         auto player = PlayerManager::getSingleton().get(get_player_id());
 
         if (player)
         {
-            selection->get_entity().setMaterialName("selection_" + player->get_color());
+            m_selection->get_entity().setMaterialName("selection_" + player->get_color());
         }
     }
 }

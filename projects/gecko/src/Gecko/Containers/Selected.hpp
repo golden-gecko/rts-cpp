@@ -67,12 +67,12 @@ namespace Gecko
     public:
         bool operator==(const Selected& other) const
         {
-            return m_items == other.m_items && groups == other.groups;
+            return m_items == other.m_items && m_groups == other.m_groups;
         }
 
     private:
         Items m_items;
-        Groups groups;
+        Groups m_groups;
 
         void apply_selection(const Items& object_ids, bool select);
     };

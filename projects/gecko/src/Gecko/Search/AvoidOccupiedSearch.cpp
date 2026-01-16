@@ -5,11 +5,6 @@
 
 namespace Gecko
 {
-    AvoidOccupiedSearch::AvoidOccupiedSearch(const Layer& layer) :
-        base_type(layer)
-    {
-    }
-
     std::optional<Path::Points> AvoidOccupiedSearch::get_path(const Ogre::Vector3& from, const Ogre::Vector3& to)
     {
         auto from_index = m_layer.get_index(from);
@@ -181,5 +176,10 @@ namespace Gecko
         }
 
         return node_path;
+    }
+
+    AvoidOccupiedSearch::AvoidOccupiedSearch(const Layer& layer) :
+        base_type(layer)
+    {
     }
 }

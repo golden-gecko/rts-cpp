@@ -34,11 +34,11 @@ namespace Gecko
         RenderInterface(unsigned int window_width, unsigned int window_height);
 
     private:
-        Ogre::RenderSystem*    mRenderSystem = nullptr;
-        Ogre::LayerBlendModeEx mColourBlendMode;
-        Ogre::LayerBlendModeEx mAlphaBlendMode;
-        bool                   mScissorEnable = false;
-        size_t                 mScissorRect[4] = { 0, 0, 0, 0 };
-        Ogre::String           mGroup;
+        Ogre::RenderSystem*    m_render_system = nullptr;
+        Ogre::LayerBlendModeEx m_colour_blend_mode;
+        Ogre::LayerBlendModeEx m_alpha_blend_mode;
+        bool                   m_scissor_enable = false;
+        size_t                 m_scissor_rect[4] = { 0, 0, 0, 0 };
+        Ogre::String           m_group;
     };
 }

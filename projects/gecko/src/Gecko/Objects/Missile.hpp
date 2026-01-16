@@ -26,7 +26,7 @@ namespace Gecko
         void set_position(const Ogre::Vector3& position, bool validate = true) override;
 
     private:
-        float damage = 0.0f;
-        float speed = 0.0f;
+        float m_damage = 0.0f;
+        float m_speed = 0.0f;
     };
 }

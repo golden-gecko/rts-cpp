@@ -8,11 +8,6 @@
 
 namespace Gecko
 {
-    FollowRoadsSearch::FollowRoadsSearch(const Layer& layer) :
-        base_type(layer)
-    {
-    }
-
     std::optional<Path::Points> FollowRoadsSearch::get_path(const Ogre::Vector3& from, const Ogre::Vector3& to)
     {
         return Path::Points();
@@ -239,5 +234,10 @@ namespace Gecko
             return points;
         }
         */
+    }
+    
+    FollowRoadsSearch::FollowRoadsSearch(const Layer& layer) :
+        base_type(layer)
+    {
     }
 }

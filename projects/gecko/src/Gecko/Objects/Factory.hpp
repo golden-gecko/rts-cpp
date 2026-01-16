@@ -20,14 +20,14 @@ namespace Gecko
     public:
         const std::map<std::string, float>& get_usage() const
         {
-            return usage;
+            return m_usage;
         }
 
     private:
-        std::set<std::string> configurations;
-        Ogre::Vector3 rally_point = Ogre::Vector3::ZERO;
-        Id created_objects;
-        float spent_resources = 0.0f;
-        std::map<std::string, float> usage;
+        std::set<std::string> m_configurations;
+        Ogre::Vector3 m_rally_point = Ogre::Vector3::ZERO;
+        Id m_created_objects;
+        float m_spent_resources = 0.0f;
+        std::map<std::string, float> m_usage;
     };
 }

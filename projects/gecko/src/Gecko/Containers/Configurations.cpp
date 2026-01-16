@@ -8,7 +8,7 @@ namespace Gecko
     {
         auto configuration = std::make_shared<Configuration>();
 
-        for (const auto& i : available)
+        for (const auto& i : m_available)
         {
             configuration->append(i);
         }
@@ -22,7 +22,7 @@ namespace Gecko
 
         for (const auto& i : *(configuration))
         {
-            available.emplace(i.asString());
+            m_available.emplace(i.asString());
         }
     }
 }

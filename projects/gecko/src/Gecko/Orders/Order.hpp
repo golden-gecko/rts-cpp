@@ -67,52 +67,52 @@ namespace Gecko
     public:
         bool has_reached_max_attempts_to_complete() const
         {
-            return attempts_to_complete >= Settings::Game::OrderMaxAttemptsToComplete;
+            return m_attempts_to_complete >= Settings::Game::OrderMaxAttemptsToComplete;
         }
 
         void increase_attempts_to_complete()
         {
-            ++attempts_to_complete;
+            ++m_attempts_to_complete;
         }
 
     public:
         auto get_attempts_to_complete() const
         {
-            return attempts_to_complete;
+            return m_attempts_to_complete;
         }
 
         auto get_receiver_id() const
         {
-            return receiver_id;
+            return m_receiver_id;
         }
 
         auto get_sender_id() const
         {
-            return sender_id;
+            return m_sender_id;
         }
 
         auto get_type() const
         {
-            return type;
+            return m_type;
         }
 
     public:
-        void set_receiver_id(Id _receiver_id)
+        void set_receiver_id(Id receiver_id)
         {
-            receiver_id = _receiver_id;
+            m_receiver_id = receiver_id;
         }
 
-        void set_sender_id(Id _sender_id)
+        void set_sender_id(Id sender_id)
         {
-            sender_id = _sender_id;
+            m_sender_id = sender_id;
         }
 
     private:
-        order_type::Value type = order_type::Value::None;
+        order_type::Value m_type = order_type::Value::None;
 
-        Id sender_id;
-        Id receiver_id;
+        Id m_sender_id;
+        Id m_receiver_id;
 
-        std::uint16_t attempts_to_complete = 0;
+        std::uint16_t m_attempts_to_complete = 0;
     };
 }

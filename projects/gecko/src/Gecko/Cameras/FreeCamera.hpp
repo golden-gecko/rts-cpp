@@ -11,8 +11,10 @@ namespace Gecko
         using base_type = Camera;
 
     public:
-        explicit FreeCamera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration);
-
+        // From Updatable.
         void update(float time) override;
+
+    public:
+        explicit FreeCamera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration);
     };
 }

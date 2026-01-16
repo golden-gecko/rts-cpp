@@ -17,18 +17,18 @@ namespace Gecko
     {
         auto configuration = std::make_shared<Configuration>();
 
-        for (const auto& i : available)
+        for (const auto& i : m_available)
         {
             configuration->append("available", order_type::to_string(i));
         }
 
-        for (const auto& i : queue)
+        for (const auto& i : m_queue)
         {
             auto order = OrderManager::getSingleton().get(i);
 
             if (order)
             {
-                configuration->append("queue", order->serialize());
+                configuration->append("m_queue", order->serialize());
             }
         }
 
@@ -40,7 +40,7 @@ namespace Gecko
         clear();
 
         // TODO: Move to method?
-        available.clear();
+        m_available.clear();
 
         if (configuration->has_member("available"))
         {
@@ -48,13 +48,13 @@ namespace Gecko
 
             for (const auto& i : *(child))
             {
-                available.emplace(order_type::from_string(i.asString()));
+                m_available.emplace(order_type::from_string(i.asString()));
             }
         }
 
-        if (configuration->has_member("queue"))
+        if (configuration->has_member("m_queue"))
         {
-            auto child = configuration->get_child("queue");
+            auto child = configuration->get_child("m_queue");
 
             for (const auto& i : *(child))
             {
@@ -69,7 +69,7 @@ namespace Gecko
 
                 order->deserialize(order_configuration);
 
-                queue.emplace_back(order->get_id());
+                m_queue.emplace_back(order->get_id());
             }
         }
     }
@@ -94,7 +94,7 @@ namespace Gecko
             return false;
         }
 
-        queue.emplace_front(order_id);
+        m_queue.emplace_front(order_id);
 
         return true;
     }
@@ -119,30 +119,30 @@ namespace Gecko
             return false;
         }
 
-        queue.emplace_back(order_id);
+        m_queue.emplace_back(order_id);
 
         return true;
     }
 
     void Orders::remove(Id order_id)
     {
-        auto i = std::ranges::find(queue, order_id);
+        auto i = std::ranges::find(m_queue, order_id);
 
-        if (i != queue.end())
+        if (i != m_queue.end())
         {
             OrderManager::getSingleton().destroy(order_id);
 
-            queue.erase(i);
+            m_queue.erase(i);
         }
     }
 
     void Orders::remove_current_order()
     {
-        if (queue.empty() == false)
+        if (m_queue.empty() == false)
         {
-            OrderManager::getSingleton().destroy(queue.front());
+            OrderManager::getSingleton().destroy(m_queue.front());
 
-            queue.pop_front();
+            m_queue.pop_front();
         }
     }
 
@@ -150,20 +150,20 @@ namespace Gecko
     {
         if (OrderManager::getSingletonPtr())
         {
-            for (const auto& order_id : queue)
+            for (const auto& order_id : m_queue)
             {
                 OrderManager::getSingleton().destroy(order_id);
             }
         }
 
-        queue.clear();
+        m_queue.clear();
     }
 
     void Orders::move_first_to_end()
     {
-        auto& order_id = queue.front();
+        auto& order_id = m_queue.front();
 
-        queue.pop_front();
-        queue.push_back(order_id);
+        m_queue.pop_front();
+        m_queue.push_back(order_id);
     }
 }

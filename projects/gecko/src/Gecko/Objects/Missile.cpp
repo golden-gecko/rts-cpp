@@ -20,16 +20,16 @@ namespace Gecko
     Missile::Missile(const Missile& other) :
         base_type(other)
     {
-        damage = other.damage;
-        speed = other.speed;
+        m_damage = other.m_damage;
+        m_speed = other.m_speed;
     }
 
     ConfigurationPtr Missile::serialize() const
     {
         auto configuration = base_type::serialize();
 
-        configuration->set("damage", damage);
-        configuration->set("speed", speed);
+        configuration->set("damage", m_damage);
+        configuration->set("speed", m_speed);
 
         return configuration;
     }
@@ -38,15 +38,15 @@ namespace Gecko
     {
         base_type::deserialize(configuration);
 
-        damage = configuration->get_float("damage", 0.0f);
-        speed = configuration->get_float("speed", 0.0f);
+        m_damage = configuration->get_float("damage", 0.0f);
+        m_speed = configuration->get_float("speed", 0.0f);
     }
 
     void Missile::update(float time)
     {
         base_type::update(time);
 
-        set_position(get_position() + get_direction() * speed * time, false);
+        set_position(get_position() + get_direction() * m_speed * time, false);
     }
 
     void Missile::set_position(const Ogre::Vector3& position, bool validate)

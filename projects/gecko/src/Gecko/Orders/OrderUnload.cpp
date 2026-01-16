@@ -41,9 +41,9 @@ namespace Gecko
     {
         auto configuration = base_type::serialize();
 
-        configuration->set("target_id", target_id);
-        configuration->set("resource_name", resource_name);
-        configuration->set("resource_value", resource_value);
+        configuration->set("target_id", m_target_id);
+        configuration->set("resource_name", m_resource_name);
+        configuration->set("resource_value", m_resource_value);
 
         return configuration;
     }
@@ -52,8 +52,8 @@ namespace Gecko
     {
         base_type::deserialize(configuration);
 
-        target_id = configuration->get_int("target_id", Id::Empty.get());
-        resource_name = configuration->get_string("resource_name", "");
-        resource_value = configuration->get_float("resource_value", 0.0f);
+        m_target_id = configuration->get_int("target_id", Id::Empty.get());
+        m_resource_name = configuration->get_string("resource_name", "");
+        m_resource_value = configuration->get_float("resource_value", 0.0f);
     }
 }

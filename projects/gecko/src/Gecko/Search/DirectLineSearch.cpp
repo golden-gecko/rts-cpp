@@ -4,11 +4,6 @@
 
 namespace Gecko
 {
-    DirectLineSearch::DirectLineSearch(const Layer& layer) :
-        base_type(layer)
-    {
-    }
-
     std::optional<Path::Points> DirectLineSearch::get_path(const Ogre::Vector3& from, const Ogre::Vector3& to)
     {
         auto from_index = m_layer.get_index(from);
@@ -20,5 +15,10 @@ namespace Gecko
         }
 
         return Path::Points { to_index };
+    }
+
+    DirectLineSearch::DirectLineSearch(const Layer& layer) :
+        base_type(layer)
+    {
     }
 }

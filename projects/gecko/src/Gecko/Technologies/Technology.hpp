@@ -25,29 +25,29 @@ namespace Gecko
     public:
         bool is_locked() const
         {
-            return locked;
+            return m_locked;
         }
 
         void research()
         {
-            in_research = true;
+            m_in_research = true;
         }
 
         void unlock()
         {
-            locked = false;
+            m_locked = false;
         }
 
     private:
-        std::string name;
+        std::string m_name;
 
-        std::map<std::string, float> costs;
-        std::set<std::string> obsoletes;
-        std::set<std::string> unlocks;
+        std::map<std::string, float> m_costs;
+        std::set<std::string> m_obsoletes;
+        std::set<std::string> m_unlocks;
 
-        Timer research_timer;
+        Timer m_research_timer;
 
-        bool in_research = false;
-        bool locked = true;
+        bool m_in_research = false;
+        bool m_locked = true;
     };
 }

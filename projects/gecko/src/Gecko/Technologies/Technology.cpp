@@ -8,36 +8,36 @@ namespace Gecko
     {
         auto configuration = std::make_shared<Configuration>();
 
-        configuration->set("name", name);
-        configuration->set("costs", costs);
-        configuration->set("obsoletes", name);
-        configuration->set("unlocks", unlocks);
-        configuration->set("research_timer", research_timer.serialize());
-        configuration->set("in_research", in_research);
-        configuration->set("locked", locked);
+        configuration->set("name", m_name);
+        configuration->set("costs", m_costs);
+        configuration->set("obsoletes", m_name);
+        configuration->set("unlocks", m_unlocks);
+        configuration->set("research_timer", m_research_timer.serialize());
+        configuration->set("in_research", m_in_research);
+        configuration->set("locked", m_locked);
 
         return configuration;
     }
 
     void Technology::deserialize(const ConfigurationPtr& configuration)
     {
-        name = configuration->get_string("name");
-        costs = configuration->get_map<std::string, float>("costs");
-        obsoletes = configuration->get_string_array<std::set<std::string>>("obsoletes", {});
-        unlocks = configuration->get_string_array<std::set<std::string>>("unlocks", {});
+        m_name = configuration->get_string("name");
+        m_costs = configuration->get_map<std::string, float>("costs");
+        m_obsoletes = configuration->get_string_array<std::set<std::string>>("obsoletes", {});
+        m_unlocks = configuration->get_string_array<std::set<std::string>>("unlocks", {});
 
         if (configuration->has_member("research_timer"))
         {
-            research_timer.deserialize(configuration->get_child("research_timer"));
+            m_research_timer.deserialize(configuration->get_child("research_timer"));
         }
 
-        in_research = configuration->get_bool("in_research", false);
-        locked = configuration->get_bool("locked", true);
+        m_in_research = configuration->get_bool("in_research", false);
+        m_locked = configuration->get_bool("locked", true);
     }
 
     void Technology::update(float time)
     {
-        if (in_research && research_timer.update(time))
+        if (m_in_research && m_research_timer.update(time))
         {
             unlock();
         }

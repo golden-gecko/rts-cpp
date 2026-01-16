@@ -32,8 +32,8 @@ namespace Gecko
             // ui->set_visible(false);
 
             // Render.
-            // viewport->clear();
-            // viewport->update();
+            // m_viewport->clear();
+            // m_viewport->update();
 
             // Enable.
             // map->show_grid(grid_visibility);
@@ -43,11 +43,11 @@ namespace Gecko
 
     Minimap::Minimap()
     {
-        rttTexture = Ogre::TextureManager::getSingleton().createManual(
+        m_texture = Ogre::TextureManager::getSingleton().createManual(
             "texture_minimap",
             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
             Ogre::TEX_TYPE_2D,
-            texture_size, texture_size,
+            m_texture_size, m_texture_size,
             0,
             Ogre::PF_R8G8B8,
             Ogre::TU_RENDERTARGET
@@ -76,18 +76,18 @@ namespace Gecko
                 camera->get_camera()->setOrthoWindow(size_x, size_z);
             }
 
-            renderTexture = rttTexture->getBuffer()->getRenderTarget();
+            m_render_texture = m_texture->getBuffer()->getRenderTarget();
 
-            viewport = renderTexture->addViewport(camera->get_camera());
-            viewport->setOverlaysEnabled(false);
-            viewport->setShadowsEnabled(false);
-            viewport->setSkiesEnabled(false);
+            m_viewport = m_render_texture->addViewport(camera->get_camera());
+            m_viewport->setOverlaysEnabled(false);
+            m_viewport->setShadowsEnabled(false);
+            m_viewport->setSkiesEnabled(false);
         }
     }
 
     Minimap::~Minimap()
     {
-        Ogre::TextureManager::getSingleton().remove(rttTexture);
+        Ogre::TextureManager::getSingleton().remove(m_texture);
     }
 
     void Minimap::click(int x, int y)

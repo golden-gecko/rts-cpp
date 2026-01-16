@@ -11,9 +11,10 @@ namespace Gecko
         using base_type = Search;
 
     public:
-        explicit FollowRoadsSearch(const Layer& layer);
+        // From Search.
+        std::optional<Path::Points> get_path(const Ogre::Vector3& from, const Ogre::Vector3& to) override;
 
     public:
-        std::optional<Path::Points> get_path(const Ogre::Vector3& from, const Ogre::Vector3& to) override;
+        explicit FollowRoadsSearch(const Layer& layer);
     };
 }

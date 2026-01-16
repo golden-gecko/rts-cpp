@@ -18,8 +18,8 @@ namespace Gecko::Utils::Time
         ~Scope();
 
     private:
-        std::string name;
+        std::string m_name;
 
-        Value start;
+        Value m_start;
     };
 }

@@ -33,7 +33,7 @@
             "out": {
                 "items": {
                     "Pollution": {
-                        "production": 0.1
+                        "production": 0.4
                     },
                     "Tools": {
                         "production": 1.0

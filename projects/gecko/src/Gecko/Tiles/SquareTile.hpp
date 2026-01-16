@@ -10,6 +10,7 @@ namespace Gecko
         public Tile
     {
     public:
+        // From Initializable.
         void init() override;
         void deinit() override;
 

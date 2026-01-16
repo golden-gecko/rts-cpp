@@ -18,57 +18,57 @@ namespace Gecko
     public:
         void add(const std::string& item)
         {
-            available.emplace(item);
+            m_available.emplace(item);
         }
 
         void clear()
         {
-            available.clear();
+            m_available.clear();
         }
 
         auto empty() const
         {
-            return available.empty();
+            return m_available.empty();
         }
 
         bool is_available(const std::string& item) const
         {
-            return std::ranges::find(available, item) != available.end();
+            return std::ranges::find(m_available, item) != m_available.end();
         }
 
         auto size() const
         {
-            return available.size();
+            return m_available.size();
         }
 
     public:
         auto begin() const
         {
-            return available.begin();
+            return m_available.begin();
         }
 
         auto end() const
         {
-            return available.end();
+            return m_available.end();
         }
 
         auto cbegin() const
         {
-            return available.cbegin();
+            return m_available.cbegin();
         }
 
         auto cend() const
         {
-            return available.cend();
+            return m_available.cend();
         }
 
     public:
         bool operator==(const Configurations& other) const
         {
-            return available == other.available;
+            return m_available == other.m_available;
         }
 
     private:
-        Available available;
+        Available m_available;
     };
 }

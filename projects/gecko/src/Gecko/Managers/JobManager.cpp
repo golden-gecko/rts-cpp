@@ -25,23 +25,23 @@ namespace Gecko
     {
         // If requester is in the queue, update resource value.
         // Otherwise, add requester to the end of queue.
-        auto is_queued = std::ranges::find_if(in_queue,
+        auto is_queued = std::ranges::find_if(m_in_queue,
             [&](const auto& x)
             {
                 return x.requester_id == requester && x.resource_name == resource_name;
             }
         );
 
-        if (is_queued == in_queue.end())
+        if (is_queued == m_in_queue.end())
         {
-            auto i = std::ranges::find_if(in_queue,
+            auto i = std::ranges::find_if(m_in_queue,
                 [&](const auto& x)
                 {
                     return x.resource_priority < resource_priority;
                 }
             );
 
-            in_queue.emplace(i, Request(requester, resource_name, resource_value, resource_priority));
+            m_in_queue.emplace(i, Request(requester, resource_name, resource_value, resource_priority));
         }
         else
         {
@@ -53,23 +53,23 @@ namespace Gecko
     {
         // If requester is in the queue, update resource value.
         // Otherwise, add requester to the end of queue.
-        auto is_queued = std::ranges::find_if(out_queue,
+        auto is_queued = std::ranges::find_if(m_out_queue,
             [&](const auto& x)
             {
                 return x.requester_id == requester && x.resource_name == resource_name;
             }
         );
 
-        if (is_queued == out_queue.end())
+        if (is_queued == m_out_queue.end())
         {
-            auto i = std::ranges::find_if(out_queue,
+            auto i = std::ranges::find_if(m_out_queue,
                 [&](const auto& x)
                 {
                     return x.resource_priority < resource_priority;
                 }
             );
 
-            out_queue.emplace(i, Request(requester, resource_name, resource_value, resource_priority));
+            m_out_queue.emplace(i, Request(requester, resource_name, resource_value, resource_priority));
         }
         else
         {
@@ -116,7 +116,7 @@ namespace Gecko
 
     void JobManager::remove_in(const Id& requester, const std::string& resource_name)
     {
-        std::erase_if(in_queue,
+        std::erase_if(m_in_queue,
             [&](const auto& x)
             {
                 return x.requester_id == requester && x.resource_name == resource_name;
@@ -126,7 +126,7 @@ namespace Gecko
 
     void JobManager::remove_out(const Id& requester, const std::string& resource_name)
     {
-        std::erase_if(out_queue,
+        std::erase_if(m_out_queue,
             [&](const auto& x)
             {
                 return x.requester_id == requester && x.resource_name == resource_name;
@@ -160,10 +160,10 @@ namespace Gecko
         auto order_manager = OrderManager::getSingletonPtr();
 
         // Start with output resources, because if there is not output resources then there is nothing to transport.
-        for (auto out_request = out_queue.cbegin(); out_request != out_queue.cend(); ++out_request)
+        for (auto out_request = m_out_queue.cbegin(); out_request != m_out_queue.cend(); ++out_request)
         {
             // TODO: Optimize.
-            for (auto in_request = in_queue.cbegin(); in_request != in_queue.cend(); ++in_request)
+            for (auto in_request = m_in_queue.cbegin(); in_request != m_in_queue.cend(); ++in_request)
             {
                 // Check if output and input requesters are the same.
                 if (out_request->requester_id == in_request->requester_id)
@@ -207,8 +207,8 @@ namespace Gecko
 
                 // TODO: Remove when orders are completed.
                 // Remove input and output requesters from queues.
-                out_queue.erase(out_request);
-                in_queue.erase(in_request);
+                m_out_queue.erase(out_request);
+                m_in_queue.erase(in_request);
 
                 return jobs;
             }
@@ -221,7 +221,7 @@ namespace Gecko
     {
         auto order_manager = OrderManager::getSingletonPtr();
 
-        for (auto in_request = in_queue.cbegin(); in_request != in_queue.cend(); ++in_request)
+        for (auto in_request = m_in_queue.cbegin(); in_request != m_in_queue.cend(); ++in_request)
         {
             // Check if resource is carried by object.
             if (Utils::is_enough_to_process(resources->get_current(in_request->resource_name)) == false)
@@ -241,7 +241,7 @@ namespace Gecko
 
             // TODO: Remove when orders are completed.
             // Remove requester from queue.
-            in_queue.erase(in_request);
+            m_in_queue.erase(in_request);
 
             return jobs;
         }

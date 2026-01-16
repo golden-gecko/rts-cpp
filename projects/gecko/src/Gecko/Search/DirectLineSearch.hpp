@@ -11,9 +11,10 @@ namespace Gecko
         using base_type = Search;
 
     public:
-        explicit DirectLineSearch(const Layer& layer);
+        // From Search.
+        std::optional<Path::Points> get_path(const Ogre::Vector3& from, const Ogre::Vector3& to) override;
 
     public:
-        std::optional<Path::Points> get_path(const Ogre::Vector3& from, const Ogre::Vector3& to) override;
+        explicit DirectLineSearch(const Layer& layer);
     };
 }

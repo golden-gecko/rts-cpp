@@ -23,7 +23,7 @@ namespace Gecko
     public:
         void add(const order_type::Value& item)
         {
-            available.emplace(item);
+            m_available.emplace(item);
         }
 
         bool add_first(Id order_id);
@@ -31,22 +31,22 @@ namespace Gecko
 
         void clear()
         {
-            queue.clear();
+            m_queue.clear();
         }
 
         auto empty() const
         {
-            return queue.empty();
+            return m_queue.empty();
         }
 
         const auto& front() const
         {
-            return queue.front();
+            return m_queue.front();
         }
 
         bool is_available(order_type::Value item) const
         {
-            return std::ranges::find(available, item) != available.end();
+            return std::ranges::find(m_available, item) != m_available.end();
         }
 
         void move_first_to_end();
@@ -57,62 +57,62 @@ namespace Gecko
 
         auto size() const
         {
-            return queue.size();
+            return m_queue.size();
         }
 
     public:
         // TODO: Remove.
         auto& get_available()
         {
-            return available;
+            return m_available;
         }
 
         const auto& get_available() const
         {
-            return available;
+            return m_available;
         }
 
         // TODO: Remove.
         auto& get_queue()
         {
-            return queue;
+            return m_queue;
         }
 
         const auto& get_queue() const
         {
-            return queue;
+            return m_queue;
         }
 
     public:
-        // TODO: Iterate over available or queue?
+        // TODO: Iterate over m_available or m_queue?
         auto begin() const
         {
-            return available.begin();
+            return m_available.begin();
         }
 
         auto end() const
         {
-            return available.end();
+            return m_available.end();
         }
 
         auto cbegin() const
         {
-            return available.cbegin();
+            return m_available.cbegin();
         }
 
         auto cend() const
         {
-            return available.cend();
+            return m_available.cend();
         }
 
     public:
         bool operator==(const Orders& other) const
         {
-            return available == other.available && queue == other.queue;
+            return m_available == other.m_available && m_queue == other.m_queue;
         }
 
     private:
-        Available available;
-        Queue queue;
+        Available m_available;
+        Queue m_queue;
     };
 }

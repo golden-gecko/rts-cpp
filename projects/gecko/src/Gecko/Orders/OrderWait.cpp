@@ -32,14 +32,14 @@ namespace Gecko
     {
         base_type::init();
 
-        wait_timer.reset();
+        m_wait_timer.reset();
     }
 
     ConfigurationPtr OrderWait::serialize() const
     {
         auto configuration = base_type::serialize();
 
-        configuration->set("wait_timer", wait_timer.serialize());
+        configuration->set("wait_timer", m_wait_timer.serialize());
 
         return configuration;
     }
@@ -50,7 +50,7 @@ namespace Gecko
 
         if (configuration->has_member("wait_timer"))
         {
-            wait_timer.deserialize(configuration->get_child("wait_timer"));
+            m_wait_timer.deserialize(configuration->get_child("wait_timer"));
         }
     }
 }

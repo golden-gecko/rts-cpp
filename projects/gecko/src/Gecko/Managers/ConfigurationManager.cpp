@@ -50,7 +50,7 @@ namespace Gecko
                 continue;
             }
 
-            if (configurations.find(name) != configurations.end())
+            if (m_configurations.find(name) != m_configurations.end())
             {
                 throw Exception("Configuration '" + name + "' from '" + path + "' already exists.");
             }
@@ -64,7 +64,7 @@ namespace Gecko
                 continue;
             }
 
-            configurations.emplace(name, configuration);
+            m_configurations.emplace(name, configuration);
         }
     }
 
@@ -72,7 +72,7 @@ namespace Gecko
     {
         if (m_cache)
         {
-            for (const auto& [path, configuration] : configurations)
+            for (const auto& [path, configuration] : m_configurations)
             {
                 configuration->save_cache();
             }
@@ -81,9 +81,9 @@ namespace Gecko
 
     ConfigurationPtr ConfigurationManager::get(const std::string& name) const
     {
-        Map::const_iterator configuration = configurations.find(name);
+        Map::const_iterator configuration = m_configurations.find(name);
 
-        if (configuration == configurations.end())
+        if (configuration == m_configurations.end())
         {
             throw Exception("No configuration with name '" + name + "'.");
         }
@@ -93,26 +93,26 @@ namespace Gecko
 
     const ConfigurationManager::Map& ConfigurationManager::get_configurations() const
     {
-        return configurations;
+        return m_configurations;
     }
 
     ConfigurationManager::Map::iterator ConfigurationManager::begin()
     {
-        return configurations.begin();
+        return m_configurations.begin();
     }
 
     ConfigurationManager::Map::iterator ConfigurationManager::end()
     {
-        return configurations.end();
+        return m_configurations.end();
     }
 
     ConfigurationManager::Map::const_iterator ConfigurationManager::cbegin() const
     {
-        return configurations.cbegin();
+        return m_configurations.cbegin();
     }
 
     ConfigurationManager::Map::const_iterator ConfigurationManager::cend() const
     {
-        return configurations.cend();
+        return m_configurations.cend();
     }
 }

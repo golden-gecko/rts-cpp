@@ -91,15 +91,15 @@
             "configuration": "coal_mine",
             "player": "human",
             "position": {
-                "x": 136.0,
-                "z": 128.0
+                "x": 128.0,
+                "z": 136.0
             }
         },
         {
             "configuration": "iron_ore_deposit",
             "player": "world",
             "position": {
-                "x": 144.0,
+                "x": 136.0,
                 "z": 128.0
             }
         },
@@ -107,40 +107,8 @@
             "configuration": "iron_ore_mine",
             "player": "human",
             "position": {
-                "x": 152.0,
-                "z": 128.0
-            }
-        },
-        {
-            "configuration": "ironworks",
-            "player": "human",
-            "position": {
-                "x": 160.0,
-                "z": 128.0
-            }
-        },
-        {
-            "configuration": "tools_factory",
-            "player": "human",
-            "position": {
-                "x": 168.0,
-                "z": 128.0
-            }
-        },
-        {
-            "configuration": "vehicles_factory",
-            "player": "human",
-            "position": {
-                "x": 176.0,
-                "z": 128.0
-            }
-        },
-        {
-            "configuration": "truck",
-            "player": "human",
-            "position": {
                 "x": 136.0,
-                "z": 128.0
+                "z": 136.0
             }
         }
     ],

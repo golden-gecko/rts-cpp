@@ -27,8 +27,8 @@ namespace Gecko
         void remove_out(const Id& requester, const std::string& resource_name);
 
     private:
-        std::deque<Request> in_queue;
-        std::deque<Request> out_queue;
+        std::deque<Request> m_in_queue;
+        std::deque<Request> m_out_queue;
 
         std::vector<Order*> get_attack_job(const Id& id, const std::shared_ptr<Resources>& resources);
         std::vector<Order*> get_transport_job(const Id& id, const std::shared_ptr<Resources>& resources);

@@ -4,26 +4,26 @@ namespace Gecko
 {
     RenderInterface::RenderInterface(unsigned int window_width, unsigned int window_height)
     {
-        mRenderSystem = Ogre::Root::getSingletonPtr()->getRenderSystem();
+        m_render_system = Ogre::Root::getSingletonPtr()->getRenderSystem();
 
-        mColourBlendMode.blendType = Ogre::LBT_COLOUR;
-        mColourBlendMode.source1 = Ogre::LBS_DIFFUSE;
-        mColourBlendMode.source2 = Ogre::LBS_TEXTURE;
-        mColourBlendMode.operation = Ogre::LBX_MODULATE;
+        m_colour_blend_mode.blendType = Ogre::LBT_COLOUR;
+        m_colour_blend_mode.source1 = Ogre::LBS_DIFFUSE;
+        m_colour_blend_mode.source2 = Ogre::LBS_TEXTURE;
+        m_colour_blend_mode.operation = Ogre::LBX_MODULATE;
 
-        mAlphaBlendMode.blendType = Ogre::LBT_ALPHA;
-        mAlphaBlendMode.source1 = Ogre::LBS_DIFFUSE;
-        mAlphaBlendMode.source2 = Ogre::LBS_TEXTURE;
-        mAlphaBlendMode.operation = Ogre::LBX_MODULATE;
+        m_alpha_blend_mode.blendType = Ogre::LBT_ALPHA;
+        m_alpha_blend_mode.source1 = Ogre::LBS_DIFFUSE;
+        m_alpha_blend_mode.source2 = Ogre::LBS_TEXTURE;
+        m_alpha_blend_mode.operation = Ogre::LBX_MODULATE;
 
-        mScissorEnable = false;
+        m_scissor_enable = false;
 
-        mScissorRect[0] = 0;
-        mScissorRect[1] = 0;
-        mScissorRect[2] = window_width;
-        mScissorRect[3] = window_height;
+        m_scissor_rect[0] = 0;
+        m_scissor_rect[1] = 0;
+        m_scissor_rect[2] = window_width;
+        m_scissor_rect[3] = window_height;
 
-        mGroup = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
+        m_group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
     }
 
     Rml::CompiledGeometryHandle RenderInterface::CompileGeometry(Rml::Span<const Rml::Vertex> vertices, Rml::Span<const int> indices)
@@ -66,7 +66,7 @@ namespace Gecko
             ogre_vertices[i].z = 0;
 
             Ogre::ColourValue diffuse(vertices[i].colour.red / 255.0f, vertices[i].colour.green / 255.0f, vertices[i].colour.blue / 255.0f, vertices[i].colour.alpha / 255.0f);
-            mRenderSystem->convertColourValue(diffuse, &ogre_vertices[i].diffuse);
+            m_render_system->convertColourValue(diffuse, &ogre_vertices[i].diffuse);
 
             ogre_vertices[i].u = vertices[i].tex_coord[0];
             ogre_vertices[i].v = vertices[i].tex_coord[1];
@@ -90,7 +90,7 @@ namespace Gecko
     {
         Ogre::Matrix4 transform;
         transform.makeTrans(translation.x, translation.y, 0);
-        mRenderSystem->_setWorldMatrix(transform);
+        m_render_system->_setWorldMatrix(transform);
         RocketCompiledGeometry* ogre3d_geometry = reinterpret_cast<RocketCompiledGeometry*>(geometry);
 
         //*
@@ -98,18 +98,18 @@ namespace Gecko
 
         if (ogre_resource.isNull())
         {
-            mRenderSystem->_disableTextureUnit(0);
+            m_render_system->_disableTextureUnit(0);
         }
         else
         {
             auto ogre_texture = static_pointer_cast<Ogre::Texture>(ogre_resource);
 
-            mRenderSystem->_setTexture(0, true, ogre_texture);
-            mRenderSystem->_setTextureBlendMode(0, mColourBlendMode);
-            mRenderSystem->_setTextureBlendMode(0, mAlphaBlendMode);
+            m_render_system->_setTexture(0, true, ogre_texture);
+            m_render_system->_setTextureBlendMode(0, m_colour_blend_mode);
+            m_render_system->_setTextureBlendMode(0, m_alpha_blend_mode);
         }
 
-        mRenderSystem->_render(ogre3d_geometry->mRenderOperation);
+        m_render_system->_render(ogre3d_geometry->mRenderOperation);
         //*/
     }
 
@@ -183,7 +183,7 @@ namespace Gecko
         // Try to create texture from memory
         Ogre::TexturePtr ogre_texture = Ogre::TextureManager::getSingleton().loadRawData(
             texture_name,
-            mGroup,
+            m_group,
             dataStream,
             source_dimensions.x,
             source_dimensions.y,
@@ -208,27 +208,27 @@ namespace Gecko
     {
         throw std::exception("RenderInterface::EnableScissorRegion");
 
-        mScissorEnable = enable;
+        m_scissor_enable = enable;
 
-        if (!mScissorEnable)
-            mRenderSystem->setScissorTest(false);
+        if (!m_scissor_enable)
+            m_render_system->setScissorTest(false);
         else
-            mRenderSystem->setScissorTest(true, mScissorRect[0], mScissorRect[1], mScissorRect[2], mScissorRect[3]);
+            m_render_system->setScissorTest(true, m_scissor_rect[0], m_scissor_rect[1], m_scissor_rect[2], m_scissor_rect[3]);
     }
 
     void RenderInterface::SetScissorRegion(Rml::Rectanglei region)
     {
         throw std::exception("RenderInterface::SetScissorRegion");
 
-        mScissorRect[0] = std::max<int>(0, region.Position().x);
-        mScissorRect[1] = std::max<int>(0, region.Position().y);
+        m_scissor_rect[0] = std::max<int>(0, region.Position().x);
+        m_scissor_rect[1] = std::max<int>(0, region.Position().y);
 
         /*
-        mScissorRect[2] = x + width;
-        mScissorRect[3] = y + height;
+        m_scissor_rect[2] = x + width;
+        m_scissor_rect[3] = y + height;
 
-        if (mScissorEnable)
-            mRenderSystem->setScissorTest(true, mScissorRect[0], mScissorRect[1], mScissorRect[2], mScissorRect[3]);
+        if (m_scissor_enable)
+            m_render_system->setScissorTest(true, m_scissor_rect[0], m_scissor_rect[1], m_scissor_rect[2], m_scissor_rect[3]);
         */
     }
 }

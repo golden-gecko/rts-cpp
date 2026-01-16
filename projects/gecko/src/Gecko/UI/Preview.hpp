@@ -26,11 +26,11 @@ namespace Gecko
         void set_visible(bool visible);
 
     private:
-        Ogre::TexturePtr rttTexture{ nullptr };
-        Ogre::RenderTexture* renderTexture { nullptr };
-        Ogre::Viewport* viewport { nullptr };
+        Ogre::TexturePtr m_texture = nullptr;
+        Ogre::RenderTexture* m_render_texture = nullptr;
+        Ogre::Viewport* m_viewport = nullptr;
 
-        std::uint16_t texture_size { 256 };
-        std::uint16_t size { 128 };
+        std::uint16_t m_texture_size = 256;
+        std::uint16_t m_size = 128;
     };
 }

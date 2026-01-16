@@ -65,7 +65,7 @@ namespace Gecko
 
         auto get_active_player_id() const
         {
-            return active_player_id;
+            return m_active_player_id;
         }
 
         const auto& get_configuration() const
@@ -82,14 +82,14 @@ namespace Gecko
 
         const auto& get_name() const
         {
-            return name;
+            return m_name;
         }
 
         std::vector<std::string> get_saves() const;
 
         Ogre::SceneManager* get_scene_manager() const
         {
-            return scene_manager;
+            return m_scene_manager;
         }
 
     public:
@@ -106,16 +106,16 @@ namespace Gecko
     private:
         ConfigurationPtr m_configuration;
 
-        std::string name;
+        std::string m_name;
 
-        Id active_map_id;
-        Id active_player_id;
+        Id m_active_map_id;
+        Id m_active_player_id;
 
     private:
-        Ogre::SceneManager* scene_manager = nullptr;
+        Ogre::SceneManager* m_scene_manager = nullptr;
 
-        Ogre::Light* light = nullptr;
-        Ogre::SceneNode* light_scene_node = nullptr;
+        Ogre::Light* m_light = nullptr;
+        Ogre::SceneNode* m_light_scene_node = nullptr;
 
         void init_meshes();
         void init_root();

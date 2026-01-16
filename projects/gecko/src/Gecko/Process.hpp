@@ -21,17 +21,17 @@ namespace Gecko
     public:
         const auto& get_name() const
         {
-            return name;
+            return m_name;
         }
 
     public:
         bool operator==(const Process& other) const;
 
     private:
-        std::string name;
+        std::string m_name;
 
-        std::shared_ptr<Resources> in;
-        std::shared_ptr<Resources> out;
+        std::shared_ptr<Resources> m_in;
+        std::shared_ptr<Resources> m_out;
 
         Object* get_deposit(const Resource& in_resource, Id id, const Ogre::Vector3& position, float time) const;
         Object* get_storage(const Resource& out_resource, Id id, const Ogre::Vector3& position, float time) const;

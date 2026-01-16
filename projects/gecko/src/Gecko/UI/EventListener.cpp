@@ -12,7 +12,7 @@ namespace Gecko
 
 		std::vector<std::string> segments;
 
-        boost::algorithm::split(segments, value, boost::is_any_of(":"), boost::token_compress_on);
+        boost::algorithm::split(segments, m_value, boost::is_any_of(":"), boost::token_compress_on);
 
 		if (segments.size() != 2)
 		{
@@ -22,11 +22,11 @@ namespace Gecko
 		const std::string function = segments[0];
 		const std::string argument = segments[1];
 
-		if (value == "call:quit-to-menu")
+		if (m_value == "call:quit-to-menu")
 		{
 			on_quit_to_menu();
 		}
-		else if (value == "call:quit-to-desktop")
+		else if (m_value == "call:quit-to-desktop")
 		{
 			on_quit_to_desktop();
 		}
@@ -50,7 +50,7 @@ namespace Gecko
 	}
 
 	EventListener::EventListener(const Rml::String& value) :
-		value(value)
+		m_value(value)
 	{
 	}
 

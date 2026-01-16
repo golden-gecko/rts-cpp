@@ -24,6 +24,6 @@ namespace Gecko
 		void on_quit_to_desktop() const;
 
 	private:
-		Rml::String value;
+		Rml::String m_value;
 	};
 }

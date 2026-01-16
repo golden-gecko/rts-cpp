@@ -33,16 +33,16 @@ namespace Gecko
     {
         base_type::init();
 
-        target_id = Id::Empty;
-        target_position = Ogre::Vector3::ZERO;
+        m_target_id = Id::Empty;
+        m_target_position = Ogre::Vector3::ZERO;
     }
 
     ConfigurationPtr OrderAttack::serialize() const
     {
         auto configuration = base_type::serialize();
 
-        configuration->set("target_id", target_id);
-        configuration->set("target_position", target_position);
+        configuration->set("target_id", m_target_id);
+        configuration->set("target_position", m_target_position);
 
         return configuration;
     }
@@ -51,7 +51,7 @@ namespace Gecko
     {
         base_type::deserialize(configuration);
 
-        target_id = configuration->get_int("target_id", Id::Empty.get());
-        target_position = configuration->get_vector3("target_position", Ogre::Vector3::ZERO);
+        m_target_id = configuration->get_int("m_target_id", Id::Empty.get());
+        m_target_position = configuration->get_vector3("m_target_position", Ogre::Vector3::ZERO);
     }
 }

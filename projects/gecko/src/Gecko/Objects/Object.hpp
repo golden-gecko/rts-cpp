@@ -15,6 +15,20 @@ namespace Gecko
         using base_type = Item;
 
     public:
+        // From Initializable.
+        void init() override;
+        void deinit() override;
+
+    public:
+        // From Serializable.
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
+        // From Updatable.
+        void update(float time) override;
+
+    public:
         static Object* create(Object* memory, const ConfigurationPtr& configuration);
 
     public:
@@ -23,39 +37,31 @@ namespace Gecko
 
         ~Object() override;
 
-        void init() override;
-        void deinit() override;
-
-        ConfigurationPtr serialize() const override;
-        void deserialize(const ConfigurationPtr& configuration) override;
-
-        void update(float time) override;
-
     public:
         auto is_selectable() const
         {
-            return selectable;
+            return m_selectable;
         }
 
         auto is_selected() const
         {
-            return selected;
+            return m_selected;
         }
 
         auto is_visible() const
         {
-            return visible;
+            return m_visible;
         }
 
     public:
         auto get_components() const
         {
-            return components;
+            return m_components;
         }
 
         auto get_configurations() const
         {
-            return configurations;
+            return m_configurations;
         }
 
         Ogre::Vector3 get_direction() const;
@@ -68,58 +74,58 @@ namespace Gecko
 
         const auto& get_name() const
         {
-            return name;
+            return m_name;
         }
 
         auto get_orders() const
         {
-            return orders;
+            return m_orders;
         }
 
         Map* get_owner() const
         {
-            return owner;
+            return m_owner;
         }
 
         const auto& get_player_id() const
         {
-            return player_id;
+            return m_player_id;
         }
 
         const Ogre::Vector3& get_position() const;
 
         auto get_processes() const
         {
-            return processes;
+            return m_processes;
         }
 
         virtual std::map<std::string, float> get_progress_bars() const;
 
         auto get_resources() const
         {
-            return resources;
+            return m_resources;
         }
 
         const Ogre::Vector3& get_scale() const
         {
-            return scene_node->getScale();
+            return m_scene_node->getScale();
         }
 
         auto& get_scene_node()
         {
-            return *scene_node;
+            return *m_scene_node;
         }
 
         const auto& get_scene_node() const
         {
-            return *scene_node;
+            return *m_scene_node;
         }
 
         Area get_size() const;
 
         auto get_skills() const
         {
-            return skills;
+            return m_skills;
         }
 
         // TODO: Implement from components.
@@ -133,12 +139,12 @@ namespace Gecko
     public:
         virtual void set_direction(const Ogre::Vector3& direction)
         {
-            scene_node->setDirection(direction, Ogre::Node::TransformSpace::TS_WORLD);
+            m_scene_node->setDirection(direction, Ogre::Node::TransformSpace::TS_WORLD);
         }
 
         void set_owner(Map* _owner)
         {
-            owner = _owner;
+            m_owner = _owner;
         }
 
         virtual void set_player_id(Id player_id);
@@ -147,12 +153,12 @@ namespace Gecko
 
         virtual void set_scale(const Ogre::Vector3& scale)
         {
-            scene_node->setScale(scale);
+            m_scene_node->setScale(scale);
         }
 
-        virtual void set_selected(bool _selected);
+        virtual void set_selected(bool selected);
 
-        virtual void set_visible(bool _visible);
+        virtual void set_visible(bool visible);
 
     protected:
         virtual void update_components(float time);
@@ -179,29 +185,29 @@ namespace Gecko
         // TODO: End.
 
     private:
-        Map* owner = nullptr;
+        Map* m_owner = nullptr;
 
-        std::string name;
-        Id player_id;
-        Timer alive_timer;
+        std::string m_name;
+        Id m_player_id;
+        Timer m_alive_timer;
 
-        bool selectable = false;
-        bool selected = false;
-        bool visible = false;
+        bool m_selectable = false;
+        bool m_selected = false;
+        bool m_visible = false;
 
-        std::shared_ptr<Components> components;
-        std::shared_ptr<Configurations> configurations;
-        std::shared_ptr<Orders> orders;
-        std::shared_ptr<Layers> layers;
-        std::shared_ptr<Processes> processes;
-        std::shared_ptr<Resources> resources;
-        std::shared_ptr<Skills> skills;
-        std::shared_ptr<Mesh> selection;
+        std::shared_ptr<Components> m_components;
+        std::shared_ptr<Configurations> m_configurations;
+        std::shared_ptr<Orders> m_orders;
+        std::shared_ptr<Layers> m_layers;
+        std::shared_ptr<Processes> m_processes;
+        std::shared_ptr<Resources> m_resources;
+        std::shared_ptr<Skills> m_skills;
+        std::shared_ptr<Mesh> m_selection;
 
-        Ogre::SceneNode* scene_node = nullptr;
+        Ogre::SceneNode* m_scene_node = nullptr;
 
         // TODO: Move to serialize and deserialize methods.
-        Timer job_timer = Timer(1.0f);
+        Timer m_job_timer = Timer(1.0f);
 
         void create_selection_mesh();
     };

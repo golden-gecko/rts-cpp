@@ -7,11 +7,6 @@
 
 namespace Gecko
 {
-    TopDownCamera::TopDownCamera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration) :
-        base_type(root, scene_manager, name, configuration)
-    {
-    }
-
     void TopDownCamera::update(float time)
     {
         Ogre::Vector3 direction = Ogre::Vector3::ZERO;
@@ -70,5 +65,10 @@ namespace Gecko
 
             set_position(camera_position);
         }
+    }
+
+    TopDownCamera::TopDownCamera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration) :
+        base_type(root, scene_manager, name, configuration)
+    {
     }
 }

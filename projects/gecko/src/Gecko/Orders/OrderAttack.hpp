@@ -27,27 +27,27 @@ namespace Gecko
     public:
         auto get_target_id() const
         {
-            return target_id;
+            return m_target_id;
         }
 
         const auto& get_target_position() const
         {
-            return target_position;
+            return m_target_position;
         }
 
     public:
-        void set_target_id(const Id& new_target_id)
+        void set_target_id(const Id& target_id)
         {
-            target_id = new_target_id;
+            m_target_id = target_id;
         }
 
-        void set_target_position(const Ogre::Vector3& new_target_position)
+        void set_target_position(const Ogre::Vector3& target_position)
         {
-            target_position = new_target_position;
+            m_target_position = target_position;
         }
 
     private:
-        Id target_id;
-        Ogre::Vector3 target_position = Ogre::Vector3::ZERO;
+        Id m_target_id;
+        Ogre::Vector3 m_target_position = Ogre::Vector3::ZERO;
     };
 }

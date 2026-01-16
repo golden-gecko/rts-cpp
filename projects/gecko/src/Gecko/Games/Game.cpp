@@ -335,33 +335,33 @@ namespace Gecko
 
     Ogre::Entity* Game::create_entity(const std::string& name) const
     {
-        return scene_manager->createEntity(name);
+        return m_scene_manager->createEntity(name);
     }
 
     void Game::destroy_entity(Ogre::Entity* entity) const
     {
         if (entity)
         {
-            scene_manager->destroyEntity(entity);
+            m_scene_manager->destroyEntity(entity);
         }
     }
 
     Ogre::ManualObject* Game::create_manual_object() const
     {
-        return scene_manager->createManualObject();
+        return m_scene_manager->createManualObject();
     }
 
     void Game::destroy_manual_object(Ogre::ManualObject* manual_object) const
     {
         if (manual_object)
         {
-            scene_manager->destroyManualObject(manual_object);
+            m_scene_manager->destroyManualObject(manual_object);
         }
     }
 
     Ogre::RaySceneQuery* Game::create_ray_scene_query(const Ogre::Ray& ray) const
     {
-        auto ray_scene_query = scene_manager->createRayQuery(ray);
+        auto ray_scene_query = m_scene_manager->createRayQuery(ray);
 
         ray_scene_query->setSortByDistance(true);
 
@@ -372,20 +372,20 @@ namespace Gecko
     {
         if (ray_scene_query)
         {
-            scene_manager->destroyQuery(ray_scene_query);
+            m_scene_manager->destroyQuery(ray_scene_query);
         }
     }
 
     Ogre::SceneNode* Game::create_scene_node() const
     {
-        return scene_manager->getRootSceneNode()->createChildSceneNode();
+        return m_scene_manager->getRootSceneNode()->createChildSceneNode();
     }
 
     void Game::destroy_scene_node(Ogre::SceneNode* scene_node) const
     {
         if (scene_node)
         {
-            scene_manager->destroySceneNode(scene_node);
+            m_scene_manager->destroySceneNode(scene_node);
         }
     }
 
@@ -469,12 +469,12 @@ namespace Gecko
                 if (key_value[1] == "enabled")
                 {
                     // TODO: Fix.
-                    // get_scene_manager()->getSkyBoxNode()->setVisible(true);
+                    // get_m_scene_manager()->getSkyBoxNode()->setVisible(true);
                 }
                 else if (key_value[1] == "disabled")
                 {
                     // TODO: Fix.
-                    // get_scene_manager()->getSkyBoxNode()->setVisible(false);
+                    // get_m_scene_manager()->getSkyBoxNode()->setVisible(false);
                 }
             }
         }
@@ -550,7 +550,7 @@ namespace Gecko
 
     Player* Game::get_active_player() const
     {
-        return PlayerManager::getSingleton().get(active_player_id);
+        return PlayerManager::getSingleton().get(m_active_player_id);
     }
 
     std::vector<std::string> Game::get_maps() const
@@ -607,14 +607,14 @@ namespace Gecko
     {
         UI::getSingleton().log_info(
             "Switched active player from "
-            + Utils::Convert::to_string(active_player_id)
+            + Utils::Convert::to_string(m_active_player_id)
             + " to "
             + Utils::Convert::to_string(id)
             + "."
         );
 
         // Get current active player.
-        auto current_active_player = PlayerManager::getSingleton().get(active_player_id);
+        auto current_active_player = PlayerManager::getSingleton().get(m_active_player_id);
 
         if (current_active_player)
         {
@@ -623,7 +623,7 @@ namespace Gecko
         }
 
         // Set new active player ID.
-        active_player_id = id;
+        m_active_player_id = id;
 
         // Get new active player.
         auto new_active_player = PlayerManager::getSingleton().get(id);
@@ -1023,26 +1023,26 @@ namespace Gecko
     void Game::init_scene()
     {
         // TODO: Use "OctreeSceneManager".
-        scene_manager = getRoot()->createSceneManager();
-        scene_manager->addRenderQueueListener(this);
-        scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::White));
+        m_scene_manager = getRoot()->createSceneManager();
+        m_scene_manager->addRenderQueueListener(this);
+        m_scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::White));
 
         // TODO: Move materials to bin directory.
         // TODO: Move to configuration.
         // TODO: Enable.
-        // scene_manager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);
-        // scene_manager->setFog(Ogre::FogMode::FOG_EXP2, Ogre::ColourValue(0.9f, 0.9f, 0.9f), 0.002f, 100.0f, 500.0f);
-        // scene_manager->setSkyBox(true, "Examples/CloudyNoonSkyBox", 10.0f);
+        // m_scene_manager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);
+        // m_scene_manager->setFog(Ogre::FogMode::FOG_EXP2, Ogre::ColourValue(0.9f, 0.9f, 0.9f), 0.002f, 100.0f, 500.0f);
+        // m_scene_manager->setSkyBox(true, "Examples/CloudyNoonSkyBox", 10.0f);
 
-        Ogre::RTShader::ShaderGenerator::getSingleton().addSceneManager(scene_manager);
+        Ogre::RTShader::ShaderGenerator::getSingleton().addSceneManager(m_scene_manager);
 
-        light = scene_manager->createLight();
+        m_light = m_scene_manager->createLight();
         // TODO: Makes all material black. Investigate.
         // light->setDiffuseColour(m_configuration->get_color("scene.directional.color", Ogre::ColourValue::White));
-        light->setType(Ogre::Light::LightTypes::LT_DIRECTIONAL);
+        m_light->setType(Ogre::Light::LightTypes::LT_DIRECTIONAL);
 
-        light_scene_node = create_scene_node();
-        light_scene_node->attachObject(light);
+        m_light_scene_node = create_scene_node();
+        m_light_scene_node->attachObject(m_light);
         // TODO: Makes some parts of objects white. Investigate.
         // light_scene_node->setDirection(m_configuration->get_vector3("scene.directional.direction"));
     }
@@ -1062,8 +1062,8 @@ namespace Gecko
 
     void Game::deinit_scene()
     {
-        Ogre::RTShader::ShaderGenerator::getSingleton().removeSceneManager(scene_manager);
+        Ogre::RTShader::ShaderGenerator::getSingleton().removeSceneManager(m_scene_manager);
 
-        getRoot()->destroySceneManager(scene_manager);
+        getRoot()->destroySceneManager(m_scene_manager);
     }
 }
