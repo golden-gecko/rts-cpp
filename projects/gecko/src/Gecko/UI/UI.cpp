@@ -2,6 +2,7 @@
 
 #include "Gecko/Cameras/Camera.hpp"
 #include "Gecko/Configuration.hpp"
+#include "Gecko/Containers/Components.hpp"
 #include "Gecko/Containers/Orders.hpp"
 #include "Gecko/Containers/Resources.hpp"
 #include "Gecko/Containers/Selected.hpp"
@@ -26,6 +27,7 @@
 #include "Gecko/UI/RenderInterface.hpp"
 #include "Gecko/UI/SelectionBox.hpp"
 #include "Gecko/UI/SystemInterface.hpp"
+#include "Gecko/Utils/Utils.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/String.hpp"
 
@@ -843,57 +845,39 @@ namespace Gecko
 
     void UI::set_floating_descriptions()
     {
-        // TODO: Refactor? Fix? Remove?
         /*
-        // Update cache.
-        static std::vector<Id> json_floating_descriptions_cache;
+        TODO: Works very slow.
 
-        if (json_floating_descriptions_cache == objects)
+        // Create RML.
+        Rml::String rml;
+
+        auto camera = MapManager::getSingleton().begin()->second->get_camera("Main")->get_camera();
+        auto window = Game::getSingleton().getRenderWindow();
+
+        for (const auto& [id, object] : ObjectManager::getSingleton())
         {
-            return;
-        }
-
-        json_floating_descriptions_cache = objects;
-
-        // Create JSON.
-        Json::Value json_floating_descriptions;
-
-        auto camera = Game::getSingleton().get_camera(Settings::Camera::MainName)->get_camera();
-        auto window = Game::getSingleton().get_window(Settings::Window::MainName);
-
-        for (const auto& id : objects)
-        {
-            auto object = ObjectManager::getSingleton().get(id);
-            auto coordinates = Utils::get_screenspace_coords(object->get_mesh().get_entity(), camera, true);
+            const Ogre::AxisAlignedBox& box = object->get_scene_node()._getWorldAABB();
+            auto coordinates = Utils::get_screenspace_coords(box, camera, true);
 
             if (coordinates)
             {
-                auto width = static_cast<int>(std::roundf(coordinates->x * window->get_width()));
-                auto height = static_cast<int>(std::roundf(coordinates->y * window->get_height()));
+                auto width = static_cast<int>(std::roundf(coordinates->x * window->getWidth()));
+                auto height = static_cast<int>(std::roundf(coordinates->y * window->getHeight()));
 
-                Json::Value json_object;
-
-                json_object["id"] = id;
-                json_object["name"] = object->get_name();
-                json_object["left"] = width;
-                json_object["top"] = height;
+                rml += std::format("<div class=\"floating-description\" id=\"object_{}\" style=\"left: {}px; top: {}px;\">", id.get(), width, height);
+                rml += std::format("<div class=\"name\">{}</div>", object->get_name());
 
                 for (const auto& [name, value] : object->get_progress_bars())
                 {
-                    json_object["bars"][name] = value;
+                    rml += std::format("<div class=\"bar {}\"><div class=\"bar-background\"><div class=\"bar-current\" style=\"width: {}%;\"></div></div></div>", name, value);
                 }
 
-                json_floating_descriptions.append(json_object);
+                rml += "</div>";
             }
         }
 
         // Update UI.
-        static std::stringstream stream;
-
-        stream.str("");
-        stream << "app.ui.set_floating_descriptions(";
-        stream << Utils::Convert::to_string(json_floating_descriptions);
-        stream << ")";
+        floating_descriptions_body->SetInnerRML(rml);
         */
     }
 
@@ -1420,6 +1404,7 @@ namespace Gecko
         configurations_header = get_header_placeholder("configurations");
         diplomacy_body = get_body_placeholder("diplomacy");
         info_body = get_body_placeholder("info");
+        floating_descriptions_body = get_body_placeholder("floating_descriptions");
         layers_body = get_body_placeholder("layers");
         log_body = get_body_placeholder("log");
         maps_body = get_body_placeholder("maps");

@@ -493,19 +493,26 @@ namespace Gecko
 
     std::map<std::string, float> Object::get_progress_bars() const
     {
+        // TODO: Optimize.
         std::map<std::string, float> progress_bars;
 
-        /*
-        TODO: Implement.
-        if (get_max_health() <= 0.0f)
+        float health = 0.0f;
+        float max_health = 0.0f;
+
+        for (Components::Items::const_iterator i = m_components->cbegin(); i != m_components->cend(); i++)
+        {
+            health += (*i)->get_health();
+            max_health += (*i)->get_max_health();
+        }
+
+        if (max_health <= 0.0f)
         {
             progress_bars["health"] = 0.0f;
         }
         else
         {
-            progress_bars["health"] = std::roundf(get_health() / get_max_health() * 100.f);
+            progress_bars["health"] = std::roundf(health / max_health * 100.f);
         }
-        */
 
         return progress_bars;
     }

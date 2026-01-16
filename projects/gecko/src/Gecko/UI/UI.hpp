@@ -185,6 +185,7 @@ namespace Gecko
         Rml::Element* configurations_body = nullptr;
         Rml::Element* configurations_header = nullptr;
         Rml::Element* diplomacy_body = nullptr;
+        Rml::Element* floating_descriptions_body = nullptr;
         Rml::Element* info_body = nullptr;
         Rml::Element* layers_body = nullptr;
         Rml::Element* log_body = nullptr;

@@ -14,7 +14,7 @@ namespace Gecko::Utils
     Coordinate get_index_from_position(float x, float z, const Ogre::Vector3& scale);
     Coordinate get_index_from_position(const Ogre::Vector3& position, const Ogre::Vector3& scale);
 
-    std::optional<Ogre::Vector2> get_screenspace_coords(const Ogre::Entity& object, Ogre::Camera* camera, bool convert);
+    std::optional<Ogre::Vector2> get_screenspace_coords(const Ogre::AxisAlignedBox& box, Ogre::Camera* camera, bool convert);
 
     std::size_t get_window_handle(Ogre::RenderWindow* render_window);
 

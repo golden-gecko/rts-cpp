@@ -31,15 +31,8 @@ namespace Gecko::Utils
         return get_index_from_position(position.x, position.z, scale);
     }
 
-    std::optional<Ogre::Vector2> get_screenspace_coords(const Ogre::Entity& object, Ogre::Camera* camera, bool convert)
+    std::optional<Ogre::Vector2> get_screenspace_coords(const Ogre::AxisAlignedBox& box, Ogre::Camera* camera, bool convert)
     {
-        if (object.isInScene() == false)
-        {
-            return {};
-        }
-
-        const auto& AABB = object.getWorldBoundingBox(true);
-
         /**
         * If you need the point above the object instead of the center point:
         * This snippet derives the average point between the top-most corners of the bounding box
@@ -48,7 +41,7 @@ namespace Gecko::Utils
         *    + AABB.getCorner(AxisAlignedBox::NEAR_LEFT_TOP)
         *    + AABB.getCorner(AxisAlignedBox::NEAR_RIGHT_TOP)) / 4;
         */
-        auto point = AABB.getCenter();
+        auto point = box.getCenter();
 
         // Is the camera facing that point? If not, return false
         auto cameraPlane = Ogre::Plane(Ogre::Vector3(camera->getDerivedOrientation().zAxis()), camera->getDerivedPosition());
