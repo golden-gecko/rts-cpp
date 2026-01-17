@@ -13,25 +13,25 @@ TEST(configuration, new_configuration_is_empty)
 
 TEST(configuration, configuration_from_file_has_members)
 {
-    Gecko::Configuration configuration(std::string("../games/rts.json"));
+    Gecko::Configuration configuration("../tests/units/tank.json");
 
-    EXPECT_EQ(configuration.get_file_name(), "../games/rts.json");
-    EXPECT_EQ(configuration.get_name(), "rts");
-    EXPECT_EQ(configuration.size(), 9);
+    EXPECT_EQ(configuration.get_file_name(), "../tests/units/tank.json");
+    EXPECT_EQ(configuration.get_name(), "tank");
+    EXPECT_EQ(configuration.size(), 3);
 }
 
 TEST(configuration, can_retrieve_single_keys_from_configuration)
 {
-    Gecko::Configuration configuration("../games/rts.json");
+    Gecko::Configuration configuration("../tests/units/tank.json");
 
-    EXPECT_EQ(configuration.get_string("name"), "RTS");
+    EXPECT_EQ(configuration.get_string("name"), "Tank");
 }
 
 TEST(configuration, can_retrieve_paths_from_configuration)
 {
-    Gecko::Configuration configuration("../games/rts.json");
+    Gecko::Configuration configuration("../tests/units/tank.json");
 
-    EXPECT_EQ(configuration.get_string("ui.layout"), "../ui/ui.rml");
+    EXPECT_EQ(configuration.get_string("path.with.nested.value"), "OK");
 }
 
 TEST(configuration, bool_value_can_be_saved_and_retrieved_from_single_key)

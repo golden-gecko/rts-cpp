@@ -115,14 +115,11 @@ namespace Gecko
 
     void RenderInterface::ReleaseGeometry(Rml::CompiledGeometryHandle geometry)
     {
-        int i = 0;
-
-        /*
         RocketCompiledGeometry* ogre3d_geometry = reinterpret_cast<RocketCompiledGeometry*>(geometry);
+
         delete ogre3d_geometry->mRenderOperation.vertexData;
         delete ogre3d_geometry->mRenderOperation.indexData;
         delete ogre3d_geometry;
-        */
     }
 
     Rml::TextureHandle RenderInterface::LoadTexture(Rml::Vector2i& texture_dimensions, const Rml::String& source)
