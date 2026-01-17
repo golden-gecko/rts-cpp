@@ -772,6 +772,10 @@ namespace Gecko
 
     void UI::set_configurations(const std::set<std::string>& configurations)
     {
+        // Update cache.
+        // TODO: Implement.
+
+        // Update UI.
         m_configurations.clear();
 
         for (const std::string& i : configurations)
@@ -892,35 +896,18 @@ namespace Gecko
 
     void UI::set_maps(const std::vector<std::string>& maps)
     {
-        /*
-        TODO: Fix.
-
         // Update cache.
-        static std::vector<std::string> maps_cache;
-
-        if (maps_cache == maps)
-        {
-            return;
-        }
-
-        maps_cache = maps;
-
-        // Create JSON.
-        Json::Value json_maps;
-
-        for (const auto& i : maps)
-        {
-            json_maps.append(i);
-        }
+        // TODO: Fix.
 
         // Update UI.
-        static std::stringstream stream;
+        m_maps.clear();
 
-        stream.str("");
-        stream << "app.map_menu.set_maps(";
-        stream << Utils::Convert::to_string(json_maps);
-        stream << ")";
-        */
+        for (const auto& map : maps)
+        {
+            m_maps.push_back(map);
+        }
+
+        m_map_menu_model.DirtyVariable("maps");
     }
 
     void UI::set_hovered_object_id(Id object_id)
@@ -1122,35 +1109,18 @@ namespace Gecko
 
     void UI::set_saves(const std::vector<std::string>& saves)
     {
-        /*
-        TODO: Fix.
-
         // Update cache.
-        static std::vector<std::string> saves_cache;
-
-        if (saves_cache == saves)
-        {
-            return;
-        }
-
-        saves_cache = saves;
-
-        // Create JSON.
-        Json::Value json_saves;
-
-        for (const auto& i : saves)
-        {
-            json_saves.append(i);
-        }
+        // TODO: Fix.
 
         // Update UI.
-        static std::stringstream stream;
+        m_saves.clear();
 
-        stream.str("");
-        stream << "app.load_menu.set_saves(";
-        stream << Utils::Convert::to_string(json_saves);
-        stream << ")";
-        */
+        for (const auto& save : saves)
+        {
+            m_saves.push_back(save);
+        }
+
+        m_load_menu_model.DirtyVariable("saves");
     }
 
     void UI::set_skill_name(const std::string& skill_name)
@@ -1370,6 +1340,16 @@ namespace Gecko
             }
         }
 
+        // Load menu.
+        {
+            if (auto constructor = context->CreateDataModel("load_menu"))
+            {
+                constructor.Bind("saves", &m_saves);
+
+                m_load_menu_model = constructor.GetModelHandle();
+            }
+        }
+
         // Log.
         {
             if (auto constructor = context->CreateDataModel("log"))
@@ -1377,6 +1357,16 @@ namespace Gecko
                 constructor.Bind("log", &m_log);
 
                 m_log_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Map menu.
+        {
+            if (auto constructor = context->CreateDataModel("map_menu"))
+            {
+                constructor.Bind("maps", &m_maps);
+
+                m_map_menu_model = constructor.GetModelHandle();
             }
         }
 

@@ -388,7 +388,7 @@
         <div class="card-body">
             <button class="button" onclick="open:diplomacy">Diplomacy</button>
             <button class="button" onclick="open:layers">Layers</button>
-            <button class="button" onclick="open:main-menu">Menu</button>
+            <button class="button" onclick="menu:main-menu">Menu</button>
             <button class="button" onclick="open:objects-admin">Objects</button>   
             <button class="button" onclick="open:orders-admin">Orders</button>
             <button class="button" onclick="open:statistics">Statistics</button>
@@ -472,19 +472,13 @@
     </div>
 
     <!-- Load Menu -->
-    <div id="load-menu" class="card hidden centered">
+    <div id="load-menu" class="card centered hidden" data-model="load_menu">
         <div class="card-header">Load</div>
         <div class="card-body">
-            <button class="button-continue button">Continue</button>
-            <div>
-                <button class="button" data-name="2017_10_12_12_51_41">2017_10_12_12_51_41</button>
-                <button class="button" data-name="2018_10_12_12_51_41">2018_10_12_12_51_41</button>
-                <button class="button" data-name="2019_10_12_12_51_41">2019_10_12_12_51_41</button>
-                <button class="button" data-name="2020_10_03_12_51_19">2020_10_03_12_51_19</button>
-                <button class="button" data-name="2020_11_10_13_21_33">2020_11_10_13_21_33</button>
-            </div>
-            <button class="button-quit-game button">Quit to menu</button>
-            <button class="button-quit-application button">Quit to desktop</button>
+            <button class="button" onclick="menu:none">Continue</button>
+            <button class="button" data-for="i : saves">{{i}}</button>
+            <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
+            <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
         </div>
     </div>
 
@@ -496,33 +490,27 @@
     </div>
 
     <!-- Main Menu -->
-    <div id="main-menu" class="card hidden centered">
+    <div id="main-menu" class="card centered hidden">
         <div class="card-header">Menu</div>
         <div class="card-body">
-            <button class="button button-continue">Continue</button>
-            <button class="button button-new-game">New game</button>
-            <button class="button button-save" onclick="open:save">Save</button>
-            <button class="button button-load" onclick="open:load">Load</button>
-            <button class="button button-options" onclick="open:options">Options</button>
-            <button class="button button-quit-game" onclick="call:quit-to-menu">Quit to menu</button>
-            <button class="button button-quit-application" onclick="call:quit-to-desktop">Quit to desktop</button>
+            <button class="button" onclick="menu:none">Continue</button>
+            <button class="button" onclick="menu:map-menu">New game</button>
+            <button class="button">Save</button>
+            <button class="button" onclick="menu:load-menu">Load</button>
+            <button class="button">Options</button>
+            <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
+            <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
         </div>
     </div>
 
     <!-- Map Menu -->
-    <div id="map-menu" class="card hidden centered">
+    <div id="map-menu" class="card centered hidden" data-model="map_menu">
         <div class="card-header">Maps</div>
         <div class="card-body">
-            <button class="button-continue button">Continue</button>
-            <div>
-                <button class="button" data-name="tutorial #1">tutorial #1</button>
-                <button class="button" data-name="tutorial #2">tutorial #2</button>
-                <button class="button" data-name="level #1">level #1</button>
-                <button class="button" data-name="level #2">level #2</button>
-                <button class="button" data-name="level #3">level #3</button>
-            </div>
-            <button class="button-quit-game button">Quit to menu</button>
-            <button class="button-quit-application button">Quit to desktop</button>
+            <button class="button" onclick="menu:none">Continue</button>
+            <button class="button" data-for="i : maps">{{i}}</button>
+            <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
+            <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
         </div>
     </div>
 
@@ -741,9 +729,9 @@
                 <tbody>
                     <tr data-for="i : resources">
                         <td>{{i.name}}</td>
-                        <td class="number">{{i.current}}</td>
-                        <td class="number">{{i.max}}</td>
-                        <td class="number {{i.direction}}">{{i.ratio}}</td>
+                        <td class="number">{{format(i.current, 1)}}</td>
+                        <td class="number">{{format(i.max, 1)}}</td>
+                        <td class="number {{i.direction}}">{{format(i.ratio, 1)}}</td>
                     </tr>
                 </tbody>
             </table>

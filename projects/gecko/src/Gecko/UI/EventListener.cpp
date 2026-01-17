@@ -34,6 +34,10 @@ namespace Gecko
 		{
 			on_close(argument);
 		}
+		else if (function == "menu")
+		{
+			on_menu(argument);
+		}
 		else if (function == "open")
 		{
 			on_open(argument);
@@ -77,6 +81,28 @@ namespace Gecko
 
 		// TODO: Fix. Mouse is still detecting hidden object.
 		element->SetClass("hidden", true);
+	}
+
+	void EventListener::on_menu(const std::string& value) const
+	{
+		L_TRACE << "EventListener::on_menu(" << value << ")";
+
+		get_element("load-menu")->SetClass("hidden", true);
+		get_element("main-menu")->SetClass("hidden", true);
+		get_element("map-menu")->SetClass("hidden", true);
+
+		if (value == "load-menu")
+		{
+			get_element("load-menu")->SetClass("hidden", false);
+		}
+		else if (value == "main-menu")
+		{
+			get_element("main-menu")->SetClass("hidden", false);
+		}
+		else if (value == "map-menu")
+		{
+			get_element("map-menu")->SetClass("hidden", false);
+		}
 	}
 
 	void EventListener::on_open(const std::string& value) const

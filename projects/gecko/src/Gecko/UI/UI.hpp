@@ -162,9 +162,9 @@ namespace Gecko
         void set_maps(const std::vector<std::string>& maps);
         void set_objects_admin();
         void set_orders_admin();
-        void set_players();
         void set_order_type(order_type::Value order_type);
         void set_orders(const std::set<std::string>& orders);
+        void set_players();
         void set_resources(std::shared_ptr<Resources> resources);
         void set_saves(const std::vector<std::string>& saves);
         void set_skill_name(const std::string& skill_name);
@@ -271,7 +271,9 @@ namespace Gecko
         Rml::DataModelHandle m_configurations_model;
         Rml::DataModelHandle m_diplomacy_model;
         Rml::DataModelHandle m_info_model;
+        Rml::DataModelHandle m_load_menu_model;
         Rml::DataModelHandle m_log_model;
+        Rml::DataModelHandle m_map_menu_model;
         Rml::DataModelHandle m_objects_admin_model;
         Rml::DataModelHandle m_orders_model;
         Rml::DataModelHandle m_orders_admin_model;
@@ -285,11 +287,13 @@ namespace Gecko
         Rml::Vector<Data_Diplomacy> m_diplomacy;
         std::string m_info;
         Rml::Vector<Data_Log> m_log;
+        Rml::Vector<std::string> m_maps;
         Rml::Vector<Data_Object> m_objects_admin;
         Rml::Vector<std::string> m_orders;
         Rml::Vector<Data_Order> m_orders_admin;
         Rml::Vector<Data_Player> m_players;
         Rml::Vector<Data_Resource> m_resources;
+        Rml::Vector<std::string> m_saves;
         Rml::Vector<std::string> m_skills;
         Rml::Vector<Data_Statistic> m_statistics;
         Rml::Vector<std::string> m_technologies;
