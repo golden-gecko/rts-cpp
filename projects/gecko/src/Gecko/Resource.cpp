@@ -5,7 +5,7 @@
 namespace Gecko
 {
     Resource::Resource(const std::string& name) :
-        name(name)
+        m_name(name)
     {
 
     }
@@ -14,38 +14,38 @@ namespace Gecko
     {
         auto configuration = std::make_shared<Configuration>();
 
-        configuration->set("name", name);
+        configuration->set("name", m_name);
 
-        configuration->set("current", current);
-        configuration->set("maximal", maximal);
-        configuration->set("consumption", consumption);
-        configuration->set("production", production);
+        configuration->set("current", m_current);
+        configuration->set("maximal", m_maximal);
+        configuration->set("consumption", m_consumption);
+        configuration->set("production", m_production);
 
-        configuration->set("need_deposit", need_deposit);
-        configuration->set("need_storage", need_storage);
+        configuration->set("need_deposit", m_need_deposit);
+        configuration->set("need_storage", m_need_storage);
 
-        configuration->set("deposit_range", deposit_range);
-        configuration->set("storage_range", storage_range);
+        configuration->set("deposit_range", m_deposit_range);
+        configuration->set("storage_range", m_storage_range);
 
-        configuration->set("priority", priority);
+        configuration->set("priority", m_priority);
 
         return configuration;
     }
 
     void Resource::deserialize(const ConfigurationPtr& configuration)
     {
-        current = configuration->get_float("current", 0.0f);
-        maximal = configuration->get_float("maximal", 0.0f);
-        consumption = configuration->get_float("consumption", 0.0f);
-        production = configuration->get_float("production", 0.0f);
+        m_current = configuration->get_float("current", 0.0f);
+        m_maximal = configuration->get_float("maximal", 0.0f);
+        m_consumption = configuration->get_float("consumption", 0.0f);
+        m_production = configuration->get_float("production", 0.0f);
 
-        need_deposit = configuration->get_bool("need_deposit", false);
-        need_storage = configuration->get_bool("need_storage", false);
+        m_need_deposit = configuration->get_bool("need_deposit", false);
+        m_need_storage = configuration->get_bool("need_storage", false);
 
-        deposit_range = configuration->get_float("deposit_range", 0.0f);
-        storage_range = configuration->get_float("storage_range", 0.0f);
+        m_deposit_range = configuration->get_float("deposit_range", 0.0f);
+        m_storage_range = configuration->get_float("storage_range", 0.0f);
 
-        priority = configuration->get_float("priority", Settings::Game::ResourcePriority);
+        m_priority = configuration->get_float("priority", Settings::Game::ResourcePriority);
     }
 
     void Resource::update(float time)
@@ -55,26 +55,26 @@ namespace Gecko
 
     float Resource::add(float value)
     {
-        if (current + value > maximal)
+        if (m_current + value > m_maximal)
         {
-            value = maximal - current;
+            value = m_maximal - m_current;
         }
 
-        current += value;
-        current = std::clamp(current, 0.0f, maximal);
+        m_current += value;
+        m_current = std::clamp(m_current, 0.0f, m_maximal);
 
         return value;
     }
 
     float Resource::remove(float value)
     {
-        if (value > current)
+        if (value > m_current)
         {
-            value = current;
+            value = m_current;
         }
 
-        current -= value;
-        current = std::clamp(current, 0.0f, maximal);
+        m_current -= value;
+        m_current = std::clamp(m_current, 0.0f, m_maximal);
 
         return value;
     }

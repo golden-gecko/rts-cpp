@@ -25,9 +25,9 @@ namespace Gecko
         void update(float time) override;
 
     private:
-        std::string missile_configuration;
-        std::uint16_t missiles_fired = 0;
-        float rotation_speed = 0.0f;
-        Timer reload_timer;
+        std::string m_missile_configuration;
+        std::uint16_t m_missiles_fired = 0;
+        float m_rotation_speed = 0.0f;
+        Timer m_reload_timer;
     };
 }

@@ -22,21 +22,21 @@ namespace Gecko
     Mesh::Mesh(const Mesh& other) :
         base_type(other)
     {
-        if (other.entity)
+        if (other.m_entity)
         {
-            entity = Utils::Mesh::copy_entity(*other.entity);
+            m_entity = Utils::Mesh::copy_entity(*other.m_entity);
 
             if (get_owner())
             {
-                entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
+                m_entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
             }
         }
 
         // TODO: Scene node is created at the same parent? Should be created from new owner.
-        if (other.scene_node)
+        if (other.m_scene_node)
         {
-            scene_node = Utils::Mesh::copy_scene_node(*other.scene_node);
-            scene_node->attachObject(entity);
+            m_scene_node = Utils::Mesh::copy_scene_node(*other.m_scene_node);
+            m_scene_node->attachObject(m_entity);
         }
     }
 
@@ -45,14 +45,14 @@ namespace Gecko
         // TODO: Fix.
         if (Game::getSingletonPtr())
         {
-            Game::getSingleton().destroy_scene_node(scene_node);
-            Game::getSingleton().destroy_entity(entity);
+            Game::getSingleton().destroy_scene_node(m_scene_node);
+            Game::getSingleton().destroy_entity(m_entity);
         }
     }
 
     Ogre::Vector3 Mesh::get_direction() const
     {
-        return Utils::get_node_direction(*scene_node);
+        return Utils::get_node_direction(*m_scene_node);
     }
 
     void Mesh::init()
@@ -75,42 +75,33 @@ namespace Gecko
         auto position = m_configuration->get_vector3("position", Ogre::Vector3::ZERO);
         auto scale = m_configuration->get_vector3("mesh.scale", Ogre::Vector3::UNIT_SCALE);
 
-        scene_node = get_owner()->get_scene_node().createChildSceneNode();
-        scene_node->attachObject(entity);
-        scene_node->setFixedYawAxis(true);
-        scene_node->setPosition(position);
-        scene_node->setScale(scale);
+        m_scene_node = get_owner()->get_scene_node().createChildSceneNode();
+        m_scene_node->attachObject(m_entity);
+        m_scene_node->setFixedYawAxis(true);
+        m_scene_node->setPosition(position);
+        m_scene_node->setScale(scale);
     }
 
     void Mesh::set_owner(Object* _owner)
     {
         base_type::set_owner(_owner);
 
-        if (entity)
+        if (m_entity)
         {
-            entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
+            m_entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
         }
     }
 
     void Mesh::set_position(const Ogre::Vector3& position)
     {
-        scene_node->setPosition(position);
+        m_scene_node->setPosition(position);
     }
 
     void Mesh::load_from_file()
     {
-        entity = Game::getSingleton().create_entity(m_configuration->get_string("mesh.name"));
-        entity->setQueryFlags(QueryFlags::QF_Object);
-        entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
-        //entity->setMaterialName("mine_hull");
-
-        if (m_configuration->get_string("mesh.name") == "mine_hull.mesh")
-        {
-            auto c = entity->getMesh()->getNumSubMeshes();
-            //entity->getMesh()->getSubMesh(0)->setMaterialName("mine_hull");
-            auto m = entity->getMesh()->getSubMesh(0)->getMaterial();
-            auto s = entity->getMesh()->getSubMesh(0)->getMaterialName();
-        }
+        m_entity = Game::getSingleton().create_entity(m_configuration->get_string("mesh.name"));
+        m_entity->setQueryFlags(QueryFlags::QF_Object);
+        m_entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
     }
 
     void Mesh::load_from_vertices()
@@ -264,8 +255,8 @@ namespace Gecko
             Game::getSingleton().destroy_manual_object(mesh);
         }
 
-        entity = Game::getSingleton().create_entity(mesh_name);
-        entity->setQueryFlags(QueryFlags::QF_Object);
-        entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
+        m_entity = Game::getSingleton().create_entity(mesh_name);
+        m_entity->setQueryFlags(QueryFlags::QF_Object);
+        m_entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
     }
 }

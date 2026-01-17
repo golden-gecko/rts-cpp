@@ -14,18 +14,18 @@ namespace Gecko
 {
     Cursor::Cursor()
     {
-        square = Game::getSingleton().create_manual_object();
-        square->setQueryFlags(QueryFlags::QF_Cursor);
+        m_square = Game::getSingleton().create_manual_object();
+        m_square->setQueryFlags(QueryFlags::QF_Cursor);
 
-        scene_node = Game::getSingleton().create_scene_node();
-        scene_node->attachObject(square);
-        scene_node->setPosition(Settings::UI::CursorOffset);
+        m_scene_node = Game::getSingleton().create_scene_node();
+        m_scene_node->attachObject(m_square);
+        m_scene_node->setPosition(Settings::UI::CursorOffset);
     }
 
     Cursor::~Cursor()
     {
-        Game::getSingleton().destroy_scene_node(scene_node);
-        Game::getSingleton().destroy_manual_object(square);
+        Game::getSingleton().destroy_scene_node(m_scene_node);
+        Game::getSingleton().destroy_manual_object(m_square);
     }
 
     void Cursor::set_mesh(const ConfigurationPtr& configuration)
@@ -33,12 +33,12 @@ namespace Gecko
         set_visible(false);
 
         // Save configuration name.
-        mesh_name = configuration->get_name();
+        m_mesh_name = configuration->get_name();
 
         // Find or create component and object.
-        auto object = objects.find(mesh_name);
+        auto object = m_objects.find(m_mesh_name);
 
-        if (object == objects.end())
+        if (object == m_objects.end())
         {
             // TODO: Create object factory.
             auto type = configuration->get_string("type");
@@ -51,7 +51,7 @@ namespace Gecko
                 object->set_visible(true);
                 object->init();
 
-                objects.emplace(std::make_pair(configuration->get_name(), std::move(object)));
+                m_objects.emplace(std::make_pair(configuration->get_name(), std::move(object)));
             }
             else if (type == "Missile")
             {
@@ -61,7 +61,7 @@ namespace Gecko
                 object->set_visible(true);
                 object->init();
 
-                objects.emplace(std::make_pair(configuration->get_name(), std::move(object)));
+                m_objects.emplace(std::make_pair(configuration->get_name(), std::move(object)));
             }
             else if (type == "Object")
             {
@@ -71,7 +71,7 @@ namespace Gecko
                 object->set_visible(true);
                 object->init();
 
-                objects.emplace(std::make_pair(configuration->get_name(), std::move(object)));
+                m_objects.emplace(std::make_pair(configuration->get_name(), std::move(object)));
             }
             else if (type == "Vehicle")
             {
@@ -81,7 +81,7 @@ namespace Gecko
                 object->set_visible(true);
                 object->init();
 
-                objects.emplace(std::make_pair(configuration->get_name(), std::move(object)));
+                m_objects.emplace(std::make_pair(configuration->get_name(), std::move(object)));
             }
             else
             {
@@ -99,30 +99,30 @@ namespace Gecko
         set_visible(false);
 
         // Save type.
-        this->type = type;
+        m_type = type;
 
         // Show cursor.
         if (type == Type::Component)
         {
-            auto component = components.find(mesh_name);
+            auto component = m_components.find(m_mesh_name);
 
-            if (component != components.end())
+            if (component != m_components.end())
             {
                 component->second->set_visible(true);
             }
         }
         else if (type == Type::Object)
         {
-            auto object = objects.find(mesh_name);
+            auto object = m_objects.find(m_mesh_name);
 
-            if (object != objects.end())
+            if (object != m_objects.end())
             {
                 object->second->set_visible(true);
             }
         }
         else if (type == Type::Square)
         {
-            scene_node->setVisible(true);
+            m_scene_node->setVisible(true);
         }
         else
         {
@@ -133,14 +133,14 @@ namespace Gecko
     void Cursor::set_visible(bool visible)
     {
         // Hide all.
-        scene_node->setVisible(false);
+        m_scene_node->setVisible(false);
 
-        for (const auto& [configuration_name, component] : components)
+        for (const auto& [configuration_name, component] : m_components)
         {
             component->set_visible(false);
         }
 
-        for (const auto& [configuration_name, object] : objects)
+        for (const auto& [configuration_name, object] : m_objects)
         {
             object->set_visible(false);
         }
@@ -148,27 +148,27 @@ namespace Gecko
         // Show cursor.
         if (visible)
         {
-            if (type == Type::Component)
+            if (m_type == Type::Component)
             {
-                auto component = components.find(mesh_name);
+                auto component = m_components.find(m_mesh_name);
 
-                if (component != components.end())
+                if (component != m_components.end())
                 {
                     component->second->set_visible(true);
                 }
             }
-            else if (type == Type::Object)
+            else if (m_type == Type::Object)
             {
-                auto object = objects.find(mesh_name);
+                auto object = m_objects.find(m_mesh_name);
 
-                if (object != objects.end())
+                if (object != m_objects.end())
                 {
                     object->second->set_visible(true);
                 }
             }
-            else if (type == Type::Square)
+            else if (m_type == Type::Square)
             {
-                scene_node->setVisible(true);
+                m_scene_node->setVisible(true);
             }
             else
             {
@@ -184,27 +184,27 @@ namespace Gecko
             return;
         }
 
-        position = cast.first->get_index(cast.second);
+        m_position = cast.first->get_index(cast.second);
 
-        if (type == Type::Component)
+        if (m_type == Type::Component)
         {
-            auto component = components.find(mesh_name);
+            auto component = m_components.find(m_mesh_name);
 
-            if (component != components.end())
+            if (component != m_components.end())
             {
                 component->second->set_position(cast.second);
             }
         }
-        else if (type == Type::Object)
+        else if (m_type == Type::Object)
         {
-            auto object = objects.find(mesh_name);
+            auto object = m_objects.find(m_mesh_name);
 
-            if (object != objects.end())
+            if (object != m_objects.end())
             {
                 object->second->set_position(cast.second);
             }
         }
-        else if (type == Type::Square)
+        else if (m_type == Type::Square)
         {
             // Get node vertices.
             auto index_x = static_cast<Index>(std::floorf(cast.second.x / cast.first->get_scale().x));
@@ -215,10 +215,10 @@ namespace Gecko
             // Get grid vertices.
             const auto& grid_scale = cast.first->get_grid_scale();
 
-            auto g00 = Ogre::Vector3( position.x      * grid_scale.x, 0.0f,  position.z      * grid_scale.z);
-            auto g01 = Ogre::Vector3( position.x      * grid_scale.x, 0.0f, (position.z + 1) * grid_scale.z);
-            auto g11 = Ogre::Vector3((position.x + 1) * grid_scale.x, 0.0f, (position.z + 1) * grid_scale.z);
-            auto g10 = Ogre::Vector3((position.x + 1) * grid_scale.x, 0.0f,  position.z      * grid_scale.z);
+            auto g00 = Ogre::Vector3( m_position.x      * grid_scale.x, 0.0f,  m_position.z      * grid_scale.z);
+            auto g01 = Ogre::Vector3( m_position.x      * grid_scale.x, 0.0f, (m_position.z + 1) * grid_scale.z);
+            auto g11 = Ogre::Vector3((m_position.x + 1) * grid_scale.x, 0.0f, (m_position.z + 1) * grid_scale.z);
+            auto g10 = Ogre::Vector3((m_position.x + 1) * grid_scale.x, 0.0f,  m_position.z      * grid_scale.z);
 
             // Get Y position of grid vertices.
             g00 = cast.first->get_position(g00.x, g00.z, false);
@@ -227,34 +227,34 @@ namespace Gecko
             g10 = cast.first->get_position(g10.x, g10.z, false);
 
             // Create cursor.
-            square->clear();
-            square->begin("cursor_grid_red"); // TODO: Hardcoded.
+            m_square->clear();
+            m_square->begin("cursor_grid_red"); // TODO: Hardcoded.
 
-            square->position(g00);
-            square->normal(Ogre::Vector3::UNIT_Y);
-            square->textureCoord(0.0f, 0.0f);
+            m_square->position(g00);
+            m_square->normal(Ogre::Vector3::UNIT_Y);
+            m_square->textureCoord(0.0f, 0.0f);
 
-            square->position(g01);
-            square->normal(Ogre::Vector3::UNIT_Y);
-            square->textureCoord(1.0f, 0.0f);
+            m_square->position(g01);
+            m_square->normal(Ogre::Vector3::UNIT_Y);
+            m_square->textureCoord(1.0f, 0.0f);
 
-            square->position(g10);
-            square->normal(Ogre::Vector3::UNIT_Y);
-            square->textureCoord(0.0f, 1.0f);
+            m_square->position(g10);
+            m_square->normal(Ogre::Vector3::UNIT_Y);
+            m_square->textureCoord(0.0f, 1.0f);
 
-            square->position(g10);
-            square->normal(Ogre::Vector3::UNIT_Y);
-            square->textureCoord(0.0f, 1.0f);
+            m_square->position(g10);
+            m_square->normal(Ogre::Vector3::UNIT_Y);
+            m_square->textureCoord(0.0f, 1.0f);
 
-            square->position(g01);
-            square->normal(Ogre::Vector3::UNIT_Y);
-            square->textureCoord(1.0f, 0.0f);
+            m_square->position(g01);
+            m_square->normal(Ogre::Vector3::UNIT_Y);
+            m_square->textureCoord(1.0f, 0.0f);
 
-            square->position(g11);
-            square->normal(Ogre::Vector3::UNIT_Y);
-            square->textureCoord(1.0f, 1.0f);
+            m_square->position(g11);
+            m_square->normal(Ogre::Vector3::UNIT_Y);
+            m_square->textureCoord(1.0f, 1.0f);
 
-            square->end();
+            m_square->end();
         }
         else
         {

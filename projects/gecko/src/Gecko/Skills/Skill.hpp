@@ -13,15 +13,19 @@ namespace Gecko
         using base_type = Item;
 
     public:
+        // From Serializable.
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
+        // From Updatable.
+        void update(float time) override;
+
+    public:
         explicit Skill() = default;
         explicit Skill(const Skill& other);
 
         virtual ~Skill() = default;
-
-        ConfigurationPtr serialize() const override;
-        void deserialize(const ConfigurationPtr& configuration) override;
-
-        void update(float time) override;
 
     public:
         virtual void activate(const Id& id) = 0;

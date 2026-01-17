@@ -29,69 +29,69 @@ namespace Gecko
     public:
         auto get_consumption() const
         {
-            return consumption;
+            return m_consumption;
         }
 
         auto get_current() const
         {
-            return current;
+            return m_current;
         }
 
         auto get_deposit_range() const
         {
-            return deposit_range;
+            return m_deposit_range;
         }
 
         // TODO: Unify naming (max vs maximal).
         auto get_max() const
         {
-            return maximal;
+            return m_maximal;
         }
 
         const auto& get_name() const
         {
-            return name;
+            return m_name;
         }
 
         auto get_need_deposit() const
         {
-            return need_deposit;
+            return m_need_deposit;
         }
 
         auto get_need_storage() const
         {
-            return need_storage;
+            return m_need_storage;
         }
 
         auto get_priority() const
         {
-            return priority;
+            return m_priority;
         }
 
         auto get_production() const
         {
-            return production;
+            return m_production;
         }
 
         auto get_storage() const
         {
-            return maximal - current;
+            return m_maximal - m_current;
         }
 
         auto get_storage_range() const
         {
-            return storage_range;
+            return m_storage_range;
         }
 
     public:
         void set_current(float _current)
         {
-            current = _current;
+            m_current = _current;
         }
 
         void set_maximal(float _maximal)
         {
-            maximal = _maximal;
+            m_maximal = _maximal;
         }
 
     public:
@@ -99,26 +99,26 @@ namespace Gecko
         {
             static constexpr auto epsilon = std::numeric_limits<float>::epsilon();
 
-            return std::abs(consumption - other.consumption) < epsilon
-                && std::abs(production - other.production) < epsilon
-                && std::abs(current - other.current) < epsilon
-                && std::abs(maximal - other.maximal) < epsilon;
+            return std::abs(m_consumption - other.m_consumption) < epsilon
+                && std::abs(m_production - other.m_production) < epsilon
+                && std::abs(m_current - other.m_current) < epsilon
+                && std::abs(m_maximal - other.m_maximal) < epsilon;
         }
 
     private:
-        std::string name;
+        std::string m_name;
 
-        float current = 0.0f;
-        float maximal = 0.0f;
-        float consumption = 0.0f;
-        float production = 0.0f;
+        float m_current = 0.0f;
+        float m_maximal = 0.0f;
+        float m_consumption = 0.0f;
+        float m_production = 0.0f;
 
-        bool need_deposit = false;
-        bool need_storage = false;
+        bool m_need_deposit = false;
+        bool m_need_storage = false;
 
-        float deposit_range = 0.0f;
-        float storage_range = 0.0f;
+        float m_deposit_range = 0.0f;
+        float m_storage_range = 0.0f;
 
-        float priority = Settings::Game::ResourcePriority;
+        float m_priority = Settings::Game::ResourcePriority;
     };
 }

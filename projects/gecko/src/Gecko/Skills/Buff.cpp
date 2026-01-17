@@ -4,15 +4,6 @@
 
 namespace Gecko
 {
-    Buff* Buff::create(Buff* memory, const ConfigurationPtr& configuration)
-    {
-        auto component = new (memory) Buff();
-
-        component->deserialize(configuration);
-
-        return component;
-    }
-
     ConfigurationPtr Buff::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
@@ -51,5 +42,14 @@ namespace Gecko
 
             m_refresh_timer.reset();
         }
+    }
+
+    Buff* Buff::create(Buff* memory, const ConfigurationPtr& configuration)
+    {
+        auto component = new (memory) Buff();
+
+        component->deserialize(configuration);
+
+        return component;
     }
 }

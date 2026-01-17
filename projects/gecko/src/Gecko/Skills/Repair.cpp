@@ -5,15 +5,6 @@
 
 namespace Gecko
 {
-    Repair* Repair::create(Repair* memory, const ConfigurationPtr& configuration)
-    {
-        auto component = new (memory) Repair();
-
-        component->deserialize(configuration);
-
-        return component;
-    }
-
     ConfigurationPtr Repair::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
@@ -54,5 +45,14 @@ namespace Gecko
 
             m_refresh_timer.reset();
         }
+    }
+
+    Repair* Repair::create(Repair* memory, const ConfigurationPtr& configuration)
+    {
+        auto component = new (memory) Repair();
+
+        component->deserialize(configuration);
+
+        return component;
     }
 }

@@ -24,7 +24,7 @@ namespace Gecko
     public:
         bool is_visible() const override
         {
-            return entity->isVisible();
+            return m_entity->isVisible();
         }
 
     public:
@@ -32,27 +32,27 @@ namespace Gecko
 
         auto& get_entity()
         {
-            return *entity;
+            return *m_entity;
         }
 
         const auto& get_entity() const
         {
-            return *entity;
+            return *m_entity;
         }
 
         auto& get_scene_node()
         {
-            return *scene_node;
+            return *m_scene_node;
         }
 
         const auto& get_scene_node() const
         {
-            return *scene_node;
+            return *m_scene_node;
         }
 
         Ogre::Vector3 get_size() const override
         {
-            return entity->getBoundingBox().getSize();
+            return m_entity->getBoundingBox().getSize();
         }
 
     public:
@@ -64,12 +64,12 @@ namespace Gecko
         {
             base_type::set_visible(visible);
 
-            scene_node->setVisible(visible);
+            m_scene_node->setVisible(visible);
         }
 
     private:
-        Ogre::Entity* entity = nullptr;
-        Ogre::SceneNode* scene_node = nullptr;
+        Ogre::Entity* m_entity = nullptr;
+        Ogre::SceneNode* m_scene_node = nullptr;
 
         void load_from_file();
         void load_from_vertices();

@@ -27,10 +27,12 @@ namespace Gecko
         bool povMoved(const OIS::JoyStickEvent& arg, int index) override;
         bool vector3Moved(const OIS::JoyStickEvent& arg, int index) override;
 
+    public:
         // From OIS::KeyListener.
         bool keyPressed(const OIS::KeyEvent& arg) override;
         bool keyReleased(const OIS::KeyEvent& arg) override;
 
+    public:
         // From OIS::MouseListener.
         bool mouseMoved(const OIS::MouseEvent& arg) override;
         bool mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id) override;
@@ -64,10 +66,10 @@ namespace Gecko
 
         unsigned long m_render_window_handle = 0;
 
-        OIS::InputManager* input_manager = nullptr;
-        OIS::JoyStick* joystick = nullptr;
-        OIS::Keyboard* keyboard = nullptr;
-        OIS::Mouse* mouse = nullptr;
+        OIS::InputManager* m_input_manager = nullptr;
+        OIS::JoyStick* m_joystick = nullptr;
+        OIS::Keyboard* m_keyboard = nullptr;
+        OIS::Mouse* m_mouse = nullptr;
 
         std::map<Command::Value, std::set<OIS::KeyCode>> commands;
 
@@ -86,7 +88,7 @@ namespace Gecko
 
         bool is_key_pressed(OIS::KeyCode key_code) const
         {
-            return keyboard->isKeyDown(key_code);
+            return m_keyboard->isKeyDown(key_code);
         }
 
         void handle_left_mouse_button(const OIS::MouseEvent& arg);

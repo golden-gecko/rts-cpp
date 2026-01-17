@@ -21,6 +21,6 @@ namespace Gecko
         explicit Shield(const Shield& other);
 
     private:
-        float defence = 0.0f;
+        float m_defence = 0.0f;
     };
 }

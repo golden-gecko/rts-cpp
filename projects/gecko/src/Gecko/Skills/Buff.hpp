@@ -11,16 +11,19 @@ namespace Gecko
         using base_type = Skill;
 
     public:
-        static Buff* create(Buff* memory, const ConfigurationPtr& configuration);
-
-    public:
-        explicit Buff() = default;
-
+        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
+        // From Skill.
         void activate(const Id& id) override;
         void activate(const Ogre::Vector3& position) override;
+
+    public:
+        static Buff* create(Buff* memory, const ConfigurationPtr& configuration);
+
+    public:
+        explicit Buff() = default;
     };
 }

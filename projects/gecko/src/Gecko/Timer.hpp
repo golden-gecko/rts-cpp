@@ -21,12 +21,12 @@ namespace Gecko
     public:
         float get_current() const
         {
-            return current;
+            return m_current;
         }
 
         float get_maximal() const
         {
-            return maximal;
+            return m_maximal;
         }
 
         float get_progress() const
@@ -35,14 +35,14 @@ namespace Gecko
         }
 
     public:
-        void set_current(float _current)
+        void set_current(float current)
         {
-            current = _current;
+            m_current = current;
         }
 
-        void set_maximal(float _maximal)
+        void set_maximal(float maximal)
         {
-            maximal = _maximal;
+            m_maximal = maximal;
         }
 
         void reset()
@@ -55,11 +55,11 @@ namespace Gecko
         {
             static constexpr auto epsilon = std::numeric_limits<float>::epsilon();
 
-            return std::abs(maximal - current) < epsilon;
+            return std::abs(m_maximal - m_current) < epsilon;
         }
 
     private:
-        float current = 0.0f;
-        float maximal = std::numeric_limits<float>::max();
+        float m_current = 0.0f;
+        float m_maximal = std::numeric_limits<float>::max();
     };
 }

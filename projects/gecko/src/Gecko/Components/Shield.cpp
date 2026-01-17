@@ -16,14 +16,14 @@ namespace Gecko
     Shield::Shield(const Shield& other) :
         base_type(other)
     {
-        defence = other.defence;
+        m_defence = other.m_defence;
     }
 
     ConfigurationPtr Shield::serialize() const
     {
         auto configuration = base_type::serialize();
 
-        configuration->set("defence", defence);
+        configuration->set("defence", m_defence);
 
         return configuration;
     }
@@ -32,6 +32,6 @@ namespace Gecko
     {
         base_type::deserialize(configuration);
 
-        defence = configuration->get_float("defence", 0.0f);
+        m_defence = configuration->get_float("defence", 0.0f);
     }
 }

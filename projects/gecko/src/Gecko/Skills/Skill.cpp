@@ -4,14 +4,6 @@
 
 namespace Gecko
 {
-    Skill::Skill(const Skill& other) :
-        base_type(other)
-    {
-        m_name = other.m_name;
-        m_refresh_timer = other.m_refresh_timer;
-        m_activation_count = other.m_activation_count;
-    }
-
     ConfigurationPtr Skill::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
@@ -38,5 +30,13 @@ namespace Gecko
     void Skill::update(float time)
     {
         m_refresh_timer.update(time);
+    }
+
+    Skill::Skill(const Skill& other) :
+        base_type(other)
+    {
+        m_name = other.m_name;
+        m_refresh_timer = other.m_refresh_timer;
+        m_activation_count = other.m_activation_count;
     }
 }

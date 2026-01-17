@@ -5,35 +5,35 @@
 namespace Gecko
 {
     Timer::Timer(float maximal) :
-        maximal(maximal)
+        m_maximal(maximal)
     {
     }
 
     Timer::Timer(const Timer& other)
     {
-        current = other.current;
-        maximal = other.maximal;
+        m_current = other.m_current;
+        m_maximal = other.m_maximal;
     }
 
     ConfigurationPtr Timer::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
-        configuration->set("current", current);
-        configuration->set("maximal", maximal);
+        configuration->set("current", m_current);
+        configuration->set("maximal", m_maximal);
 
         return configuration;
     }
 
     void Timer::deserialize(const ConfigurationPtr& configuration)
     {
-        current = configuration->get_float("current", 0.0f);
-        maximal = configuration->get_float("maximal", std::numeric_limits<decltype(maximal)>::max());
+        m_current = configuration->get_float("current", 0.0f);
+        m_maximal = configuration->get_float("maximal", std::numeric_limits<decltype(m_maximal)>::max());
     }
 
     Timer& Timer::update(float time)
     {
-        current = std::clamp(current + time, 0.0f, maximal);
+        m_current = std::clamp(m_current + time, 0.0f, m_maximal);
 
         return *this;
     }

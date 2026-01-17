@@ -6,15 +6,6 @@
 
 namespace Gecko
 {
-    FireMissile* FireMissile::create(FireMissile* memory, const ConfigurationPtr& configuration)
-    {
-        auto component = new (memory) FireMissile();
-
-        component->deserialize(configuration);
-
-        return component;
-    }
-
     ConfigurationPtr FireMissile::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
@@ -56,5 +47,14 @@ namespace Gecko
 
             m_refresh_timer.reset();
         }
+    }
+
+    FireMissile* FireMissile::create(FireMissile* memory, const ConfigurationPtr& configuration)
+    {
+        auto component = new (memory) FireMissile();
+
+        component->deserialize(configuration);
+
+        return component;
     }
 }

@@ -16,16 +16,16 @@ namespace Gecko
     Drive::Drive(const Drive& other) :
         base_type(other)
     {
-        speed = other.speed;
-        distance_driven = other.distance_driven;
+        m_speed = other.m_speed;
+        m_distance_driven = other.m_distance_driven;
     }
 
     ConfigurationPtr Drive::serialize() const
     {
         auto configuration = base_type::serialize();
 
-        configuration->set("speed", speed);
-        configuration->set("distance_driven", distance_driven);
+        configuration->set("speed", m_speed);
+        configuration->set("distance_driven", m_distance_driven);
 
         return configuration;
     }
@@ -34,7 +34,7 @@ namespace Gecko
     {
         base_type::deserialize(configuration);
 
-        speed = configuration->get_float("speed", 0.0f);
-        speed = configuration->get_float("distance_driven", 0.0f);
+        m_speed = configuration->get_float("speed", 0.0f);
+        m_speed = configuration->get_float("distance_driven", 0.0f);
     }
 }

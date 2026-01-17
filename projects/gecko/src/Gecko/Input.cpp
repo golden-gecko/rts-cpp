@@ -277,62 +277,62 @@ namespace Gecko
         param_list.emplace(OIS::ParamList::value_type("x11_mouse_hide", "false"));
 #endif
 
-        input_manager = OIS::InputManager::createInputSystem(param_list);
+        m_input_manager = OIS::InputManager::createInputSystem(param_list);
 
-        if (input_manager->getNumberOfDevices(OIS::Type::OISJoyStick) > 0)
+        if (m_input_manager->getNumberOfDevices(OIS::Type::OISJoyStick) > 0)
         {
-            joystick = dynamic_cast<OIS::JoyStick*>(input_manager->createInputObject(OIS::Type::OISJoyStick, true));
-            joystick->setEventCallback(this);
+            m_joystick = dynamic_cast<OIS::JoyStick*>(m_input_manager->createInputObject(OIS::Type::OISJoyStick, true));
+            m_joystick->setEventCallback(this);
         }
 
-        if (input_manager->getNumberOfDevices(OIS::Type::OISKeyboard) > 0)
+        if (m_input_manager->getNumberOfDevices(OIS::Type::OISKeyboard) > 0)
         {
-            keyboard = static_cast<OIS::Keyboard*>(input_manager->createInputObject(OIS::OISKeyboard, true));
-            keyboard->setEventCallback(this);
+            m_keyboard = static_cast<OIS::Keyboard*>(m_input_manager->createInputObject(OIS::OISKeyboard, true));
+            m_keyboard->setEventCallback(this);
         }
 
-        if (input_manager->getNumberOfDevices(OIS::Type::OISMouse) > 0)
+        if (m_input_manager->getNumberOfDevices(OIS::Type::OISMouse) > 0)
         {
-            mouse = static_cast<OIS::Mouse*>(input_manager->createInputObject(OIS::OISMouse, true));
-            mouse->setEventCallback(this);
+            m_mouse = static_cast<OIS::Mouse*>(m_input_manager->createInputObject(OIS::OISMouse, true));
+            m_mouse->setEventCallback(this);
         }
     }
 
     void Input::deinit()
     {
-        if (joystick)
+        if (m_joystick)
         {
-            input_manager->destroyInputObject(joystick);
+            m_input_manager->destroyInputObject(m_joystick);
         }
 
-        if (keyboard)
+        if (m_keyboard)
         {
-            input_manager->destroyInputObject(keyboard);
+            m_input_manager->destroyInputObject(m_keyboard);
         }
 
-        if (mouse)
+        if (m_mouse)
         {
-            input_manager->destroyInputObject(mouse);
+            m_input_manager->destroyInputObject(m_mouse);
         }
 
-        OIS::InputManager::destroyInputSystem(input_manager);
+        OIS::InputManager::destroyInputSystem(m_input_manager);
     }
 
     void Input::update(float time)
     {
-        if (joystick)
+        if (m_joystick)
         {
-            joystick->capture();
+            m_joystick->capture();
         }
 
-        if (keyboard)
+        if (m_keyboard)
         {
-            keyboard->capture();
+            m_keyboard->capture();
         }
 
-        if (mouse)
+        if (m_mouse)
         {
-            mouse->capture();
+            m_mouse->capture();
         }
     }
 
@@ -362,7 +362,7 @@ namespace Gecko
 
     bool Input::is_mouse_button_pressed(OIS::MouseButtonID mouse_button) const
     {
-        return mouse->getMouseState().buttonDown(mouse_button);
+        return m_mouse->getMouseState().buttonDown(mouse_button);
     }
 
     void Input::set_mouse_sensitivity(const Ogre::Vector2& sensivity)
@@ -377,9 +377,9 @@ namespace Gecko
 
     void Input::set_window_size(int width, int height)
     {
-        if (mouse)
+        if (m_mouse)
         {
-            const auto& mouse_state = mouse->getMouseState();
+            const auto& mouse_state = m_mouse->getMouseState();
 
             mouse_state.width = width;
             mouse_state.height = height;

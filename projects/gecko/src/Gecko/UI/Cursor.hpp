@@ -31,12 +31,12 @@ namespace Gecko
     public:
         const Coordinate& get_position() const
         {
-            return position;
+            return m_position;
         }
 
         bool is_visible() const
         {
-            return visible;
+            return m_visible;
         }
 
     public:
@@ -45,16 +45,16 @@ namespace Gecko
         void set_visible(bool visible);
 
     private:
-        Coordinate position;
+        Coordinate m_position;
 
-        bool visible = false;
-        Type type = Type::Square;
-        std::string mesh_name;
+        bool m_visible = false;
+        Type m_type = Type::Square;
+        std::string m_mesh_name;
 
-        Ogre::SceneNode* scene_node = nullptr;
-        Ogre::ManualObject* square = nullptr;
+        Ogre::SceneNode* m_scene_node = nullptr;
+        Ogre::ManualObject* m_square = nullptr;
 
-        std::map<std::string, std::unique_ptr<Component>> components;
-        std::map<std::string, std::unique_ptr<Object>> objects;
+        std::map<std::string, std::unique_ptr<Component>> m_components;
+        std::map<std::string, std::unique_ptr<Object>> m_objects;
     };
 }

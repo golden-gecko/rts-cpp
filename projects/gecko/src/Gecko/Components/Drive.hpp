@@ -23,16 +23,16 @@ namespace Gecko
     public:
         auto get_distance_driven() const
         {
-            return distance_driven;
+            return m_distance_driven;
         }
 
         auto get_speed() const
         {
-            return speed;
+            return m_speed;
         }
 
     private:
-        float speed = 0.0f;
-        float distance_driven = 0.0f;
+        float m_speed = 0.0f;
+        float m_distance_driven = 0.0f;
     };
 }

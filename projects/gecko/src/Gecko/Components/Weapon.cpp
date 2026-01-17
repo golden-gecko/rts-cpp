@@ -17,27 +17,27 @@ namespace Gecko
     Weapon::Weapon(const Weapon& other) :
         base_type(other)
     {
-        missile_configuration = other.missile_configuration;
-        missiles_fired = other.missiles_fired;
-        rotation_speed = other.rotation_speed;
-        reload_timer = other.reload_timer;
+        m_missile_configuration = other.m_missile_configuration;
+        m_missiles_fired = other.m_missiles_fired;
+        m_rotation_speed = other.m_rotation_speed;
+        m_reload_timer = other.m_reload_timer;
     }
 
     void Weapon::init()
     {
         base_type::init();
 
-        reload_timer.reset();
+        m_reload_timer.reset();
     }
 
     ConfigurationPtr Weapon::serialize() const
     {
         auto configuration = base_type::serialize();
 
-        configuration->set("missile.configuration", missile_configuration);
-        configuration->set("missiles_fired", missiles_fired);
-        configuration->set("rotation_speed", rotation_speed);
-        configuration->set("reload_timer", reload_timer.serialize());
+        configuration->set("missile.configuration", m_missile_configuration);
+        configuration->set("missiles_fired", m_missiles_fired);
+        configuration->set("rotation_speed", m_rotation_speed);
+        configuration->set("reload_timer", m_reload_timer.serialize());
 
         return configuration;
     }
@@ -46,10 +46,10 @@ namespace Gecko
     {
         base_type::deserialize(configuration);
 
-        missile_configuration = configuration->get_string("missile.configuration");
-        missiles_fired = configuration->get_int<uint16_t>("missiles_fired", 0);
-        rotation_speed = configuration->get_float("rotation_speed", 0.0f);
-        reload_timer.deserialize(configuration->get_child("reload_timer"));
+        m_missile_configuration = configuration->get_string("missile.configuration");
+        m_missiles_fired = configuration->get_int<uint16_t>("missiles_fired", 0);
+        m_rotation_speed = configuration->get_float("rotation_speed", 0.0f);
+        m_reload_timer.deserialize(configuration->get_child("reload_timer"));
     }
 
     void Weapon::update(float time)
