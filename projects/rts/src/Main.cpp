@@ -73,3 +73,34 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
+/*
+
+    "objects": [
+        {
+            "configuration": "ironworks",
+            "player": "human",
+            "position": {
+                "x": 160.0,
+                "z": 128.0
+            }
+        },
+        {
+            "configuration": "tools_factory",
+            "player": "human",
+            "position": {
+                "x": 168.0,
+                "z": 128.0
+            }
+        },
+        {
+            "configuration": "vehicles_factory",
+            "player": "human",
+            "position": {
+                "x": 176.0,
+                "z": 128.0
+            }
+        }
+    ],
+
+*/

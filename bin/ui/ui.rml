@@ -243,7 +243,6 @@
 
         #log {
             left: 5px;
-            right: 50%;
             top: 5px;
         }
 
@@ -344,17 +343,19 @@
 
 <body>
     <!-- Configurations -->
-    <div id="configurations" class="card">
-        <div class="card-header">Configurations - <span class="card-header-placeholder">None</span>
+    <div id="configurations" class="card" data-model="configurations">
+        <div class="card-header">Configurations - {{configuration_name}}
             <img class="button-collapse" src="icons/arrow-up-short.png" />
             <img class="button-expand" src="icons/arrow-down-short.png" />
         </div>
 
-        <div class="card-body placeholder"></div>
+        <div class="card-body placeholder">
+            <button type="button" class="button" onclick="configuration:{{i}}" data-for="i : configurations">{{i}}</button>
+        </div>
     </div>
 
     <!-- Diplomacy -->
-    <div id="diplomacy" class="background hidden">
+    <div id="diplomacy" class="background hidden" data-model="diplomacy">
         <div class="card modal">
             <div class="card-header">Diplomacy</div>
             <div class="card-body">
@@ -366,7 +367,13 @@
                             <td>Color</td>
                         </tr>
                     </thead>
-                    <tbody class="placeholder"></tbody>
+                    <tbody>
+                        <tr data-for="i : diplomacy">
+                            <td class="number">{{i.id}}</td>
+                            <td>{{i.name}}</td>
+                            <td>{{i.color}}</td>
+                        </tr>
+                    </tbody>
                 </table>
 
                 <div class="buttons">
@@ -390,14 +397,14 @@
     </div>
 
     <!-- Info -->
-    <div id="info" class="card">
+    <div id="info" class="card" data-model="info">
         <div class="card-header">Info
             <img class="button-collapse" src="icons/arrow-up-short.png" />
             <img class="button-expand" src="icons/arrow-down-short.png" />
         </div>
 
         <div class="card-body">
-            <pre class="placeholder"></pre>
+            <pre>{{info}}</pre>
         </div>
     </div>
 
@@ -407,7 +414,7 @@
 
         <div class="card-body">
             <div class="container body">
-                <div class="placeholder">
+                <div>
                     <div class="row">
                         <div class="col-4">Air
                             <div class="form-check">
@@ -469,7 +476,7 @@
         <div class="card-header">Load</div>
         <div class="card-body">
             <button class="button-continue button">Continue</button>
-            <div class="placeholder">
+            <div>
                 <button class="button" data-name="2017_10_12_12_51_41">2017_10_12_12_51_41</button>
                 <button class="button" data-name="2018_10_12_12_51_41">2018_10_12_12_51_41</button>
                 <button class="button" data-name="2019_10_12_12_51_41">2019_10_12_12_51_41</button>
@@ -482,8 +489,10 @@
     </div>
 
     <!-- Log -->
-    <div id="log" class="card">
-        <div class="card-body placeholder"></div>
+    <div id="log" class="card" data-model="log">
+        <div class="card-body placeholder">
+            <p class="{{i.level}}" data-for="i : log">{{i.message}}</p>
+        </div>
     </div>
 
     <!-- Main Menu -->
@@ -505,7 +514,7 @@
         <div class="card-header">Maps</div>
         <div class="card-body">
             <button class="button-continue button">Continue</button>
-            <div class="placeholder">
+            <div>
                 <button class="button" data-name="tutorial #1">tutorial #1</button>
                 <button class="button" data-name="tutorial #2">tutorial #2</button>
                 <button class="button" data-name="level #1">level #1</button>
@@ -530,7 +539,7 @@
     </div>
 
     <!-- Objects (admin) -->
-    <div id="objects-admin" class="background hidden">
+    <div id="objects-admin" class="background hidden" data-model="objects_admin">
         <div class="card modal">
             <div class="card-header">Objects</div>
             <div class="card-body">
@@ -543,7 +552,14 @@
                             <td>Current order</td>
                         </tr>
                     </thead>
-                    <tbody class="placeholder"></tbody>
+                    <tbody>
+                        <tr data-for="i : objects_admin">
+                            <td class="number">{{i.id}}</td>
+                            <td>{{i.name}}</td>
+                            <td class="number">{{i.order_count}}</td>
+                            <td>{{i.order_name}}</td>
+                        </tr>
+                    </tbody>
                 </table>
 
                 <div class="buttons">
@@ -637,17 +653,19 @@
     </div>
 
     <!-- Orders -->
-    <div id="orders" class="card">
-        <div class="card-header">Orders - <span class="card-header-placeholder">None</span>
+    <div id="orders" class="card" data-model="orders">
+        <div class="card-header">Orders - {{order_name}}
             <img class="button-collapse" src="icons/arrow-up-short.png" />
             <img class="button-expand" src="icons/arrow-down-short.png" />
         </div>
 
-        <div class="card-body placeholder"></div>
+        <div class="card-body placeholder">
+            <button type="button" class="button" onclick="order:{{i}}" data-for="i : orders">{{i}}</button>
+        </div>
     </div>
 
     <!-- Orders (admin) -->
-    <div id="orders-admin" class="background hidden">
+    <div id="orders-admin" class="background hidden" data-model="orders_admin">
         <div class="card modal">
             <div class="card-header">Orders</div>
             <div class="card-body">
@@ -661,7 +679,15 @@
                             <td>Attempts</td>
                         </tr>
                     </thead>
-                    <tbody class="placeholder"></tbody>
+                    <tbody>
+                        <tr data-for="i : orders_admin">
+                            <td class="number">{{i.id}}</td>
+                            <td>{{i.name}}</td>
+                            <td class="number">{{i.sender_name}}</td>
+                            <td class="number">{{i.receiver_name}}</td>
+                            <td>{{i.attempts}}</td>
+                        </tr>
+                    </tbody>
                 </table>
 
                 <div class="buttons">
@@ -672,15 +698,21 @@
     </div>
 
     <!-- Players -->
-    <div id="players" class="card">
+    <div id="players" class="card" data-model="players">
         <div class="card-header">Players
             <img class="button-collapse" src="icons/arrow-up-short.png" />
             <img class="button-expand" src="icons/arrow-down-short.png" />
         </div>
 
         <div class="card-body">
-            <table class="table table-condensed no-header">
-                <tbody class="placeholder"></tbody>
+            <table>
+                <tbody>
+                    <tr data-for="i : players">
+                        <td class="number">{{i.id}}</td>
+                        <td>{{i.name}}</td>
+                        <td>{{i.color}}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -698,31 +730,40 @@
     </div>
 
     <!-- Resources -->
-    <div id="resources" class="card">
+    <div id="resources" class="card" data-model="resources">
         <div class="card-header">Resources
             <img class="button-collapse" src="icons/arrow-up-short.png" />
             <img class="button-expand" src="icons/arrow-down-short.png" />
         </div>
 
         <div class="card-body">
-            <table class="table table-condensed no-header">
-                <tbody class="placeholder"></tbody>
+            <table>
+                <tbody>
+                    <tr data-for="i : resources">
+                        <td>{{i.name}}</td>
+                        <td class="number">{{i.current}}</td>
+                        <td class="number">{{i.max}}</td>
+                        <td class="number {{i.direction}}">{{i.ratio}}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>
 
     <!-- Skills -->
-    <div id="skills" class="card">
-        <div class="card-header">Skills - <span class="card-header-placeholder">None</span>
+    <div id="skills" class="card" data-model="skills">
+        <div class="card-header">Skills - {{skill_name}}
             <img class="button-collapse" src="icons/arrow-up-short.png" />
             <img class="button-expand" src="icons/arrow-down-short.png" />
         </div>
 
-        <div class="card-body placeholder"></div>
+        <div class="card-body">
+            <button type="button" class="button" onclick="skill:{{i}}" data-for="i : skills">{{i}}</button>
+        </div>
     </div>
 
     <!-- Statistics -->
-    <div id="statistics" class="background hidden">
+    <div id="statistics" class="background hidden" data-model="statistics">
         <div class="card modal">
             <div class="card-header">Statistics</div>
             <div class="card-body">
@@ -733,7 +774,12 @@
                             <td class="number">Value</td>
                         </tr>
                     </thead>
-                    <tbody class="placeholder"></tbody>
+                    <tbody>
+                        <tr data-for="i : statistics">
+                            <td class="name">{{i.name}}</td>
+                            <td class="value number">{{i.value}}</td>
+                        </tr>
+                    </tbody>
                 </table>
 
                 <div class="buttons">
@@ -744,11 +790,14 @@
     </div>
 
     <!-- Technologies -->
-    <div id="technologies" class="background hidden">
+    <div id="technologies" class="background hidden" data-model="technologies">
         <div class="card modal">
             <div class="card-header">Technologies</div>
             <div class="card-body">
-                <div class="placeholder"></div>
+                <div data-for="i : technologies">
+                    <button type="button" class="button">{{i}}</button>
+                </div>
+
                 <div class="buttons">
                     <button class="button" onclick="close:technologies">Close</button>
                 </div>
@@ -757,17 +806,15 @@
     </div>
 
     <div id="floating_descriptions">
-        <div class="placeholder">
-            <!--
-            <div class="floating-description hidden" id="object_0" style="left: 350px; top: 400px;">
-                <div class="name">Tank</div>
-                <div class="bar health"><div class="bar-background"><div class="bar-current" style="width: 90%;"></div></div></div>
-                <div class="bar fuel"><div class="bar-background"><div class="bar-current" style="width: 20%;"></div></div></div>
-                <div class="bar ammunition"><div class="bar-background"><div class="bar-current" style="width: 25%;"></div></div></div>
-                <div class="bar reload"><div class="bar-background"><div class="bar-current" style="width: 30%;"></div></div></div>
-            </div>
-            -->
+        <!--
+        <div class="floating-description hidden" id="object_0" style="left: 350px; top: 400px;">
+            <div class="name">Tank</div>
+            <div class="bar health"><div class="bar-background"><div class="bar-current" style="width: 90%;"></div></div></div>
+            <div class="bar fuel"><div class="bar-background"><div class="bar-current" style="width: 20%;"></div></div></div>
+            <div class="bar ammunition"><div class="bar-background"><div class="bar-current" style="width: 25%;"></div></div></div>
+            <div class="bar reload"><div class="bar-background"><div class="bar-current" style="width: 30%;"></div></div></div>
         </div>
+        -->
     </div>
 </body>
 </rml>

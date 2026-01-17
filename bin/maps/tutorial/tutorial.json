@@ -80,6 +80,14 @@
     "name": "Tutorial",
     "objects": [
         {
+            "configuration": "truck",
+            "player": "human",
+            "position": {
+                "x": 128.0,
+                "z": 120.0
+            }
+        },
+        {
             "configuration": "coal_deposit",
             "player": "world",
             "position": {
@@ -109,6 +117,62 @@
             "position": {
                 "x": 136.0,
                 "z": 136.0
+            }
+        },
+        {
+            "configuration": "tank",
+            "player": "human",
+            "position": {
+                "x": 128.0,
+                "z": 160.0
+            }
+        },
+        {
+            "configuration": "tank",
+            "player": "human",
+            "position": {
+                "x": 136.0,
+                "z": 160.0
+            }
+        },
+        {
+            "configuration": "tree",
+            "player": "human",
+            "position": {
+                "x": 120.0,
+                "z": 152.0
+            }
+        },
+        {
+            "configuration": "tree",
+            "player": "human",
+            "position": {
+                "x": 128.0,
+                "z": 152.0
+            }
+        },
+        {
+            "configuration": "tree",
+            "player": "human",
+            "position": {
+                "x": 136.0,
+                "z": 152.0
+            }
+        },
+        {
+            "configuration": "tree",
+            "player": "human",
+            "position": {
+                "x": 144.0,
+                "z": 152.0
+            }
+        },
+        {
+            "configuration": "tree",
+            "player": "human",
+            "position": {
+                "x": 152.0,
+                "z": 152.0
             }
         }
     ],

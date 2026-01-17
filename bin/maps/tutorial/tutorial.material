@@ -11,7 +11,7 @@ material tutorial_terrain
 
             texture_unit
             {
-                scale 4.0 4.0
+                scale 8.0 8.0
                 tex_coord_set 1
                 texture terrain_detail.jpg
             }
@@ -26,7 +26,7 @@ material tutorial_terrain
             texture_unit grid
             {
                 colour_op alpha_blend
-                filtering none
+                max_anisotropy 8
                 tex_coord_set 2
                 texture grid_yellow.png
             }

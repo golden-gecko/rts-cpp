@@ -34,15 +34,7 @@
 #include <OIS.h>
 
 // RmlUi
-#include <RmlUi/Core/Context.h>
-#include <RmlUi/Core/Element.h>
-#include <RmlUi/Core/ElementDocument.h>
-#include <RmlUi/Core/EventListener.h>
-#include <RmlUi/Core/EventListenerInstancer.h>
-#include <RmlUi/Core/Factory.h>
-#include <RmlUi/Core/RenderInterface.h>
-#include <RmlUi/Core/SystemInterface.h>
-#include <RmlUi/Core/Types.h>
+#include <RmlUi/Core.h>
 #include <RmlUi/Debugger.h>
 
 // Windows

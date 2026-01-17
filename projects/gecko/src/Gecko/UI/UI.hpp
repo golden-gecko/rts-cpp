@@ -88,7 +88,7 @@ namespace Gecko
     public:
         const auto& get_configuration_name() const
         {
-            return configuration_name;
+            return m_configuration_name;
         }
 
         auto& get_cursor()
@@ -118,7 +118,12 @@ namespace Gecko
 
         auto get_order_name() const
         {
-            return order_name;
+            return m_order_name;
+        }
+
+        auto get_order_type() const
+        {
+            return m_order_type;
         }
 
         auto& get_preview()
@@ -143,13 +148,12 @@ namespace Gecko
 
         const auto& get_skill_name() const
         {
-            return skill_name;
+            return m_skill_name;
         }
 
     public:
-        void set_configuration_name(const std::string& _configuration_name);
+        void set_configuration_name(const std::string& configuration_name);
         void set_configurations(const std::set<std::string>& configurations);
-        void set_configurations_header(const std::string& _configuration_name);
         void set_diplomacy();
         void set_floating_descriptions();
         void set_hovered_object_id(Id object_id);
@@ -159,14 +163,12 @@ namespace Gecko
         void set_objects_admin();
         void set_orders_admin();
         void set_players();
-        void set_order_name(order_type::Value _order_name);
+        void set_order_type(order_type::Value order_type);
         void set_orders(const std::set<std::string>& orders);
-        void set_orders_header(order_type::Value order_type);
         void set_resources(std::shared_ptr<Resources> resources);
         void set_saves(const std::vector<std::string>& saves);
-        void set_skill_name(const std::string& _order_name);
+        void set_skill_name(const std::string& skill_name);
         void set_skills(const std::set<std::string>& skills);
-        void set_skills_header(const std::string& skill_name);
         void set_statistics(const std::map<std::string, std::string>& info);
         void set_terrain_layers(const std::set<std::string>& layers);
         void set_visible(bool visible);
@@ -181,25 +183,6 @@ namespace Gecko
         Rml::Context* context = nullptr;
         Rml::ElementDocument* document = nullptr;
 
-        // TODO: Rename element to body.
-        Rml::Element* configurations_body = nullptr;
-        Rml::Element* configurations_header = nullptr;
-        Rml::Element* diplomacy_body = nullptr;
-        Rml::Element* floating_descriptions_body = nullptr;
-        Rml::Element* info_body = nullptr;
-        Rml::Element* layers_body = nullptr;
-        Rml::Element* log_body = nullptr;
-        Rml::Element* maps_body = nullptr;
-        Rml::Element* objects_admin_body = nullptr;
-        Rml::Element* orders_admin_body = nullptr;
-        Rml::Element* orders_body = nullptr;
-        Rml::Element* orders_header = nullptr;
-        Rml::Element* players_body = nullptr;
-        Rml::Element* resources_body = nullptr;
-        Rml::Element* skills_header = nullptr;
-        Rml::Element* skills_body = nullptr;
-        Rml::Element* statistics_body = nullptr;
-
         std::unique_ptr<Cursor> cursor;
         std::unique_ptr<Minimap> minimap;
         std::unique_ptr<Preview> preview;
@@ -212,21 +195,103 @@ namespace Gecko
 
         Timer refresh_time = Timer(Settings::UI::RefreshInterval);
 
-        std::string configuration_name = "none";
-        order_type::Value order_name = order_type::Value::None;
-        std::string skill_name = "none";
+        std::string m_configuration_name = "None";
+        std::string m_order_name = "None";
+        order_type::Value m_order_type = order_type::Value::None;
+        std::string m_skill_name = "None";
 
         std::shared_ptr<EventListenerInstancer> event_listener_instancer;
 
         void init_components();
+        void init_data_bindings();
         void init_documents();
         void init_events();
         void init_fonts();
         void init_visibility_types();
 
-        void log_write(const std::string& text, const std::string& type, Id id = Id::Empty);
+        void log_write(const std::string& message, const std::string& type, Id id = Id::Empty);
 
-        Rml::Element* get_header_placeholder(const std::string& selector) const;
-        Rml::Element* get_body_placeholder(const std::string& selector) const;
+    public:
+        // TODO: Delete.
+        bool m_data_bindings_initialized = false;
+
+    private:
+        struct Data_Diplomacy
+        {
+            int         id;
+            std::string name;
+            std::string color;
+        };
+
+        struct Data_Log
+        {
+            std::string type;
+            std::string message;
+        };
+        
+        struct Data_Object
+        {
+            int         id;
+            std::string name;
+            std::size_t order_count;
+            std::string order_name;
+        };
+
+        struct Data_Order
+        {
+            int         id;
+            std::string name;
+            std::string sender_name;
+            std::string receiver_name;
+            std::string attempts;
+        };
+
+        struct Data_Player
+        {
+            int         id;
+            std::string name;
+            std::string color;
+        };
+
+        struct Data_Resource
+        {
+            std::string name;
+            float       current;
+            float       max;
+            std::string direction;
+            float       ratio;
+        };
+
+        struct Data_Statistic
+        {
+            std::string name;
+            std::string value;
+        };
+
+        Rml::DataModelHandle m_configurations_model;
+        Rml::DataModelHandle m_diplomacy_model;
+        Rml::DataModelHandle m_info_model;
+        Rml::DataModelHandle m_log_model;
+        Rml::DataModelHandle m_objects_admin_model;
+        Rml::DataModelHandle m_orders_model;
+        Rml::DataModelHandle m_orders_admin_model;
+        Rml::DataModelHandle m_players_model;
+        Rml::DataModelHandle m_resources_model;
+        Rml::DataModelHandle m_skills_model;
+        Rml::DataModelHandle m_statistics_model;
+        Rml::DataModelHandle m_technologies_model;
+
+        Rml::Vector<std::string> m_configurations;
+        Rml::Vector<Data_Diplomacy> m_diplomacy;
+        std::string m_info;
+        Rml::Vector<Data_Log> m_log;
+        Rml::Vector<Data_Object> m_objects_admin;
+        Rml::Vector<std::string> m_orders;
+        Rml::Vector<Data_Order> m_orders_admin;
+        Rml::Vector<Data_Player> m_players;
+        Rml::Vector<Data_Resource> m_resources;
+        Rml::Vector<std::string> m_skills;
+        Rml::Vector<Data_Statistic> m_statistics;
+        Rml::Vector<std::string> m_technologies;
     };
 }

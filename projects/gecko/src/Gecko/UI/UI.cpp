@@ -49,6 +49,8 @@ namespace Gecko
         // TODO: Get window size.
         context = Rml::CreateContext("main", Rml::Vector2i(1920, 1200));
 
+        init_data_bindings();
+
         // TODO: Move to configuration.
         if (false)
         {
@@ -644,25 +646,25 @@ namespace Gecko
 
     void UI::reset_configuration()
     {
-        if (get_configuration_name() != "none")
+        if (get_configuration_name() != "None")
         {
-            set_configuration_name("none");
+            set_configuration_name("None");
         }
     }
 
     void UI::reset_order()
     {
-        if (get_order_name() != order_type::Value::None)
+        if (get_order_type() != order_type::Value::None)
         {
-            set_order_name(order_type::Value::None);
+            set_order_type(order_type::Value::None);
         }
     }
 
     void UI::reset_skill()
     {
-        if (get_skill_name() != "none")
+        if (get_skill_name() != "None")
         {
-            set_skill_name("none");
+            set_skill_name("None");
         }
     }
 
@@ -735,23 +737,24 @@ namespace Gecko
         get_preview().set_visible(visible);
     }
 
-    void UI::set_configuration_name(const std::string& _configuration_name)
+    void UI::set_configuration_name(const std::string& configuration_name)
     {
         reset();
 
-        configuration_name = _configuration_name;
+        m_configuration_name = configuration_name;
+        m_configurations_model.DirtyVariable("configuration_name");
 
-        // Update UI.
-        set_configurations_header(_configuration_name);
+        /*
+        TODO: Fix cursor.
 
         // Update cursor.
-        if (_configuration_name == "none")
+        if (configuration_name == "None")
         {
             get_cursor().set_type(Cursor::Type::Square);
         }
         else
         {
-            auto configuration = ConfigurationManager::getSingleton().get(_configuration_name);
+            auto configuration = ConfigurationManager::getSingleton().get(configuration_name);
 
             get_cursor().set_mesh(configuration);
             get_cursor().set_type(Cursor::Type::Object);
@@ -760,56 +763,23 @@ namespace Gecko
         get_cursor().set_visible(false);
 
         // Reset order.
-        if (order_name != order_type::Value::None)
+        if (m_order_type != order_type::Value::None)
         {
             reset_order();
         }
+        */
     }
 
     void UI::set_configurations(const std::set<std::string>& configurations)
     {
-        // TODO: Remove
-        if (configurations_body == nullptr)
+        m_configurations.clear();
+
+        for (const std::string& i : configurations)
         {
-            return;
+            m_configurations.push_back(i);
         }
 
-        // Update cache.
-        static std::set<std::string> configurations_cache;
-
-        if (configurations_cache == configurations)
-        {
-            return;
-        }
-
-        configurations_cache = configurations;
-
-        // Create RML.
-        Rml::String rml;
-
-        for (const std::string& _configuration : configurations)
-        {
-            std::string title = Utils::String::to_title(_configuration);
-
-            rml += std::vformat(m_configuration->get_string("templates.configurations"), std::make_format_args(_configuration, title));
-        }
-
-        // Update UI.
-        configurations_body->SetInnerRML(rml);
-    }
-
-    void UI::set_configurations_header(const std::string& _configuration_name)
-    {
-        // Update cache.
-        static std::string configuration_name_cache = "none";
-
-        if (configuration_name_cache == _configuration_name)
-        {
-            return;
-        }
-
-        // Update UI.
-        configurations_header->SetInnerRML(Utils::String::to_title(_configuration_name));
+        m_configurations_model.DirtyVariable("configurations");
     }
 
     void UI::set_diplomacy()
@@ -827,20 +797,15 @@ namespace Gecko
         players_cache = players;
         */
 
-        // Create RML.
-        Rml::String rml;
+        // Update UI.
+        m_diplomacy.clear();
 
         for (const auto& [id, player] : PlayerManager::getSingleton())
         {
-            int id_value = id.get();
-            std::string name = player->get_name();
-            std::string color = player->get_color();
-
-            rml += std::vformat(m_configuration->get_string("templates.diplomacy"), std::make_format_args(id_value, name, color));
+            m_diplomacy.push_back({ id.get(), player->get_name(), player->get_color()});
         }
 
-        // Update UI.
-        diplomacy_body->SetInnerRML(rml);
+        m_diplomacy_model.DirtyVariable("diplomacy");
     }
 
     void UI::set_floating_descriptions()
@@ -965,33 +930,21 @@ namespace Gecko
 
     void UI::set_info(const ConfigurationPtr& info)
     {
-        // Update cache.
-        static ConfigurationPtr info_cache;
+        m_info = info->to_string("  ");
 
-        if (info_cache == info)
-        {
-            return;
-        }
+        boost::algorithm::replace_all(m_info, "\"", "");
+        boost::algorithm::replace_all(m_info, "{", "");
+        boost::algorithm::replace_all(m_info, "}", "");
+        boost::algorithm::replace_all(m_info, " [", "");
+        boost::algorithm::replace_all(m_info, "]", "");
+        boost::algorithm::replace_all(m_info, ",", "");
+        boost::algorithm::replace_all(m_info, " :", ":");
 
-        info_cache = info;
+        m_info = boost::regex_replace(m_info, boost::regex(" +\n"), "\n");
+        m_info = boost::regex_replace(m_info, boost::regex("\n+"), "\n");
+        m_info = boost::regex_replace(m_info, boost::regex("\n  "), "\n");
 
-        // Create RML.
-        std::string rml = info->to_string("  ");
-
-        boost::algorithm::replace_all(rml, "\"", "");
-        boost::algorithm::replace_all(rml, "{", "");
-        boost::algorithm::replace_all(rml, "}", "");
-        boost::algorithm::replace_all(rml, " [", "");
-        boost::algorithm::replace_all(rml, "]", "");
-        boost::algorithm::replace_all(rml, ",", "");
-        boost::algorithm::replace_all(rml, " :", ":");
-
-        rml = boost::regex_replace(rml, boost::regex(" +\n"), "\n");
-        rml = boost::regex_replace(rml, boost::regex("\n+"), "\n");
-        rml = boost::regex_replace(rml, boost::regex("\n  "), "\n");
-
-        // Update UI.
-        info_body->SetInnerRML(rml);
+        m_info_model.DirtyVariable("info");
     }
 
     void UI::set_objects_admin()
@@ -1009,14 +962,11 @@ namespace Gecko
         objects_cache = objects;
         */
 
-        // Create RML.
-        Rml::String rml;
+        // Update UI.
+        m_objects_admin.clear();
 
         for (const auto& [id, object] : ObjectManager::getSingleton())
         {
-            int id_value = id.get();
-            std::string name = object->get_name();
-            std::size_t order_count = object->get_orders()->size();
             std::string order_name;
 
             if (object->get_orders()->size())
@@ -1029,11 +979,10 @@ namespace Gecko
                 }
             }
 
-            rml += std::vformat(m_configuration->get_string("templates.objects-admin"), std::make_format_args(id_value, name, order_count, order_name));
+            m_objects_admin.push_back({ id.get(), object->get_name(), object->get_orders()->size(), order_name });
         }
 
-        // Update UI.
-        objects_admin_body->SetInnerRML(rml);
+        m_objects_admin_model.DirtyVariable("objects_admin");
     }
 
     void UI::set_orders_admin()
@@ -1050,12 +999,11 @@ namespace Gecko
         orders_cache = orders;
         */
 
-        // Create RML.
-        Rml::String rml;
+        // Update UI.
+        m_orders_admin.clear();
 
         for (const auto& [id, order] : OrderManager::getSingleton())
         {
-            int id_value = id.get();
             std::string sender_name;
             
             Object* sender = ObjectManager::getSingleton().get(order->get_sender_id());
@@ -1075,16 +1023,16 @@ namespace Gecko
             }
 
             std::string order_name = order_type::to_string(order->get_type());
+
             std::string attempts
                 = Utils::Convert::to_string(order->get_attempts_to_complete())
                 + "/"
                 + Utils::Convert::to_string(Settings::Game::OrderMaxAttemptsToComplete);
 
-            rml += std::vformat(m_configuration->get_string("templates.orders-admin"), std::make_format_args(id_value, sender_name, receiver_name, order_name, attempts));
+            m_orders_admin.push_back({ id.get(), sender_name, receiver_name, order_name, attempts });
         }
 
-        // Update UI.
-        orders_admin_body->SetInnerRML(rml);
+        m_orders_admin_model.DirtyVariable("orders_admin");
     }
 
     void UI::set_players()
@@ -1101,84 +1049,48 @@ namespace Gecko
 
         players_cache = players;
         */
-
-        // Create RML.
-        Rml::String rml;
+        
+        // Update UI.
+        m_players.clear();
 
         for (const auto& [id, player] : PlayerManager::getSingleton())
         {
-            int id_value = id.get();
-            std::string name = player->get_name();
-            std::string color = player->get_color();
-
-            rml += std::vformat(m_configuration->get_string("templates.players"), std::make_format_args(id_value, name, color));
+            m_players.push_back({ id.get(), player->get_name(), player->get_color()});
         }
 
-        // Update UI.
-        players_body->SetInnerRML(rml);
+        m_players_model.DirtyVariable("players");
     }
 
-    void UI::set_order_name(order_type::Value _order_name)
+    void UI::set_order_type(order_type::Value order_type)
     {
         reset();
 
-        order_name = _order_name;
+        m_order_name = order_type::to_string(order_type);
+        m_order_type = order_type;
 
-        // Update UI.
-        set_orders_header(order_name);
+        m_orders_model.DirtyVariable("order_name");
     }
 
     void UI::set_orders(const std::set<std::string>& orders)
     {
-        // TODO: Remove.
-        if (orders_body == nullptr)
-        {
-            return;
-        }
-
         // Update cache.
-        static std::set<std::string> orders_cache;
-
-        if (orders_cache == orders)
-        {
-            return;
-        }
-
-        orders_cache = orders;
-
-        // Create RML.
-        Rml::String rml;
-
-        for (const std::string& order : orders)
-        {
-            std::string title = Utils::String::to_title(order);
-
-            rml += std::vformat(m_configuration->get_string("templates.orders"), std::make_format_args(order, title));
-        }
+        // TODO: Implement.
 
         // Update UI.
-        orders_body->SetInnerRML(rml);
-    }
+        m_orders.clear();
 
-    void UI::set_orders_header(order_type::Value order_type)
-    {
-        // Update cache.
-        static order_type::Value order_type_cache = order_type::Value::None;
-
-        if (order_type_cache == order_type)
+        for (const std::string& i : orders)
         {
-            return;
+            m_orders.push_back(i);
         }
 
-        order_type_cache = order_type;
-
-        // Update UI.
-        orders_header->SetInnerRML(Utils::String::to_title(order_type::to_string(order_type)));
+        m_orders_model.DirtyVariable("orders");
     }
 
     void UI::set_resources(std::shared_ptr<Resources> resources)
     {
         // Update cache.
+        /*
         static Resources resources_cache;
 
         if (resources_cache == (*(resources.get())))
@@ -1187,23 +1099,25 @@ namespace Gecko
         }
 
         resources_cache = (*(resources.get()));
+        */
 
-        // Create RML.
-        std::string rml;
+        // Update UI.
+        m_resources.clear();
 
         for (const auto& resource : (*(resources.get())))
         {
-            float current = resource.second.get_current();
-            float max = resource.second.get_max();
             float ratio = resource.second.get_consumption() - resource.second.get_production();
 
-            std::string class_name = (resource.second.get_consumption() - resource.second.get_production()) > 0.0f ? "green" : "red";
-
-            rml += std::vformat(m_configuration->get_string("templates.resources"), std::make_format_args(resource.first, current, max, class_name, ratio));
+            m_resources.push_back({
+                resource.first,
+                resource.second.get_current(),
+                resource.second.get_max(),
+                ratio > 0.0f ? "green" : "red",
+                ratio
+            });
         }
 
-        // Update UI.
-        resources_body->SetInnerRML(rml);
+        m_resources_model.DirtyVariable("resources");
     }
 
     void UI::set_saves(const std::vector<std::string>& saves)
@@ -1239,56 +1153,28 @@ namespace Gecko
         */
     }
 
-    void UI::set_skill_name(const std::string& _skill_name)
+    void UI::set_skill_name(const std::string& skill_name)
     {
         reset();
 
-        skill_name = _skill_name;
-
-        // Update UI.
-        set_skills_header(skill_name);
+        m_skill_name = skill_name;
+        m_skills_model.DirtyVariable("skill_name");
     }
 
     void UI::set_skills(const std::set<std::string>& skills)
     {
         // Update cache.
-        static std::set<std::string> skills_cache;
-
-        if (skills_cache == skills)
-        {
-            return;
-        }
-
-        skills_cache = skills;
-
-        // Create RML.
-        Rml::String rml;
-
-        for (const std::string& skill : skills)
-        {
-            std::string title = Utils::String::to_title(skill);
-
-            rml += std::vformat(m_configuration->get_string("templates.skills"), std::make_format_args(skill, title));
-        }
+        // TODO: Implement.
 
         // Update UI.
-        skills_body->SetInnerRML(rml);
-    }
+        m_skills.clear();
 
-    void UI::set_skills_header(const std::string& skill_name)
-    {
-        // Update cache.
-        static std::string skill_name_cache = "none";
-
-        if (skill_name_cache == skill_name)
+        for (const std::string& i : skills)
         {
-            return;
+            m_skills.push_back(i);
         }
 
-        skill_name_cache = skill_name;
-
-        // Update UI.
-        orders_header->SetInnerRML(Utils::String::to_title(skill_name));
+        m_skills_model.DirtyVariable("skills");
     }
 
     void UI::set_statistics(const std::map<std::string, std::string>& statistics)
@@ -1303,19 +1189,15 @@ namespace Gecko
 
         statistics_cache = statistics;
 
-        // Create RML.
-        Rml::String rml;
+        // Update UI.
+        m_statistics.clear();
 
         for (const auto& i : statistics)
         {
-            std::string name  = i.first;
-            std::string value = i.second;
-
-            rml += std::vformat(m_configuration->get_string("templates.statistics"), std::make_format_args(name, value));
+            m_statistics.push_back({ i.first, i.second });
         }
 
-        // Update UI.
-        statistics_body->SetInnerRML(rml);
+        m_statistics_model.DirtyVariable("statistics");
     }
 
     void UI::set_terrain_layers(const std::set<std::string>& layers)
@@ -1388,6 +1270,201 @@ namespace Gecko
         selection_box = std::make_unique<SelectionBox>();
     }
 
+    void UI::init_data_bindings()
+    {
+        // Register types.
+        {
+            if (auto constructor = context->CreateDataModel("types"))
+            {
+                if (auto handle = constructor.RegisterStruct<Data_Diplomacy>())
+                {
+                    handle.RegisterMember("id", &Data_Diplomacy::id);
+                    handle.RegisterMember("name", &Data_Diplomacy::name);
+                    handle.RegisterMember("color", &Data_Diplomacy::color);
+                }
+
+                if (auto handle = constructor.RegisterStruct<Data_Log>())
+                {
+                    handle.RegisterMember("type", &Data_Log::type);
+                    handle.RegisterMember("message", &Data_Log::message);
+                }
+
+                if (auto handle = constructor.RegisterStruct<Data_Object>())
+                {
+                    handle.RegisterMember("id", &Data_Object::id);
+                    handle.RegisterMember("name", &Data_Object::name);
+                    handle.RegisterMember("order_count", &Data_Object::order_count);
+                    handle.RegisterMember("order_name", &Data_Object::order_name);
+                }
+
+                if (auto handle = constructor.RegisterStruct<Data_Order>())
+                {
+                    handle.RegisterMember("id", &Data_Order::id);
+                    handle.RegisterMember("name", &Data_Order::name);
+                    handle.RegisterMember("sender_name", &Data_Order::sender_name);
+                    handle.RegisterMember("receiver_name", &Data_Order::receiver_name);
+                    handle.RegisterMember("attempts", &Data_Order::attempts);
+                }
+
+                if (auto handle = constructor.RegisterStruct<Data_Player>())
+                {
+                    handle.RegisterMember("id", &Data_Player::id);
+                    handle.RegisterMember("name", &Data_Player::name);
+                    handle.RegisterMember("color", &Data_Player::color);
+                }
+
+                if (auto handle = constructor.RegisterStruct<Data_Resource>())
+                {
+                    handle.RegisterMember("name", &Data_Resource::name);
+                    handle.RegisterMember("current", &Data_Resource::current);
+                    handle.RegisterMember("max", &Data_Resource::max);
+                    handle.RegisterMember("direction", &Data_Resource::direction);
+                    handle.RegisterMember("ratio", &Data_Resource::ratio);
+                }
+
+                if (auto handle = constructor.RegisterStruct<Data_Statistic>())
+                {
+                    handle.RegisterMember("name", &Data_Statistic::name);
+                    handle.RegisterMember("value", &Data_Statistic::value);
+                }
+
+                constructor.RegisterArray<Rml::Vector<std::string>>();
+                constructor.RegisterArray<Rml::Vector<Data_Diplomacy>>();
+                constructor.RegisterArray<Rml::Vector<Data_Log>>();
+                constructor.RegisterArray<Rml::Vector<Data_Object>>();
+                constructor.RegisterArray<Rml::Vector<Data_Order>>();
+                constructor.RegisterArray<Rml::Vector<Data_Player>>();
+                constructor.RegisterArray<Rml::Vector<Data_Resource>>();
+                constructor.RegisterArray<Rml::Vector<Data_Statistic>>();
+            }
+        }
+
+        // Configurations.
+        {
+            if (auto constructor = context->CreateDataModel("configurations"))
+            {
+                constructor.Bind("configuration_name", &m_configuration_name);
+                constructor.Bind("configurations", &m_configurations);
+
+                m_configurations_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Diplomacy.
+        {
+            if (auto constructor = context->CreateDataModel("diplomacy"))
+            {
+                constructor.Bind("diplomacy", &m_diplomacy);
+
+                m_diplomacy_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Info.
+        {
+            if (auto constructor = context->CreateDataModel("info"))
+            {
+                constructor.Bind("info", &m_info);
+
+                m_info_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Log.
+        {
+            if (auto constructor = context->CreateDataModel("log"))
+            {
+                constructor.Bind("log", &m_log);
+
+                m_log_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Objects admin.
+        {
+            if (auto constructor = context->CreateDataModel("objects_admin"))
+            {
+                constructor.Bind("objects_admin", &m_objects_admin);
+
+                m_objects_admin_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Orders.
+        {
+            if (auto constructor = context->CreateDataModel("orders"))
+            {
+                constructor.Bind("order_name", &m_order_name);
+                constructor.Bind("orders", &m_orders);
+
+                m_orders_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Orders admin.
+        {
+            if (auto constructor = context->CreateDataModel("orders_admin"))
+            {
+                constructor.Bind("orders_admin", &m_orders_admin);
+
+                m_orders_admin_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Players.
+        {
+            if (auto constructor = context->CreateDataModel("players"))
+            {
+                constructor.Bind("players", &m_players);
+
+                m_players_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Resources.
+        {
+            if (auto constructor = context->CreateDataModel("resources"))
+            {
+                constructor.Bind("resources", &m_resources);
+
+                m_resources_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Statistics.
+        {
+            if (auto constructor = context->CreateDataModel("statistics"))
+            {
+                constructor.Bind("statistics", &m_statistics);
+
+                m_statistics_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Skills.
+        {
+            if (auto constructor = context->CreateDataModel("skills"))
+            {
+                constructor.Bind("skill_name", &m_skill_name);
+                constructor.Bind("skills", &m_skills);
+
+                m_skills_model = constructor.GetModelHandle();
+            }
+        }
+
+        // Technologies.
+        {
+            if (auto constructor = context->CreateDataModel("technologies"))
+            {
+                constructor.Bind("technologies", &m_technologies);
+
+                m_technologies_model = constructor.GetModelHandle();
+            }
+        }
+
+        m_data_bindings_initialized = true;
+    }
+
     void UI::init_documents()
     {
         // TODO: Warning on first call.
@@ -1399,24 +1476,6 @@ namespace Gecko
         document->Show();
 
         Rml::Debugger::Initialise(context);
-
-        configurations_body = get_body_placeholder("configurations");
-        configurations_header = get_header_placeholder("configurations");
-        diplomacy_body = get_body_placeholder("diplomacy");
-        info_body = get_body_placeholder("info");
-        floating_descriptions_body = get_body_placeholder("floating_descriptions");
-        layers_body = get_body_placeholder("layers");
-        log_body = get_body_placeholder("log");
-        maps_body = get_body_placeholder("maps");
-        objects_admin_body = get_body_placeholder("objects-admin");
-        orders_admin_body = get_body_placeholder("orders-admin");
-        orders_body = get_body_placeholder("orders");
-        orders_header = get_header_placeholder("orders");
-        players_body = get_body_placeholder("players");
-        resources_body = get_body_placeholder("resources");
-        skills_body = get_body_placeholder("skills");
-        skills_header = get_header_placeholder("skills");
-        statistics_body = get_body_placeholder("statistics");
     }
 
     void UI::init_events()
@@ -1450,72 +1509,18 @@ namespace Gecko
         */
     }
 
-    void UI::log_write(const std::string& text, const std::string& type, Id id)
+    void UI::log_write(const std::string& message, const std::string& type, Id id)
     {
-        // TODO: Refactor. Make class.
-        // TODO: Implement id argument.
-        static std::vector<std::string> lines;
-
-        lines.push_back(text);
-
-        if (lines.size() > 3)
+        if (m_log_model) // TODO: Delete.
         {
-            lines.erase(lines.cbegin(), lines.cbegin() + (lines.size() - 3));
-        }
+            m_log.push_back({ type, message });
 
-        if (document)
-        {
-            std::string rml;
-
-            for (const std::string& line : lines)
+            if (m_log.size() > 3)
             {
-                rml += std::vformat(m_configuration->get_string("templates.log"), std::make_format_args(type, line));
+                m_log.erase(m_log.cbegin(), m_log.cbegin() + (m_log.size() - 3));
             }
 
-            log_body->SetInnerRML(rml);
+            m_log_model.DirtyVariable("log");
         }
-    }
-
-    Rml::Element* UI::get_header_placeholder(const std::string& selector) const
-    {
-        Rml::Element* element = document->GetElementById(selector);
-
-        if (element == nullptr)
-        {
-            return nullptr;
-        }
-
-        Rml::ElementList elements;
-
-        element->GetElementsByClassName(elements, "card-header-placeholder");
-
-        if (elements.size() == 0)
-        {
-            return nullptr;
-        }
-
-        return elements[0];
-    }
-
-    Rml::Element* UI::get_body_placeholder(const std::string& selector) const
-    {
-        Rml::Element* element = document->GetElementById(selector);
-
-        if (element == nullptr)
-        {
-            return nullptr;
-        }
-
-        Rml::ElementList elements;
-
-        // TODO: Rename class to card-body-placeholder.
-        element->GetElementsByClassName(elements, "placeholder");
-
-        if (elements.size() == 0)
-        {
-            return nullptr;
-        }
-
-        return elements[0];
     }
 }

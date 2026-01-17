@@ -146,7 +146,10 @@ namespace Gecko
             }
         }
 
-        UI::getSingleton().set_configurations(configurations);
+        if (UI::getSingleton().m_data_bindings_initialized)
+        {
+            UI::getSingleton().set_configurations(configurations);
+        }
     }
 
     void Game::load_save(const std::string& save_name)

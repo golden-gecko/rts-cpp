@@ -75,6 +75,7 @@ namespace Gecko
 			return;
 		}
 
+		// TODO: Fix. Mouse is still detecting hidden object.
 		element->SetClass("hidden", true);
 	}
 
@@ -87,6 +88,7 @@ namespace Gecko
 			return;
 		}
 
+		// TODO: Fix. Mouse is still detecting hidden object.
 		element->SetClass("hidden", false);
 	}
 

@@ -93,9 +93,12 @@ namespace Gecko
 
         auto& ui = UI::getSingleton();
 
-        ui.set_configurations(configurations);
-        ui.set_orders(orders);
-        ui.set_skills(skills);
+        if (ui.m_data_bindings_initialized)
+        {
+            ui.set_configurations(configurations);
+            ui.set_orders(orders);
+            ui.set_skills(skills);
+        }
     }
 
     void Selected::create_group(std::uint16_t group_number)

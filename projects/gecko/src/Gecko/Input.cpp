@@ -761,11 +761,11 @@ namespace Gecko
         selection_box.set_visible(false);
 
         const auto& configuration_name = ui.get_configuration_name();
-        auto possible_order_name = ui.get_order_name();
+        auto possible_order_name = ui.get_order_type();
         const auto& skill_name = ui.get_skill_name();
 
-        // TODO: Do something with "none".
-        if (configuration_name != "none")
+        // TODO: Do something with "None".
+        if (configuration_name != "None")
         {
             auto layer_cast = Utils::Raycast::to_layer(arg);
 
@@ -827,8 +827,8 @@ namespace Gecko
                 UI::getSingleton().reset();
             }
         }
-        // TODO: Do something with "none".
-        else if (skill_name != "none")
+        // TODO: Do something with "None".
+        else if (skill_name != "None")
         {
             process_skill(arg, skill_name);
         }

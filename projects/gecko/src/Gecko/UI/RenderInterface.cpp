@@ -211,9 +211,13 @@ namespace Gecko
         m_scissor_enable = enable;
 
         if (!m_scissor_enable)
+        {
             m_render_system->setScissorTest(false);
+        }
         else
+        {
             m_render_system->setScissorTest(true, m_scissor_rect[0], m_scissor_rect[1], m_scissor_rect[2], m_scissor_rect[3]);
+        }
     }
 
     void RenderInterface::SetScissorRegion(Rml::Rectanglei region)
@@ -223,12 +227,12 @@ namespace Gecko
         m_scissor_rect[0] = std::max<int>(0, region.Position().x);
         m_scissor_rect[1] = std::max<int>(0, region.Position().y);
 
-        /*
-        m_scissor_rect[2] = x + width;
-        m_scissor_rect[3] = y + height;
+        m_scissor_rect[2] = region.Position().x + region.Width();
+        m_scissor_rect[3] = region.Position().y + region.Height();
 
         if (m_scissor_enable)
+        {
             m_render_system->setScissorTest(true, m_scissor_rect[0], m_scissor_rect[1], m_scissor_rect[2], m_scissor_rect[3]);
-        */
+        }
     }
 }
