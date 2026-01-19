@@ -6,6 +6,6 @@
             "../ui/fonts/LatoLatin-Bold.ttf",
             "../ui/fonts/LatoLatin-BoldItalic.ttf"
         ],
-        "layout": "../ui/ui.rml"
+        "layout": "../ui/demo/demo.rml"
     }
 }

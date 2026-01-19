@@ -177,25 +177,41 @@ namespace Gecko
 
         while (getRoot()->endRenderingQueued() == false)
         {
-            current_time = Utils::Time::get();
-
-            frame_time = Utils::Time::get_duration(previous_time, current_time);
-
-            elasped_time += frame_time;
-
-            if (elasped_time >= Settings::Game::FrameTime)
+            if (false)
             {
+                current_time = Utils::Time::get();
+
+                frame_time = Utils::Time::get_duration(previous_time, current_time);
+
+                elasped_time += frame_time;
+
+                if (elasped_time >= Settings::Game::FrameTime)
+                {
+                    pollEvents();
+
+                    update_input(Settings::Game::FrameTime);
+                    update(Settings::Game::FrameTime);
+
+                    getRoot()->renderOneFrame();
+
+                    elasped_time -= std::floor((elasped_time / Settings::Game::FrameTime)) * Settings::Game::FrameTime;
+                }
+
+                previous_time = current_time;
+            }
+            else
+            {
+                current_time = Utils::Time::get();
+
                 pollEvents();
 
-                update_input(Settings::Game::FrameTime);
-                update(Settings::Game::FrameTime);
+                update_input(Utils::Time::get_duration(previous_time, current_time));
+                update(Utils::Time::get_duration(previous_time, current_time));
 
                 getRoot()->renderOneFrame();
 
-                elasped_time -= std::floor((elasped_time / Settings::Game::FrameTime)) * Settings::Game::FrameTime;
+                previous_time = current_time;
             }
-
-            previous_time = current_time;
         }
     }
 

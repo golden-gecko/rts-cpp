@@ -1,9 +1,13 @@
 #include "Gecko/UI/RenderInterface.hpp"
 
+#include "Gecko/Utils/Time.hpp"
+
 namespace Gecko
 {
     RenderInterface::RenderInterface(unsigned int window_width, unsigned int window_height)
     {
+        // L_TIME("RenderInterface::RenderInterface()");
+
         m_render_system = Ogre::Root::getSingletonPtr()->getRenderSystem();
 
         m_colour_blend_mode.blendType = Ogre::LBT_COLOUR;
@@ -28,6 +32,8 @@ namespace Gecko
 
     Rml::CompiledGeometryHandle RenderInterface::CompileGeometry(Rml::Span<const Rml::Vertex> vertices, Rml::Span<const int> indices)
     {
+        L_TIME("RenderInterface::CompileGeometry()");
+
         RocketCompiledGeometry* geometry = new RocketCompiledGeometry();
         // geometry->mTexture = (texture == NULL) ? NULL : (RocketTexture*)texture;
 
@@ -88,6 +94,8 @@ namespace Gecko
 
     void RenderInterface::RenderGeometry(Rml::CompiledGeometryHandle geometry, Rml::Vector2f translation, Rml::TextureHandle texture)
     {
+        // L_TIME("RenderInterface::RenderGeometry()");
+
         Ogre::Matrix4 transform;
         transform.makeTrans(translation.x, translation.y, 0);
         m_render_system->_setWorldMatrix(transform);
@@ -115,6 +123,8 @@ namespace Gecko
 
     void RenderInterface::ReleaseGeometry(Rml::CompiledGeometryHandle geometry)
     {
+        // L_TIME("RenderInterface::ReleaseGeometry()");
+
         RocketCompiledGeometry* ogre3d_geometry = reinterpret_cast<RocketCompiledGeometry*>(geometry);
 
         delete ogre3d_geometry->mRenderOperation.vertexData;
@@ -124,6 +134,8 @@ namespace Gecko
 
     Rml::TextureHandle RenderInterface::LoadTexture(Rml::Vector2i& texture_dimensions, const Rml::String& source)
     {
+        // L_TIME("RenderInterface::LoadTexture()");
+
         std::filesystem::path path(source);
         std::string filename = path.filename().string();
 
@@ -171,6 +183,8 @@ namespace Gecko
 
     Rml::TextureHandle RenderInterface::GenerateTexture(Rml::Span<const Rml::byte> source, Rml::Vector2i source_dimensions)
     {
+        // L_TIME("RenderInterface::GenerateTexture()");
+
         static int texture_id = 1;
         std::string texture_name = std::format("generated_texture_{}", texture_id++);
 
@@ -199,27 +213,28 @@ namespace Gecko
 
     void RenderInterface::ReleaseTexture(Rml::TextureHandle texture)
     {
+        // L_TIME("RenderInterface::ReleaseTexture()");
     }
 
     void RenderInterface::EnableScissorRegion(bool enable)
     {
-        throw std::exception("RenderInterface::EnableScissorRegion");
+        L_TIME("RenderInterface::EnableScissorRegion()");
 
         m_scissor_enable = enable;
 
-        if (!m_scissor_enable)
+        if (m_scissor_enable)
         {
-            m_render_system->setScissorTest(false);
+            m_render_system->setScissorTest(true, m_scissor_rect[0], m_scissor_rect[1], m_scissor_rect[2], m_scissor_rect[3]);
         }
         else
         {
-            m_render_system->setScissorTest(true, m_scissor_rect[0], m_scissor_rect[1], m_scissor_rect[2], m_scissor_rect[3]);
+            m_render_system->setScissorTest(false);
         }
     }
 
     void RenderInterface::SetScissorRegion(Rml::Rectanglei region)
     {
-        throw std::exception("RenderInterface::SetScissorRegion");
+        L_TIME("RenderInterface::SetScissorRegion()");
 
         m_scissor_rect[0] = std::max<int>(0, region.Position().x);
         m_scissor_rect[1] = std::max<int>(0, region.Position().y);

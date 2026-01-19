@@ -30,6 +30,7 @@
 #include "Gecko/Utils/Utils.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/String.hpp"
+#include "Gecko/Utils/Time.hpp"
 
 Gecko::UI* Ogre::Singleton<Gecko::UI>::msSingleton = nullptr;
 
@@ -104,7 +105,7 @@ namespace Gecko
 
             if (hovered_object)
             {
-                set_info(hovered_object->get_info());
+                // set_info(hovered_object->get_info());
 
                 UI::getSingleton().get_preview().get_camera()->set_target_id(hovered_object->get_id());
             }
@@ -117,7 +118,7 @@ namespace Gecko
 
                     if (object)
                     {
-                        set_info(object->get_info());
+                        // set_info(object->get_info());
 
                         UI::getSingleton().get_preview().get_camera()->set_target_id(object->get_id());
 
@@ -164,7 +165,7 @@ namespace Gecko
                 }
                 */
 
-                set_info(std::make_shared<Configuration>(info));
+                // set_info(std::make_shared<Configuration>(info));
 
                 std::map<std::string, std::string> statistics;
 
@@ -173,26 +174,26 @@ namespace Gecko
                     statistics.emplace(i.first, Utils::Convert::to_string(i.second));
                 }
 
-                set_statistics(statistics);
+                // set_statistics(statistics);
             }
 
             // TODO: Optimize.
-            set_floating_descriptions();
+            // set_floating_descriptions();
 
-            set_diplomacy();
+            // set_diplomacy();
             // TODO: First map.
-            set_layers(MapManager::getSingleton().begin()->second->get_layers());
-            set_maps(Game::getSingleton().get_maps());
-            set_objects_admin();
-            set_orders_admin();
-            set_players();
+            // set_layers(MapManager::getSingleton().begin()->second->get_layers());
+            // set_maps(Game::getSingleton().get_maps());
+            // set_objects_admin();
+            // set_orders_admin();
+            // set_players();
 
             if (Game::getSingleton().get_active_player())
             {
-                set_resources(Game::getSingleton().get_active_player()->get_resources());
+                // set_resources(Game::getSingleton().get_active_player()->get_resources());
             }
 
-            set_saves(Game::getSingleton().get_saves());
+            // set_saves(Game::getSingleton().get_saves());
 
             get_minimap().update(time);
             get_preview().update(time);
@@ -210,6 +211,8 @@ namespace Gecko
 
     void UI::render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
     {
+        // L_TIME("UI::render()");
+
         if (queueGroupId != Ogre::RENDER_QUEUE_OVERLAY)
         {
             return;
@@ -742,7 +745,11 @@ namespace Gecko
         reset();
 
         m_configuration_name = configuration_name;
-        m_configurations_model.DirtyVariable("configuration_name");
+
+        if (m_configurations_model)
+        {
+            m_configurations_model.DirtyVariable("configuration_name");
+        }
 
         /*
         TODO: Fix cursor.
@@ -783,7 +790,10 @@ namespace Gecko
             m_configurations.push_back(i);
         }
 
-        m_configurations_model.DirtyVariable("configurations");
+        if (m_configurations_model)
+        {
+            m_configurations_model.DirtyVariable("configurations");
+        }
     }
 
     void UI::set_diplomacy()
@@ -809,7 +819,10 @@ namespace Gecko
             m_diplomacy.push_back({ id.get(), player->get_name(), player->get_color()});
         }
 
-        m_diplomacy_model.DirtyVariable("diplomacy");
+        if (m_diplomacy_model)
+        {
+            m_diplomacy_model.DirtyVariable("diplomacy");
+        }
     }
 
     void UI::set_floating_descriptions()
@@ -907,7 +920,10 @@ namespace Gecko
             m_maps.push_back(map);
         }
 
-        m_map_menu_model.DirtyVariable("maps");
+        if (m_map_menu_model)
+        {
+            m_map_menu_model.DirtyVariable("maps");
+        }
     }
 
     void UI::set_hovered_object_id(Id object_id)
@@ -931,7 +947,10 @@ namespace Gecko
         m_info = boost::regex_replace(m_info, boost::regex("\n+"), "\n");
         m_info = boost::regex_replace(m_info, boost::regex("\n  "), "\n");
 
-        m_info_model.DirtyVariable("info");
+        if (m_info_model)
+        {
+            m_info_model.DirtyVariable("info");
+        }
     }
 
     void UI::set_objects_admin()
@@ -969,7 +988,10 @@ namespace Gecko
             m_objects_admin.push_back({ id.get(), object->get_name(), object->get_orders()->size(), order_name });
         }
 
-        m_objects_admin_model.DirtyVariable("objects_admin");
+        if (m_objects_admin_model)
+        {
+            m_objects_admin_model.DirtyVariable("objects_admin");
+        }
     }
 
     void UI::set_orders_admin()
@@ -1019,7 +1041,10 @@ namespace Gecko
             m_orders_admin.push_back({ id.get(), sender_name, receiver_name, order_name, attempts });
         }
 
-        m_orders_admin_model.DirtyVariable("orders_admin");
+        if (m_orders_admin_model)
+        {
+            m_orders_admin_model.DirtyVariable("orders_admin");
+        }
     }
 
     void UI::set_players()
@@ -1045,7 +1070,10 @@ namespace Gecko
             m_players.push_back({ id.get(), player->get_name(), player->get_color()});
         }
 
-        m_players_model.DirtyVariable("players");
+        if (m_players_model)
+        {
+            m_players_model.DirtyVariable("players");
+        }
     }
 
     void UI::set_order_type(order_type::Value order_type)
@@ -1055,7 +1083,10 @@ namespace Gecko
         m_order_name = order_type::to_string(order_type);
         m_order_type = order_type;
 
-        m_orders_model.DirtyVariable("order_name");
+        if (m_orders_model)
+        {
+            m_orders_model.DirtyVariable("order_name");
+        }
     }
 
     void UI::set_orders(const std::set<std::string>& orders)
@@ -1071,7 +1102,10 @@ namespace Gecko
             m_orders.push_back(i);
         }
 
-        m_orders_model.DirtyVariable("orders");
+        if (m_orders_model)
+        {
+            m_orders_model.DirtyVariable("orders");
+        }
     }
 
     void UI::set_resources(std::shared_ptr<Resources> resources)
@@ -1104,7 +1138,10 @@ namespace Gecko
             });
         }
 
-        m_resources_model.DirtyVariable("resources");
+        if (m_resources_model)
+        {
+            m_resources_model.DirtyVariable("resources");
+        }
     }
 
     void UI::set_saves(const std::vector<std::string>& saves)
@@ -1120,7 +1157,10 @@ namespace Gecko
             m_saves.push_back(save);
         }
 
-        m_load_menu_model.DirtyVariable("saves");
+        if (m_load_menu_model)
+        {
+            m_load_menu_model.DirtyVariable("saves");
+        }
     }
 
     void UI::set_skill_name(const std::string& skill_name)
@@ -1128,7 +1168,11 @@ namespace Gecko
         reset();
 
         m_skill_name = skill_name;
-        m_skills_model.DirtyVariable("skill_name");
+
+        if (m_skills_model)
+        {
+            m_skills_model.DirtyVariable("skill_name");
+        }
     }
 
     void UI::set_skills(const std::set<std::string>& skills)
@@ -1144,7 +1188,10 @@ namespace Gecko
             m_skills.push_back(i);
         }
 
-        m_skills_model.DirtyVariable("skills");
+        if (m_skills_model)
+        {
+            m_skills_model.DirtyVariable("skills");
+        }
     }
 
     void UI::set_statistics(const std::map<std::string, std::string>& statistics)
@@ -1167,7 +1214,10 @@ namespace Gecko
             m_statistics.push_back({ i.first, i.second });
         }
 
-        m_statistics_model.DirtyVariable("statistics");
+        if (m_statistics_model)
+        {
+            m_statistics_model.DirtyVariable("statistics");
+        }
     }
 
     void UI::set_terrain_layers(const std::set<std::string>& layers)
@@ -1463,6 +1513,7 @@ namespace Gecko
         context->UnloadAllDocuments();
 
         document = context->LoadDocument(m_configuration->get_string("layout"));
+        document->ReloadStyleSheet();
         document->Show();
 
         Rml::Debugger::Initialise(context);
