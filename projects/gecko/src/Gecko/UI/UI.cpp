@@ -105,7 +105,7 @@ namespace Gecko
 
             if (hovered_object)
             {
-                // set_info(hovered_object->get_info());
+                set_info(hovered_object->get_info());
 
                 UI::getSingleton().get_preview().get_camera()->set_target_id(hovered_object->get_id());
             }
@@ -118,7 +118,7 @@ namespace Gecko
 
                     if (object)
                     {
-                        // set_info(object->get_info());
+                        set_info(object->get_info());
 
                         UI::getSingleton().get_preview().get_camera()->set_target_id(object->get_id());
 
@@ -165,7 +165,7 @@ namespace Gecko
                 }
                 */
 
-                // set_info(std::make_shared<Configuration>(info));
+                set_info(std::make_shared<Configuration>(info));
 
                 std::map<std::string, std::string> statistics;
 

@@ -1,325 +1,111 @@
-/* Global */
-
-body,
-html {
-    color: #212529;
-    font-family: LatoLatin;
-    font-size: 1.2rem;
-    height: 100%;
-    width: 100%;
+body {
+	color: black;
 }
 
 pre {
-    white-space: pre;
+	white-space: pre-wrap;
 }
 
-table {
-	box-sizing: border-box;
-	display: table;
+div#title_bar div#icon
+{
+	display: none;
 }
 
-tbody,
-tfoot,
-thead {
-	display: table-row-group;
-}
-        
-thead {
-    font-weight: bold;
-}
-
-td {
-	display: table-cell;
-    padding: 2px 5px;
-}
-        
-tr {
-	box-sizing: border-box;
-	display: table-row;
-}
-
-.background {
-    bottom: 0px;
-    display: block;
-    left: 0px;
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    z-index: 10;
-}
-
-.button {
-    border-color: #e9ecef;
-    color: #212529;
-    display: inline-block;
-    margin-left: 2px;
-    padding: 5px 10px;
-    text-align: center;
-    vertical-align: middle;
-}
-
-.button:active,
-.button:hover {
-    color: #000;
-    border-color: #f9fafb;
-}
-
-.buttons {
-    bottom: 10px;
-    position: absolute;
-}
-
-.card {
-    background: white;
-    position: absolute;
-}
-
-.card-header {
-    padding: 10px 15px;
-}
-
-.card-header .button-collapse,
-.card-header .button-expand {
-    float: right;
-    height: 16px;
-    margin: 2px -2px 0 8px;
-    width: 16px;
-}
-
-.card-header .button-expand {
-    display: none;
-}
-
-.card-body {
-    padding: 15px;
-}
-
-.centered {
-    left: 50%;
-    position: fixed;
-    top: 50%;
+div#content
+{
+	text-align: left;
 }
 
 .hidden {
-    display: none;
+	display: none;
 }
 
-.modal {
-    bottom: 200px;
-    left: 200px;
-    position: absolute;
-    right: 200px;
-    top: 200px;
+.panel {
+	position: absolute;
 }
 
 /* Configurations */
 
 #configurations {
-    bottom: 265px;
-    left: 550px;
-}
-
-/* Cursor */
-
-#cursor {
-    position: absolute;
-}
-
-#cursor img {
-    width: 30px;
-}
-
-#cursor .attack {
-    margin-left: -15px;
-    margin-top: -15px;
-}
-
-#cursor .idle {
-    display: block;
-    margin-left: -8px;
-    margin-top: -3px;
-}
-
-#cursor .move {
-    margin-left: -16px;
-    margin-top: -15px;
-}
-
-/* Floating description */
-
-.floating-description {
-    background-color: #fff;
-    display: block;
-    min-width: 100px;
-    position: absolute;
-}
-
-.floating-description .bar {
-    display: block;
-    width: 100%;
-}
-
-.floating-description .bar .bar-background {
-    background: #0ff;
-    width: 100%;
-}
-
-.floating-description .bar .bar-background,
-.floating-description .bar .bar-current {
-    display: block;
-    height: 5px;
-}
-
-.floating-description .bar .bar-current {
-}
-
-.floating-description .bar.ammunition .bar-background {
-    background: #800;
-}
-
-.floating-description .bar.ammunition .bar-current {
-    background: #f00;
-}
-
-.floating-description .bar.fuel .bar-background {
-    background: #840;
-}
-
-.floating-description .bar.fuel .bar-current {
-    background: #f80;
-}
-
-.floating-description .bar.health .bar-background {
-    background: #040;
-}
-
-.floating-description .bar.health .bar-current {
-    background: #080;
-}
-
-.floating-description .bar.reload .bar-background {
-    background: #008;
-}
-
-.floating-description .bar.reload .bar-current {
-    background: #00f;
-}
-
-.floating-description .name {
-    display: block;
-    padding: 5px;
+	bottom: 265px;
+	left: 550px;
 }
 
 /* Game Menu */
 
 #game-menu {
-    right: 5px;
-    top: 5px;
+	right: 5px;
+	top: 5px;
 }
 
 /* Info */
 
 #info {
-    bottom: 5px;
-    left: 310px;
+	bottom: 5px;
+	left: 310px;
 }
 
 /* Log */
 
 #log {
-    left: 5px;
-    top: 5px;
-}
-
-#log p {
-    display: block;
+	left: 5px;
+	top: 5px;
 }
 
 #log .error {
-    color: red;
+	color: red;
 }
 
 #log .info {
-    color: green;
-}
-
-/* Menu */
-
-#load-menu button,
-#main-menu button,
-#map-menu button {
-    display: block;
-    height: 30px;
-    margin-bottom: 0.4rem;
-    width: 300px;
-}
-
-#load-menu .button-quit-application,
-#main-menu .button-quit-application,
-#map-menu .button-quit-application {
-    margin-bottom: 0;
+	color: green;
 }
 
 /* Minimap */
 
 #minimap {
-    bottom: 5px;
-    right: 5px;
+	bottom: 5px;
+	right: 5px;
 }
 
 /* Orders */
 
 #orders {
-    bottom: 150px;
-    left: 550px;
+	bottom: 150px;
+	left: 550px;
 }
 
 /* Players */
 
 #players {
-    right: 5px;
-    top: 100px;
-    width: 300px;
+	right: 5px;
+	top: 100px;
 }
 
 /* Preview */
 
 #preview {
-    bottom: 5px;
-    left: 5px;
-}
-
-#preview .body {
-    height: 128px;
-    width: 128px;
+	bottom: 5px;
+	left: 5px;
 }
 
 /* Resources */
 
 #resources {
-    display: block;
-    left: 5px;
-    top: 100px;
-    width: 400px;
+	left: 5px;
+	top: 100px;
 }
 
 #resources .green {
-    color: green;
+	color: green;
 }
 
 #resources .red {
-    color: red;
+	color: red;
 }
 
 /* Skills */
 
 #skills {
-    bottom: 5px;
-    left: 550px;
-}
-
-/* Technologies */
-
-#technologies .placeholder .button {
-    margin: 5px;
+	bottom: 5px;
+	left: 550px;
 }
