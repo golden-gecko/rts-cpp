@@ -34,6 +34,10 @@ namespace Gecko
 		{
 			on_close(argument);
 		}
+		else if (function == "configuration")
+		{
+			on_configuration(argument);
+		}
 		else if (function == "menu")
 		{
 			on_menu(argument);
@@ -41,6 +45,14 @@ namespace Gecko
 		else if (function == "open")
 		{
 			on_open(argument);
+		}
+		else if (function == "order")
+		{
+			on_order(argument);
+		}
+		else if (function == "skill")
+		{
+			on_skill(argument);
 		}
 	}
 
@@ -83,6 +95,10 @@ namespace Gecko
 		element->SetClass("hidden", true);
 	}
 
+	void EventListener::on_configuration(const std::string& value) const
+	{
+	}
+
 	void EventListener::on_menu(const std::string& value) const
 	{
 		L_TRACE << "EventListener::on_menu(" << value << ")";
@@ -118,6 +134,11 @@ namespace Gecko
 		element->SetClass("hidden", false);
 	}
 
+	void EventListener::on_order(const std::string& value) const
+	{
+		UI::getSingleton().set_order_type(order_type::from_string(value));
+	}
+
 	void EventListener::on_quit_to_menu() const
 	{
 		Game::getSingleton().load_map("menu");
@@ -126,5 +147,9 @@ namespace Gecko
 	void EventListener::on_quit_to_desktop() const
 	{
 		Game::getSingleton().quit();
+	}
+
+	void EventListener::on_skill(const std::string& value) const
+	{
 	}
 }

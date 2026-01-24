@@ -1,7 +1,7 @@
 <template name="window" content="content">
     <head>
-        <link type="text/rcss" href="styles/rml.rcss" />
         <link type="text/rcss" href="styles/invader.rcss" />
+        <link type="text/rcss" href="styles/ui.rcss" />
     </head>
     <body class="window">
         <div id="window">

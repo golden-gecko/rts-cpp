@@ -190,7 +190,7 @@ namespace Gecko
 
             if (Game::getSingleton().get_active_player())
             {
-                // set_resources(Game::getSingleton().get_active_player()->get_resources());
+                set_resources(Game::getSingleton().get_active_player()->get_resources());
             }
 
             // set_saves(Game::getSingleton().get_saves());
@@ -202,10 +202,6 @@ namespace Gecko
 
     UI::UI(const ConfigurationPtr& configuration) :
         m_configuration(configuration)
-    {
-    }
-
-    UI::~UI()
     {
     }
 
@@ -617,7 +613,7 @@ namespace Gecko
     {
         Rml::ElementList elements;
 
-        document->GetElementsByClassName(elements, "card");
+        document->GetElementsByClassName(elements, "panel");
 
         for (Rml::Element* element : elements)
         {

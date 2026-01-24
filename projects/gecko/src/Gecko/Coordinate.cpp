@@ -20,4 +20,24 @@ namespace Gecko
     {
         return Utils::Convert::to_string(x) + ":" + Utils::Convert::to_string(y) + ":" + Utils::Convert::to_string(z);
     }
+
+    bool Coordinate::operator==(const Coordinate& other) const
+    {
+        return x == other.x && y == other.y && z == other.z;
+    }
+
+    bool Coordinate::operator!=(const Coordinate& other) const
+    {
+        return !(*(this) == other);
+    }
+
+    bool Coordinate::operator<(const Coordinate& other) const
+    {
+        return std::tie(x, y, z) < std::tie(other.x, other.y, other.z);
+    }
+
+    bool Coordinate::operator>(const Coordinate& other) const
+    {
+        return std::tie(x, y, z) > std::tie(other.x, other.y, other.z);
+    }
 }

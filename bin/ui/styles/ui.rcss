@@ -1,55 +1,118 @@
-body {
+/*** Global ***/
+
+body, div, p, pre, td {
+	text-align: left;
+}
+
+body, div, p, pre {
 	color: black;
+}
+
+div, p {
+	display: block;
+
 }
 
 pre {
 	white-space: pre-wrap;
 }
 
-div#title_bar div#icon
-{
-	display: none;
-}
-
-div#content
-{
-	text-align: left;
-}
-
 .hidden {
 	display: none;
 }
+
+/*** Content ***/
+
+div#content {
+	text-align: left;
+}
+
+/*** Table ***/
+
+table {
+	display: table;
+}
+
+thead, tbody, tfoot {
+	display: table-row-group;
+}
+
+tr {
+	display: table-row;
+}
+
+td {
+	display: table-cell;
+}
+
+td.green {
+	color: green;
+}
+
+td.red {
+	color: red;
+}
+
+td.number {
+	padding-right: 20dp;
+	text-align: right;
+}
+
+td.text {
+	padding-left: 20dp;
+}
+
+/*** Menu ***/
+
+.menu {
+	inset: 300dp 600dp;
+	z-index: 100;
+}
+
+.menu .button {
+	display: block;
+	margin: 0 auto;
+}
+
+/*** Panel ***/
 
 .panel {
 	position: absolute;
 }
 
-/* Configurations */
+/*** Popup ***/
+
+.popup {
+	inset: 5dp;
+	z-index: 100;
+}
+
+/*** Configurations ***/
 
 #configurations {
-	bottom: 265px;
-	left: 550px;
+	bottom: 265dp;
+	left: 550dp;
 }
 
-/* Game Menu */
+/*** Game Menu ***/
 
 #game-menu {
-	right: 5px;
-	top: 5px;
+	right: 5dp;
+	top: 5dp;
 }
 
-/* Info */
+/*** Info ***/
 
 #info {
-	bottom: 5px;
-	left: 310px;
+	bottom: 5dp;
+	left: 310dp;
 }
 
-/* Log */
+/*** Log ***/
 
 #log {
-	left: 5px;
-	top: 5px;
+	left: 5dp;
+	top: 5dp;
 }
 
 #log .error {
@@ -60,52 +123,52 @@ div#content
 	color: green;
 }
 
-/* Minimap */
+/*** Minimap ***/
 
 #minimap {
-	bottom: 5px;
-	right: 5px;
+	bottom: 5dp;
+	right: 5dp;
 }
 
-/* Orders */
+/*** Orders ***/
 
 #orders {
-	bottom: 150px;
-	left: 550px;
+	bottom: 150dp;
+	left: 550dp;
 }
 
-/* Players */
+/*** Players ***/
 
 #players {
-	right: 5px;
-	top: 100px;
+	right: 5dp;
+	top: 100dp;
 }
 
-/* Preview */
+/*** Preview ***/
 
 #preview {
-	bottom: 5px;
-	left: 5px;
+	bottom: 5dp;
+	left: 5dp;
 }
 
-/* Resources */
+/*** Resources ***/
 
 #resources {
-	left: 5px;
-	top: 100px;
+	left: 5dp;
+	top: 130dp;
 }
 
-#resources .green {
-	color: green;
+#resources table {
+	width: 300dp;
 }
 
-#resources .red {
-	color: red;
+#resources td {
+	width: 100dp;
 }
 
-/* Skills */
+/*** Skills ***/
 
 #skills {
-	bottom: 5px;
-	left: 550px;
+	bottom: 5dp;
+	left: 550dp;
 }

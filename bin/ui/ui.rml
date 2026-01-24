@@ -1,9 +1,7 @@
 <rml>
 	<head>
-		<title>Demo</title>
-        <link type="text/rcss" href="styles/ui.rcss" />
         <link type="text/template" href="window.rml" />
-	</head>
+    </head>
 	<body style="height: 100%; width: 100%;">
 
         <!-- Configurations -->
@@ -17,9 +15,8 @@
         </div>
 
         <!-- Diplomacy -->
-        <div id="diplomacy" class="background hidden panel" data-model="diplomacy">
+        <div id="diplomacy" class="background hidden popup panel" data-model="diplomacy">
             <template src="window">
-                <div class="modal">
                 <div>Diplomacy</div>
                 <div>
                     <table>
@@ -43,14 +40,12 @@
                         <button class="button" onclick="close:diplomacy">Close</button>
                     </div>
                 </div>
-                </div>
             </template>
         </div>
 
         <!-- Game Menu -->
         <div id="game-menu" class="panel">
             <template src="window">
-                <div>
                 <button class="button" onclick="open:diplomacy">Diplomacy</button>
                 <button class="button" onclick="open:layers">Layers</button>
                 <button class="button" onclick="menu:main-menu">Menu</button>
@@ -58,7 +53,6 @@
                 <button class="button" onclick="open:orders-admin">Orders</button>
                 <button class="button" onclick="open:statistics">Statistics</button>
                 <button class="button" onclick="open:technologies">Technologies</button>
-            </div>
             </template>
         </div>
 
@@ -66,40 +60,30 @@
         <div id="info" class="panel" data-model="info">
             <template src="window">
                 <div>Info</div>
-
-            <div>
                 <pre>{{info}}</pre>
-            </div>
             </template>
         </div>
 
         <!-- Load Menu -->
-        <div id="load-menu" class="hidden panel" data-model="load_menu">
+        <div id="load-menu" class="hidden menu panel" data-model="load_menu">
             <template src="window">
-                <div>Load</div>
-            <div>
                 <button class="button" onclick="menu:none">Continue</button>
                 <button class="button" data-for="i : saves">{{i}}</button>
                 <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
                 <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
-            </div>
             </template>
         </div>
 
         <!-- Log -->
         <div id="log" class="panel" data-model="log">
             <template src="window">
-                <div>
-                    <p class="{{i.level}}" data-for="i : log">{{i.message}}</p>
-                </div>
+                <p class="{{i.level}}" data-for="i : log">{{i.message}}</p>
             </template>
         </div>
 
         <!-- Main Menu -->
-        <div id="main-menu" class="hidden panel">
+        <div id="main-menu" class="hidden menu panel">
             <template src="window">
-                <div>Menu</div>
-            <div>
                 <button class="button" onclick="menu:none">Continue</button>
                 <button class="button" onclick="menu:map-menu">New game</button>
                 <button class="button">Save</button>
@@ -107,20 +91,16 @@
                 <button class="button">Options</button>
                 <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
                 <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
-            </div>
             </template>
         </div>
 
         <!-- Map Menu -->
-        <div id="map-menu" class="hidden panel" data-model="map_menu">
+        <div id="map-menu" class="hidden menu panel" data-model="map_menu">
             <template src="window">
-                <div>Maps</div>
-                <div>
-                    <button class="button" onclick="menu:none">Continue</button>
-                    <button class="button" data-for="i : maps">{{i}}</button>
-                    <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
-                    <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
-                </div>
+                <button class="button" onclick="menu:none">Continue</button>
+                <button class="button" data-for="i : maps">{{i}}</button>
+                <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
+                <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
             </template>
         </div>
 
@@ -128,17 +108,13 @@
         <div id="minimap" class="panel">
             <template src="window">
                 <div>Minimap</div>
-
-            <div>
                 <img src="texture_minimap" />
-            </div>
             </template>
         </div>
 
         <!-- Objects (admin) -->
-        <div id="objects-admin" class="background hidden panel" data-model="objects_admin">
+        <div id="objects-admin" class="background hidden popup panel" data-model="objects_admin">
             <template src="window">
-                <div class="modal">
                 <div>Objects</div>
                 <div>
                     <table>
@@ -164,7 +140,6 @@
                         <button class="button" onclick="close:objects-admin">Close</button>
                     </div>
                 </div>
-            </div>
             </template>
         </div>
 
@@ -179,11 +154,9 @@
         </div>
 
         <!-- Orders (admin) -->
-        <div id="orders-admin" class="background hidden panel" data-model="orders_admin">
+        <div id="orders-admin" class="background hidden popup panel" data-model="orders_admin">
             <template src="window">
-                <div class="modal">
                 <div>Orders</div>
-
                 <div>
                     <table>
                         <thead>
@@ -210,7 +183,6 @@
                         <button class="button" onclick="close:orders-admin">Close</button>
                     </div>
                 </div>
-            </div>
             </template>
         </div>
 
@@ -218,8 +190,6 @@
         <div id="players" class="panel" data-model="players">
             <template src="window">
                 <div>Players</div>
-
-            <div>
                 <table>
                     <tbody>
                         <tr data-for="i : players">
@@ -229,7 +199,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
             </template>
         </div>
 
@@ -237,10 +206,7 @@
         <div id="preview" class="panel">
             <template src="window">
                 <div>Preview</div>
-
-                <div>
-                    <img src="texture_preview" />
-                </div>
+                <img src="texture_preview" />
             </template>
         </div>
 
@@ -248,19 +214,24 @@
         <div id="resources" class="panel" data-model="resources">
             <template src="window">
                 <div>Resources</div>
-
-            <div>
                 <table>
+                    <thead>
+                        <tr>
+                            <td class="text">Name</td>
+                            <td class="number">Current</td>
+                            <td class="number">Max</td>
+                            <td class="number">Ratio</td>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr data-for="i : resources">
-                            <td>{{i.name}}</td>
+                            <td class="text">{{i.name}}</td>
                             <td class="number">{{format(i.current, 1)}}</td>
                             <td class="number">{{format(i.max, 1)}}</td>
                             <td class="number {{i.direction}}">{{format(i.ratio, 1)}}</td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
             </template>
         </div>
 
@@ -268,46 +239,40 @@
         <div id="skills" class="panel" data-model="skills">
             <template src="window">
                 <div>Skills - {{skill_name}}</div>
-
-            <div>
-                <button type="button" class="button" onclick="skill:{{i}}" data-for="i : skills">{{i}}</button>
-            </div>
+                <div>
+                    <button type="button" class="button" onclick="skill:{{i}}" data-for="i : skills">{{i}}</button>
+                </div>
             </template>
         </div>
 
         <!-- Statistics -->
-        <div id="statistics" class="background hidden panel" data-model="statistics">
+        <div id="statistics" class="background hidden popup panel" data-model="statistics">
             <template src="window">
-                <div class="modal">
                 <div>Statistics</div>
-                <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <td>Name</td>
-                                <td class="number">Value</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-for="i : statistics">
-                                <td class="name">{{i.name}}</td>
-                                <td class="value number">{{i.value}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td class="number">Value</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-for="i : statistics">
+                            <td class="name">{{i.name}}</td>
+                            <td class="value number">{{i.value}}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <div class="buttons">
-                        <button class="button" onclick="close:statistics">Close</button>
-                    </div>
+                <div class="buttons">
+                    <button class="button" onclick="close:statistics">Close</button>
                 </div>
-            </div>
             </template>
         </div>
 
         <!-- Technologies -->
         <div id="technologies" class="background hidden panel" data-model="technologies">
             <template src="window">
-                <div class="modal">
                 <div>Technologies</div>
                 <div>
                     <div data-for="i : technologies">
@@ -318,7 +283,6 @@
                         <button class="button" onclick="close:technologies">Close</button>
                     </div>
                 </div>
-            </div>
             </template>
         </div>
 

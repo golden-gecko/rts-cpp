@@ -18,24 +18,9 @@ namespace Gecko
         std::string to_string() const;
 
     public:
-        bool operator==(const Coordinate& other) const
-        {
-            return x == other.x && y == other.y && z == other.z;
-        }
-
-        bool operator!=(const Coordinate& other) const
-        {
-            return !(*(this) == other);
-        }
-
-        bool operator<(const Coordinate& other) const
-        {
-            return std::tie(x, y, z) < std::tie(other.x, other.y, other.z);
-        }
-
-        bool operator>(const Coordinate& other) const
-        {
-            return std::tie(x, y, z) > std::tie(other.x, other.y, other.z);
-        }
+        bool operator==(const Coordinate& other) const;
+        bool operator!=(const Coordinate& other) const;
+        bool operator<(const Coordinate& other) const;
+        bool operator>(const Coordinate& other) const;
     };
 }

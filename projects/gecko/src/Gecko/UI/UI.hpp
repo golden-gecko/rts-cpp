@@ -25,7 +25,7 @@ namespace Gecko
     public:
         explicit UI(const ConfigurationPtr& configuration);
 
-        ~UI() override;
+        ~UI() override = default;
 
         void render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation);
 
