@@ -1,6 +1,6 @@
 @spritesheet theme
 {
-	src: ../textures/invader.tga;
+	src: invader.tga;
 
 	/* For high dpi screens, designates the scaling it is intended to be shown at. */
 	resolution: 1x;

@@ -1,0 +1,111 @@
+body {
+	color: black;
+}
+
+pre {
+	white-space: pre-wrap;
+}
+
+div#title_bar div#icon
+{
+	display: none;
+}
+
+div#content
+{
+	text-align: left;
+}
+
+.hidden {
+	display: none;
+}
+
+.panel {
+	position: absolute;
+}
+
+/* Configurations */
+
+#configurations {
+	bottom: 265px;
+	left: 550px;
+}
+
+/* Game Menu */
+
+#game-menu {
+	right: 5px;
+	top: 5px;
+}
+
+/* Info */
+
+#info {
+	bottom: 5px;
+	left: 310px;
+}
+
+/* Log */
+
+#log {
+	left: 5px;
+	top: 5px;
+}
+
+#log .error {
+	color: red;
+}
+
+#log .info {
+	color: green;
+}
+
+/* Minimap */
+
+#minimap {
+	bottom: 5px;
+	right: 5px;
+}
+
+/* Orders */
+
+#orders {
+	bottom: 150px;
+	left: 550px;
+}
+
+/* Players */
+
+#players {
+	right: 5px;
+	top: 100px;
+}
+
+/* Preview */
+
+#preview {
+	bottom: 5px;
+	left: 5px;
+}
+
+/* Resources */
+
+#resources {
+	left: 5px;
+	top: 100px;
+}
+
+#resources .green {
+	color: green;
+}
+
+#resources .red {
+	color: red;
+}
+
+/* Skills */
+
+#skills {
+	bottom: 5px;
+	left: 550px;
+}

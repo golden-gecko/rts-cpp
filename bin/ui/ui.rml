@@ -1,808 +1,326 @@
 <rml>
-<head>
-    <title>UI</title>
-
-    <style>
-        /* Global */
-
-        body,
-        html {
-            color: #212529;
-            font-family: LatoLatin;
-            font-size: 1.2rem;
-            height: 100%;
-            width: 100%;
-        }
-
-        pre {
-            white-space: pre;
-        }
-
-        table {
-	        box-sizing: border-box;
-	        display: table;
-        }
-
-        tbody,
-        tfoot,
-        thead {
-	        display: table-row-group;
-        }
-        
-        thead {
-            font-weight: bold;
-        }
-
-        td {
-	        display: table-cell;
-            padding: 2px 5px;
-        }
-        
-        tr {
-	        box-sizing: border-box;
-	        display: table-row;
-        }
-
-        .background {
-            background-color: rgba(255, 255, 255, 192);
-            bottom: 0px;
-            border-radius: .5rem;
-            display: block;
-            left: 0px;
-            position: absolute;
-            right: 0px;
-            top: 0px;
-            z-index: 10;
-        }
-
-        .button {
-            background-color: #e9ecef;
-            border-color: #e9ecef;
-            border-radius: .25rem;
-            color: #212529;
-            display: inline-block;
-            margin-left: 2px;
-            padding: 5px 10px;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .button:active,
-        .button:hover {
-            color: #000;
-            background-color: #f9fafb;
-            border-color: #f9fafb;
-        }
-
-        .buttons {
-            bottom: 10px;
-            position: absolute;
-        }
-
-        .card {
-            display: flex;
-            flex-direction: column;
-            background-color: #fff;
-            border-radius: .5rem;
-            position: absolute;
-        }
-
-        .card-header {
-            background-color: #eee;
-            border-radius: .5rem .5rem 0 0;
-            padding: 10px 15px;
-        }
-
-        .card-header .button-collapse,
-        .card-header .button-expand {
-            float: right;
-            height: 16px;
-            margin: 2px -2px 0 8px;
-            width: 16px;
-        }
-
-        .card-header .button-expand {
-            display: none;
-        }
-
-        .card-body {
-            padding: 15px;
-        }
-
-        .centered {
-            left: 50%;
-            position: fixed;
-            top: 50%;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .modal {
-            bottom: 200px;
-            left: 200px;
-            position: absolute;
-            right: 200px;
-            top: 200px;
-        }
-
-        /* Configurations */
-
-        #configurations {
-            bottom: 265px;
-            left: 550px;
-        }
-
-        /* Cursor */
-
-        #cursor {
-            position: absolute;
-        }
-
-        #cursor img {
-            width: 30px;
-        }
-
-        #cursor .attack {
-            margin-left: -15px;
-            margin-top: -15px;
-        }
-
-        #cursor .idle {
-            display: block;
-            margin-left: -8px;
-            margin-top: -3px;
-        }
-
-        #cursor .move {
-            margin-left: -16px;
-            margin-top: -15px;
-        }
-
-        /* Floating description */
-
-        .floating-description {
-            background-color: #fff;
-            display: block;
-            min-width: 100px;
-            position: absolute;
-        }
-
-        .floating-description .bar {
-            display: block;
-            width: 100%;
-        }
-
-        .floating-description .bar .bar-background {
-            background: #0ff;
-            width: 100%;
-        }
-
-        .floating-description .bar .bar-background,
-        .floating-description .bar .bar-current {
-            display: block;
-            height: 5px;
-        }
-
-        .floating-description .bar .bar-current {
-        }
-
-        .floating-description .bar.ammunition .bar-background {
-            background: #800;
-        }
-
-        .floating-description .bar.ammunition .bar-current {
-            background: #f00;
-        }
-
-        .floating-description .bar.fuel .bar-background {
-            background: #840;
-        }
-
-        .floating-description .bar.fuel .bar-current {
-            background: #f80;
-        }
-
-        .floating-description .bar.health .bar-background {
-            background: #040;
-        }
-
-        .floating-description .bar.health .bar-current {
-            background: #080;
-        }
-
-        .floating-description .bar.reload .bar-background {
-            background: #008;
-        }
-
-        .floating-description .bar.reload .bar-current {
-            background: #00f;
-        }
-
-        .floating-description .name {
-            display: block;
-            padding: 5px;
-        }
-
-        /* Game Menu */
-
-        #game-menu {
-            right: 5px;
-            top: 5px;
-        }
-
-        /* Info */
-
-        #info {
-            bottom: 5px;
-            left: 310px;
-        }
-
-        /* Log */
-
-        #log {
-            left: 5px;
-            top: 5px;
-        }
-
-        #log p {
-            display: block;
-        }
-
-        #log .error {
-            color: red;
-        }
-
-        #log .info {
-            color: green;
-        }
-
-        /* Menu */
-
-        #load-menu button,
-        #main-menu button,
-        #map-menu button {
-            display: block;
-            height: 30px;
-            margin-bottom: 0.4rem;
-            width: 300px;
-        }
-
-        #load-menu .button-quit-application,
-        #main-menu .button-quit-application,
-        #map-menu .button-quit-application {
-            margin-bottom: 0;
-        }
-
-        /* Minimap */
-
-        #minimap {
-            bottom: 5px;
-            right: 5px;
-        }
-
-        /* Orders */
-
-        #orders {
-            bottom: 150px;
-            left: 550px;
-        }
-
-        /* Players */
-
-        #players {
-            right: 5px;
-            top: 100px;
-            width: 300px;
-        }
-
-        /* Preview */
-
-        #preview {
-            bottom: 5px;
-            left: 5px;
-        }
-
-        #preview .body {
-            height: 128px;
-            width: 128px;
-        }
-
-        /* Resources */
-
-        #resources {
-            display: flex;
-            left: 5px;
-            top: 100px;
-            width: 400px;
-        }
-
-        #resources .green {
-            color: green;
-        }
-
-        #resources .red {
-            color: red;
-        }
-
-        /* Skills */
-
-        #skills {
-            bottom: 5px;
-            left: 550px;
-        }
-
-        /* Technologies */
-
-        #technologies .placeholder .button {
-            margin: 5px;
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Configurations -->
-    <div id="configurations" class="card" data-model="configurations">
-        <div class="card-header">Configurations - {{configuration_name}}
-            <img class="button-collapse" src="icons/arrow-up-short.png" />
-            <img class="button-expand" src="icons/arrow-down-short.png" />
+	<head>
+		<title>Demo</title>
+        <link type="text/rcss" href="styles/ui.rcss" />
+        <link type="text/template" href="window.rml" />
+	</head>
+	<body style="height: 100%; width: 100%;">
+
+        <!-- Configurations -->
+        <div id="configurations" class="panel" data-model="configurations">
+            <template src="window">
+                <div>Configurations - {{configuration_name}}</div>
+                <div>
+                    <button type="button" class="button" onclick="configuration:{{i}}" data-for="i : configurations">{{i}}</button>
+                </div>
+            </template>
         </div>
 
-        <div class="card-body placeholder">
-            <button type="button" class="button" onclick="configuration:{{i}}" data-for="i : configurations">{{i}}</button>
-        </div>
-    </div>
+        <!-- Diplomacy -->
+        <div id="diplomacy" class="background hidden panel" data-model="diplomacy">
+            <template src="window">
+                <div class="modal">
+                <div>Diplomacy</div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td class="number">ID</td>
+                                <td>Name</td>
+                                <td>Color</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-for="i : diplomacy">
+                                <td class="number">{{i.id}}</td>
+                                <td>{{i.name}}</td>
+                                <td>{{i.color}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-    <!-- Diplomacy -->
-    <div id="diplomacy" class="background hidden" data-model="diplomacy">
-        <div class="card modal">
-            <div class="card-header">Diplomacy</div>
-            <div class="card-body">
+                    <div class="buttons">
+                        <button class="button" onclick="close:diplomacy">Close</button>
+                    </div>
+                </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Game Menu -->
+        <div id="game-menu" class="panel">
+            <template src="window">
+                <div>
+                <button class="button" onclick="open:diplomacy">Diplomacy</button>
+                <button class="button" onclick="open:layers">Layers</button>
+                <button class="button" onclick="menu:main-menu">Menu</button>
+                <button class="button" onclick="open:objects-admin">Objects</button>
+                <button class="button" onclick="open:orders-admin">Orders</button>
+                <button class="button" onclick="open:statistics">Statistics</button>
+                <button class="button" onclick="open:technologies">Technologies</button>
+            </div>
+            </template>
+        </div>
+
+        <!-- Info -->
+        <div id="info" class="panel" data-model="info">
+            <template src="window">
+                <div>Info</div>
+
+            <div>
+                <pre>{{info}}</pre>
+            </div>
+            </template>
+        </div>
+
+        <!-- Load Menu -->
+        <div id="load-menu" class="hidden panel" data-model="load_menu">
+            <template src="window">
+                <div>Load</div>
+            <div>
+                <button class="button" onclick="menu:none">Continue</button>
+                <button class="button" data-for="i : saves">{{i}}</button>
+                <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
+                <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
+            </div>
+            </template>
+        </div>
+
+        <!-- Log -->
+        <div id="log" class="panel" data-model="log">
+            <template src="window">
+                <div>
+                    <p class="{{i.level}}" data-for="i : log">{{i.message}}</p>
+                </div>
+            </template>
+        </div>
+
+        <!-- Main Menu -->
+        <div id="main-menu" class="hidden panel">
+            <template src="window">
+                <div>Menu</div>
+            <div>
+                <button class="button" onclick="menu:none">Continue</button>
+                <button class="button" onclick="menu:map-menu">New game</button>
+                <button class="button">Save</button>
+                <button class="button" onclick="menu:load-menu">Load</button>
+                <button class="button">Options</button>
+                <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
+                <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
+            </div>
+            </template>
+        </div>
+
+        <!-- Map Menu -->
+        <div id="map-menu" class="hidden panel" data-model="map_menu">
+            <template src="window">
+                <div>Maps</div>
+                <div>
+                    <button class="button" onclick="menu:none">Continue</button>
+                    <button class="button" data-for="i : maps">{{i}}</button>
+                    <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
+                    <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
+                </div>
+            </template>
+        </div>
+
+        <!-- Minimap-->
+        <div id="minimap" class="panel">
+            <template src="window">
+                <div>Minimap</div>
+
+            <div>
+                <img src="texture_minimap" />
+            </div>
+            </template>
+        </div>
+
+        <!-- Objects (admin) -->
+        <div id="objects-admin" class="background hidden panel" data-model="objects_admin">
+            <template src="window">
+                <div class="modal">
+                <div>Objects</div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td class="number">ID</td>
+                                <td>Name</td>
+                                <td class="number">Order count</td>
+                                <td>Current order</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-for="i : objects_admin">
+                                <td class="number">{{i.id}}</td>
+                                <td>{{i.name}}</td>
+                                <td class="number">{{i.order_count}}</td>
+                                <td>{{i.order_name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="buttons">
+                        <button class="button" onclick="close:objects-admin">Close</button>
+                    </div>
+                </div>
+            </div>
+            </template>
+        </div>
+
+        <!-- Orders -->
+        <div id="orders" class="panel" data-model="orders">
+            <template src="window">
+                <div>Orders - {{order_name}}</div>
+                <div>
+                    <button type="button" class="button" onclick="order:{{i}}" data-for="i : orders">{{i}}</button>
+                </div>
+            </template>
+        </div>
+
+        <!-- Orders (admin) -->
+        <div id="orders-admin" class="background hidden panel" data-model="orders_admin">
+            <template src="window">
+                <div class="modal">
+                <div>Orders</div>
+
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td class="number">ID</td>
+                                <td class="number">Sender</td>
+                                <td class="number">Receiver</td>
+                                <td>Type</td>
+                                <td>Attempts</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-for="i : orders_admin">
+                                <td class="number">{{i.id}}</td>
+                                <td>{{i.name}}</td>
+                                <td class="number">{{i.sender_name}}</td>
+                                <td class="number">{{i.receiver_name}}</td>
+                                <td>{{i.attempts}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="buttons">
+                        <button class="button" onclick="close:orders-admin">Close</button>
+                    </div>
+                </div>
+            </div>
+            </template>
+        </div>
+
+        <!-- Players -->
+        <div id="players" class="panel" data-model="players">
+            <template src="window">
+                <div>Players</div>
+
+            <div>
                 <table>
-                    <thead>
-                        <tr>
-                            <td class="number">ID</td>
-                            <td>Name</td>
-                            <td>Color</td>
-                        </tr>
-                    </thead>
                     <tbody>
-                        <tr data-for="i : diplomacy">
+                        <tr data-for="i : players">
                             <td class="number">{{i.id}}</td>
                             <td>{{i.name}}</td>
                             <td>{{i.color}}</td>
                         </tr>
                     </tbody>
                 </table>
-
-                <div class="buttons">
-                    <button class="button" onclick="close:diplomacy">Close</button>
-                </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Game Menu -->
-    <div id="game-menu" class="card">
-        <div class="card-body">
-            <button class="button" onclick="open:diplomacy">Diplomacy</button>
-            <button class="button" onclick="open:layers">Layers</button>
-            <button class="button" onclick="menu:main-menu">Menu</button>
-            <button class="button" onclick="open:objects-admin">Objects</button>   
-            <button class="button" onclick="open:orders-admin">Orders</button>
-            <button class="button" onclick="open:statistics">Statistics</button>
-            <button class="button" onclick="open:technologies">Technologies</button>
-        </div>
-    </div>
-
-    <!-- Info -->
-    <div id="info" class="card" data-model="info">
-        <div class="card-header">Info
-            <img class="button-collapse" src="icons/arrow-up-short.png" />
-            <img class="button-expand" src="icons/arrow-down-short.png" />
+            </template>
         </div>
 
-        <div class="card-body">
-            <pre>{{info}}</pre>
-        </div>
-    </div>
+        <!-- Preview -->
+        <div id="preview" class="panel">
+            <template src="window">
+                <div>Preview</div>
 
-    <!-- Layers -->
-    <div id="layers" class="card hidden">
-        <div class="card-header">Layers</div>
-
-        <div class="card-body">
-            <div class="container body">
                 <div>
-                    <div class="row">
-                        <div class="col-4">Air
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" data-layer-name="Air" data-data-layer-name="None" id="Air_None" name="Air" checked="checked" />
-                                <label class="form-check-label" for="Air_None">None</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" data-layer-name="Air" data-data-layer-name="Pollution" id="Air_Pollution" name="Air" />
-                                <label class="form-check-label" for="Air_Pollution">Pollution</label>
-                            </div>
-                        </div>
-                        <div class="col-4">Terrain
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" data-layer-name="Terrain" data-data-layer-name="None" id="Terrain_None" name="Terrain" />
-                                <label class="form-check-label" for="Terrain_None">None</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" data-layer-name="Terrain" data-data-layer-name="Height" id="Terrain_Height" name="Terrain" />
-                                <label class="form-check-label" for="Terrain_Height">Height</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" data-layer-name="Terrain" data-data-layer-name="Navigation" id="Terrain_Navigation" name="Terrain" />
-                                <label class="form-check-label" for="Terrain_Navigation">Navigation</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" data-layer-name="Terrain" data-data-layer-name="Type" id="Terrain_Type" name="Terrain" checked="checked" />
-                                <label class="form-check-label" for="Terrain_Type">Type</label>
-                            </div>
-                        </div>
-                        <div class="col-4">Water
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" data-layer-name="Water" data-data-layer-name="None" id="Water_None" name="Water" />
-                                <label class="form-check-label" for="Water_None">None</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" data-layer-name="Water" data-data-layer-name="Height" id="Water_Height" name="Water" checked="checked" />
-                                <label class="form-check-label" for="Water_Height">Height</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" data-layer-name="Water" data-data-layer-name="Pollution" id="Water_Pollution" name="Water" />
-                                <label class="form-check-label" for="Water_Pollution">Pollution</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" data-layer-name="Water" data-data-layer-name="Type" id="Water_Type" name="Water" />
-                                <label class="form-check-label" for="Water_Type">Type</label>
-                            </div>
-                        </div>
-                    </div>
+                    <img src="texture_preview" />
                 </div>
-                <div class="buttons">
-                    <button class="button">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Load Menu -->
-    <div id="load-menu" class="card centered hidden" data-model="load_menu">
-        <div class="card-header">Load</div>
-        <div class="card-body">
-            <button class="button" onclick="menu:none">Continue</button>
-            <button class="button" data-for="i : saves">{{i}}</button>
-            <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
-            <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
-        </div>
-    </div>
-
-    <!-- Log -->
-    <div id="log" class="card" data-model="log">
-        <div class="card-body placeholder">
-            <p class="{{i.level}}" data-for="i : log">{{i.message}}</p>
-        </div>
-    </div>
-
-    <!-- Main Menu -->
-    <div id="main-menu" class="card centered hidden">
-        <div class="card-header">Menu</div>
-        <div class="card-body">
-            <button class="button" onclick="menu:none">Continue</button>
-            <button class="button" onclick="menu:map-menu">New game</button>
-            <button class="button">Save</button>
-            <button class="button" onclick="menu:load-menu">Load</button>
-            <button class="button">Options</button>
-            <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
-            <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
-        </div>
-    </div>
-
-    <!-- Map Menu -->
-    <div id="map-menu" class="card centered hidden" data-model="map_menu">
-        <div class="card-header">Maps</div>
-        <div class="card-body">
-            <button class="button" onclick="menu:none">Continue</button>
-            <button class="button" data-for="i : maps">{{i}}</button>
-            <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
-            <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
-        </div>
-    </div>
-
-    <!-- Minimap-->
-    <div id="minimap" class="card">
-        <div class="card-header">Minimap
-            <img class="button-collapse" src="icons/arrow-up-short.png" />
-            <img class="button-expand" src="icons/arrow-down-short.png" />
+            </template>
         </div>
 
-        <div class="card-body">
-            <img src="texture_minimap" />
-        </div>
-    </div>
+        <!-- Resources -->
+        <div id="resources" class="panel" data-model="resources">
+            <template src="window">
+                <div>Resources</div>
 
-    <!-- Objects (admin) -->
-    <div id="objects-admin" class="background hidden" data-model="objects_admin">
-        <div class="card modal">
-            <div class="card-header">Objects</div>
-            <div class="card-body">
+            <div>
                 <table>
-                    <thead>
-                        <tr>
-                            <td class="number">ID</td>
-                            <td>Name</td>
-                            <td class="number">Order count</td>
-                            <td>Current order</td>
-                        </tr>
-                    </thead>
                     <tbody>
-                        <tr data-for="i : objects_admin">
-                            <td class="number">{{i.id}}</td>
+                        <tr data-for="i : resources">
                             <td>{{i.name}}</td>
-                            <td class="number">{{i.order_count}}</td>
-                            <td>{{i.order_name}}</td>
+                            <td class="number">{{format(i.current, 1)}}</td>
+                            <td class="number">{{format(i.max, 1)}}</td>
+                            <td class="number {{i.direction}}">{{format(i.ratio, 1)}}</td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            </template>
+        </div>
 
-                <div class="buttons">
-                    <button class="button" onclick="close:objects-admin">Close</button>
+        <!-- Skills -->
+        <div id="skills" class="panel" data-model="skills">
+            <template src="window">
+                <div>Skills - {{skill_name}}</div>
+
+            <div>
+                <button type="button" class="button" onclick="skill:{{i}}" data-for="i : skills">{{i}}</button>
+            </div>
+            </template>
+        </div>
+
+        <!-- Statistics -->
+        <div id="statistics" class="background hidden panel" data-model="statistics">
+            <template src="window">
+                <div class="modal">
+                <div>Statistics</div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td class="number">Value</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-for="i : statistics">
+                                <td class="name">{{i.name}}</td>
+                                <td class="value number">{{i.value}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="buttons">
+                        <button class="button" onclick="close:statistics">Close</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Options -->
-    <div id="options" class="card hidden">
-        <div class="card-header">Options</div>
-        <div class="card-body">
-            <form>
-                <div class="form-group row">
-                    <label for="input_mouse_sensivity_x" class="col-sm-4 col-form-label">Mouse sensivity X</label>
-                    <div class="col-sm-8">
-                        <input type="email" class="form-control" id="input_mouse_sensivity_x" name="input_mouse_sensivity_x" />
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="input_mouse_sensivity_y" class="col-sm-4 col-form-label">Mouse sensivity Y</label>
-                    <div class="col-sm-8">
-                        <input type="email" class="form-control" id="input_mouse_sensivity_y" name="input_mouse_sensivity_y" />
-                    </div>
-                </div>
-
-                <fieldset class="form-group">
-                    <div class="row">
-                        <legend class="col-form-label col-sm-4 pt-0">Fog of war type</legend>
-                        <div class="col-sm-8">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="fog_of_war_type" id="fog_of_war_type_fuzzy" value="fuzzy" />
-                                <label class="form-check-label" for="fog_of_war_type_fuzzy">fuzzy</label>
-                            </div>
-
-                            <div class="form-check disabled">
-                                <input class="form-check-input" type="radio" name="fog_of_war_type" id="fog_of_war_type_solid" value="solid" />
-                                <label class="form-check-label" for="fog_of_war_type_solid">solid</label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="fog_of_war_type" id="fog_of_war_type_none" value="none" />
-                                <label class="form-check-label" for="fog_of_war_type_none">none</label>
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-
-                <fieldset class="form-group">
-                    <div class="row">
-                        <legend class="col-form-label col-sm-4 pt-0">Minimap</legend>
-                        <div class="col-sm-8">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="ui_minimap_visible" id="ui_minimap_visible" value="visible" />
-                                <label class="form-check-label" for="ui_minimap_visible">visible</label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="ui_minimap_visible" id="ui_minimap_hidden" value="hidden" />
-                                <label class="form-check-label" for="ui_minimap_hidden">hidden</label>
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-
-                <fieldset class="form-group">
-                    <div class="row">
-                        <legend class="col-form-label col-sm-4 pt-0">Preview</legend>
-                        <div class="col-sm-8">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="ui_preview_visible" id="ui_preview_visible" value="visible" />
-                                <label class="form-check-label" for="ui_preview_visible">visible</label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="ui_preview_visible" id="ui_preview_hidden" value="hidden" />
-                                <label class="form-check-label" for="ui_preview_hidden">hidden</label>
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-
-                <div class="col-sm-12 buttons">
-                    <button type="submit" class="button">Save</button>
-                    <button class="button">Close</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Orders -->
-    <div id="orders" class="card" data-model="orders">
-        <div class="card-header">Orders - {{order_name}}
-            <img class="button-collapse" src="icons/arrow-up-short.png" />
-            <img class="button-expand" src="icons/arrow-down-short.png" />
+            </template>
         </div>
 
-        <div class="card-body placeholder">
-            <button type="button" class="button" onclick="order:{{i}}" data-for="i : orders">{{i}}</button>
-        </div>
-    </div>
+        <!-- Technologies -->
+        <div id="technologies" class="background hidden panel" data-model="technologies">
+            <template src="window">
+                <div class="modal">
+                <div>Technologies</div>
+                <div>
+                    <div data-for="i : technologies">
+                        <button type="button" class="button">{{i}}</button>
+                    </div>
 
-    <!-- Orders (admin) -->
-    <div id="orders-admin" class="background hidden" data-model="orders_admin">
-        <div class="card modal">
-            <div class="card-header">Orders</div>
-            <div class="card-body">
-                <table>
-                    <thead>
-                        <tr>
-                            <td class="number">ID</td>
-                            <td class="number">Sender</td>
-                            <td class="number">Receiver</td>
-                            <td>Type</td>
-                            <td>Attempts</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-for="i : orders_admin">
-                            <td class="number">{{i.id}}</td>
-                            <td>{{i.name}}</td>
-                            <td class="number">{{i.sender_name}}</td>
-                            <td class="number">{{i.receiver_name}}</td>
-                            <td>{{i.attempts}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="buttons">
-                    <button class="button" onclick="close:orders-admin">Close</button>
+                    <div class="buttons">
+                        <button class="button" onclick="close:technologies">Close</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Players -->
-    <div id="players" class="card" data-model="players">
-        <div class="card-header">Players
-            <img class="button-collapse" src="icons/arrow-up-short.png" />
-            <img class="button-expand" src="icons/arrow-down-short.png" />
+            </template>
         </div>
 
-        <div class="card-body">
-            <table>
-                <tbody>
-                    <tr data-for="i : players">
-                        <td class="number">{{i.id}}</td>
-                        <td>{{i.name}}</td>
-                        <td>{{i.color}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Preview -->
-    <div id="preview" class="card">
-        <div class="card-header">Preview
-            <img class="button-collapse" src="icons/arrow-up-short.png" />
-            <img class="button-expand" src="icons/arrow-down-short.png" />
-        </div>
-
-        <div class="card-body">
-            <img src="texture_preview" />
-        </div>
-    </div>
-
-    <!-- Resources -->
-    <div id="resources" class="card" data-model="resources">
-        <div class="card-header">Resources
-            <img class="button-collapse" src="icons/arrow-up-short.png" />
-            <img class="button-expand" src="icons/arrow-down-short.png" />
-        </div>
-
-        <div class="card-body">
-            <table>
-                <tbody>
-                    <tr data-for="i : resources">
-                        <td>{{i.name}}</td>
-                        <td class="number">{{format(i.current, 1)}}</td>
-                        <td class="number">{{format(i.max, 1)}}</td>
-                        <td class="number {{i.direction}}">{{format(i.ratio, 1)}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Skills -->
-    <div id="skills" class="card" data-model="skills">
-        <div class="card-header">Skills - {{skill_name}}
-            <img class="button-collapse" src="icons/arrow-up-short.png" />
-            <img class="button-expand" src="icons/arrow-down-short.png" />
-        </div>
-
-        <div class="card-body">
-            <button type="button" class="button" onclick="skill:{{i}}" data-for="i : skills">{{i}}</button>
-        </div>
-    </div>
-
-    <!-- Statistics -->
-    <div id="statistics" class="background hidden" data-model="statistics">
-        <div class="card modal">
-            <div class="card-header">Statistics</div>
-            <div class="card-body">
-                <table>
-                    <thead>
-                        <tr>
-                            <td>Name</td>
-                            <td class="number">Value</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-for="i : statistics">
-                            <td class="name">{{i.name}}</td>
-                            <td class="value number">{{i.value}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="buttons">
-                    <button class="button" onclick="close:statistics">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Technologies -->
-    <div id="technologies" class="background hidden" data-model="technologies">
-        <div class="card modal">
-            <div class="card-header">Technologies</div>
-            <div class="card-body">
-                <div data-for="i : technologies">
-                    <button type="button" class="button">{{i}}</button>
-                </div>
-
-                <div class="buttons">
-                    <button class="button" onclick="close:technologies">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="floating_descriptions">
-        <!--
-        <div class="floating-description hidden" id="object_0" style="left: 350px; top: 400px;">
-            <div class="name">Tank</div>
-            <div class="bar health"><div class="bar-background"><div class="bar-current" style="width: 90%;"></div></div></div>
-            <div class="bar fuel"><div class="bar-background"><div class="bar-current" style="width: 20%;"></div></div></div>
-            <div class="bar ammunition"><div class="bar-background"><div class="bar-current" style="width: 25%;"></div></div></div>
-            <div class="bar reload"><div class="bar-background"><div class="bar-current" style="width: 30%;"></div></div></div>
-        </div>
-        -->
-    </div>
-</body>
+    </body>
 </rml>
