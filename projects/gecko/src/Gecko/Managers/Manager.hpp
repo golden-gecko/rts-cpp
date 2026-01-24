@@ -350,12 +350,12 @@ namespace Gecko
             m_collections.clear();
         }
 
-        auto begin() const
+        auto begin()
         {
             return m_items.begin();
         }
 
-        auto end() const
+        auto end()
         {
             return m_items.end();
         }

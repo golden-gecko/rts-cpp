@@ -174,19 +174,20 @@ namespace Gecko
                     statistics.emplace(i.first, Utils::Convert::to_string(i.second));
                 }
 
-                // set_statistics(statistics);
+                set_statistics(statistics);
             }
 
             // TODO: Optimize.
             // set_floating_descriptions();
 
+            // TODO: Enable.
             // set_diplomacy();
             // TODO: First map.
             // set_layers(MapManager::getSingleton().begin()->second->get_layers());
             // set_maps(Game::getSingleton().get_maps());
-            // set_objects_admin();
-            // set_orders_admin();
-            // set_players();
+            set_objects_admin();
+            set_orders_admin();
+            set_players();
 
             if (Game::getSingleton().get_active_player())
             {
@@ -922,7 +923,7 @@ namespace Gecko
         }
     }
 
-    void UI::set_hovered_object_id(Id object_id)
+    void UI::set_hovered_object_id(const Id& object_id)
     {
         hovered_object_id = object_id;
     }
@@ -1104,7 +1105,7 @@ namespace Gecko
         }
     }
 
-    void UI::set_resources(std::shared_ptr<Resources> resources)
+    void UI::set_resources(const std::shared_ptr<Resources>& resources)
     {
         // Update cache.
         /*

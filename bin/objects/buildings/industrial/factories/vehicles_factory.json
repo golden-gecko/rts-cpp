@@ -3,10 +3,11 @@
         {
             "configuration": "factory_hull",
             "mesh": {
-                "color": {
-                    "b": 0.5,
-                    "g": 0.5,
-                    "r": 0.5
+                "name": "machine_wireless.mesh",
+                "scale": {
+                    "x": 10.0,
+                    "y": 10.0,
+                    "z": 10.0
                 }
             }
         }

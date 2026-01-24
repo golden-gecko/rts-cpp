@@ -7,7 +7,7 @@
         <!-- Configurations -->
         <div id="configurations" class="panel" data-model="configurations">
             <template src="window">
-                <div>Configurations - {{configuration_name}}</div>
+                <div class="panel-header">Configurations - {{configuration_name}}</div>
                 <div>
                     <button type="button" class="button" onclick="configuration:{{i}}" data-for="i : configurations">{{i}}</button>
                 </div>
@@ -17,21 +17,20 @@
         <!-- Diplomacy -->
         <div id="diplomacy" class="background hidden popup panel" data-model="diplomacy">
             <template src="window">
-                <div>Diplomacy</div>
                 <div>
                     <table>
                         <thead>
                             <tr>
                                 <td class="number">ID</td>
-                                <td>Name</td>
-                                <td>Color</td>
+                                <td class="text">Name</td>
+                                <td class="text">Color</td>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-for="i : diplomacy">
                                 <td class="number">{{i.id}}</td>
-                                <td>{{i.name}}</td>
-                                <td>{{i.color}}</td>
+                                <td class="text">{{i.name}}</td>
+                                <td class="text">{{i.color}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -59,7 +58,6 @@
         <!-- Info -->
         <div id="info" class="panel" data-model="info">
             <template src="window">
-                <div>Info</div>
                 <pre>{{info}}</pre>
             </template>
         </div>
@@ -107,7 +105,6 @@
         <!-- Minimap-->
         <div id="minimap" class="panel">
             <template src="window">
-                <div>Minimap</div>
                 <img src="texture_minimap" />
             </template>
         </div>
@@ -115,23 +112,22 @@
         <!-- Objects (admin) -->
         <div id="objects-admin" class="background hidden popup panel" data-model="objects_admin">
             <template src="window">
-                <div>Objects</div>
                 <div>
                     <table>
                         <thead>
                             <tr>
                                 <td class="number">ID</td>
-                                <td>Name</td>
+                                <td class="text">Name</td>
                                 <td class="number">Order count</td>
-                                <td>Current order</td>
+                                <td class="text">Current order</td>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-for="i : objects_admin">
                                 <td class="number">{{i.id}}</td>
-                                <td>{{i.name}}</td>
+                                <td class="text">{{i.name}}</td>
                                 <td class="number">{{i.order_count}}</td>
-                                <td>{{i.order_name}}</td>
+                                <td class="text">{{i.order_name}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -146,7 +142,7 @@
         <!-- Orders -->
         <div id="orders" class="panel" data-model="orders">
             <template src="window">
-                <div>Orders - {{order_name}}</div>
+                <div class="panel-header">Orders - {{order_name}}</div>
                 <div>
                     <button type="button" class="button" onclick="order:{{i}}" data-for="i : orders">{{i}}</button>
                 </div>
@@ -156,7 +152,6 @@
         <!-- Orders (admin) -->
         <div id="orders-admin" class="background hidden popup panel" data-model="orders_admin">
             <template src="window">
-                <div>Orders</div>
                 <div>
                     <table>
                         <thead>
@@ -164,17 +159,17 @@
                                 <td class="number">ID</td>
                                 <td class="number">Sender</td>
                                 <td class="number">Receiver</td>
-                                <td>Type</td>
-                                <td>Attempts</td>
+                                <td class="text">Type</td>
+                                <td class="text">Attempts</td>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-for="i : orders_admin">
                                 <td class="number">{{i.id}}</td>
-                                <td>{{i.name}}</td>
+                                <td class="text">{{i.name}}</td>
                                 <td class="number">{{i.sender_name}}</td>
                                 <td class="number">{{i.receiver_name}}</td>
-                                <td>{{i.attempts}}</td>
+                                <td class="text">{{i.attempts}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -189,13 +184,12 @@
         <!-- Players -->
         <div id="players" class="panel" data-model="players">
             <template src="window">
-                <div>Players</div>
                 <table>
                     <tbody>
                         <tr data-for="i : players">
                             <td class="number">{{i.id}}</td>
-                            <td>{{i.name}}</td>
-                            <td>{{i.color}}</td>
+                            <td class="text">{{i.name}}</td>
+                            <td class="text">{{i.color}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -205,7 +199,6 @@
         <!-- Preview -->
         <div id="preview" class="panel">
             <template src="window">
-                <div>Preview</div>
                 <img src="texture_preview" />
             </template>
         </div>
@@ -213,7 +206,6 @@
         <!-- Resources -->
         <div id="resources" class="panel" data-model="resources">
             <template src="window">
-                <div>Resources</div>
                 <table>
                     <thead>
                         <tr>
@@ -238,7 +230,7 @@
         <!-- Skills -->
         <div id="skills" class="panel" data-model="skills">
             <template src="window">
-                <div>Skills - {{skill_name}}</div>
+                <div class="panel-header">Skills - {{skill_name}}</div>
                 <div>
                     <button type="button" class="button" onclick="skill:{{i}}" data-for="i : skills">{{i}}</button>
                 </div>
@@ -248,11 +240,10 @@
         <!-- Statistics -->
         <div id="statistics" class="background hidden popup panel" data-model="statistics">
             <template src="window">
-                <div>Statistics</div>
                 <table>
                     <thead>
                         <tr>
-                            <td>Name</td>
+                            <td class="text">Name</td>
                             <td class="number">Value</td>
                         </tr>
                     </thead>
@@ -273,7 +264,6 @@
         <!-- Technologies -->
         <div id="technologies" class="background hidden panel" data-model="technologies">
             <template src="window">
-                <div>Technologies</div>
                 <div>
                     <div data-for="i : technologies">
                         <button type="button" class="button">{{i}}</button>

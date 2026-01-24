@@ -40,12 +40,12 @@ namespace Gecko
         }
 
     public:
-        auto begin() const
+        auto begin()
         {
             return m_items.begin();
         }
 
-        auto end() const
+        auto end()
         {
             return m_items.end();
         }
@@ -55,7 +55,7 @@ namespace Gecko
             return m_items.cbegin();
         }
 
-        auto cend()
+        auto cend() const
         {
             return m_items.cend();
         }

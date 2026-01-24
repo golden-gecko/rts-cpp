@@ -156,7 +156,7 @@ namespace Gecko
         void set_configurations(const std::set<std::string>& configurations);
         void set_diplomacy();
         void set_floating_descriptions();
-        void set_hovered_object_id(Id object_id);
+        void set_hovered_object_id(const Id& object_id);
         void set_info(const ConfigurationPtr& info);
         void set_layers(const std::map<std::string, std::shared_ptr<Layer>>& layers);
         void set_maps(const std::vector<std::string>& maps);
@@ -165,7 +165,7 @@ namespace Gecko
         void set_order_type(order_type::Value order_type);
         void set_orders(const std::set<std::string>& orders);
         void set_players();
-        void set_resources(std::shared_ptr<Resources> resources);
+        void set_resources(const std::shared_ptr<Resources>& resources);
         void set_saves(const std::vector<std::string>& saves);
         void set_skill_name(const std::string& skill_name);
         void set_skills(const std::set<std::string>& skills);

@@ -49,14 +49,15 @@ namespace Gecko
             return m_items.begin();
         }
 
-        const auto begin() const
-        {
-            return m_items.cbegin();
-        }
-
         auto end()
         {
             return m_items.end();
+        }
+
+        // TODO: Change to cbegin?
+        const auto begin() const
+        {
+            return m_items.cbegin();
         }
 
         const auto end() const

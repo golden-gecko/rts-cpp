@@ -160,7 +160,7 @@
             }
         },
         {
-            "configuration": "tree",
+            "configuration": "tree1",
             "player": "human",
             "position": {
                 "x": 120.0,
@@ -168,7 +168,7 @@
             }
         },
         {
-            "configuration": "tree",
+            "configuration": "tree1",
             "player": "human",
             "position": {
                 "x": 128.0,
@@ -176,7 +176,7 @@
             }
         },
         {
-            "configuration": "tree",
+            "configuration": "tree2",
             "player": "human",
             "position": {
                 "x": 136.0,
@@ -184,7 +184,7 @@
             }
         },
         {
-            "configuration": "tree",
+            "configuration": "tree1",
             "player": "human",
             "position": {
                 "x": 144.0,
@@ -192,7 +192,7 @@
             }
         },
         {
-            "configuration": "tree",
+            "configuration": "tree2",
             "player": "human",
             "position": {
                 "x": 152.0,

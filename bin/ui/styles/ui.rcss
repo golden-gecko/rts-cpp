@@ -43,6 +43,7 @@ tr {
 
 td {
 	display: table-cell;
+	padding: 2dp;
 }
 
 td.green {
@@ -83,8 +84,16 @@ td.text {
 /*** Popup ***/
 
 .popup {
-	inset: 5dp;
+	inset: 100dp;
 	z-index: 100;
+}
+
+.popup .buttons {
+	bottom: 0;
+	display: block;
+	position: absolute;
+	text-align: center;
+	width: 100%;
 }
 
 /*** Configurations ***/
@@ -112,6 +121,7 @@ td.text {
 
 #log {
 	left: 5dp;
+	width: 400dp;
 	top: 5dp;
 }
 
@@ -144,6 +154,10 @@ td.text {
 	top: 100dp;
 }
 
+#players {
+	width: 250dp;
+}
+
 /*** Preview ***/
 
 #preview {
@@ -164,6 +178,10 @@ td.text {
 
 #resources td {
 	width: 100dp;
+}
+
+#resources td.text {
+	width: 200dp;
 }
 
 /*** Skills ***/

@@ -24,6 +24,16 @@ namespace Gecko
             return m_name;
         }
 
+        const std::shared_ptr<Resources>& get_in() const
+        {
+            return m_in;
+        }
+
+        const std::shared_ptr<Resources>& get_out() const
+        {
+            return m_out;
+        }
+
     public:
         bool operator==(const Process& other) const;
 

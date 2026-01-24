@@ -42,12 +42,12 @@ namespace Gecko
         }
 
     public:
-        auto begin() const
+        auto begin()
         {
             return m_available.begin();
         }
 
-        auto end() const
+        auto end()
         {
             return m_available.end();
         }

@@ -137,7 +137,7 @@ namespace Gecko
         return resource->second.get_max() - resource->second.get_current() >= value;
     }
 
-    void Resources::merge(Resources& other)
+    void Resources::merge(const Resources& other)
     {
         for (Map::const_iterator i = other.cbegin(); i != other.cend(); i++)
         {
@@ -148,6 +148,8 @@ namespace Gecko
 
             Resource& resource = get(i->first);
 
+            resource.set_consumption(resource.get_consumption() + i->second.get_consumption());
+            resource.set_production(resource.get_production() + i->second.get_production());
             resource.set_current(resource.get_current() + i->second.get_current());
             resource.set_maximal(resource.get_max() + i->second.get_max());
         }
