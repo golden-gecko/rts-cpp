@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Gecko/Coordinate.hpp"
 #include "Gecko/Managers/ConfigurationManager.hpp"
+#include "Gecko/Navigation/Coordinate.hpp"
 
 namespace Gecko
 {

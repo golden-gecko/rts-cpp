@@ -1,4 +1,4 @@
-#include "Gecko/Path.hpp"
+#include "Gecko/Navigation/Path.hpp"
 
 namespace Gecko
 {

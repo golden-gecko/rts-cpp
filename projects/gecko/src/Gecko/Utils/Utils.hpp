@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Gecko/Coordinate.hpp"
+#include "Gecko/Navigation/Coordinate.hpp"
 #include "Gecko/Settings.hpp"
 
 #define TYPE_TO_STRING(space, name) (space::name, #name)

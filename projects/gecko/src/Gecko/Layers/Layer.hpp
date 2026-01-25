@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Gecko/Coordinate.hpp"
 #include "Gecko/Interfaces/Initializable.hpp"
 #include "Gecko/Interfaces/Updatable.hpp"
-#include "Gecko/Path.hpp"
+#include "Gecko/Navigation/Coordinate.hpp"
+#include "Gecko/Navigation/Path.hpp"
 
 namespace Gecko
 {

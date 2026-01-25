@@ -1,4 +1,4 @@
-#include "Gecko/Search/AvoidOccupiedSearch.hpp"
+#include "Gecko/Navigation/Search/AvoidOccupiedSearch.hpp"
 
 #include "Gecko/DataLayers/DataLayer.hpp"
 #include "Gecko/Layers/Layer.hpp"

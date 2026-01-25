@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Gecko/Search/Search.hpp"
+#include "Gecko/Navigation/Search/Search.hpp"
 
 namespace Gecko
 {
-    class FollowRoadsSearch :
+    class DirectLineSearch :
         public Search
     {
     private:
@@ -15,6 +15,6 @@ namespace Gecko
         std::optional<Path::Points> get_path(const Ogre::Vector3& from, const Ogre::Vector3& to) override;
 
     public:
-        explicit FollowRoadsSearch(const Layer& layer);
+        explicit DirectLineSearch(const Layer& layer);
     };
 }

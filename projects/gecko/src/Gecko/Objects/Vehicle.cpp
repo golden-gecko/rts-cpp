@@ -9,11 +9,11 @@
 #include "Gecko/Managers/ObjectManager.hpp"
 #include "Gecko/Managers/OrderManager.hpp"
 #include "Gecko/Maps/Map.hpp"
+#include "Gecko/Navigation/Search/DirectLineSearch.hpp"
 #include "Gecko/Orders/OrderAttack.hpp"
 #include "Gecko/Orders/OrderLoad.hpp"
 #include "Gecko/Orders/OrderMove.hpp"
 #include "Gecko/Orders/OrderUnload.hpp"
-#include "Gecko/Search/DirectLineSearch.hpp"
 #include "Gecko/Settings.hpp"
 #include "Gecko/Utils/Utils.hpp"
 

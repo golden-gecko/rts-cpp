@@ -1,4 +1,4 @@
-#include "Gecko/Search/DirectLineSearch.hpp"
+#include "Gecko/Navigation/Search/DirectLineSearch.hpp"
 
 #include "Gecko/Layers/Layer.hpp"
 

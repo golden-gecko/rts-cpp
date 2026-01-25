@@ -3,9 +3,9 @@
 #include "Gecko/Configuration.hpp"
 #include "Gecko/DataLayers/DataLayer.hpp"
 #include "Gecko/Exception.hpp"
-#include "Gecko/Search/AvoidOccupiedSearch.hpp"
-#include "Gecko/Search/DirectLineSearch.hpp"
-#include "Gecko/Search/FollowRoadsSearch.hpp"
+#include "Gecko/Navigation/Search/AvoidOccupiedSearch.hpp"
+#include "Gecko/Navigation/Search/DirectLineSearch.hpp"
+#include "Gecko/Navigation/Search/FollowRoadsSearch.hpp"
 #include "Gecko/Validators/RoadPosition.hpp"
 #include "Gecko/Validators/SquareCenterPosition.hpp"
 

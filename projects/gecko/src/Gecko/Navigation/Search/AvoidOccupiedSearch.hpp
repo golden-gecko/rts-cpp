@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Gecko/Search/Search.hpp"
+#include "Gecko/Navigation/Search/Search.hpp"
 
 namespace Gecko
 {

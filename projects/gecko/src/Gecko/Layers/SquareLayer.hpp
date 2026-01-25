@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Gecko/Coordinate.hpp"
 #include "Gecko/Layers/Layer.hpp"
+#include "Gecko/Navigation/Coordinate.hpp"
 #include "Gecko/Tiles/SquareTile.hpp"
 
 namespace Gecko

@@ -1,4 +1,4 @@
-#include "Gecko/Search/FollowRoadsSearch.hpp"
+#include "Gecko/Navigation/Search/FollowRoadsSearch.hpp"
 
 #include "Gecko/DataLayers/DataLayer.hpp"
 #include "Gecko/Layers/SquareLayer.hpp"

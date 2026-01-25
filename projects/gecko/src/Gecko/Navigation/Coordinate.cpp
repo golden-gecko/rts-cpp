@@ -1,4 +1,4 @@
-#include "Gecko/Coordinate.hpp"
+#include "Gecko/Navigation/Coordinate.hpp"
 
 #include "Gecko/Utils/Convert.hpp"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Gecko/Coordinate.hpp"
+#include "Gecko/Navigation/Coordinate.hpp"
 
 namespace Gecko
 {

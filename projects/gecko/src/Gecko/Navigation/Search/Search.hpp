@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Gecko/Cache.hpp"
-#include "Gecko/Path.hpp"
+#include "Gecko/Navigation/Path.hpp"
 
 namespace Gecko
 {
