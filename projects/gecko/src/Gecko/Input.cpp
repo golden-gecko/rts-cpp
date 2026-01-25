@@ -124,7 +124,7 @@ namespace Gecko
             { Command::Value::UI_Show_Menu, std::bind(&UI::show_menu, UI::getSingletonPtr()) },
             { Command::Value::UI_Toggle_Floating_Description, std::bind(&UI::toggle_floating_description, UI::getSingletonPtr()) },
 
-            { Command::Value::Quit, std::bind(&Game::shutdown, Game::getSingletonPtr()) }
+            { Command::Value::Quit, std::bind(&Game::stop, Game::getSingletonPtr()) }
         };
 
         for (const auto& [command, function] : commands)

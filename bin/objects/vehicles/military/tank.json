@@ -17,7 +17,15 @@
             }
         },
         {
-            "configuration": "tracked"
+            "configuration": "tracked",
+            "mesh": {
+                "name": "tank.mesh",
+                "scale": {
+                    "x": 3.0,
+                    "y": 3.0,
+                    "z": 3.0
+                }
+            }
         }
     ],
     "creatable": {
