@@ -232,12 +232,12 @@ namespace Gecko
         }
 
     public:
-        auto begin() const
+        auto begin()
         {
             return m_value.begin();
         }
 
-        auto end() const
+        auto end()
         {
             return m_value.end();
         }

@@ -2,6 +2,7 @@
 
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Diplomacy.hpp"
+#include "Gecko/Containers/Processes.hpp"
 #include "Gecko/Containers/Resources.hpp"
 #include "Gecko/Containers/Selected.hpp"
 #include "Gecko/Managers/ObjectManager.hpp"
@@ -93,6 +94,12 @@ namespace Gecko
             if (get_id() == object->get_player_id())
             {
                 m_resources->merge(*(object->get_resources().get()));
+
+                for (const auto& [_, process] : *(object->get_processes().get()))
+                {
+                    m_resources->merge(*(process.get_in().get()));
+                    m_resources->merge(*(process.get_out().get()));
+                }
             }
         }
     }

@@ -45,7 +45,7 @@ namespace Gecko
 
         bool has_storage(const std::string& name, float value) const;
 
-        void merge(Resources& other);
+        void merge(const Resources& other);
 
         float remove(const std::string& name, float value);
 

@@ -9,12 +9,12 @@ namespace Gecko
         void add(const std::string& name, float value);
 
     public:
-        auto begin() const
+        auto begin()
         {
             return m_values.begin();
         }
 
-        auto end() const
+        auto end()
         {
             return m_values.end();
         }

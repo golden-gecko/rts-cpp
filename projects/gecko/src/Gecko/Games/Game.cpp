@@ -1041,7 +1041,6 @@ namespace Gecko
 
     void Game::init_scene()
     {
-        // TODO: Use "OctreeSceneManager".
         m_scene_manager = getRoot()->createSceneManager();
         m_scene_manager->addRenderQueueListener(this);
         m_scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::White));
@@ -1056,14 +1055,13 @@ namespace Gecko
         Ogre::RTShader::ShaderGenerator::getSingleton().addSceneManager(m_scene_manager);
 
         m_light = m_scene_manager->createLight();
-        // TODO: Makes all material black. Investigate.
-        // light->setDiffuseColour(m_configuration->get_color("scene.directional.color", Ogre::ColourValue::White));
+        m_light->setDiffuseColour(m_configuration->get_color("scene.directional.diffuse.color", Ogre::ColourValue::White));
+        m_light->setSpecularColour(m_configuration->get_color("scene.directional.specular.color", Ogre::ColourValue::White));
         m_light->setType(Ogre::Light::LightTypes::LT_DIRECTIONAL);
 
         m_light_scene_node = create_scene_node();
         m_light_scene_node->attachObject(m_light);
-        // TODO: Makes some parts of objects white. Investigate.
-        // light_scene_node->setDirection(m_configuration->get_vector3("scene.directional.direction"));
+        m_light_scene_node->setDirection(m_configuration->get_vector3("scene.directional.direction"));
     }
 
     void Game::deinit_maps()

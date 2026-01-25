@@ -84,14 +84,24 @@ namespace Gecko
         }
 
     public:
-        void set_current(float _current)
+        void set_consumption(float consumption)
         {
-            m_current = _current;
+            m_consumption = consumption;
         }
 
-        void set_maximal(float _maximal)
+        void set_production(float production)
         {
-            m_maximal = _maximal;
+            m_production = production;
+        }
+
+        void set_current(float current)
+        {
+            m_current = current;
+        }
+
+        void set_maximal(float maximal)
+        {
+            m_maximal = maximal;
         }
 
     public:

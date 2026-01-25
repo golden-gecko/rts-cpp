@@ -3,10 +3,11 @@
         {
             "configuration": "factory_hull",
             "mesh": {
-                "color": {
-                    "b": 0.5,
-                    "g": 0.5,
-                    "r": 0.5
+                "name": "ironworks.mesh",
+                "scale": {
+                    "x": 5.0,
+                    "y": 5.0,
+                    "z": 5.0
                 }
             }
         }

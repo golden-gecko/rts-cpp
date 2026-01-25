@@ -10,17 +10,10 @@ namespace Gecko
 
         m_render_system = Ogre::Root::getSingletonPtr()->getRenderSystem();
 
-        m_colour_blend_mode.blendType = Ogre::LBT_COLOUR;
-        m_colour_blend_mode.source1 = Ogre::LBS_DIFFUSE;
-        m_colour_blend_mode.source2 = Ogre::LBS_TEXTURE;
-        m_colour_blend_mode.operation = Ogre::LBX_MODULATE;
-
-        m_alpha_blend_mode.blendType = Ogre::LBT_ALPHA;
-        m_alpha_blend_mode.source1 = Ogre::LBS_DIFFUSE;
-        m_alpha_blend_mode.source2 = Ogre::LBS_TEXTURE;
-        m_alpha_blend_mode.operation = Ogre::LBX_MODULATE;
-
         m_scissor_enable = false;
+
+        m_window_width = window_width;
+        m_window_height = window_height;
 
         m_scissor_rect[0] = 0;
         m_scissor_rect[1] = 0;
@@ -32,7 +25,7 @@ namespace Gecko
 
     Rml::CompiledGeometryHandle RenderInterface::CompileGeometry(Rml::Span<const Rml::Vertex> vertices, Rml::Span<const int> indices)
     {
-        L_TIME("RenderInterface::CompileGeometry()");
+        // L_TIME("RenderInterface::CompileGeometry()");
 
         RocketCompiledGeometry* geometry = new RocketCompiledGeometry();
         // geometry->mTexture = (texture == NULL) ? NULL : (RocketTexture*)texture;
@@ -113,8 +106,6 @@ namespace Gecko
             auto ogre_texture = static_pointer_cast<Ogre::Texture>(ogre_resource);
 
             m_render_system->_setTexture(0, true, ogre_texture);
-            m_render_system->_setTextureBlendMode(0, m_colour_blend_mode);
-            m_render_system->_setTextureBlendMode(0, m_alpha_blend_mode);
         }
 
         m_render_system->_render(ogre3d_geometry->mRenderOperation);
@@ -218,7 +209,7 @@ namespace Gecko
 
     void RenderInterface::EnableScissorRegion(bool enable)
     {
-        L_TIME("RenderInterface::EnableScissorRegion()");
+        // L_TIME("RenderInterface::EnableScissorRegion()");
 
         m_scissor_enable = enable;
 
@@ -234,13 +225,13 @@ namespace Gecko
 
     void RenderInterface::SetScissorRegion(Rml::Rectanglei region)
     {
-        L_TIME("RenderInterface::SetScissorRegion()");
+        // L_TIME("RenderInterface::SetScissorRegion()");
 
         m_scissor_rect[0] = std::max<int>(0, region.Position().x);
         m_scissor_rect[1] = std::max<int>(0, region.Position().y);
 
-        m_scissor_rect[2] = region.Position().x + region.Width();
-        m_scissor_rect[3] = region.Position().y + region.Height();
+        m_scissor_rect[2] = std::min<int>(m_window_width, region.Position().x + region.Width());
+        m_scissor_rect[3] = std::min<int>(m_window_height, region.Position().y + region.Height());
 
         if (m_scissor_enable)
         {

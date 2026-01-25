@@ -85,12 +85,12 @@ namespace Gecko
 
     public:
         // TODO: Iterate over m_available or m_queue?
-        auto begin() const
+        auto begin()
         {
             return m_available.begin();
         }
 
-        auto end() const
+        auto end()
         {
             return m_available.end();
         }
