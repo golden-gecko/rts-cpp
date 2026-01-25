@@ -49,16 +49,16 @@
     "resources": {
         "items": {
             "Coal": {
-                "maximal": 10.0
+                "max": 10.0
             },
             "Iron": {
-                "maximal": 10.0
+                "max": 10.0
             },
             "Iron Ore": {
-                "maximal": 10.0
+                "max": 10.0
             },
             "Pollution": {
-                "maximal": 1000000.0
+                "max": 1000000.0
             }
         }
     }

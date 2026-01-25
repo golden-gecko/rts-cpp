@@ -45,7 +45,7 @@
     "resources": {
         "items": {
             "Energy": {
-                "maximal": 10.0
+                "max": 10.0
             }
         }
     }

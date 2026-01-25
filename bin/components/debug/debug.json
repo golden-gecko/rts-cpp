@@ -4,7 +4,7 @@
     },
     "health": {
         "current": 1.0,
-        "maximal": 1.0
+        "max": 1.0
     },
     "name": "Debug",
     "type": "Debug"

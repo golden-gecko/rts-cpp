@@ -151,7 +151,7 @@ namespace Gecko
             resource.set_consumption(resource.get_consumption() + i->second.get_consumption());
             resource.set_production(resource.get_production() + i->second.get_production());
             resource.set_current(resource.get_current() + i->second.get_current());
-            resource.set_maximal(resource.get_max() + i->second.get_max());
+            resource.set_max(resource.get_max() + i->second.get_max());
         }
     }
 

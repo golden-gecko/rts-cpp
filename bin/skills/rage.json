@@ -5,7 +5,7 @@
     "name": "Rage",
     "refresh_timer": {
         "current": 120.0,
-        "maximal": 120.0
+        "max": 120.0
     },
     "type": "Buff"
 }

@@ -56,13 +56,13 @@
     "resources": {
         "items": {
             "Bread": {
-                "maximal": 1000.0
+                "max": 1000.0
             },
             "Flour": {
-                "maximal": 1000.0
+                "max": 1000.0
             },
             "Wheat": {
-                "maximal": 1000.0
+                "max": 1000.0
             }
         }
     }

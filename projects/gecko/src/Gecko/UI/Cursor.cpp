@@ -172,7 +172,7 @@ namespace Gecko
             }
             else
             {
-                // TODO: Log warning.
+                L_WARNING << "Invalid cursor type.";
             }
         }
     }
@@ -258,7 +258,7 @@ namespace Gecko
         }
         else
         {
-            // TODO: Log warning.
+            L_WARNING << "Invalid cursor type.";
         }
     }
 }

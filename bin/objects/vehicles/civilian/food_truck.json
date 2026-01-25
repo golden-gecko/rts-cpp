@@ -24,13 +24,13 @@
     "resources": {
         "items": {
             "Flour": {
-                "maximal": 10.0
+                "max": 10.0
             },
             "Food": {
-                "maximal": 10.0
+                "max": 10.0
             },
             "Wheat": {
-                "maximal": 10.0
+                "max": 10.0
             }
         }
     }

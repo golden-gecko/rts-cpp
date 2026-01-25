@@ -1,16 +1,30 @@
 #include "Gecko/Cameras/ObjectFollowCamera.hpp"
 
-#include "Gecko/Input.hpp"
-#include "Gecko/Layers/SquareLayer.hpp"
-#include "Gecko/Managers/MapManager.hpp"
+#include "Gecko/Configuration.hpp"
 #include "Gecko/Managers/ObjectManager.hpp"
-#include "Gecko/Maps/Map.hpp"
 #include "Gecko/Objects/Object.hpp"
 
 namespace Gecko
 {
+    ConfigurationPtr ObjectFollowCamera::serialize() const
+    {
+        ConfigurationPtr configuration = base_type::serialize();
+
+        configuration->set("distance", m_distance);
+
+        return configuration;
+    }
+        
+    void ObjectFollowCamera::deserialize(const ConfigurationPtr& configuration)
+    {
+        base_type::deserialize(configuration);
+
+        m_distance = configuration->get_float("distance", 0.0f);
+    }
+
     void ObjectFollowCamera::update(float time)
     {
+        // TODO: Move smooth movement.
         Object* target = ObjectManager::getSingleton().get(m_target_id);
 
         if (target)
@@ -23,5 +37,6 @@ namespace Gecko
     ObjectFollowCamera::ObjectFollowCamera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration) :
         base_type(root, scene_manager, name, configuration)
     {
+        m_distance = configuration->get_float("distance", 0.0f);
     }
 }

@@ -10,7 +10,7 @@
         "rifle"
     ],
     "research_timer": {
-        "maximal": 120.0
+        "max": 120.0
     },
     "type": "Technology",
     "unlocks": [

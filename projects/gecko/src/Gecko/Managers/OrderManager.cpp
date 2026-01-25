@@ -295,7 +295,7 @@ namespace Gecko
 
         auto order_move = dynamic_cast<OrderWait*>(order);
 
-        order_move->get_wait_timer().set_maximal(time);
+        order_move->get_wait_timer().set_max(time);
 
         return order;
     }

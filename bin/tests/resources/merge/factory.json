@@ -2,11 +2,11 @@
     "items": {
         "Coal": {
             "current": 20.0,
-            "maximal": 80.0
+            "max": 80.0
         },
         "Iron Ore": {
             "current": 40.0,
-            "maximal": 60.0
+            "max": 60.0
         }
     }
 }

@@ -2,11 +2,11 @@
     "items": {
         "Iron Ore": {
             "current": 20.0,
-            "maximal": 60.0
+            "max": 60.0
         },
         "Unprocessed Iron Ore": {
             "current": 200.0,
-            "maximal": 800.0
+            "max": 800.0
         }
     }
 }

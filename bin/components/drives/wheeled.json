@@ -5,7 +5,7 @@
     },
     "health": {
         "current": 40.0,
-        "maximal": 40.0
+        "max": 40.0
     },
     "include": [
         "../components/drives/_drive.json"

@@ -42,10 +42,10 @@
     "resources": {
         "items": {
             "Bread": {
-                "maximal": 10.0
+                "max": 10.0
             },
             "Flour": {
-                "maximal": 10.0
+                "max": 10.0
             }
         }
     }

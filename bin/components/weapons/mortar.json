@@ -5,7 +5,7 @@
     },
     "health": {
         "current": 20.0,
-        "maximal": 20.0
+        "max": 20.0
     },
     "include": [
         "../components/weapons/_weapon.json"
@@ -27,7 +27,7 @@
     },
     "name": "Mortar",
     "reload_timer": {
-        "maximal": 3.0
+        "max": 3.0
     },
     "rotation_speed": 3.0
 }

@@ -6,7 +6,7 @@
     "percentage": 100.0,
     "refresh_timer": {
         "current": 60.0,
-        "maximal": 60.0
+        "max": 60.0
     },
     "type": "Repair"
 }

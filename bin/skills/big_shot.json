@@ -8,7 +8,7 @@
     "name": "Big Shot",
     "refresh_timer": {
         "current": 20.0,
-        "maximal": 20.0
+        "max": 20.0
     },
     "type": "FireMissile"
 }

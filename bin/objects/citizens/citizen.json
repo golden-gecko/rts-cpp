@@ -41,22 +41,22 @@
     "resources": {
         "items": {
             "Bread": {
-                "maximal": 1.0
+                "max": 1.0
             },
             "Coal": {
-                "maximal": 1.0
+                "max": 1.0
             },
             "Flour": {
-                "maximal": 1.0
+                "max": 1.0
             },
             "Iron": {
-                "maximal": 1.0
+                "max": 1.0
             },
             "Iron Ore": {
-                "maximal": 1.0
+                "max": 1.0
             },
             "Wheat": {
-                "maximal": 1.0
+                "max": 1.0
             }
         }
     },

@@ -12,11 +12,11 @@ def process_json_file(file_name):
 
     with open(file_name, 'w') as file:
         json.dump(configuration, file, indent=4, sort_keys=True)
-        file.write('\r\n')
+        file.write('\n')
 
 
 def format_json_configurations(path):
-    print('format_json_configurations(' + path + ')')
+    print('Format JSON configurations: ' + path)
 
     for file_name in glob.iglob(path, recursive=True):
         process_json_file(file_name)
@@ -34,14 +34,14 @@ def process_material_file(file_name):
 
 
 def format_materials(path):
-    print('format_materials(' + path + ')')
+    print('Format materials: ' + path)
 
     for file_name in glob.iglob(path, recursive=True):
         process_material_file(file_name)
 
 
 def main():
-    # format_json_configurations(os.path.join('..', '..', 'bin', '**', '*.json'))
+    format_json_configurations(os.path.join('..', '..', 'bin', '**', '*.json'))
     format_materials(os.path.join('..', '..', 'bin', 'meshes', '**', '*.material'))
 
 

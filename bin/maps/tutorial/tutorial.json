@@ -26,6 +26,7 @@
             "type": "Minimap"
         },
         {
+            "distance": 10.0,
             "look_at": {
                 "x": 100.0,
                 "y": 50.0,

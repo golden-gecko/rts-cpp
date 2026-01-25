@@ -39,7 +39,7 @@ namespace Gecko
 
         auto get_max_health() const
         {
-            return m_health_timer.get_maximal();
+            return m_health_timer.get_max();
         }
 
         const auto& get_name() const

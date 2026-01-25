@@ -170,7 +170,7 @@ namespace Gecko
         auto navigation_layer = layer->get_data_layer("Navigation");
 
         // If travel distance is greater than distance to next point in path,
-        // move to next point in path. Otherwise, move to maximal distance.
+        // move to next point in path. Otherwise, move to max distance.
         if (distance.squaredLength() > next_distance.squaredLength())
         {
             // TODO: Copy to "else".

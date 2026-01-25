@@ -486,7 +486,6 @@ namespace Gecko
 
     void Configuration::merge(const Json::Value& other)
     {
-        // TODO: Make function const.
         merge_json_objects(m_value, other);
     }
 }

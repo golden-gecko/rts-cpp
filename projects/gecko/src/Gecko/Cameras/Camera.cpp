@@ -22,7 +22,7 @@ namespace Gecko
         m_camera_scene_node->attachObject(m_camera);
         m_camera_scene_node->setFixedYawAxis(true);
 
-        // TODO: Use deserialize instead of constructor.
+        // TODO: Remove this from constructor. Does not work.
         deserialize(configuration);
 
         auto polygon_mode = configuration->get_string("polygon_mode", Settings::Camera::PolygonMode);

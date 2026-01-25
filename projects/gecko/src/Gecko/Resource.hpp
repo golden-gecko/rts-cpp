@@ -42,10 +42,9 @@ namespace Gecko
             return m_deposit_range;
         }
 
-        // TODO: Unify naming (max vs maximal).
         auto get_max() const
         {
-            return m_maximal;
+            return m_max;
         }
 
         const auto& get_name() const
@@ -75,7 +74,7 @@ namespace Gecko
 
         auto get_storage() const
         {
-            return m_maximal - m_current;
+            return m_max - m_current;
         }
 
         auto get_storage_range() const
@@ -99,9 +98,9 @@ namespace Gecko
             m_current = current;
         }
 
-        void set_maximal(float maximal)
+        void set_max(float max)
         {
-            m_maximal = maximal;
+            m_max = max;
         }
 
     public:
@@ -112,14 +111,14 @@ namespace Gecko
             return std::abs(m_consumption - other.m_consumption) < epsilon
                 && std::abs(m_production - other.m_production) < epsilon
                 && std::abs(m_current - other.m_current) < epsilon
-                && std::abs(m_maximal - other.m_maximal) < epsilon;
+                && std::abs(m_max - other.m_max) < epsilon;
         }
 
     private:
         std::string m_name;
 
         float m_current = 0.0f;
-        float m_maximal = 0.0f;
+        float m_max = 0.0f;
         float m_consumption = 0.0f;
         float m_production = 0.0f;
 

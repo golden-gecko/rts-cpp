@@ -46,13 +46,13 @@
     "resources": {
         "items": {
             "Iron": {
-                "maximal": 10.0
+                "max": 10.0
             },
             "Pollution": {
-                "maximal": 1000000.0
+                "max": 1000000.0
             },
             "Tools": {
-                "maximal": 10.0
+                "max": 10.0
             }
         }
     }

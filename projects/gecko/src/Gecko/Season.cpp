@@ -13,7 +13,7 @@ namespace Gecko
             m_color = configuration.get_color("color");
         }
 
-        m_timer.set_maximal(configuration.get_float("length", 10.0f));
+        m_timer.set_max(configuration.get_float("length", 10.0f));
     }
 
     void Season::init()

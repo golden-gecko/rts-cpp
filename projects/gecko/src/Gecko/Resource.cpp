@@ -17,7 +17,7 @@ namespace Gecko
         configuration->set("name", m_name);
 
         configuration->set("current", m_current);
-        configuration->set("maximal", m_maximal);
+        configuration->set("max", m_max);
         configuration->set("consumption", m_consumption);
         configuration->set("production", m_production);
 
@@ -35,7 +35,7 @@ namespace Gecko
     void Resource::deserialize(const ConfigurationPtr& configuration)
     {
         m_current = configuration->get_float("current", 0.0f);
-        m_maximal = configuration->get_float("maximal", 0.0f);
+        m_max = configuration->get_float("max", 0.0f);
         m_consumption = configuration->get_float("consumption", 0.0f);
         m_production = configuration->get_float("production", 0.0f);
 
@@ -55,13 +55,13 @@ namespace Gecko
 
     float Resource::add(float value)
     {
-        if (m_current + value > m_maximal)
+        if (m_current + value > m_max)
         {
-            value = m_maximal - m_current;
+            value = m_max - m_current;
         }
 
         m_current += value;
-        m_current = std::clamp(m_current, 0.0f, m_maximal);
+        m_current = std::clamp(m_current, 0.0f, m_max);
 
         return value;
     }
@@ -74,7 +74,7 @@ namespace Gecko
         }
 
         m_current -= value;
-        m_current = std::clamp(m_current, 0.0f, m_maximal);
+        m_current = std::clamp(m_current, 0.0f, m_max);
 
         return value;
     }

@@ -13,7 +13,7 @@ namespace Gecko
         void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
-        explicit Timer(float maximal = std::numeric_limits<float>::max());
+        explicit Timer(float max = std::numeric_limits<float>::max());
         explicit Timer(const Timer& other);
 
         Timer& update(float time);
@@ -24,14 +24,14 @@ namespace Gecko
             return m_current;
         }
 
-        float get_maximal() const
+        float get_max() const
         {
-            return m_maximal;
+            return m_max;
         }
 
         float get_progress() const
         {
-            return get_current() / get_maximal();
+            return get_current() / get_max();
         }
 
     public:
@@ -40,9 +40,9 @@ namespace Gecko
             m_current = current;
         }
 
-        void set_maximal(float maximal)
+        void set_max(float max)
         {
-            m_maximal = maximal;
+            m_max = max;
         }
 
         void reset()
@@ -55,11 +55,11 @@ namespace Gecko
         {
             static constexpr auto epsilon = std::numeric_limits<float>::epsilon();
 
-            return std::abs(m_maximal - m_current) < epsilon;
+            return std::abs(m_max - m_current) < epsilon;
         }
 
     private:
         float m_current = 0.0f;
-        float m_maximal = std::numeric_limits<float>::max();
+        float m_max = std::numeric_limits<float>::max();
     };
 }

@@ -12,6 +12,11 @@ namespace Gecko
         using base_type = Camera;
 
     public:
+        // From Serializable.
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
         // From Camera.
         void update(float time) override;
 
@@ -42,6 +47,6 @@ namespace Gecko
 
     private:
         Id m_target_id;
-        float m_distance = 10.0f; // TODO: Add to configuration.
+        float m_distance = 0.0f;
     };
 }

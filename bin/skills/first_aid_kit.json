@@ -5,7 +5,7 @@
     "name": "First Aid Kit",
     "refresh_timer": {
         "current": 60.0,
-        "maximal": 60.0
+        "max": 60.0
     },
     "type": "Repair",
     "value": 20.0

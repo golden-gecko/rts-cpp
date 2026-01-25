@@ -50,10 +50,10 @@
     "resources": {
         "items": {
             "Iron": {
-                "maximal": 100.0
+                "max": 100.0
             },
             "Pollution": {
-                "maximal": 1000000.0
+                "max": 1000000.0
             }
         }
     }

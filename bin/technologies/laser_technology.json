@@ -7,7 +7,7 @@
     },
     "name": "Laser Technology",
     "research_timer": {
-        "maximal": 240.0
+        "max": 240.0
     },
     "type": "Technology",
     "unlocks": [

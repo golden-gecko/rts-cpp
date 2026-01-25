@@ -4,7 +4,7 @@
     },
     "health": {
         "current": 100.0,
-        "maximal": 100.0
+        "max": 100.0
     },
     "include": [
         "../components/meshes/cube_centered_on_bottom.json"

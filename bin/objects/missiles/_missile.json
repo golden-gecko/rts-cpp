@@ -1,6 +1,6 @@
 {
     "alive_timer": {
-        "maximal": 3.0
+        "max": 3.0
     },
     "components": [
         {
@@ -9,7 +9,7 @@
     ],
     "health": {
         "current": 1.0,
-        "maximal": 1.0
+        "max": 1.0
     },
     "orders": {
         "available": [

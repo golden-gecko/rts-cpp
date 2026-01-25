@@ -6,7 +6,7 @@
     "defence": 4.0,
     "health": {
         "current": 10.0,
-        "maximal": 10.0
+        "max": 10.0
     },
     "include": [
         "../components/shields/_shield.json"

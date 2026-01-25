@@ -57,13 +57,13 @@
     "resources": {
         "items": {
             "Coal": {
-                "maximal": 1000.0
+                "max": 1000.0
             },
             "Iron": {
-                "maximal": 1000.0
+                "max": 1000.0
             },
             "Iron Ore": {
-                "maximal": 1000.0
+                "max": 1000.0
             }
         }
     }
