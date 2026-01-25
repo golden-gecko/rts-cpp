@@ -7,44 +7,13 @@
 #include "Gecko/Managers/MapManager.hpp"
 #include "Gecko/Maps/Map.hpp"
 #include "Gecko/Settings.hpp"
-#include "Gecko/UI/UI.hpp"
 
 namespace Gecko
 {
-    void Preview::update(float time)
-    {
-        // TODO: Hardcoded map and camera.
-        auto map = MapManager::getSingleton().begin()->second;
-        auto camera = map->get_camera("Preview");
-
-        if (camera)
-        {
-            // TODO: Hardcoded map.
-            auto map = MapManager::getSingleton().begin()->second;
-            auto ui = UI::getSingletonPtr();
-
-            // Save state.
-            // auto grid_visibility = map->is_grid_visible();
-            // auto ui_visibility = ui->save_visibility();
-
-            // Disable.
-            // map->show_grid(false);
-            // ui->set_visible(false);
-
-            // Render.
-            // m_viewport->clear();
-            // m_viewport->update();
-
-            // Enable.
-            // map->show_grid(grid_visibility);
-            // ui->restore_visibility(ui_visibility);
-        }
-    }
-
     Preview::Preview()
     {
         m_texture = Ogre::TextureManager::getSingleton().createManual(
-            "texture_preview",
+            m_texture_name,
             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
             Ogre::TEX_TYPE_2D,
             m_texture_size, m_texture_size,
@@ -53,20 +22,21 @@ namespace Gecko
             Ogre::TU_RENDERTARGET
         );
 
-        // TODO: Hardcoded map and camera.
-        auto map = MapManager::getSingleton().begin()->second;
-        auto camera = map->get_camera("Preview");
+        MapPtr map = Game::getSingleton().get_active_map();
 
-        if (camera)
+        if (map)
         {
-            camera->get_camera()->setAspectRatio(1.0f);
+            CameraPtr camera = map->get_camera("Preview");
 
-            m_render_texture = m_texture->getBuffer()->getRenderTarget();
+            if (camera)
+            {
+                m_render_texture = m_texture->getBuffer()->getRenderTarget();
 
-            m_viewport = m_render_texture->addViewport(camera->get_camera());
-            m_viewport->setOverlaysEnabled(false);
-            m_viewport->setShadowsEnabled(false);
-            m_viewport->setSkiesEnabled(false);
+                m_viewport = m_render_texture->addViewport(camera->get_camera());
+                m_viewport->setOverlaysEnabled(false);
+                m_viewport->setShadowsEnabled(false);
+                m_viewport->setSkiesEnabled(false);
+            }
         }
     }
 

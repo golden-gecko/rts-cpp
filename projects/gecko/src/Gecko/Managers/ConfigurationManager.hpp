@@ -11,7 +11,7 @@ namespace Gecko
     public:
         explicit ConfigurationManager(bool cache = true);
 
-        void parse_configuration_files();
+        void parse_configuration_files(const std::vector<std::string>& directories);
         void parse_directory(const std::string& directory);
 
         void save_cache() const;

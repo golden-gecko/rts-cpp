@@ -39,23 +39,23 @@ namespace Gecko
     void UI::init()
     {
         // TODO: Get window size.
-        render_interface = std::make_shared<RenderInterface>(1920, 1200);
-        system_interface = std::make_shared<SystemInterface>();
+        m_render_interface = std::make_shared<RenderInterface>(1920, 1200);
+        m_system_interface = std::make_shared<SystemInterface>();
 
-        Rml::SetRenderInterface(render_interface.get());
-        Rml::SetSystemInterface(system_interface.get());
+        Rml::SetRenderInterface(m_render_interface.get());
+        Rml::SetSystemInterface(m_system_interface.get());
 
         Rml::Initialise();
 
         // TODO: Get window size.
-        context = Rml::CreateContext("main", Rml::Vector2i(1920, 1200));
+        m_context = Rml::CreateContext("main", Rml::Vector2i(1920, 1200));
 
         init_data_bindings();
 
         // TODO: Move to configuration.
         if (false)
         {
-            Rml::Debugger::Initialise(context);
+            Rml::Debugger::Initialise(m_context);
         }
 
         // Load fonts.
@@ -71,7 +71,7 @@ namespace Gecko
 
         // Load cursor.
         /*
-        Rml::ElementDocument* cursor = context->LoadMouseCursor(getResourceFullPath("cursor.rml").c_str());
+        Rml::ElementDocument* cursor = m_context->LoadMouseCursor(getResourceFullPath("cursor.rml").c_str());
 
         if (cursor)
         {
@@ -87,21 +87,23 @@ namespace Gecko
 
     void UI::deinit()
     {
-        cursor.reset();
-        minimap.reset();
-        preview.reset();
-        selection_box.reset();
+        m_cursor.reset();
+        m_minimap.reset();
+        m_preview.reset();
+        m_selection_box.reset();
 
         Rml::Shutdown();
     }
 
     void UI::update(float time)
     {
-        if (refresh_time.update(time))
-        {
-            refresh_time.reset();
+        L_TIME("UI::update()");
 
-            auto hovered_object = ObjectManager::getSingleton().get(hovered_object_id);
+        if (m_refresh_time.update(time))
+        {
+            m_refresh_time.reset();
+
+            auto hovered_object = ObjectManager::getSingleton().get(m_hovered_object_id);
 
             if (hovered_object)
             {
@@ -195,9 +197,6 @@ namespace Gecko
             }
 
             // set_saves(Game::getSingleton().get_saves());
-
-            get_minimap().update(time);
-            get_preview().update(time);
         }
     }
 
@@ -234,7 +233,7 @@ namespace Gecko
             return;
         }
 
-        context->Update();
+        m_context->Update();
 
         // Set up the projection and view matrices.
         float z_near = -1.0f;
@@ -283,7 +282,7 @@ namespace Gecko
         render_system->_setSceneBlending(Ogre::SBF_SOURCE_ALPHA, Ogre::SBF_ONE_MINUS_SOURCE_ALPHA);
         render_system->_setDepthBias(0, 0);
 
-        context->Render();
+        m_context->Render();
     }
 
     void UI::change_visibility(const std::string& type, bool visible)
@@ -572,7 +571,7 @@ namespace Gecko
     void UI::inject_key_press(char key_code)
     {
         // TODO: Fill the last argument.
-        context->ProcessKeyDown(Utils::Convert::to_rmlui_key(key_code), 0);
+        m_context->ProcessKeyDown(Utils::Convert::to_rmlui_key(key_code), 0);
 
         switch (Utils::Convert::to_rmlui_key(key_code))
         {
@@ -589,32 +588,32 @@ namespace Gecko
     void UI::inject_key_release(char key_code)
     {
         // TODO: Fill the last argument.
-        context->ProcessKeyUp(Utils::Convert::to_rmlui_key(key_code), 0);
+        m_context->ProcessKeyUp(Utils::Convert::to_rmlui_key(key_code), 0);
     }
 
     void UI::inject_mouse_move(std::size_t x, std::size_t y)
     {
         // TODO: Convert types and fill the last argument.
-        context->ProcessMouseMove(x, y, 0);
+        m_context->ProcessMouseMove(x, y, 0);
     }
 
     void UI::inject_mouse_press(std::size_t x, std::size_t y, OIS::MouseButtonID id)
     {
         // TODO: Fill the last argument.
-        context->ProcessMouseButtonDown(Utils::Convert::to_rmlui_button(id), 0);
+        m_context->ProcessMouseButtonDown(Utils::Convert::to_rmlui_button(id), 0);
     }
 
     void UI::inject_mouse_release(std::size_t x, std::size_t y, OIS::MouseButtonID id)
     {
         // TODO: Fill the last argument.
-        context->ProcessMouseButtonUp(Utils::Convert::to_rmlui_button(id), 0);
+        m_context->ProcessMouseButtonUp(Utils::Convert::to_rmlui_button(id), 0);
     }
 
     bool UI::is_mouse_inside(std::size_t x, std::size_t y)
     {
         Rml::ElementList elements;
 
-        document->GetElementsByClassName(elements, "panel");
+        m_document->GetElementsByClassName(elements, "panel");
 
         for (Rml::Element* element : elements)
         {
@@ -695,7 +694,7 @@ namespace Gecko
 
         if (selection_box_state != state.end())
         {
-            selection_box->set_visible(selection_box_state->second);
+            m_selection_box->set_visible(selection_box_state->second);
         }
 
         auto ui_layers_state = state.find("ui_layers");
@@ -724,7 +723,7 @@ namespace Gecko
 
     void UI::toggle_floating_description()
     {
-        floating_description = !floating_description;
+        m_floating_description = !m_floating_description;
     }
 
     void UI::set_visible(bool visible)
@@ -923,9 +922,9 @@ namespace Gecko
         }
     }
 
-    void UI::set_hovered_object_id(const Id& object_id)
+    void UI::set_hovered_object_id(const Id& hovered_object_id)
     {
-        hovered_object_id = object_id;
+        m_hovered_object_id = hovered_object_id;
     }
 
     void UI::set_info(const ConfigurationPtr& info)
@@ -952,19 +951,6 @@ namespace Gecko
 
     void UI::set_objects_admin()
     {
-        // TODO: Fix cache.
-        /*
-        // Update cache.
-        static ObjectManager::Container objects_cache;
-
-        if (objects_cache == objects)
-        {
-            return;
-        }
-
-        objects_cache = objects;
-        */
-
         // Update UI.
         m_objects_admin.clear();
 
@@ -1046,19 +1032,6 @@ namespace Gecko
 
     void UI::set_players()
     {
-        // TODO: Fix cache.
-        /*
-        // Update cache.
-        static PlayerManager::Container players_cache;
-
-        if (players_cache == players)
-        {
-            return;
-        }
-
-        players_cache = players;
-        */
-        
         // Update UI.
         m_players.clear();
 
@@ -1108,7 +1081,6 @@ namespace Gecko
     void UI::set_resources(const std::shared_ptr<Resources>& resources)
     {
         // Update cache.
-        /*
         static Resources resources_cache;
 
         if (resources_cache == (*(resources.get())))
@@ -1117,7 +1089,6 @@ namespace Gecko
         }
 
         resources_cache = (*(resources.get()));
-        */
 
         // Update UI.
         m_resources.clear();
@@ -1143,9 +1114,6 @@ namespace Gecko
 
     void UI::set_saves(const std::vector<std::string>& saves)
     {
-        // Update cache.
-        // TODO: Fix.
-
         // Update UI.
         m_saves.clear();
 
@@ -1219,9 +1187,6 @@ namespace Gecko
 
     void UI::set_terrain_layers(const std::set<std::string>& layers)
     {
-        /*
-        TODO: Fix.
-
         // Update cache.
         static std::set<std::string> layers_cache;
 
@@ -1230,6 +1195,9 @@ namespace Gecko
             return;
         }
 
+        layers_cache = layers;
+
+        /*
         // Create JSON.
         Json::Value json_layers;
 
@@ -1250,9 +1218,6 @@ namespace Gecko
 
     void UI::set_water_layers(const std::set<std::string>& layers)
     {
-        /*
-        TODO: Fix.
-
         // Update cache.
         static std::set<std::string> layers_cache;
 
@@ -1261,6 +1226,9 @@ namespace Gecko
             return;
         }
 
+        layers_cache = layers;
+
+        /*
         // Create JSON.
         Json::Value json_layers;
 
@@ -1281,17 +1249,17 @@ namespace Gecko
 
     void UI::init_components()
     {
-        cursor = std::make_unique<Cursor>();
-        minimap = std::make_unique<Minimap>();
-        preview = std::make_unique<Preview>();
-        selection_box = std::make_unique<SelectionBox>();
+        m_cursor = std::make_unique<Cursor>();
+        m_minimap = std::make_unique<Minimap>();
+        m_preview = std::make_unique<Preview>();
+        m_selection_box = std::make_unique<SelectionBox>();
     }
 
     void UI::init_data_bindings()
     {
         // Register types.
         {
-            if (auto constructor = context->CreateDataModel("types"))
+            if (auto constructor = m_context->CreateDataModel("types"))
             {
                 if (auto handle = constructor.RegisterStruct<Data_Diplomacy>())
                 {
@@ -1358,7 +1326,7 @@ namespace Gecko
 
         // Configurations.
         {
-            if (auto constructor = context->CreateDataModel("configurations"))
+            if (auto constructor = m_context->CreateDataModel("configurations"))
             {
                 constructor.Bind("configuration_name", &m_configuration_name);
                 constructor.Bind("configurations", &m_configurations);
@@ -1369,7 +1337,7 @@ namespace Gecko
 
         // Diplomacy.
         {
-            if (auto constructor = context->CreateDataModel("diplomacy"))
+            if (auto constructor = m_context->CreateDataModel("diplomacy"))
             {
                 constructor.Bind("diplomacy", &m_diplomacy);
 
@@ -1379,7 +1347,7 @@ namespace Gecko
 
         // Info.
         {
-            if (auto constructor = context->CreateDataModel("info"))
+            if (auto constructor = m_context->CreateDataModel("info"))
             {
                 constructor.Bind("info", &m_info);
 
@@ -1389,7 +1357,7 @@ namespace Gecko
 
         // Load menu.
         {
-            if (auto constructor = context->CreateDataModel("load_menu"))
+            if (auto constructor = m_context->CreateDataModel("load_menu"))
             {
                 constructor.Bind("saves", &m_saves);
 
@@ -1399,7 +1367,7 @@ namespace Gecko
 
         // Log.
         {
-            if (auto constructor = context->CreateDataModel("log"))
+            if (auto constructor = m_context->CreateDataModel("log"))
             {
                 constructor.Bind("log", &m_log);
 
@@ -1409,7 +1377,7 @@ namespace Gecko
 
         // Map menu.
         {
-            if (auto constructor = context->CreateDataModel("map_menu"))
+            if (auto constructor = m_context->CreateDataModel("map_menu"))
             {
                 constructor.Bind("maps", &m_maps);
 
@@ -1419,7 +1387,7 @@ namespace Gecko
 
         // Objects admin.
         {
-            if (auto constructor = context->CreateDataModel("objects_admin"))
+            if (auto constructor = m_context->CreateDataModel("objects_admin"))
             {
                 constructor.Bind("objects_admin", &m_objects_admin);
 
@@ -1429,7 +1397,7 @@ namespace Gecko
 
         // Orders.
         {
-            if (auto constructor = context->CreateDataModel("orders"))
+            if (auto constructor = m_context->CreateDataModel("orders"))
             {
                 constructor.Bind("order_name", &m_order_name);
                 constructor.Bind("orders", &m_orders);
@@ -1440,7 +1408,7 @@ namespace Gecko
 
         // Orders admin.
         {
-            if (auto constructor = context->CreateDataModel("orders_admin"))
+            if (auto constructor = m_context->CreateDataModel("orders_admin"))
             {
                 constructor.Bind("orders_admin", &m_orders_admin);
 
@@ -1450,7 +1418,7 @@ namespace Gecko
 
         // Players.
         {
-            if (auto constructor = context->CreateDataModel("players"))
+            if (auto constructor = m_context->CreateDataModel("players"))
             {
                 constructor.Bind("players", &m_players);
 
@@ -1460,7 +1428,7 @@ namespace Gecko
 
         // Resources.
         {
-            if (auto constructor = context->CreateDataModel("resources"))
+            if (auto constructor = m_context->CreateDataModel("resources"))
             {
                 constructor.Bind("resources", &m_resources);
 
@@ -1470,7 +1438,7 @@ namespace Gecko
 
         // Statistics.
         {
-            if (auto constructor = context->CreateDataModel("statistics"))
+            if (auto constructor = m_context->CreateDataModel("statistics"))
             {
                 constructor.Bind("statistics", &m_statistics);
 
@@ -1480,7 +1448,7 @@ namespace Gecko
 
         // Skills.
         {
-            if (auto constructor = context->CreateDataModel("skills"))
+            if (auto constructor = m_context->CreateDataModel("skills"))
             {
                 constructor.Bind("skill_name", &m_skill_name);
                 constructor.Bind("skills", &m_skills);
@@ -1491,7 +1459,7 @@ namespace Gecko
 
         // Technologies.
         {
-            if (auto constructor = context->CreateDataModel("technologies"))
+            if (auto constructor = m_context->CreateDataModel("technologies"))
             {
                 constructor.Bind("technologies", &m_technologies);
 
@@ -1507,20 +1475,20 @@ namespace Gecko
         // TODO: Warning on first call.
         Rml::Debugger::Shutdown();
 
-        context->UnloadAllDocuments();
+        m_context->UnloadAllDocuments();
 
-        document = context->LoadDocument(m_configuration->get_string("layout"));
-        document->ReloadStyleSheet();
-        document->Show();
+        m_document = m_context->LoadDocument(m_configuration->get_string("layout"));
+        m_document->ReloadStyleSheet();
+        m_document->Show();
 
-        Rml::Debugger::Initialise(context);
+        Rml::Debugger::Initialise(m_context);
     }
 
     void UI::init_events()
     {
-        event_listener_instancer = std::make_shared<EventListenerInstancer>();
+        m_event_listener_instancer = std::make_shared<EventListenerInstancer>();
 
-    	Rml::Factory::RegisterEventListenerInstancer(event_listener_instancer.get());
+    	Rml::Factory::RegisterEventListenerInstancer(m_event_listener_instancer.get());
     }
 
     void UI::init_fonts()

@@ -177,41 +177,25 @@ namespace Gecko
 
         while (getRoot()->endRenderingQueued() == false)
         {
-            if (false)
+            current_time = Utils::Time::get();
+
+            frame_time = Utils::Time::get_duration(previous_time, current_time);
+
+            elasped_time += frame_time;
+
+            if (elasped_time >= Settings::Game::FrameTime)
             {
-                current_time = Utils::Time::get();
-
-                frame_time = Utils::Time::get_duration(previous_time, current_time);
-
-                elasped_time += frame_time;
-
-                if (elasped_time >= Settings::Game::FrameTime)
-                {
-                    pollEvents();
-
-                    update_input(Settings::Game::FrameTime);
-                    update(Settings::Game::FrameTime);
-
-                    getRoot()->renderOneFrame();
-
-                    elasped_time -= std::floor((elasped_time / Settings::Game::FrameTime)) * Settings::Game::FrameTime;
-                }
-
-                previous_time = current_time;
-            }
-            else
-            {
-                current_time = Utils::Time::get();
-
                 pollEvents();
 
-                update_input(Utils::Time::get_duration(previous_time, current_time));
-                update(Utils::Time::get_duration(previous_time, current_time));
+                update_input(Settings::Game::FrameTime);
+                update(Settings::Game::FrameTime);
 
-                getRoot()->renderOneFrame();
-
-                previous_time = current_time;
+                elasped_time -= std::floor((elasped_time / Settings::Game::FrameTime)) * Settings::Game::FrameTime;
             }
+
+            getRoot()->renderOneFrame();
+
+            previous_time = current_time;
         }
     }
 
@@ -567,6 +551,12 @@ namespace Gecko
         */
     }
 
+    Map* Game::get_active_map() const
+    {
+        // TODO: Hardcoded first map.
+        return MapManager::getSingleton().begin()->second;
+    }
+
     Player* Game::get_active_player() const
     {
         return PlayerManager::getSingleton().get(m_active_player_id);
@@ -574,16 +564,14 @@ namespace Gecko
 
     std::vector<std::string> Game::get_maps() const
     {
-        auto maps_path = m_configuration->get_string("options.maps.path", Settings::Game::SavesPath);
-
-        if (std::filesystem::exists(maps_path) == false)
+        if (std::filesystem::exists(Settings::Game::SavesPath) == false)
         {
             return {};
         }
 
         std::vector<std::string> maps;
 
-        for (auto directory = std::filesystem::directory_iterator(maps_path); directory != std::filesystem::directory_iterator(); ++directory)
+        for (auto directory = std::filesystem::directory_iterator(Settings::Game::SavesPath); directory != std::filesystem::directory_iterator(); ++directory)
         {
             if (std::filesystem::is_directory(directory->path()))
             {
@@ -602,16 +590,14 @@ namespace Gecko
 
     std::vector<std::string> Game::get_saves() const
     {
-        auto saves_path = m_configuration->get_string("options.saves.path", Settings::Game::SavesPath);
-
-        if (std::filesystem::exists(saves_path) == false)
+        if (std::filesystem::exists(Settings::Game::SavesPath) == false)
         {
             return {};
         }
 
         std::vector<std::string> saves;
 
-        for (auto file = std::filesystem::directory_iterator(saves_path); file != std::filesystem::directory_iterator(); ++file)
+        for (auto file = std::filesystem::directory_iterator(Settings::Game::SavesPath); file != std::filesystem::directory_iterator(); ++file)
         {
             if (file->path().extension() == Settings::Configuration::Extension)
             {
@@ -973,9 +959,8 @@ namespace Gecko
 
     void Game::init_meshes()
     {
-        auto meshes_path = m_configuration->get_string("options.cache.meshes.path", Settings::Cache::MeshesPath);
-        const auto& mesh_name = Settings::UI::SelectionMesh;
-        auto mesh_path = std::filesystem::path(meshes_path) / std::filesystem::path(mesh_name);
+        auto meshes_path = Settings::Cache::MeshesPath;
+        auto mesh_path = std::filesystem::path(meshes_path) / std::filesystem::path(Settings::UI::SelectionMesh);
 
         if (std::filesystem::exists(mesh_path) == false)
         {
@@ -1011,7 +996,7 @@ namespace Gecko
             selection->end();
 
             // Save mesh to cache.
-            auto mesh = selection->convertToMesh(mesh_name);
+            auto mesh = selection->convertToMesh(Settings::UI::SelectionMesh);
 
             if (m_configuration->get_bool("options.cache.meshes.enabled", true))
             {

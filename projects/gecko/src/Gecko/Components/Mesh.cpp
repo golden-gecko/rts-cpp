@@ -107,152 +107,155 @@ namespace Gecko
     void Mesh::load_from_vertices()
     {
         auto game_configuration = Game::getSingleton().get_configuration();
-        auto meshes_path = game_configuration->get_string("options.cache.meshes.path", Settings::Cache::MeshesPath);
+        auto meshes_path = Settings::Cache::MeshesPath;
         auto mesh_name = get_owner()->get_configuration()->get_name() + "_" + m_configuration->get_name() + ".mesh";
         auto mesh_path = std::filesystem::path(meshes_path) / std::filesystem::path(mesh_name);
 
-        if (std::filesystem::exists(mesh_path) == false)
+        if (!Ogre::MeshManager::getSingleton().getByName(mesh_name))
         {
-            std::vector<Ogre::Vector3> vertices;
-            std::vector<Ogre::ColourValue> colors;
-            std::vector<std::vector<Ogre::Vector2>> texture_coordinates;
-            std::vector<Ogre::Vector3> normals;
-            std::vector<std::uint32_t> indices;
-
-            // Load vertices.
-            const auto model_vertices = m_configuration->get_child_optional("mesh.vertices");
-
-            if (model_vertices)
+            if (std::filesystem::exists(mesh_path) == false)
             {
-                if (model_vertices.value()->size() % 3 != 0)
+                std::vector<Ogre::Vector3> vertices;
+                std::vector<Ogre::ColourValue> colors;
+                std::vector<std::vector<Ogre::Vector2>> texture_coordinates;
+                std::vector<Ogre::Vector3> normals;
+                std::vector<std::uint32_t> indices;
+
+                // Load vertices.
+                const auto model_vertices = m_configuration->get_child_optional("mesh.vertices");
+
+                if (model_vertices)
                 {
-                    throw std::runtime_error("Vertices size must be multiple of 3.");
+                    if (model_vertices.value()->size() % 3 != 0)
+                    {
+                        throw std::runtime_error("Vertices size must be multiple of 3.");
+                    }
+
+                    vertices.reserve(model_vertices.value()->size() / 3);
+
+                    auto j = model_vertices.value()->begin();
+
+                    for (size_t i = 0; i < model_vertices.value()->size(); i += 3)
+                    {
+                        auto x = j->asFloat(); j++;
+                        auto y = j->asFloat(); j++;
+                        auto z = j->asFloat(); j++;
+
+                        vertices.emplace_back(x, y, z);
+                    }
                 }
 
-                vertices.reserve(model_vertices.value()->size() / 3);
+                // Load colors.
+                auto color = m_configuration->get_color("mesh.color", Ogre::ColourValue::White);
+                colors.resize(vertices.size(), color);
 
-                auto j = model_vertices.value()->begin();
-
-                for (size_t i = 0; i < model_vertices.value()->size(); i += 3)
-                {
-                    auto x = j->asFloat(); j++;
-                    auto y = j->asFloat(); j++;
-                    auto z = j->asFloat(); j++;
-
-                    vertices.emplace_back(x, y, z);
-                }
-            }
-
-            // Load colors.
-            auto color = m_configuration->get_color("mesh.color", Ogre::ColourValue::White);
-            colors.resize(vertices.size(), color);
-
-            // Load texture coordinates.
-            // TODO: Implement.
-
-            // Load normals.
-            const auto model_normals = m_configuration->get_child_optional("mesh.normals");
-
-            if (model_normals)
-            {
-                if (model_normals.value()->size() % 3 != 0)
-                {
-                    throw std::runtime_error("Normals size must be multiple of 3.");
-                }
-
-                normals.reserve(model_normals.value()->size() / 3);
-
-                auto j = model_normals.value()->begin();
-
-                for (size_t i = 0; i < model_normals.value()->size(); i += 3)
-                {
-                    auto x = j->asFloat(); j++;
-                    auto y = j->asFloat(); j++;
-                    auto z = j->asFloat(); j++;
-
-                    normals.emplace_back(x, y, z);
-                }
-            }
-
-            // Load indices.
-            const auto model_indices = m_configuration->get_child_optional("mesh.indices");
-
-            if (model_indices)
-            {
-                indices.reserve(model_indices.value()->size());
-
-                for (const auto& i : *(model_indices.value()))
-                {
-                    indices.emplace_back(static_cast<std::uint32_t>(i.asInt64()));
-                }
-            }
-
-            if (vertices.empty())
-            {
-                throw Exception("Mesh has no vertices.");
-            }
-
-            if (vertices.size() != colors.size())
-            {
-                throw Exception("Colors has different size than vertices.");
-            }
-
-            if (vertices.size() != normals.size())
-            {
-                throw Exception("Normals has different size than vertices.");
-            }
-
-            for (auto i = 0; i < texture_coordinates.size(); i++)
-            {
-                if (vertices.size() != texture_coordinates[i].size())
-                {
-                    throw Exception("Texture coordinates has different size than vertices.");
-                }
-            }
-
-            auto mesh = Game::getSingleton().create_manual_object();
-            auto material_name = m_configuration->get_string("mesh.material_name", "white");
-
-            mesh->begin(material_name);
-
-            for (auto i = 0; i < vertices.size(); i++)
-            {
-                mesh->position(vertices[i]);
-                mesh->colour(colors[i]);
-                mesh->normal(normals[i]);
-
+                // Load texture coordinates.
                 // TODO: Implement.
-                mesh->textureCoord(0.0f, 0.0f);
 
-                for (auto j = 0; j < texture_coordinates.size(); ++j)
+                // Load normals.
+                const auto model_normals = m_configuration->get_child_optional("mesh.normals");
+
+                if (model_normals)
                 {
-                    mesh->textureCoord(texture_coordinates[j][i]);
+                    if (model_normals.value()->size() % 3 != 0)
+                    {
+                        throw std::runtime_error("Normals size must be multiple of 3.");
+                    }
+
+                    normals.reserve(model_normals.value()->size() / 3);
+
+                    auto j = model_normals.value()->begin();
+
+                    for (size_t i = 0; i < model_normals.value()->size(); i += 3)
+                    {
+                        auto x = j->asFloat(); j++;
+                        auto y = j->asFloat(); j++;
+                        auto z = j->asFloat(); j++;
+
+                        normals.emplace_back(x, y, z);
+                    }
                 }
-            }
 
-            for (auto i : indices)
-            {
-                mesh->index(i);
-            }
+                // Load indices.
+                const auto model_indices = m_configuration->get_child_optional("mesh.indices");
 
-            mesh->end();
-            auto _mesh = mesh->convertToMesh(mesh_name);
-
-            // Save mesh to cache.
-            if (game_configuration->get_bool("options.cache.meshes.enabled", true))
-            {
-                Ogre::MeshSerializer serializer;
-
-                if (std::filesystem::exists(meshes_path) == false)
+                if (model_indices)
                 {
-                    std::filesystem::create_directories(meshes_path);
+                    indices.reserve(model_indices.value()->size());
+
+                    for (const auto& i : *(model_indices.value()))
+                    {
+                        indices.emplace_back(static_cast<std::uint32_t>(i.asInt64()));
+                    }
                 }
 
-                serializer.exportMesh(_mesh.get(), mesh_path.string());
-            }
+                if (vertices.empty())
+                {
+                    throw Exception("Mesh has no vertices.");
+                }
 
-            // Destroy manual object.
-            Game::getSingleton().destroy_manual_object(mesh);
+                if (vertices.size() != colors.size())
+                {
+                    throw Exception("Colors has different size than vertices.");
+                }
+
+                if (vertices.size() != normals.size())
+                {
+                    throw Exception("Normals has different size than vertices.");
+                }
+
+                for (auto i = 0; i < texture_coordinates.size(); i++)
+                {
+                    if (vertices.size() != texture_coordinates[i].size())
+                    {
+                        throw Exception("Texture coordinates has different size than vertices.");
+                    }
+                }
+
+                auto mesh = Game::getSingleton().create_manual_object();
+                auto material_name = m_configuration->get_string("mesh.material_name", "white");
+
+                mesh->begin(material_name);
+
+                for (auto i = 0; i < vertices.size(); i++)
+                {
+                    mesh->position(vertices[i]);
+                    mesh->colour(colors[i]);
+                    mesh->normal(normals[i]);
+
+                    // TODO: Implement.
+                    mesh->textureCoord(0.0f, 0.0f);
+
+                    for (auto j = 0; j < texture_coordinates.size(); ++j)
+                    {
+                        mesh->textureCoord(texture_coordinates[j][i]);
+                    }
+                }
+
+                for (auto i : indices)
+                {
+                    mesh->index(i);
+                }
+
+                mesh->end();
+                auto _mesh = mesh->convertToMesh(mesh_name);
+
+                // Save mesh to cache.
+                if (game_configuration->get_bool("options.cache.meshes.enabled", true))
+                {
+                    Ogre::MeshSerializer serializer;
+
+                    if (std::filesystem::exists(meshes_path) == false)
+                    {
+                        std::filesystem::create_directories(meshes_path);
+                    }
+
+                    serializer.exportMesh(_mesh.get(), mesh_path.string());
+                }
+
+                // Destroy manual object.
+                Game::getSingleton().destroy_manual_object(mesh);
+            }
         }
 
         m_entity = Game::getSingleton().create_entity(mesh_name);

@@ -1,5 +1,10 @@
 {
     "options": {
+        "cache": {
+            "meshes": {
+                "enabled": false
+            }
+        },
         "input": {
             "mouse": {
                 "sensitivity": {
@@ -7,12 +12,6 @@
                     "y": -0.2
                 }
             }
-        },
-        "maps": {
-            "path": "../maps"
-        },
-        "saves": {
-            "path": "../saves"
         },
         "scene": {
             "fog_of_war": {

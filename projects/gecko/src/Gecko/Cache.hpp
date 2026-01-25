@@ -6,6 +6,8 @@ namespace Gecko
     class Cache
     {
     public:
+        explicit Cache() = default;
+
         std::optional<Value> get(const Key& key) const
         {
             auto value = m_cache.find(key);

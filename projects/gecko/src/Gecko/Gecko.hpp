@@ -93,6 +93,7 @@ namespace Gecko
     using CameraPtr = std::shared_ptr<Camera>;
     using ConfigurationPtr = std::shared_ptr<Configuration>;
     using LayerPtr = std::shared_ptr<Layer>;
+    using MapPtr = Map*; // TODO: Replace with shared_ptr<Map>.
     using ResourcePtr = std::shared_ptr<Resource>;
     using ResourcesPtr = std::shared_ptr<Resources>;
     using SeasonPtr = std::shared_ptr<Season>;
@@ -103,5 +104,5 @@ namespace Gecko
     typedef std::vector<std::vector<std::vector<Ogre::Vector2>>> TextureCoordinates;
     typedef std::vector<std::vector<Ogre::Vector3>> Vertices;
 
-    typedef int Index;
+    typedef std::uint32_t Index;
 }

@@ -6,13 +6,8 @@
 
 namespace Gecko
 {
-    class Preview :
-        public Updatable
+    class Preview
     {
-    public:
-        // From Updatable.
-        void update(float time) override;
-
     public:
         explicit Preview();
 
@@ -26,11 +21,11 @@ namespace Gecko
         void set_visible(bool visible);
 
     private:
-        Ogre::TexturePtr m_texture = nullptr;
+        Ogre::TexturePtr     m_texture        = nullptr;
         Ogre::RenderTexture* m_render_texture = nullptr;
-        Ogre::Viewport* m_viewport = nullptr;
+        Ogre::Viewport*      m_viewport       = nullptr;
 
+        std::string   m_texture_name = "texture_preview";
         std::uint16_t m_texture_size = 256;
-        std::uint16_t m_size = 128;
     };
 }

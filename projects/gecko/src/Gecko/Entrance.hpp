@@ -5,15 +5,15 @@ namespace Gecko
     class Entrance
     {
     public:
-        Entrance(const Ogre::Vector3& position, const Ogre::Vector3& direction);
+        explicit Entrance(const Ogre::Vector3& position, const Ogre::Vector3& direction);
 
     public:
-        const auto& get_direction() const
+        const Ogre::Vector3& get_direction() const
         {
             return m_direction;
         }
 
-        const auto& get_position() const
+        const Ogre::Vector3& get_position() const
         {
             return m_position;
         }

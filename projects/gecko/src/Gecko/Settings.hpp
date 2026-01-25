@@ -6,10 +6,9 @@ namespace Gecko
     {
         namespace Cache
         {
-            const std::string BlueprintsPath = "../cache/configurations";
-            const std::string GpuPath        = "../cache/gpu_cache.bin";
-            const std::string MeshesPath     = "../cache/meshes";
-            const std::string ValuesPath     = "../cache/values";
+            const std::string ConfigurationsPath = "../cache/configurations";
+            const std::string MeshesPath         = "../cache/meshes";
+            const std::string ValuesPath         = "../cache/values";
         }
 
         namespace Camera
@@ -26,24 +25,21 @@ namespace Gecko
         namespace Configuration
         {
             const std::vector<std::string> Directories = { "../components", "../games", "../maps", "../objects", "../orders", "../players", "../skills", "../technologies" };
-            const std::string Extension                = ".json";
+            const std::string              Extension   = ".json";
         }
 
         namespace Game
         {
-            const float       DistanceComparisionMinValue = 0.01f;
-            const float       FrameTime                   = 1.0f / 30.0f;
-            const float       MinCollisionDistance        = 0.1f;
-            const float       MinWeaponAngle              = 1.0f;
-            const std::string OgrePluginsFile             = "plugins.cfg";
-            const std::string OgreConfigurationFile       = "ogre.cfg";
-            const std::string OgreLogFile                 = "ogre.log";
-            const std::size_t OrderMaxAttemptsToComplete  = 3;
-            const float       OrderWaitTime               = 3.0f;
-            const float       ResourceLoadingMinDistance  = 20.0f;
-            const float       ResourcePriority            = 1.0f;
-            const float       ResourceTransportMinValue   = 1.0f;
-            const std::string SavesPath                   = "../saves";
+            const float         DistanceComparisionMinValue = 0.01f;
+            const float         FrameTime                   = 1.0f / 60.0f;
+            const float         MinCollisionDistance        = 0.1f;
+            const float         MinWeaponAngle              = 1.0f;
+            const std::uint16_t OrderMaxAttemptsToComplete  = 3;
+            const float         OrderWaitTime               = 3.0f;
+            const float         ResourceLoadingMinDistance  = 20.0f;
+            const float         ResourcePriority            = 1.0f;
+            const float         ResourceTransportMinValue   = 1.0f;
+            const std::string   SavesPath                   = "../saves";
         }
 
         namespace Input
@@ -58,21 +54,11 @@ namespace Gecko
             const Ogre::Vector3 LookAtObjectOffset  = Ogre::Vector3(100.0f, 100.0f, 100.0f);
             const bool          MinimapVisibility   = true;
             const bool          PreviewVisibility   = true;
-            const float         RefreshInterval     = 0.1f;
+            const float         RefreshInterval     = 0.2f;
             const float         SelectionBoxMinSize = 0.0001f;
             const std::string   SelectionMesh       = "selection.mesh";
             const Ogre::Vector3 SelectionOffset     = Ogre::Vector3(0.0f, 0.1f, 0.0f);
             const Ogre::Vector3 SelectionScale      = Ogre::Vector3(1.2f, 1.0f, 1.2f);
-        }
-
-        namespace Window
-        {
-            const bool        Fullscreen   = false;
-            const std::string MainName     = "Main";
-            const int         PositionLeft = 0;
-            const int         PositionTop  = 0;
-            const int         SizeWidth    = 1024;
-            const int         SizeHeight   = 768;
         }
     }
 }

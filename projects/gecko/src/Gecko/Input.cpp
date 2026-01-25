@@ -175,7 +175,7 @@ namespace Gecko
         }
         else if (is_mouse_button_pressed(OIS::MouseButtonID::MB_Middle))
         {
-            camera->rotate(Ogre::Degree(x * mouse_sensitivity.x), Ogre::Degree(y * mouse_sensitivity.y));
+            camera->rotate(Ogre::Degree(x * m_mouse_sensitivity.x), Ogre::Degree(y * m_mouse_sensitivity.y));
 
             UI::getSingleton().get_cursor().set_visible(true);
         }
@@ -257,7 +257,7 @@ namespace Gecko
         {
             for (auto j = i->begin(); j != i->end(); ++j)
             {
-                commands[Command::from_string(i.key().asString())].emplace(Key::from_string(j->asString()));
+                m_commands[Command::from_string(i.key().asString())].emplace(Key::from_string(j->asString()));
             }
         }
 
@@ -338,9 +338,9 @@ namespace Gecko
 
     bool Input::is_key_pressed(Command::Value command) const
     {
-        auto keys = commands.find(command);
+        auto keys = m_commands.find(command);
 
-        if (keys == commands.end())
+        if (keys == m_commands.end())
         {
             return false;
         }
@@ -365,9 +365,9 @@ namespace Gecko
         return m_mouse->getMouseState().buttonDown(mouse_button);
     }
 
-    void Input::set_mouse_sensitivity(const Ogre::Vector2& sensivity)
+    void Input::set_mouse_sensitivity(const Ogre::Vector2& mouse_sensitivity)
     {
-        mouse_sensitivity = sensivity;
+        m_mouse_sensitivity = mouse_sensitivity;
     }
 
     void Input::set_render_window_handle(unsigned long render_window_handle)

@@ -96,27 +96,27 @@ namespace Gecko
 
         auto& get_cursor()
         {
-            return *cursor.get();
+            return *m_cursor.get();
         }
 
         const auto& get_cursor() const
         {
-            return *cursor.get();
+            return *m_cursor.get();
         }
 
         Rml::ElementDocument* get_document() const
         {
-            return document;
+            return m_document;
         }
 
         auto& get_minimap()
         {
-            return *minimap.get();
+            return *m_minimap.get();
         }
 
         const auto& get_minimap() const
         {
-            return *minimap.get();
+            return *m_minimap.get();
         }
 
         auto get_order_name() const
@@ -131,22 +131,22 @@ namespace Gecko
 
         auto& get_preview()
         {
-            return *preview.get();
+            return *m_preview.get();
         }
 
         const auto& get_preview() const
         {
-            return *preview.get();
+            return *m_preview.get();
         }
 
         auto& get_selection_box()
         {
-            return *selection_box.get();
+            return *m_selection_box.get();
         }
 
         const auto& get_selection_box() const
         {
-            return *selection_box.get();
+            return *m_selection_box.get();
         }
 
         const auto& get_skill_name() const
@@ -159,7 +159,7 @@ namespace Gecko
         void set_configurations(const std::set<std::string>& configurations);
         void set_diplomacy();
         void set_floating_descriptions();
-        void set_hovered_object_id(const Id& object_id);
+        void set_hovered_object_id(const Id& hovered_object_id);
         void set_info(const ConfigurationPtr& info);
         void set_layers(const std::map<std::string, std::shared_ptr<Layer>>& layers);
         void set_maps(const std::vector<std::string>& maps);
@@ -180,30 +180,30 @@ namespace Gecko
     private:
         ConfigurationPtr m_configuration;
 
-        std::shared_ptr<RenderInterface> render_interface;
-        std::shared_ptr<SystemInterface> system_interface;
+        std::shared_ptr<RenderInterface> m_render_interface;
+        std::shared_ptr<SystemInterface> m_system_interface;
 
-        Rml::Context* context = nullptr;
-        Rml::ElementDocument* document = nullptr;
+        Rml::Context* m_context = nullptr;
+        Rml::ElementDocument* m_document = nullptr;
 
-        std::unique_ptr<Cursor> cursor;
-        std::unique_ptr<Minimap> minimap;
-        std::unique_ptr<Preview> preview;
-        std::unique_ptr<SelectionBox> selection_box;
+        std::unique_ptr<Cursor> m_cursor;
+        std::unique_ptr<Minimap> m_minimap;
+        std::unique_ptr<Preview> m_preview;
+        std::unique_ptr<SelectionBox> m_selection_box;
 
-        Id hovered_object_id;
+        Id m_hovered_object_id;
 
-        bool floating_description = false;
+        bool m_floating_description = false;
         bool m_visible = true;
 
-        Timer refresh_time = Timer(Settings::UI::RefreshInterval);
+        Timer m_refresh_time = Timer(Settings::UI::RefreshInterval);
 
         std::string m_configuration_name = "None";
         std::string m_order_name = "None";
         order_type::Value m_order_type = order_type::Value::None;
         std::string m_skill_name = "None";
 
-        std::shared_ptr<EventListenerInstancer> event_listener_instancer;
+        std::shared_ptr<EventListenerInstancer> m_event_listener_instancer;
 
         void init_components();
         void init_data_bindings();

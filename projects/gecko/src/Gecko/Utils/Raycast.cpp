@@ -328,7 +328,6 @@ namespace Gecko::Utils::Raycast
 
             if (layer)
             {
-                // TODO: Restore.
                 return std::make_pair(layer, closest_result);
             }
 

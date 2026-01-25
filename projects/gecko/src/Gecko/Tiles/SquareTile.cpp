@@ -54,7 +54,7 @@ namespace Gecko
 
         // Get meshes cache configuration.
         auto game_configuration = Game::getSingleton().get_configuration();
-        auto meshes_path = game_configuration->get_string("options.cache.meshes.path", Settings::Cache::MeshesPath);
+        auto meshes_path = Settings::Cache::MeshesPath;
         auto mesh_name = get_mesh_name();
         auto mesh_path = std::filesystem::path(meshes_path) / std::filesystem::path(mesh_name);
 

@@ -57,7 +57,7 @@ namespace Gecko
         bool is_mouse_button_pressed(OIS::MouseButtonID mouse_button) const;
 
     public:
-        void set_mouse_sensitivity(const Ogre::Vector2& sensivity);
+        void set_mouse_sensitivity(const Ogre::Vector2& mouse_sensitivity);
         void set_render_window_handle(unsigned long render_window_handle);
         void set_window_size(int width, int height);
 
@@ -71,9 +71,9 @@ namespace Gecko
         OIS::Keyboard* m_keyboard = nullptr;
         OIS::Mouse* m_mouse = nullptr;
 
-        std::map<Command::Value, std::set<OIS::KeyCode>> commands;
+        std::map<Command::Value, std::set<OIS::KeyCode>> m_commands;
 
-        Ogre::Vector2 mouse_sensitivity = Settings::Input::MouseSensivity;
+        Ogre::Vector2 m_mouse_sensitivity = Settings::Input::MouseSensivity;
 
         void process_attack_order(const OIS::MouseEvent& arg);
         void process_create_order(const OIS::MouseEvent& arg);

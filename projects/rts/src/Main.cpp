@@ -12,6 +12,7 @@
 #include <Gecko/Managers/PlayerManager.hpp>
 #include <Gecko/Managers/SkillManager.hpp>
 #include <Gecko/NVIDIA.hpp>
+#include <Gecko/Settings.hpp>
 #include <Gecko/Statistics.hpp>
 #include <Gecko/Technologies/TechnologyTree.hpp>
 #include <Gecko/UI/UI.hpp>
@@ -25,7 +26,7 @@ int main(int argc, char* argv[])
     // Parse configuration files.
     auto configuration_manager = std::make_unique<Gecko::ConfigurationManager>(false);
 
-    configuration_manager->parse_configuration_files();
+    configuration_manager->parse_configuration_files(Gecko::Settings::Configuration::Directories);
     configuration_manager->save_cache();
 
     // Parse command line options.

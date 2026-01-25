@@ -389,13 +389,8 @@ namespace Gecko
 
     std::string Configuration::get_cache_file_path() const
     {
-        using namespace std::filesystem;
-
-        // TODO: Move to configuration.
-        auto cache_path
-            = path("..")
-            / path("cache")
-            / path("configurations")
+        std::filesystem::path cache_path
+            = std::filesystem::path(Settings::Cache::ConfigurationsPath)
             / boost::replace_all_copy(m_file_name, "/", "_");
 
         return cache_path.string();
@@ -403,13 +398,8 @@ namespace Gecko
 
     std::string Configuration::get_value_cache_file_path() const
     {
-        using namespace std::filesystem;
-
-        // TODO: Move to configuration.
-        auto cache_path
-            = path("..")
-            / path("cache")
-            / path("values")
+        std::filesystem::path cache_path
+            = std::filesystem::path(Settings::Cache::ValuesPath)
             / boost::replace_all_copy(m_file_name, "/", "_");
 
         return cache_path.string();
