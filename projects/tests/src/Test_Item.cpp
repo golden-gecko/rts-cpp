@@ -47,13 +47,13 @@ TEST(item, item_initialization)
 
 TEST(item, item_is_deserialized_after_deinitialization)
 {
-    auto configuration = std::make_shared<Gecko::Configuration>("../objects/plants/tree.json");
+    auto configuration = std::make_shared<Gecko::Configuration>("../objects/plants/tree_01.json");
     auto item = std::make_shared<Character>();
 
     item->deserialize(configuration);
     item->init();
     item->deinit();
 
-    EXPECT_EQ(item->get_configuration()->get_name(), "tree");
+    EXPECT_EQ(item->get_configuration()->get_name(), "tree_01");
     EXPECT_EQ(item->get_id().is_valid(), false);
 }

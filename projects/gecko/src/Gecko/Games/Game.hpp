@@ -41,7 +41,6 @@ namespace Gecko
         void quit();
         void run();
         void save();
-        void shutdown();
         void unload_map();
         void update_input(float time);
 

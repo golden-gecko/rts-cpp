@@ -4,6 +4,9 @@
 #include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Timer.hpp"
+#include "Gecko/UI/Cursor.hpp"
+#include "Gecko/UI/Minimap.hpp"
+#include "Gecko/UI/Preview.hpp"
 #include "Gecko/UI/SelectionBox.hpp"
 
 namespace Gecko

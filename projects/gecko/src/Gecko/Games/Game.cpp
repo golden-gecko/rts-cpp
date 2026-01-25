@@ -323,11 +323,6 @@ namespace Gecko
         */
     }
 
-    void Game::shutdown()
-    {
-        getRoot()->queueEndRendering();
-    }
-
     void Game::unload_map()
     {
         L_TIME("Game::unload_map()");
