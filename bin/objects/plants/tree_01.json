@@ -3,7 +3,7 @@
         {
             "configuration": "hull",
             "mesh": {
-                "name": "Tree1.mesh"
+                "name": "tree_01.mesh"
             }
         }
     ],

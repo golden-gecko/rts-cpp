@@ -3,11 +3,11 @@
         {
             "configuration": "mine_hull",
             "mesh": {
-                "name": "machine_barrelLarge.mesh",
+                "name": "mine.mesh",
                 "scale": {
-                    "x": 10.0,
-                    "y": 10.0,
-                    "z": 10.0
+                    "x": 5.0,
+                    "y": 5.0,
+                    "z": 5.0
                 }
             }
         }
