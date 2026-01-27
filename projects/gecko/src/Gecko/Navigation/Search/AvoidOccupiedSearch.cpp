@@ -3,7 +3,7 @@
 #include "Gecko/DataLayers/DataLayer.hpp"
 #include "Gecko/Layers/Layer.hpp"
 
-namespace Gecko
+namespace Gecko::Navigation
 {
     std::optional<Path::Points> AvoidOccupiedSearch::get_path(const Ogre::Vector3& from, const Ogre::Vector3& to)
     {

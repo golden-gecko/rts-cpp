@@ -18,15 +18,15 @@ namespace Gecko::Utils
         return scene_node._getDerivedPosition();
     }
 
-    Coordinate get_index_from_position(float x, float z, const Ogre::Vector3& scale)
+    Navigation::Coordinate get_index_from_position(float x, float z, const Ogre::Vector3& scale)
     {
         auto x_index = static_cast<Index>(std::floorf(x / scale.x));
         auto z_index = static_cast<Index>(std::floorf(z / scale.z));
 
-        return Coordinate(x_index, 0, z_index);
+        return Navigation::Coordinate(x_index, 0, z_index);
     }
 
-    Coordinate get_index_from_position(const Ogre::Vector3& position, const Ogre::Vector3& scale)
+    Navigation::Coordinate get_index_from_position(const Ogre::Vector3& position, const Ogre::Vector3& scale)
     {
         return get_index_from_position(position.x, position.z, scale);
     }

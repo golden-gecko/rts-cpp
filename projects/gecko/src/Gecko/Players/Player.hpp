@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Gecko/Item.hpp"
+#include "Gecko/Containers/Selected.hpp"
 
 namespace Gecko
 {
@@ -51,12 +52,22 @@ namespace Gecko
             return m_selected;
         }
 
+        Id get_first_selected()
+        {
+            if (m_selected->size() > 0)
+            {
+                return *(m_selected->begin());
+            }
+
+            return Id::Empty;
+        }
+
     private:
         std::string m_name;
         std::string m_color;
 
         std::shared_ptr<Diplomacy> m_diplomacy;
         std::shared_ptr<Resources> m_resources;
-        std::shared_ptr<Selected> m_selected;
+        std::shared_ptr<Selected>  m_selected;
     };
 }

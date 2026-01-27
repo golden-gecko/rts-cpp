@@ -111,7 +111,7 @@ namespace Gecko
         }
     }
 
-    void DataLayer::add(const Coordinate& index, const Area& area, int value)
+    void DataLayer::add(const Navigation::Coordinate& index, const Area& area, int value)
     {
         for (int z = index.z - area.get_start().z; z <= index.z + area.get_end().z; ++z)
         {
@@ -127,7 +127,7 @@ namespace Gecko
         m_dirty = true;
     }
 
-    void DataLayer::remove(const Coordinate& index, const Area& area, int value)
+    void DataLayer::remove(const Navigation::Coordinate& index, const Area& area, int value)
     {
         for (int z = index.z - area.get_start().z; z <= index.z + area.get_end().z; ++z)
         {

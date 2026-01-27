@@ -1,6 +1,6 @@
 #include "Gecko/Navigation/Search/Search.hpp"
 
-namespace Gecko
+namespace Gecko::Navigation
 {
     Search::Search(const Layer& layer) :
         m_layer(layer)

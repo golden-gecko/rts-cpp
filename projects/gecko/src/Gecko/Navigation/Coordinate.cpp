@@ -2,7 +2,7 @@
 
 #include "Gecko/Utils/Convert.hpp"
 
-namespace Gecko
+namespace Gecko::Navigation
 {
     Coordinate::Coordinate(Index x, Index y, Index z) :
         x(x),

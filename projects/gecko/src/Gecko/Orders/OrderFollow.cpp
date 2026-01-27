@@ -32,7 +32,7 @@ namespace Gecko
     {
         base_type::init();
 
-        set_path(Path());
+        set_path(Navigation::Path());
         set_target_id(Id::Empty);
     }
 
@@ -51,6 +51,6 @@ namespace Gecko
         base_type::deserialize(configuration);
 
         target_id = configuration->get_int("target_id", Id::Empty.get());
-        path = configuration->get_path("path", Path());
+        path = configuration->get_path("path", Navigation::Path());
     }
 }

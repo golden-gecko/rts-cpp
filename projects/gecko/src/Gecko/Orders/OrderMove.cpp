@@ -33,7 +33,7 @@ namespace Gecko
         base_type::init();
 
         set_target_position(Ogre::Vector3::ZERO);
-        set_path(Path());
+        set_path(Navigation::Path());
     }
 
     ConfigurationPtr OrderMove::serialize() const
@@ -51,6 +51,6 @@ namespace Gecko
         base_type::deserialize(configuration);
 
         target_position = configuration->get_vector3("target_position", Ogre::Vector3::ZERO);
-        path = configuration->get_path("path", Path());
+        path = configuration->get_path("path", Navigation::Path());
     }
 }

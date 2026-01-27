@@ -10,6 +10,33 @@
 
 namespace Gecko
 {
+    void Mesh::init()
+    {
+        base_type::init();
+
+        if (m_configuration->has_member("mesh.name"))
+        {
+            load_from_file();
+        }
+        else if (m_configuration->has_member("mesh.vertices"))
+        {
+            load_from_vertices();
+        }
+        else
+        {
+            throw Exception("Mesh m_configuration has neither 'mesh.name' or 'mesh.vertices'.");
+        }
+
+        auto position = m_configuration->get_vector3("position", Ogre::Vector3::ZERO);
+        auto scale = m_configuration->get_vector3("mesh.scale", Ogre::Vector3::UNIT_SCALE);
+
+        m_scene_node = get_owner()->get_scene_node().createChildSceneNode();
+        m_scene_node->attachObject(m_entity);
+        m_scene_node->setFixedYawAxis(true);
+        m_scene_node->setPosition(position);
+        m_scene_node->setScale(scale);
+    }
+
     Mesh* Mesh::create(Mesh* memory, const ConfigurationPtr& m_configuration)
     {
         auto component = new (memory) Mesh();
@@ -53,33 +80,6 @@ namespace Gecko
     Ogre::Vector3 Mesh::get_direction() const
     {
         return Utils::get_node_direction(*m_scene_node);
-    }
-
-    void Mesh::init()
-    {
-        base_type::init();
-
-        if (m_configuration->has_member("mesh.name"))
-        {
-            load_from_file();
-        }
-        else if (m_configuration->has_member("mesh.vertices"))
-        {
-            load_from_vertices();
-        }
-        else
-        {
-            throw Exception("Mesh m_configuration has neither 'mesh.name' or 'mesh.vertices'.");
-        }
-
-        auto position = m_configuration->get_vector3("position", Ogre::Vector3::ZERO);
-        auto scale = m_configuration->get_vector3("mesh.scale", Ogre::Vector3::UNIT_SCALE);
-
-        m_scene_node = get_owner()->get_scene_node().createChildSceneNode();
-        m_scene_node->attachObject(m_entity);
-        m_scene_node->setFixedYawAxis(true);
-        m_scene_node->setPosition(position);
-        m_scene_node->setScale(scale);
     }
 
     void Mesh::set_owner(Object* _owner)

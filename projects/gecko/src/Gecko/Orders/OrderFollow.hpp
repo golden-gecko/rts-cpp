@@ -37,7 +37,7 @@ namespace Gecko
         }
 
     public:
-        void set_path(const Path& _path)
+        void set_path(const Navigation::Path& _path)
         {
             path = _path;
         }
@@ -49,6 +49,6 @@ namespace Gecko
 
     private:
         Id target_id;
-        Path path;
+        Navigation::Path path;
     };
 }

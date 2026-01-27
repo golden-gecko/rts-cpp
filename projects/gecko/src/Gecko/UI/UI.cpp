@@ -1,6 +1,7 @@
 #include "Gecko/UI/UI.hpp"
 
 #include "Gecko/Cameras/Camera.hpp"
+#include "Gecko/Components/Indicator.hpp"
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Components.hpp"
 #include "Gecko/Containers/Orders.hpp"
@@ -16,6 +17,7 @@
 #include "Gecko/Managers/PlayerManager.hpp"
 #include "Gecko/Maps/Map.hpp"
 #include "Gecko/Objects/Object.hpp"
+#include "Gecko/Orders/OrderMove.hpp"
 #include "Gecko/Players/Player.hpp"
 #include "Gecko/Statistics.hpp"
 #include "Gecko/System.hpp"
@@ -97,8 +99,6 @@ namespace Gecko
 
     void UI::update(float time)
     {
-        L_TIME("UI::update()");
-
         if (m_refresh_time.update(time))
         {
             m_refresh_time.reset();
@@ -113,19 +113,14 @@ namespace Gecko
             }
             else if (Game::getSingleton().get_active_player() && Game::getSingleton().get_active_player()->get_selected()->size())
             {
-                // TODO: Optimize. Get only first.
-                for (const auto& id : *(Game::getSingleton().get_active_player()->get_selected()))
+                Id selected_id = Game::getSingleton().get_active_player()->get_first_selected();
+                ObjectPtr selected = ObjectManager::getSingleton().get(selected_id);
+
+                if (selected)
                 {
-                    auto object = ObjectManager::getSingleton().get(id);
+                    set_info(selected->get_info());
 
-                    if (object)
-                    {
-                        set_info(object->get_info());
-
-                        UI::getSingleton().get_preview().get_camera()->set_target_id(object->get_id());
-
-                        break;
-                    }
+                    UI::getSingleton().get_preview().get_camera()->set_target_id(selected_id);
                 }
             }
             else
@@ -925,6 +920,43 @@ namespace Gecko
     void UI::set_hovered_object_id(const Id& hovered_object_id)
     {
         m_hovered_object_id = hovered_object_id;
+
+        ObjectPtr hovered_object = ObjectManager::getSingleton().get(hovered_object_id);
+
+        if (hovered_object && hovered_object->get_orders()->get_queue().size())
+        {
+            Id order_id = hovered_object->get_orders()->get_queue().front();
+            OrderPtr order = OrderManager::getSingleton().get(order_id);
+
+            if (order)
+            {
+                switch (order->get_type())
+                {
+                    case order_type::Value::Move:
+                    {
+                        OrderMove* order_move = dynamic_cast<OrderMove*>(order);
+
+                        ObjectPtr sender = ObjectManager::getSingleton().get(order->get_sender_id());
+                        ObjectPtr receiver = ObjectManager::getSingleton().get(order->get_receiver_id());
+
+                        if (order_move && sender && receiver)
+                        {
+                            std::shared_ptr<Circle> circle = std::make_shared<Circle>();
+
+                            circle->init();
+                            circle->set_position(order_move->get_target_position());
+
+                            std::shared_ptr<Path> path = std::make_shared<Path>();
+
+                            circle->init();
+                            circle->set_position(order_move->get_target_position());
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     void UI::set_info(const ConfigurationPtr& info)

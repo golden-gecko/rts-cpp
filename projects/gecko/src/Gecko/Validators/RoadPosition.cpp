@@ -11,7 +11,7 @@ namespace Gecko
 
     Ogre::Vector3 RoadPosition::validate(const Ogre::Vector3& position, const Ogre::Vector3& direction) const
     {
-        const Coordinate& index = m_layer.get_index(position);
+        const Navigation::Coordinate& index = m_layer.get_index(position);
         const Ogre::Vector3& scale = m_layer.get_scale();
 
         return Ogre::Vector3(

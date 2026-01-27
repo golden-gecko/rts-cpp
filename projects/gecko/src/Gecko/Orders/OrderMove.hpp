@@ -54,7 +54,7 @@ namespace Gecko
         }
 
     public:
-        void set_path(const Path& _path)
+        void set_path(const Navigation::Path& _path)
         {
             path = _path;
         }
@@ -66,6 +66,6 @@ namespace Gecko
 
     private:
         Ogre::Vector3 target_position = Ogre::Vector3::ZERO;
-        Path path;
+        Navigation::Path path;
     };
 }

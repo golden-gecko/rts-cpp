@@ -2,7 +2,7 @@
 
 #include "Gecko/Navigation/Coordinate.hpp"
 
-namespace Gecko
+namespace Gecko::Navigation
 {
     class Path
     {

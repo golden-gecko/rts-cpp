@@ -19,7 +19,7 @@ namespace Gecko
         deserialize_search(configuration);
     }
 
-    std::optional<Path::Points> Layer::search(const Ogre::Vector3& from, const Ogre::Vector3& to) const
+    std::optional<Navigation::Path::Points> Layer::search(const Ogre::Vector3& from, const Ogre::Vector3& to) const
     {
         // TODO: Check.
         return m_search->get_path(from, to);
@@ -108,15 +108,15 @@ namespace Gecko
 
             if (search_name == "AvoidOccupied")
             {
-                m_search = std::make_shared<AvoidOccupiedSearch>(*this);
+                m_search = std::make_shared<Navigation::AvoidOccupiedSearch>(*this);
             }
             else if (search_name == "DirectLine")
             {
-                m_search = std::make_shared<DirectLineSearch>(*this);
+                m_search = std::make_shared<Navigation::DirectLineSearch>(*this);
             }
             else if (search_name == "FollowRoads")
             {
-                m_search = std::make_shared<FollowRoadsSearch>(*this);
+                m_search = std::make_shared<Navigation::FollowRoadsSearch>(*this);
             }
             else
             {
@@ -125,7 +125,7 @@ namespace Gecko
         }
         else
         {
-            m_search = std::make_shared<DirectLineSearch>(*this);
+            m_search = std::make_shared<Navigation::DirectLineSearch>(*this);
         }
     }
 }

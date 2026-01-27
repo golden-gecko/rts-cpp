@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Gecko
+namespace Gecko::Navigation
 {
     class Coordinate
     {

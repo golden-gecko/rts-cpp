@@ -6,7 +6,7 @@
 #include "Gecko/Validators/SquareCenterPosition.hpp"
 #include "Gecko/Validators/RoadPosition.hpp"
 
-namespace Gecko
+namespace Gecko::Navigation
 {
     std::optional<Path::Points> FollowRoadsSearch::get_path(const Ogre::Vector3& from, const Ogre::Vector3& to)
     {

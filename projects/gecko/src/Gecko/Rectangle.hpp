@@ -7,12 +7,12 @@ namespace Gecko
     struct Rectangle
     {
     public:
-        Coordinate start;
-        Coordinate end;
+        Navigation::Coordinate start;
+        Navigation::Coordinate end;
 
     public:
         explicit Rectangle() = default;
-        explicit Rectangle(const Coordinate& start, const Coordinate& end);
+        explicit Rectangle(const Navigation::Coordinate& start, const Navigation::Coordinate& end);
         explicit Rectangle(Index start_x, Index start_z, Index end_x, Index end_z);
 
     public:

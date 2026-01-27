@@ -215,13 +215,13 @@ namespace Gecko
         return default_value;
     }
 
-    Path Configuration::get_path(const std::string& path) const
+    Navigation::Path Configuration::get_path(const std::string& path) const
     {
         // TODO: Implement.
-        return Path();
+        return Navigation::Path();
     }
 
-    Path Configuration::get_path(const std::string& path, const Path& default_value) const
+    Navigation::Path Configuration::get_path(const std::string& path, const Navigation::Path& default_value) const
     {
         if (has_member(path))
         {
@@ -298,7 +298,7 @@ namespace Gecko
         set<decltype(Ogre::ColourValue::a)>(path + ".a", value.a);
     }
 
-    void Configuration::set(const std::string& path, const Path& value)
+    void Configuration::set(const std::string& path, const Navigation::Path& value)
     {
         // TODO: Implement.
     }

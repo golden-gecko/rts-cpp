@@ -120,7 +120,7 @@ namespace Gecko
         return true;
     }
 
-    bool SquareLayer::is_index_valid(const Coordinate& coordinate) const
+    bool SquareLayer::is_index_valid(const Navigation::Coordinate& coordinate) const
     {
         return is_index_valid(coordinate.x, coordinate.z);
     }
@@ -149,12 +149,12 @@ namespace Gecko
         return is_position_valid(position.x, position.z);
     }
 
-    Coordinate SquareLayer::get_index(float x, float z) const
+    Navigation::Coordinate SquareLayer::get_index(float x, float z) const
     {
         return Utils::get_index_from_position(x, z, get_grid_scale());
     }
 
-    Coordinate SquareLayer::get_index(const Ogre::Vector3& position) const
+    Navigation::Coordinate SquareLayer::get_index(const Ogre::Vector3& position) const
     {
         return get_index(position.x, position.z);
     }
@@ -418,7 +418,7 @@ namespace Gecko
             for (auto x = 0; x < shards_per_row; ++x)
             {
                 tiles[x][z].set_owner(this);
-                tiles[x][z].set_tile_position(Coordinate(x, 0, z));
+                tiles[x][z].set_tile_position(Navigation::Coordinate(x, 0, z));
             }
         }
 
