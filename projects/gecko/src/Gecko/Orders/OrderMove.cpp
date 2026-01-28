@@ -1,6 +1,8 @@
 #include "Gecko/Orders/OrderMove.hpp"
 
 #include "Gecko/Configuration.hpp"
+#include "Gecko/Components/Indicator.hpp"
+#include "Gecko/Managers/ObjectManager.hpp"
 
 namespace Gecko
 {
@@ -52,5 +54,15 @@ namespace Gecko
 
         target_position = configuration->get_vector3("target_position", Ogre::Vector3::ZERO);
         path = configuration->get_path("path", Navigation::Path());
+    }
+
+    std::vector<std::shared_ptr<Indicator>> OrderMove::generate_indicators(const std::string& material_name) const
+    {
+        std::shared_ptr<Indicator> indicator = std::make_shared<Cone>();
+
+        indicator->set_material_name(material_name);
+        indicator->set_position(get_target_position());
+
+        return { indicator };
     }
 }

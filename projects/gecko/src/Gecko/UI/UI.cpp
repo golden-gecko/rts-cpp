@@ -94,6 +94,8 @@ namespace Gecko
         m_preview.reset();
         m_selection_box.reset();
 
+        refresh_indicators(Id::Empty);
+
         Rml::Shutdown();
     }
 
@@ -109,6 +111,8 @@ namespace Gecko
             {
                 set_info(hovered_object->get_info());
 
+                refresh_indicators(m_hovered_object_id);
+
                 UI::getSingleton().get_preview().get_camera()->set_target_id(hovered_object->get_id());
             }
             else if (Game::getSingleton().get_active_player() && Game::getSingleton().get_active_player()->get_selected()->size())
@@ -119,6 +123,8 @@ namespace Gecko
                 if (selected)
                 {
                     set_info(selected->get_info());
+
+                    refresh_indicators(selected_id);
 
                     UI::getSingleton().get_preview().get_camera()->set_target_id(selected_id);
                 }
@@ -163,6 +169,8 @@ namespace Gecko
                 */
 
                 set_info(std::make_shared<Configuration>(info));
+
+                refresh_indicators(Id::Empty);
 
                 std::map<std::string, std::string> statistics;
 
@@ -920,43 +928,6 @@ namespace Gecko
     void UI::set_hovered_object_id(const Id& hovered_object_id)
     {
         m_hovered_object_id = hovered_object_id;
-
-        ObjectPtr hovered_object = ObjectManager::getSingleton().get(hovered_object_id);
-
-        if (hovered_object && hovered_object->get_orders()->get_queue().size())
-        {
-            Id order_id = hovered_object->get_orders()->get_queue().front();
-            OrderPtr order = OrderManager::getSingleton().get(order_id);
-
-            if (order)
-            {
-                switch (order->get_type())
-                {
-                    case order_type::Value::Move:
-                    {
-                        OrderMove* order_move = dynamic_cast<OrderMove*>(order);
-
-                        ObjectPtr sender = ObjectManager::getSingleton().get(order->get_sender_id());
-                        ObjectPtr receiver = ObjectManager::getSingleton().get(order->get_receiver_id());
-
-                        if (order_move && sender && receiver)
-                        {
-                            std::shared_ptr<Circle> circle = std::make_shared<Circle>();
-
-                            circle->init();
-                            circle->set_position(order_move->get_target_position());
-
-                            std::shared_ptr<Path> path = std::make_shared<Path>();
-
-                            circle->init();
-                            circle->set_position(order_move->get_target_position());
-                        }
-
-                        break;
-                    }
-                }
-            }
-        }
     }
 
     void UI::set_info(const ConfigurationPtr& info)
@@ -1545,6 +1516,35 @@ namespace Gecko
 
         set_visibility_types(visibility_types);
         */
+    }
+
+    void UI::refresh_indicators(Id id)
+    {
+        m_indicators.clear();
+
+        if (ObjectPtr hovered_object = ObjectManager::getSingleton().get(id))
+        {
+            int order_number = 0;
+
+            for (const auto& order_id : hovered_object->get_orders()->get_queue())
+            {
+                order_number += 1;
+
+                if (order_number > 3)
+                {
+                    break;
+                }
+
+                OrderPtr order = OrderManager::getSingleton().get(order_id);
+
+                if (order == nullptr)
+                {
+                    continue;
+                }
+
+                m_indicators.append_range(order->generate_indicators(std::format("cone_{}", order_number)));
+            }
+        }
     }
 
     void UI::log_write(const std::string& message, const std::string& type, Id id)

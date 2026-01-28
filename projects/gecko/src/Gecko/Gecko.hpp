@@ -60,6 +60,7 @@ namespace Gecko
     class EventListenerInstancer;
     class Game;
     class Id;
+    class Indicator;
     class Initializable;
     class Layer;
     class Layers;

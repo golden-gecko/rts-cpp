@@ -1,0 +1,19 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "health": {
+        "current": 1.0,
+        "max": 1.0
+    },
+    "mesh": {
+        "name": "cone.mesh",
+        "scale": {
+            "x": 10.0,
+            "y": 10.0,
+            "z": 10.0
+        }
+    },
+    "name": "Cone",
+    "type": "Indicator"
+}

@@ -4,60 +4,31 @@
 
 namespace Gecko
 {
-    class Indicator :
-        public Mesh
+    class Indicator
     {
-    private:
-        using base_type = Mesh;
+    public:
+        explicit Indicator() = default;
+
+        virtual ~Indicator() = default;
 
     public:
-        // From Initializable.
-        void init() override;
-        void deinit() override;
+        void set_material_name(const std::string& material_name);
+        void set_position(const Ogre::Vector3& position);
 
-    public:
-        // From Updatable.
-        void update(float time) override;
-
-    private:
-        Ogre::ManualObject* m_manual_object = nullptr;
+    protected:
+        Ogre::Entity* m_entity = nullptr;
+        Ogre::SceneNode* m_scene_node = nullptr;
     };
-    
-    class Circle :
+
+    class Cone :
         public Indicator
     {
     private:
-        using base_type = Mesh;
+        using base_type = Indicator;
 
     public:
-        // From Initializable.
-        void init() override;
-        void deinit() override;
+        explicit Cone();
 
-    public:
-        // From Updatable.
-        void update(float time) override;
-
-    private:
-        Ogre::ManualObject* m_manual_object = nullptr;
-    };
-    
-    class Path :
-        public Indicator
-    {
-    private:
-        using base_type = Mesh;
-
-    public:
-        // From Initializable.
-        void init() override;
-        void deinit() override;
-
-    public:
-        // From Updatable.
-        void update(float time) override;
-
-    private:
-        Ogre::ManualObject* m_manual_object = nullptr;
+        ~Cone() override;
     };
 }

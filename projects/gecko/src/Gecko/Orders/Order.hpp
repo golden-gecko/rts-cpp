@@ -71,6 +71,11 @@ namespace Gecko
         explicit Order(const Order& other);
 
     public:
+        virtual std::vector<std::shared_ptr<Indicator>> generate_indicators(const std::string& material_name) const
+        {
+            return {};
+        }
+
         bool has_reached_max_attempts_to_complete() const
         {
             return m_attempts_to_complete >= m_max_attempts_to_complete;

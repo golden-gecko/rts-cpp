@@ -1,6 +1,9 @@
 #include "Gecko/Orders/OrderLoad.hpp"
 
 #include "Gecko/Configuration.hpp"
+#include "Gecko/Components/Indicator.hpp"
+#include "Gecko/Managers/ObjectManager.hpp"
+#include "Gecko/Objects/Object.hpp"
 
 namespace Gecko
 {
@@ -55,5 +58,18 @@ namespace Gecko
         target_id = configuration->get_int("target_id", Id::Empty.get());
         resource_name = configuration->get_string("resource_name", "");
         resource_value = configuration->get_float("resource_value", 0.0f);
+    }
+
+    std::vector<std::shared_ptr<Indicator>> OrderLoad::generate_indicators(const std::string& material_name) const
+    {
+        std::shared_ptr<Indicator> indicator = std::make_shared<Cone>();
+
+        if (ObjectPtr target = ObjectManager::getSingleton().get(get_target_id()))
+        {
+            indicator->set_material_name(material_name);
+            indicator->set_position(target->get_position());
+        }
+
+        return { indicator };
     }
 }
