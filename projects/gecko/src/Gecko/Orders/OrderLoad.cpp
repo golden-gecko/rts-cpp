@@ -1,9 +1,9 @@
 #include "Gecko/Orders/OrderLoad.hpp"
 
 #include "Gecko/Configuration.hpp"
-#include "Gecko/Components/Indicator.hpp"
 #include "Gecko/Managers/ObjectManager.hpp"
 #include "Gecko/Objects/Object.hpp"
+#include "Gecko/UI/Indicators/Point.hpp"
 
 namespace Gecko
 {
@@ -60,14 +60,14 @@ namespace Gecko
         resource_value = configuration->get_float("resource_value", 0.0f);
     }
 
-    std::vector<std::shared_ptr<Indicator>> OrderLoad::generate_indicators(const std::string& material_name) const
+    std::vector<std::shared_ptr<Indicator>> OrderLoad::generate_indicators(int order_number) const
     {
-        std::shared_ptr<Indicator> indicator = std::make_shared<Cone>();
+        std::shared_ptr<Indicator> indicator = std::make_shared<Point>();
 
         if (ObjectPtr target = ObjectManager::getSingleton().get(get_target_id()))
         {
-            indicator->set_material_name(material_name);
-            indicator->set_position(target->get_position());
+            indicator->set_material_name(std::format("cone_{}", order_number));
+            indicator->set_position(target->get_position() + target->get_size() * Ogre::Vector3::UNIT_Y);
         }
 
         return { indicator };

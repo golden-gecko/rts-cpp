@@ -383,13 +383,18 @@ namespace Gecko
         return info;
     }
 
-    Area Object::get_size() const
+    Area Object::get_area() const
     {
         const auto& aabb = m_scene_node->_getWorldAABB();
         // TODO: Hardcoded.
         const auto& layer = m_owner->get_layer("Terrain");
 
         return Area(); // layer->get_index(aabb.getMinimum()), layer->get_index(aabb.getMaximum()));
+    }
+
+    Ogre::Vector3 Object::get_size() const
+    {
+        return m_scene_node->_getWorldAABB().getSize();
     }
 
     void Object::set_player_id(Id player_id)

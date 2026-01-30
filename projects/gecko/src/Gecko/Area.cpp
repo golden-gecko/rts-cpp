@@ -7,4 +7,9 @@ namespace Gecko
         m_end(end)
     {
     }
+
+    Ogre::Vector3 Area::get_size() const
+    {
+        return m_end - m_start;
+    }
 }

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Gecko/Components/Mesh.hpp"
-
 namespace Gecko
 {
     class Indicator
@@ -18,17 +16,5 @@ namespace Gecko
     protected:
         Ogre::Entity* m_entity = nullptr;
         Ogre::SceneNode* m_scene_node = nullptr;
-    };
-
-    class Cone :
-        public Indicator
-    {
-    private:
-        using base_type = Indicator;
-
-    public:
-        explicit Cone();
-
-        ~Cone() override;
     };
 }

@@ -71,7 +71,7 @@ namespace Gecko
         explicit Order(const Order& other);
 
     public:
-        virtual std::vector<std::shared_ptr<Indicator>> generate_indicators(const std::string& material_name) const
+        virtual std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const
         {
             return {};
         }

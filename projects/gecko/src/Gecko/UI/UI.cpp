@@ -1,7 +1,6 @@
 #include "Gecko/UI/UI.hpp"
 
 #include "Gecko/Cameras/Camera.hpp"
-#include "Gecko/Components/Indicator.hpp"
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Components.hpp"
 #include "Gecko/Containers/Orders.hpp"
@@ -24,6 +23,7 @@
 #include "Gecko/Technologies/TechnologyTree.hpp"
 #include "Gecko/UI/Cursor.hpp"
 #include "Gecko/UI/EventListenerInstancer.hpp"
+#include "Gecko/UI/Indicators/Indicator.hpp"
 #include "Gecko/UI/Minimap.hpp"
 #include "Gecko/UI/Preview.hpp"
 #include "Gecko/UI/RenderInterface.hpp"
@@ -1524,17 +1524,10 @@ namespace Gecko
 
         if (ObjectPtr hovered_object = ObjectManager::getSingleton().get(id))
         {
-            int order_number = 0;
+            int order_number = 1;
 
             for (const auto& order_id : hovered_object->get_orders()->get_queue())
             {
-                order_number += 1;
-
-                if (order_number > 3)
-                {
-                    break;
-                }
-
                 OrderPtr order = OrderManager::getSingleton().get(order_id);
 
                 if (order == nullptr)
@@ -1542,7 +1535,19 @@ namespace Gecko
                     continue;
                 }
 
-                m_indicators.append_range(order->generate_indicators(std::format("cone_{}", order_number)));
+                std::vector<std::shared_ptr<Indicator>> indicators = order->generate_indicators(order_number);
+
+                if (indicators.size())
+                {
+                    m_indicators.append_range(indicators);
+
+                    order_number += 1;
+
+                    if (order_number > 3)
+                    {
+                        break;
+                    }
+                }
             }
         }
     }

@@ -26,7 +26,7 @@ namespace Gecko
         void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
-        std::vector<std::shared_ptr<Indicator>> generate_indicators(const std::string& material_name) const override;
+        std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const override;
 
     public:
         // TODO: Remove.

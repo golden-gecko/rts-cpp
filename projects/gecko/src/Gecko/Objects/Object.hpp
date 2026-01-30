@@ -121,7 +121,9 @@ namespace Gecko
             return *m_scene_node;
         }
 
-        Area get_size() const;
+        Area get_area() const;
+
+        Ogre::Vector3 get_size() const;
 
         auto get_skills() const
         {

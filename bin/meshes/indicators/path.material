@@ -1,14 +1,15 @@
-material cone {
+material path {
     receive_shadows off
 
     technique {
         pass {
             diffuse 1.0 1.0 1.0 1.0
+            line_width 10.0
         }
     }
 }
 
-material cone_1 {
+material path_1 : path {
     receive_shadows off
 
     technique {
@@ -18,7 +19,7 @@ material cone_1 {
     }
 }
 
-material cone_2 {
+material path_2 : path {
     receive_shadows off
 
     technique {
@@ -28,7 +29,7 @@ material cone_2 {
     }
 }
 
-material cone_3 {
+material path_3 : path {
     receive_shadows off
 
     technique {

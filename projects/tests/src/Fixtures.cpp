@@ -3,7 +3,7 @@
 init_game::init_game()
 {
     configuration_manager = std::make_shared<Gecko::ConfigurationManager>();
-    configuration_manager->parse_configuration_files();
+    configuration_manager->parse_configuration_files(Gecko::Settings::Configuration::Directories);
 
     component_manager = std::make_shared<Gecko::ComponentManager>();
     map_manager = std::make_shared<Gecko::MapManager>();

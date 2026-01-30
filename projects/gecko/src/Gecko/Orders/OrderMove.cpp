@@ -1,8 +1,11 @@
 #include "Gecko/Orders/OrderMove.hpp"
 
 #include "Gecko/Configuration.hpp"
-#include "Gecko/Components/Indicator.hpp"
+#include "Gecko/Games/Game.hpp"
+#include "Gecko/Layers/Layer.hpp"
 #include "Gecko/Managers/ObjectManager.hpp"
+#include "Gecko/Maps/Map.hpp"
+#include "Gecko/UI/Indicators/Path.hpp"
 
 namespace Gecko
 {
@@ -56,12 +59,16 @@ namespace Gecko
         path = configuration->get_path("path", Navigation::Path());
     }
 
-    std::vector<std::shared_ptr<Indicator>> OrderMove::generate_indicators(const std::string& material_name) const
+    std::vector<std::shared_ptr<Indicator>> OrderMove::generate_indicators(int order_number) const
     {
-        std::shared_ptr<Indicator> indicator = std::make_shared<Cone>();
+        // TODO: Hardcoded.
+        MapPtr map = Game::getSingleton().get_active_map();
+        LayerPtr layer = map->get_layer("Terrain");
 
-        indicator->set_material_name(material_name);
-        indicator->set_position(get_target_position());
+        std::shared_ptr<Path> indicator = std::make_shared<Path>();
+
+        indicator->set_material_name(std::format("path_{}", order_number));
+        indicator->set_points(std::format("path_{}", order_number), get_path().get_points());
 
         return { indicator };
     }
