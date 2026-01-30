@@ -31,6 +31,12 @@ namespace Gecko
     {
     }
 
+    Component::Component(const Component& other) :
+        base_type(other), m_owner(other.m_owner), m_name(other.m_name), m_health_timer(other.m_health_timer)
+    {
+
+    }
+
     void Component::set_position(const Ogre::Vector3& position)
     {
     }

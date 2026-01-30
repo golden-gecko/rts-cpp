@@ -26,6 +26,9 @@ namespace Gecko
         void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
+        std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const override;
+
+    public:
         // TODO: Remove.
         auto& get_path()
         {
@@ -54,7 +57,7 @@ namespace Gecko
         }
 
     public:
-        void set_path(const Path& _path)
+        void set_path(const Navigation::Path& _path)
         {
             path = _path;
         }
@@ -66,6 +69,6 @@ namespace Gecko
 
     private:
         Ogre::Vector3 target_position = Ogre::Vector3::ZERO;
-        Path path;
+        Navigation::Path path;
     };
 }

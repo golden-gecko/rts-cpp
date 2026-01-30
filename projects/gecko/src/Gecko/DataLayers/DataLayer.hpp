@@ -41,8 +41,8 @@ namespace Gecko
         }
 
     public:
-        void add(const Coordinate& index, const Area& area, int value);
-        void remove(const Coordinate& index, const Area& area, int value);
+        void add(const Navigation::Coordinate& index, const Area& area, int value);
+        void remove(const Navigation::Coordinate& index, const Area& area, int value);
 
     private:
         Layer* m_owner = nullptr;

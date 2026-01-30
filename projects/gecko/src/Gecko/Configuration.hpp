@@ -138,8 +138,8 @@ namespace Gecko
             return default_value;
         }
 
-        Path get_path(const std::string& path) const;
-        Path get_path(const std::string& path, const Path& default_value) const;
+        Navigation::Path get_path(const std::string& path) const;
+        Navigation::Path get_path(const std::string& path, const Navigation::Path& default_value) const;
 
         std::string get_string() const;
         std::string get_string(const std::string& path) const;
@@ -191,7 +191,7 @@ namespace Gecko
     public:
         void set(const std::string& path, const ConfigurationPtr& value);
         void set(const std::string& path, const Ogre::ColourValue& value);
-        void set(const std::string& path, const Path& value);
+        void set(const std::string& path, const Navigation::Path& value);
         void set(const std::string& path, const Ogre::Vector2& value);
         void set(const std::string& path, const Ogre::Vector3& value);
         void set(const std::string& path, const std::map<std::string, float>& value);

@@ -12,13 +12,17 @@ namespace Gecko
         using base_type = Item;
 
     public:
-        explicit Component() = default;
-        explicit Component(const Component& other) = default;
-
+        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
+    public:
+        // From Updatable.
         void update(float time) override;
+
+    public:
+        explicit Component() = default;
+        explicit Component(const Component& other);
 
     public:
         virtual bool is_visible() const

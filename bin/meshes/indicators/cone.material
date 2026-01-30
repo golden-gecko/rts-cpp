@@ -1,0 +1,39 @@
+material cone {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 1.0 1.0 1.0 1.0
+        }
+    }
+}
+
+material cone_1 {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 1.0 0.2 0.2 1.0
+        }
+    }
+}
+
+material cone_2 {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 1.0 1.0 0.2 1.0
+        }
+    }
+}
+
+material cone_3 {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 0.2 0.8 0.2 1.0
+        }
+    }
+}

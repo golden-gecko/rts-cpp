@@ -3,7 +3,7 @@
 #include "Gecko/Cache.hpp"
 #include "Gecko/Navigation/Path.hpp"
 
-namespace Gecko
+namespace Gecko::Navigation
 {
     class Search
     {

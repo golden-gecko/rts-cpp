@@ -24,13 +24,13 @@ namespace Gecko
     public:
         // From Layer.
         bool is_index_valid(Index x, Index z) const override;
-        bool is_index_valid(const Coordinate& coordinate) const override;
+        bool is_index_valid(const Navigation::Coordinate& coordinate) const override;
 
         bool is_position_valid(float x, float z) const override;
         bool is_position_valid(const Ogre::Vector3& position) const override;
 
-        Coordinate get_index(float x, float z) const override;
-        Coordinate get_index(const Ogre::Vector3& position) const override;
+        Navigation::Coordinate get_index(float x, float z) const override;
+        Navigation::Coordinate get_index(const Ogre::Vector3& position) const override;
 
         Ogre::Vector3 get_normal(float x, float z) const override;
         Ogre::Vector3 get_normal(const Ogre::Vector3& position) const override;

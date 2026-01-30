@@ -2,7 +2,7 @@
 
 namespace Gecko
 {
-    Rectangle::Rectangle(const Coordinate& start, const Coordinate& end) :
+    Rectangle::Rectangle(const Navigation::Coordinate& start, const Navigation::Coordinate& end) :
         start(start),
         end(end)
     {

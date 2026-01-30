@@ -60,6 +60,7 @@ namespace Gecko
     class EventListenerInstancer;
     class Game;
     class Id;
+    class Indicator;
     class Initializable;
     class Layer;
     class Layers;
@@ -94,6 +95,8 @@ namespace Gecko
     using ConfigurationPtr = std::shared_ptr<Configuration>;
     using LayerPtr = std::shared_ptr<Layer>;
     using MapPtr = Map*; // TODO: Replace with shared_ptr<Map>.
+    using ObjectPtr = Object*;
+    using OrderPtr = Order*;
     using ResourcePtr = std::shared_ptr<Resource>;
     using ResourcesPtr = std::shared_ptr<Resources>;
     using SeasonPtr = std::shared_ptr<Season>;

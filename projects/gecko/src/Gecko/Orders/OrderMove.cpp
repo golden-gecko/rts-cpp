@@ -1,6 +1,11 @@
 #include "Gecko/Orders/OrderMove.hpp"
 
 #include "Gecko/Configuration.hpp"
+#include "Gecko/Games/Game.hpp"
+#include "Gecko/Layers/Layer.hpp"
+#include "Gecko/Managers/ObjectManager.hpp"
+#include "Gecko/Maps/Map.hpp"
+#include "Gecko/UI/Indicators/Path.hpp"
 
 namespace Gecko
 {
@@ -33,7 +38,7 @@ namespace Gecko
         base_type::init();
 
         set_target_position(Ogre::Vector3::ZERO);
-        set_path(Path());
+        set_path(Navigation::Path());
     }
 
     ConfigurationPtr OrderMove::serialize() const
@@ -51,6 +56,20 @@ namespace Gecko
         base_type::deserialize(configuration);
 
         target_position = configuration->get_vector3("target_position", Ogre::Vector3::ZERO);
-        path = configuration->get_path("path", Path());
+        path = configuration->get_path("path", Navigation::Path());
+    }
+
+    std::vector<std::shared_ptr<Indicator>> OrderMove::generate_indicators(int order_number) const
+    {
+        // TODO: Hardcoded.
+        MapPtr map = Game::getSingleton().get_active_map();
+        LayerPtr layer = map->get_layer("Terrain");
+
+        std::shared_ptr<Path> indicator = std::make_shared<Path>();
+
+        indicator->set_material_name(std::format("path_{}", order_number));
+        indicator->set_points(std::format("path_{}", order_number), get_path().get_points());
+
+        return { indicator };
     }
 }

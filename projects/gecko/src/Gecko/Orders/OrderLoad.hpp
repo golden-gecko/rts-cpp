@@ -26,6 +26,9 @@ namespace Gecko
         void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
+        std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const override;
+
+    public:
         auto get_target_id() const
         {
             return target_id;

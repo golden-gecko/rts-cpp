@@ -190,6 +190,9 @@ namespace Gecko
         std::unique_ptr<Minimap> m_minimap;
         std::unique_ptr<Preview> m_preview;
         std::unique_ptr<SelectionBox> m_selection_box;
+        std::vector<std::shared_ptr<Indicator>> m_indicators;
+
+        void refresh_indicators(Id id);
 
         Id m_hovered_object_id;
 

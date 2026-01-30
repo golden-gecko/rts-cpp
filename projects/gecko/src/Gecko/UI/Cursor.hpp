@@ -29,7 +29,7 @@ namespace Gecko
         void update(const std::pair<Layer*, Ogre::Vector3>& cast);
 
     public:
-        const Coordinate& get_position() const
+        const Navigation::Coordinate& get_position() const
         {
             return m_position;
         }
@@ -45,7 +45,7 @@ namespace Gecko
         void set_visible(bool visible);
 
     private:
-        Coordinate m_position;
+        Navigation::Coordinate m_position;
 
         bool m_visible = false;
         Type m_type = Type::Square;

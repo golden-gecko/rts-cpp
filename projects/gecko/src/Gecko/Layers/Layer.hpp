@@ -3,6 +3,7 @@
 #include "Gecko/Interfaces/Initializable.hpp"
 #include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Navigation/Coordinate.hpp"
+#include "Gecko/Navigation/Search/Search.hpp"
 #include "Gecko/Navigation/Path.hpp"
 
 namespace Gecko
@@ -16,12 +17,12 @@ namespace Gecko
 
     public:
         virtual bool is_index_valid(Index x, Index z) const = 0;
-        virtual bool is_index_valid(const Coordinate& coordinate) const = 0;
+        virtual bool is_index_valid(const Navigation::Coordinate& coordinate) const = 0;
 
         virtual bool is_position_valid(float x, float z) const = 0;
         virtual bool is_position_valid(const Ogre::Vector3& position) const = 0;
 
-        std::optional<Path::Points> search(const Ogre::Vector3& from, const Ogre::Vector3& to) const;
+        std::optional<Navigation::Path::Points> search(const Ogre::Vector3& from, const Ogre::Vector3& to) const;
 
         void show_data_layer(const std::string& data_layer_name);
 
@@ -40,8 +41,8 @@ namespace Gecko
             return m_grid_scale;
         }
 
-        virtual Coordinate get_index(float x, float z) const = 0;
-        virtual Coordinate get_index(const Ogre::Vector3& position) const = 0;
+        virtual Navigation::Coordinate get_index(float x, float z) const = 0;
+        virtual Navigation::Coordinate get_index(const Ogre::Vector3& position) const = 0;
 
         const auto& get_material_name() const
         {
@@ -130,7 +131,7 @@ namespace Gecko
 
         std::map<std::string, std::shared_ptr<DataLayer>> m_data_layers;
         std::shared_ptr<PositionValidator> m_position_validator;
-        std::shared_ptr<Search> m_search;
+        std::shared_ptr<Navigation::Search> m_search;
 
         Ogre::SceneNode* m_scene_node = nullptr;
 

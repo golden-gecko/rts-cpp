@@ -34,7 +34,7 @@ namespace Gecko
 
         set_target_id(Id::Empty);
         set_target_position(Ogre::Vector3::ZERO);
-        set_path(Path());
+        set_path(Navigation::Path());
     }
 
     ConfigurationPtr OrderPatrol::serialize() const
@@ -54,6 +54,6 @@ namespace Gecko
 
         target_id = configuration->get_int("target_id", Id::Empty.get());
         target_position = configuration->get_vector3("target_position", Ogre::Vector3::ZERO);
-        path = configuration->get_path("path", Path());
+        path = configuration->get_path("path", Navigation::Path());
     }
 }

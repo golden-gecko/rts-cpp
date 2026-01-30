@@ -19,8 +19,11 @@ namespace Gecko
             return m_start;
         }
 
+        // TODO: Rename this method or Object::get_size() to Object::get_area().
+        Ogre::Vector3 get_size() const;
+
     protected:
         Ogre::Vector3 m_start = Ogre::Vector3::ZERO;
-        Ogre::Vector3 m_end = Ogre::Vector3::ZERO;
+        Ogre::Vector3 m_end   = Ogre::Vector3::ZERO;
     };
 }

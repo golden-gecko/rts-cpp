@@ -293,7 +293,7 @@ namespace Gecko
 
         // TODO: Create function json_to_file.
         {
-        auto saves_path = configuration->get_string("options.saves.path", Settings::Game::SavesPath);
+        auto saves_path = Settings::Game::SavesPath;
 
         if (exists(saves_path) == false)
         {

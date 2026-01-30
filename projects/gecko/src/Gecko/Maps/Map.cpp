@@ -78,8 +78,6 @@ namespace Gecko
 
     void Map::deinit()
     {
-        base_type::deinit();
-
         deinit_cameras();
         deinit_layers();
         deinit_seasons();
@@ -91,6 +89,8 @@ namespace Gecko
         OrderManager::getSingleton().destroy_all();
 
         set_visible(false);
+
+        base_type::deinit();
     }
 
     ConfigurationPtr Map::serialize() const

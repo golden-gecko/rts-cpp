@@ -16,12 +16,14 @@
 #include "Gecko/Managers/PlayerManager.hpp"
 #include "Gecko/Maps/Map.hpp"
 #include "Gecko/Objects/Object.hpp"
+#include "Gecko/Orders/OrderMove.hpp"
 #include "Gecko/Players/Player.hpp"
 #include "Gecko/Statistics.hpp"
 #include "Gecko/System.hpp"
 #include "Gecko/Technologies/TechnologyTree.hpp"
 #include "Gecko/UI/Cursor.hpp"
 #include "Gecko/UI/EventListenerInstancer.hpp"
+#include "Gecko/UI/Indicators/Indicator.hpp"
 #include "Gecko/UI/Minimap.hpp"
 #include "Gecko/UI/Preview.hpp"
 #include "Gecko/UI/RenderInterface.hpp"
@@ -92,13 +94,13 @@ namespace Gecko
         m_preview.reset();
         m_selection_box.reset();
 
+        refresh_indicators(Id::Empty);
+
         Rml::Shutdown();
     }
 
     void UI::update(float time)
     {
-        L_TIME("UI::update()");
-
         if (m_refresh_time.update(time))
         {
             m_refresh_time.reset();
@@ -109,23 +111,22 @@ namespace Gecko
             {
                 set_info(hovered_object->get_info());
 
+                refresh_indicators(m_hovered_object_id);
+
                 UI::getSingleton().get_preview().get_camera()->set_target_id(hovered_object->get_id());
             }
             else if (Game::getSingleton().get_active_player() && Game::getSingleton().get_active_player()->get_selected()->size())
             {
-                // TODO: Optimize. Get only first.
-                for (const auto& id : *(Game::getSingleton().get_active_player()->get_selected()))
+                Id selected_id = Game::getSingleton().get_active_player()->get_first_selected();
+                ObjectPtr selected = ObjectManager::getSingleton().get(selected_id);
+
+                if (selected)
                 {
-                    auto object = ObjectManager::getSingleton().get(id);
+                    set_info(selected->get_info());
 
-                    if (object)
-                    {
-                        set_info(object->get_info());
+                    refresh_indicators(selected_id);
 
-                        UI::getSingleton().get_preview().get_camera()->set_target_id(object->get_id());
-
-                        break;
-                    }
+                    UI::getSingleton().get_preview().get_camera()->set_target_id(selected_id);
                 }
             }
             else
@@ -168,6 +169,8 @@ namespace Gecko
                 */
 
                 set_info(std::make_shared<Configuration>(info));
+
+                refresh_indicators(Id::Empty);
 
                 std::map<std::string, std::string> statistics;
 
@@ -1513,6 +1516,40 @@ namespace Gecko
 
         set_visibility_types(visibility_types);
         */
+    }
+
+    void UI::refresh_indicators(Id id)
+    {
+        m_indicators.clear();
+
+        if (ObjectPtr hovered_object = ObjectManager::getSingleton().get(id))
+        {
+            int order_number = 1;
+
+            for (const auto& order_id : hovered_object->get_orders()->get_queue())
+            {
+                OrderPtr order = OrderManager::getSingleton().get(order_id);
+
+                if (order == nullptr)
+                {
+                    continue;
+                }
+
+                std::vector<std::shared_ptr<Indicator>> indicators = order->generate_indicators(order_number);
+
+                if (indicators.size())
+                {
+                    m_indicators.append_range(indicators);
+
+                    order_number += 1;
+
+                    if (order_number > 3)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     void UI::log_write(const std::string& message, const std::string& type, Id id)

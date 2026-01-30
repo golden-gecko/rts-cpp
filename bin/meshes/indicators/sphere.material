@@ -1,0 +1,39 @@
+material sphere {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 1.0 1.0 1.0 1.0
+        }
+    }
+}
+
+material sphere_1 {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 1.0 0.2 0.2 1.0
+        }
+    }
+}
+
+material sphere_2 {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 1.0 1.0 0.2 1.0
+        }
+    }
+}
+
+material sphere_3 {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 0.2 0.8 0.2 1.0
+        }
+    }
+}

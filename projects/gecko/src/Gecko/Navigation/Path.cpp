@@ -1,6 +1,6 @@
 #include "Gecko/Navigation/Path.hpp"
 
-namespace Gecko
+namespace Gecko::Navigation
 {
     Path::Path(const Coordinate& start, const Coordinate& end, const Points& points) :
         m_start(start),

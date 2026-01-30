@@ -1,0 +1,40 @@
+material path {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 1.0 1.0 1.0 1.0
+            line_width 10.0
+        }
+    }
+}
+
+material path_1 : path {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 1.0 0.2 0.2 1.0
+        }
+    }
+}
+
+material path_2 : path {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 1.0 1.0 0.2 1.0
+        }
+    }
+}
+
+material path_3 : path {
+    receive_shadows off
+
+    technique {
+        pass {
+            diffuse 0.2 0.8 0.2 1.0
+        }
+    }
+}

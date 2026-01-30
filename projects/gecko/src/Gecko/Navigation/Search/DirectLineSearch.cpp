@@ -2,7 +2,7 @@
 
 #include "Gecko/Layers/Layer.hpp"
 
-namespace Gecko
+namespace Gecko::Navigation
 {
     std::optional<Path::Points> DirectLineSearch::get_path(const Ogre::Vector3& from, const Ogre::Vector3& to)
     {

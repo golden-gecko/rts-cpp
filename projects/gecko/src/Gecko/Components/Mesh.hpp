@@ -11,6 +11,10 @@ namespace Gecko
         using base_type = Component;
 
     public:
+        // From Initializable.
+        void init() override;
+
+    public:
         static Mesh* create(Mesh* memory, const ConfigurationPtr& configuration);
 
     public:
@@ -18,8 +22,6 @@ namespace Gecko
         explicit Mesh(const Mesh& other);
 
         ~Mesh() override;
-
-        void init() override;
 
     public:
         bool is_visible() const override

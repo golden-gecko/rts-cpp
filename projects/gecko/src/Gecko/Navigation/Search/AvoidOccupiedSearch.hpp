@@ -2,7 +2,7 @@
 
 #include "Gecko/Navigation/Search/Search.hpp"
 
-namespace Gecko
+namespace Gecko::Navigation
 {
     class AvoidOccupiedSearch :
         public Search

@@ -138,8 +138,6 @@ namespace Gecko
 
     void Object::deinit()
     {
-        base_type::deinit();
-
         for (const auto& i : *(m_components))
         {
             i->deinit();
@@ -147,6 +145,8 @@ namespace Gecko
 
         set_selected(false);
         set_visible(false);
+
+        base_type::deinit();
     }
 
     ConfigurationPtr Object::serialize() const
@@ -287,18 +287,18 @@ namespace Gecko
 
         auto index = layer->get_index(get_position());
 
-        std::array<Coordinate, 4> indices =
+        std::array<Navigation::Coordinate, 4> indices =
         {
-            Coordinate(-1, 0,  0),
-            Coordinate( 0, 0,  1),
-            Coordinate( 0, 0, -1),
-            Coordinate( 1, 0,  0)
+            Navigation::Coordinate(-1, 0,  0),
+            Navigation::Coordinate( 0, 0,  1),
+            Navigation::Coordinate( 0, 0, -1),
+            Navigation::Coordinate( 1, 0,  0)
         };
 
-        std::list<Coordinate> open;
-        std::list<Coordinate> closed;
+        std::list<Navigation::Coordinate> open;
+        std::list<Navigation::Coordinate> closed;
 
-        Coordinate adjacent(-1, -1);
+        Navigation::Coordinate adjacent(-1, -1);
 
         for (int i = 0; i < indices.size(); i++)
         {
@@ -383,13 +383,18 @@ namespace Gecko
         return info;
     }
 
-    Area Object::get_size() const
+    Area Object::get_area() const
     {
         const auto& aabb = m_scene_node->_getWorldAABB();
         // TODO: Hardcoded.
         const auto& layer = m_owner->get_layer("Terrain");
 
         return Area(); // layer->get_index(aabb.getMinimum()), layer->get_index(aabb.getMaximum()));
+    }
+
+    Ogre::Vector3 Object::get_size() const
+    {
+        return m_scene_node->_getWorldAABB().getSize();
     }
 
     void Object::set_player_id(Id player_id)
