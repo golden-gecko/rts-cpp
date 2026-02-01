@@ -17,7 +17,7 @@ namespace Gecko
 
     void ConfigurationManager::parse_configuration_files(const std::vector<std::string>& directories)
     {
-        L_TIME("Gecko::ConfigurationManager::parse_configuration_files()");
+        L_TIME("ConfigurationManager::parse_configuration_files()");
 
         for (const std::string& directory : directories)
         {

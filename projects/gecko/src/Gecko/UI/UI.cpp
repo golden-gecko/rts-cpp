@@ -38,6 +38,15 @@ Gecko::UI* Ogre::Singleton<Gecko::UI>::msSingleton = nullptr;
 
 namespace Gecko
 {
+    /*
+    TODO: Implement.
+
+    class IndicatorManager :
+        public Manager<Indicator, std::string, Id>
+    {
+    };
+    */
+
     void UI::init()
     {
         // TODO: Get window size.

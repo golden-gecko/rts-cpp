@@ -20,6 +20,8 @@ namespace Gecko
         void update(float time) override;
 
     public:
+        void init(const ConfigurationPtr& configuration);
+
         Order* order_attack(Id sender_id, Id receiver_id, Id target_id);
         Order* order_attack(Id sender_id, Id receiver_id, const Ogre::Vector3& target_position);
 

@@ -11,5 +11,8 @@ namespace Gecko
     {
     private:
         using base_type = Manager<Skill, std::string, Id>;
+    
+    public:
+        void init(const ConfigurationPtr& configuration);
     };
 }

@@ -96,14 +96,6 @@ namespace Gecko
     public:
         void set_active_player_id(const Id& id);
 
-    protected:
-        virtual void init_components(std::size_t max_size);
-        virtual void init_maps(std::size_t max_size);
-        virtual void init_objects(std::size_t max_size);
-        virtual void init_orders(std::size_t max_size);
-        virtual void init_players(std::size_t max_size);
-        virtual void init_skills(std::size_t max_size);
-
     private:
         ConfigurationPtr m_configuration;
 

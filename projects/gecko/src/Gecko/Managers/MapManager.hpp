@@ -17,5 +17,8 @@ namespace Gecko
     public:
         // From Updatable.
         void update(float time) override;
+
+    public:
+        void init(const ConfigurationPtr& configuration);
     };
 }

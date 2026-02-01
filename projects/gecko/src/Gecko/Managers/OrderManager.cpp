@@ -1,15 +1,23 @@
 #include "Gecko/Managers/OrderManager.hpp"
 
+#include "Gecko/Configuration.hpp"
+#include "Gecko/Log.hpp"
+#include "Gecko/Managers/ConfigurationManager.hpp"
 #include "Gecko/Managers/ObjectManager.hpp"
 #include "Gecko/Objects/Object.hpp"
+#include "Gecko/Orders/OrderAttack.hpp"
 #include "Gecko/Orders/OrderCreate.hpp"
+#include "Gecko/Orders/OrderDestroy.hpp"
 #include "Gecko/Orders/OrderFollow.hpp"
 #include "Gecko/Orders/OrderGuard.hpp"
 #include "Gecko/Orders/OrderLoad.hpp"
 #include "Gecko/Orders/OrderMove.hpp"
 #include "Gecko/Orders/OrderPatrol.hpp"
+#include "Gecko/Orders/OrderRally.hpp"
+#include "Gecko/Orders/OrderStop.hpp"
 #include "Gecko/Orders/OrderUnload.hpp"
 #include "Gecko/Orders/OrderWait.hpp"
+#include "Gecko/Utils/Time.hpp"
 
 Gecko::OrderManager* Ogre::Singleton<Gecko::OrderManager>::msSingleton = nullptr;
 
@@ -23,6 +31,119 @@ namespace Gecko
         };
 
         iterate(std::bind(update, std::placeholders::_1, time));
+    }
+
+    void OrderManager::init(const ConfigurationPtr& configuration)
+    {
+        L_TIME("OrderManager::init()");
+
+        auto max_size = configuration->get_int<std::size_t>("memory.orders");
+        auto& order_manager = OrderManager::getSingleton();
+
+        for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
+        {
+            L_INFO << "Loading '" << name << "' configuration.";
+
+            // TODO: Remove default value.
+            auto type = configuration->get_string("type", "");
+
+            if (type == "Attack")
+            {
+                auto function = static_cast<OrderAttack*(*)(OrderAttack* memory, const ConfigurationPtr&)>(&OrderAttack::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderAttack>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+            else if (type == "Create")
+            {
+                auto function = static_cast<OrderCreate*(*)(OrderCreate* memory, const ConfigurationPtr&)>(&OrderCreate::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderCreate>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+            else if (type == "Destroy")
+            {
+                auto function = static_cast<OrderDestroy*(*)(OrderDestroy* memory, const ConfigurationPtr&)>(&OrderDestroy::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderDestroy>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+            else if (type == "Follow")
+            {
+                auto function = static_cast<OrderFollow*(*)(OrderFollow* memory, const ConfigurationPtr&)>(&OrderFollow::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderFollow>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+            else if (type == "Guard")
+            {
+                auto function = static_cast<OrderGuard*(*)(OrderGuard* memory, const ConfigurationPtr&)>(&OrderGuard::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderGuard>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+            else if (type == "Load")
+            {
+                auto function = static_cast<OrderLoad*(*)(OrderLoad* memory, const ConfigurationPtr&)>(&OrderLoad::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderLoad>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+            else if (type == "Move")
+            {
+                auto function = static_cast<OrderMove*(*)(OrderMove* memory, const ConfigurationPtr&)>(&OrderMove::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderMove>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+            else if (type == "Patrol")
+            {
+                auto function = static_cast<OrderPatrol*(*)(OrderPatrol* memory, const ConfigurationPtr&)>(&OrderPatrol::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderPatrol>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+            else if (type == "Rally")
+            {
+                auto function = static_cast<OrderRally*(*)(OrderRally* memory, const ConfigurationPtr&)>(&OrderRally::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderRally>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+            else if (type == "Stop")
+            {
+                auto function = static_cast<OrderStop*(*)(OrderStop* memory, const ConfigurationPtr&)>(&OrderStop::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderStop>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+            else if (type == "Unload")
+            {
+                auto function = static_cast<OrderUnload*(*)(OrderUnload* memory, const ConfigurationPtr&)>(&OrderUnload::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderUnload>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+            else if (type == "Wait")
+            {
+                auto function = static_cast<OrderWait*(*)(OrderWait* memory, const ConfigurationPtr&)>(&OrderWait::create);
+                auto factory = std::bind(function, std::placeholders::_1, configuration);
+
+                order_manager.register_type<OrderWait>(name, factory);
+                order_manager.allocate(name, max_size);
+            }
+        }
     }
 
     Order* OrderManager::order_attack(Id sender_id, Id receiver_id, Id target_id)
