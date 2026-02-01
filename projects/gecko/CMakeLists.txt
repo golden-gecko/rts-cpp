@@ -18,6 +18,7 @@ file(GLOB_RECURSE BINARY_FILES
     ${CMAKE_SOURCE_DIR}/bin/*.rml
     ${CMAKE_SOURCE_DIR}/bin/*.tga
     ${CMAKE_SOURCE_DIR}/bin/*.ttf
+    ${CMAKE_SOURCE_DIR}/bin/*.zip
 )
 file(GLOB_RECURSE HEADER_FILES
     ${PROJECT_SOURCE_DIR}/src/*.hpp

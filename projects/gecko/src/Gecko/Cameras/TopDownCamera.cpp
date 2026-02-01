@@ -1,5 +1,6 @@
 #include "Gecko/Cameras/TopDownCamera.hpp"
 
+#include "Gecko/Games/Game.hpp"
 #include "Gecko/Input.hpp"
 #include "Gecko/Layers/SquareLayer.hpp"
 #include "Gecko/Managers/MapManager.hpp"
@@ -41,29 +42,33 @@ namespace Gecko
         move(direction * m_speed * time);
 
         // Limit camera to layer.
-        // TODO: First map.
-        // TODO: Hardcoded layer name.
-        auto layer = MapManager::getSingleton().begin()->second->get_layer("Terrain");
+        auto map = Game::getSingleton().get_active_map();
 
-        if (layer)
+        if (map)
         {
-            auto camera_position = get_position();
-            auto layer_position = layer->get_position(camera_position);
+            // TODO: Hardcoded layer name.
+            auto layer = map->get_layer("Terrain");
 
-            auto min_x = layer->get_scale().x;
-            auto max_x = layer->get_size() * layer->get_scale().x - layer->get_scale().x;
+            if (layer)
+            {
+                auto camera_position = get_position();
+                auto layer_position = layer->get_position(camera_position);
 
-            auto min_y = layer_position.y + Settings::Camera::MinHeight;
-            auto max_y = layer_position.y + Settings::Camera::MaxHeight;
+                auto min_x = layer->get_scale().x;
+                auto max_x = layer->get_size() * layer->get_scale().x - layer->get_scale().x;
 
-            auto min_z = layer->get_scale().z;
-            auto max_z = layer->get_size() * layer->get_scale().z - layer->get_scale().z;
+                auto min_y = layer_position.y + Settings::Camera::MinHeight;
+                auto max_y = layer_position.y + Settings::Camera::MaxHeight;
 
-            camera_position.x = std::clamp(camera_position.x, min_x, max_x);
-            camera_position.y = std::clamp(camera_position.y, min_y, max_y);
-            camera_position.z = std::clamp(camera_position.z, min_z, max_z);
+                auto min_z = layer->get_scale().z;
+                auto max_z = layer->get_size() * layer->get_scale().z - layer->get_scale().z;
 
-            set_position(camera_position);
+                camera_position.x = std::clamp(camera_position.x, min_x, max_x);
+                camera_position.y = std::clamp(camera_position.y, min_y, max_y);
+                camera_position.z = std::clamp(camera_position.z, min_z, max_z);
+
+                set_position(camera_position);
+            }
         }
     }
 

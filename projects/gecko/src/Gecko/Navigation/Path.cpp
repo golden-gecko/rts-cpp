@@ -9,6 +9,11 @@ namespace Gecko::Navigation
     {
     }
 
+    Path::Path(const Points& points) :
+        m_points(points)
+    {
+    }
+
     std::string Path::to_string() const
     {
         std::stringstream stream;

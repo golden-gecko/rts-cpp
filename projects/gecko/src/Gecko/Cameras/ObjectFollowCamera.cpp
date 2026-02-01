@@ -24,10 +24,7 @@ namespace Gecko
 
     void ObjectFollowCamera::update(float time)
     {
-        // TODO: Move smooth movement.
-        Object* target = ObjectManager::getSingleton().get(m_target_id);
-
-        if (target)
+        if (ObjectPtr target = ObjectManager::getSingleton().get(m_target_id))
         {
             look_at(target->get_position());
             set_position(target->get_position() + Ogre::Vector3::UNIT_SCALE * m_distance);

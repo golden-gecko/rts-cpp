@@ -112,7 +112,7 @@ namespace Gecko
 
         void init_meshes();
         void init_root();
-        void init_scene();
+        void init_scene(const ConfigurationPtr& configuration);
 
         void deinit_maps();
         void deinit_root();

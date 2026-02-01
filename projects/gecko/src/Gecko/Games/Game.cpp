@@ -57,7 +57,7 @@ namespace Gecko
     void Game::init()
     {
         init_root();
-        init_scene();
+        init_scene(m_configuration->get_child("scene"));
         init_meshes();
     }
 
@@ -682,29 +682,30 @@ namespace Gecko
         }
     }
 
-    void Game::init_scene()
+    void Game::init_scene(const ConfigurationPtr& configuration)
     {
         m_scene_manager = getRoot()->createSceneManager();
         m_scene_manager->addRenderQueueListener(this);
-        m_scene_manager->setAmbientLight(m_configuration->get_color("scene.ambient.color", Ogre::ColourValue::White));
-
-        // TODO: Move materials to bin directory.
-        // TODO: Move to configuration.
-        // TODO: Enable.
-        // m_scene_manager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);
-        // m_scene_manager->setFog(Ogre::FogMode::FOG_EXP2, Ogre::ColourValue(0.9f, 0.9f, 0.9f), 0.002f, 100.0f, 500.0f);
-        // m_scene_manager->setSkyBox(true, "Examples/CloudyNoonSkyBox", 10.0f);
+        m_scene_manager->setAmbientLight(configuration->get_color("ambient.color", Ogre::ColourValue::White));
+        m_scene_manager->setFog(Ogre::FogMode::FOG_EXP2,
+            configuration->get_color("fog.color", Ogre::ColourValue::White),
+            configuration->get_float("fog.density", 0.0f),
+            configuration->get_float("fog.start", 0.0f),
+            configuration->get_float("fog.end", 0.0f)
+        );
+        m_scene_manager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);
+        m_scene_manager->setSkyBox(true, configuration->get_string("sky.name"), configuration->get_float("sky.distance", 0.0f));
 
         Ogre::RTShader::ShaderGenerator::getSingleton().addSceneManager(m_scene_manager);
 
         m_light = m_scene_manager->createLight();
-        m_light->setDiffuseColour(m_configuration->get_color("scene.directional.diffuse.color", Ogre::ColourValue::White));
-        m_light->setSpecularColour(m_configuration->get_color("scene.directional.specular.color", Ogre::ColourValue::White));
+        m_light->setDiffuseColour(configuration->get_color("directional.diffuse.color", Ogre::ColourValue::White));
+        m_light->setSpecularColour(configuration->get_color("directional.specular.color", Ogre::ColourValue::White));
         m_light->setType(Ogre::Light::LightTypes::LT_DIRECTIONAL);
 
         m_light_scene_node = create_scene_node();
         m_light_scene_node->attachObject(m_light);
-        m_light_scene_node->setDirection(m_configuration->get_vector3("scene.directional.direction"));
+        m_light_scene_node->setDirection(configuration->get_vector3("directional.direction"));
     }
 
     void Game::deinit_maps()

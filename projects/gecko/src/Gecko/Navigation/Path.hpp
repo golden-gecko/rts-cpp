@@ -12,6 +12,7 @@ namespace Gecko::Navigation
     public:
         explicit Path() = default;
         explicit Path(const Coordinate& start, const Coordinate& end, const Points& points);
+        explicit Path(const Points& points);
 
     public:
         auto& get_points()

@@ -23,6 +23,20 @@
                 "g": 0.5,
                 "r": 0.5
             }
+        },
+        "fog": {
+            "color": {
+                "b": 0.5,
+                "g": 0.4,
+                "r": 0.3
+            },
+            "density": 0.002,
+            "end": 500.0,
+            "start": 100.0
+        },
+        "sky": {
+            "distance": 10.0,
+            "name": "Examples/CloudyNoonSkyBox"
         }
     }
 }

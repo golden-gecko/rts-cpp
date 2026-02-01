@@ -15,7 +15,6 @@ namespace Gecko
         virtual ~Configuration() = default;
 
     public:
-        // TODO: Write test for this method.
         void append(const ConfigurationPtr& value);
 
         template<typename Type>
@@ -24,17 +23,15 @@ namespace Gecko
             m_value.append(value);
         }
 
-        // TODO: Write test for this method.
         void append(const std::string& path, const ConfigurationPtr& value);
 
-        // TODO: Write test for this method.
         template<typename Type>
         void append(const std::string& path, const Type& value)
         {
             // OPTIMIZATION: If path has one segment then skip rest.
             if (path.find('.') == std::string::npos)
             {
-               m_value[path].append(value);
+                m_value[path].append(value);
 
                 return;
             }
@@ -248,7 +245,6 @@ namespace Gecko
 
         Json::Value m_value;
 
-        // TODO: Finish implementation and test.
         mutable Json::Value m_cache;
 
         void add_to_cache(const std::string& path, const Json::Value& value) const;

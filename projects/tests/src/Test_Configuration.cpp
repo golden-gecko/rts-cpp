@@ -97,6 +97,37 @@ TEST(configuration, append_to_array)
     EXPECT_EQ(configuration.get_child("numbers")->size(), 3);
 }
 
+TEST(configuration, set_path)
+{
+    Gecko::Navigation::Path path;
+
+    path.set_points({
+        Gecko::Navigation::Coordinate(1, 2),
+        Gecko::Navigation::Coordinate(2, 4),
+        Gecko::Navigation::Coordinate(3, 6),
+    });
+
+    Gecko::Configuration configuration;
+
+    configuration.set("path", path);
+
+    EXPECT_EQ(configuration.get_child("path")->size(), 3);
+    EXPECT_EQ(configuration.get_child("path")->get_element(0)->get_int("x"), 1);
+    EXPECT_EQ(configuration.get_child("path")->get_element(1)->get_int("x"), 2);
+    EXPECT_EQ(configuration.get_child("path")->get_element(2)->get_int("x"), 3);
+}
+
+TEST(configuration, get_path)
+{
+    Gecko::Configuration configuration("../tests/configurations/navigation.json");
+
+    Gecko::Navigation::Path path = configuration.get_path("target");
+
+    EXPECT_EQ(path.get_points().at(0).x, 10);
+    EXPECT_EQ(path.get_points().at(1).x, 14);
+    EXPECT_EQ(path.get_points().at(2).x, 18);
+}
+
 TEST(configuration, is_include_merging)
 {
     Gecko::Configuration configuration("../tests/include/tree.json");

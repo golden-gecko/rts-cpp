@@ -71,7 +71,6 @@ namespace Gecko
         {
             if (current_value.isMember(i))
             {
-                // TODO: Fix. Configuration::has_member with inexisting members is broken.
                 current_value = current_value[i];
             }
             else
@@ -217,8 +216,18 @@ namespace Gecko
 
     Navigation::Path Configuration::get_path(const std::string& path) const
     {
-        // TODO: Implement.
-        return Navigation::Path();
+        Navigation::Path::Points points;
+
+        for (const auto& i : *(get_child(path)))
+        {
+            points.push_back(Navigation::Coordinate(
+                Configuration(i).get_int<std::uint32_t>("x"),
+                Configuration(i).get_int<std::uint32_t>("y"),
+                Configuration(i).get_int<std::uint32_t>("z")
+            ));
+        }
+
+        return Navigation::Path(points);
     }
 
     Navigation::Path Configuration::get_path(const std::string& path, const Navigation::Path& default_value) const
@@ -300,7 +309,16 @@ namespace Gecko
 
     void Configuration::set(const std::string& path, const Navigation::Path& value)
     {
-        // TODO: Implement.
+        for (const auto& i : value.get_points())
+        {
+            Configuration point;
+
+            point.set("x", i.x);
+            point.set("y", i.y);
+            point.set("z", i.z);
+
+            append(path, point.m_value);
+        }
     }
 
     void Configuration::set(const std::string& path, const Ogre::Vector2& value)
@@ -320,7 +338,7 @@ namespace Gecko
     {
         for (const auto& [key, value] : value)
         {
-            // TODO: Implement.
+            set(path + ".key", value);
         }
     }
 
