@@ -76,7 +76,8 @@ namespace Gecko
 
     void Game::update(float time)
     {
-        // TODO: Optimize to reach 60 frames.
+        // Must be updated first.
+        Input::getSingleton().update(time);
 
         MapManager::getSingleton().update(time);
         ObjectManager::getSingleton().update(time);
@@ -96,38 +97,18 @@ namespace Gecko
 
         unload_map();
 
-        auto map = MapManager::getSingleton().create(map_name);
+        m_active_map = MapManager::getSingleton().create(map_name);
 
-        if (map == nullptr)
+        if (m_active_map == nullptr)
         {
             throw Exception("Failed to create map '" + map_name + "'.");
         }
 
-        map->init();
-
-        // TODO: Move to function (maybe in UI)?
-        // Reset UI.
-        std::set<std::string> configurations;
-
-        for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
-        {
-            if (configuration->get_bool("creatable.by_player", false))
-            {
-                configurations.emplace(name);
-            }
-        }
-
-        if (UI::getSingleton().m_data_bindings_initialized)
-        {
-            UI::getSingleton().set_configurations(configurations);
-        }
+        m_active_map->init();
     }
 
     void Game::load_save(const std::string& save_name)
     {
-        quit();
-
-        // TODO: Implement.
     }
 
     void Game::quit()
@@ -158,7 +139,6 @@ namespace Gecko
             {
                 pollEvents();
 
-                update_input(Settings::Game::FrameTime);
                 update(Settings::Game::FrameTime);
 
                 elasped_time -= std::floor((elasped_time / Settings::Game::FrameTime)) * Settings::Game::FrameTime;
@@ -173,7 +153,6 @@ namespace Gecko
     void Game::save()
     {
         /*
-        TODO: Fix.
         Json::Value json_root;
 
         // Save map.
@@ -262,7 +241,6 @@ namespace Gecko
 
         json_root["objects"] = json_objects;
 
-        // TODO: Create function json_to_file.
         {
         auto saves_path = Settings::Game::SavesPath;
 
@@ -300,11 +278,6 @@ namespace Gecko
 
         ComponentManager::getSingleton().destroy_all();
         OrderManager::getSingleton().destroy_all();
-    }
-
-    void Game::update_input(float time)
-    {
-        Input::getSingleton().update(time);
     }
 
     Ogre::Entity* Game::create_entity(const std::string& name) const
@@ -368,8 +341,6 @@ namespace Gecko
         L_TRACE << "Game::save_options(" << _options << ")";
 
         /*
-        TODO: Fix.
-
         std::vector<std::string> options;
         boost::algorithm::split(options, _options, boost::is_any_of("&"), boost::token_compress_on);
 
@@ -389,11 +360,9 @@ namespace Gecko
 
             if (key_value[0] == "game_fog_of_war_type")
             {
-                // TODO: Implement.
             }
             else if (key_value[0] == "input_mouse_sensivity")
             {
-                // TODO: Implement.
                 // Input::getSingleton().set_mouse_sensitivity(visible);
             }
             else if (key_value[0] == "ui_cursor_visible")
@@ -442,12 +411,10 @@ namespace Gecko
             {
                 if (key_value[1] == "enabled")
                 {
-                    // TODO: Fix.
                     // get_m_scene_manager()->getSkyBoxNode()->setVisible(true);
                 }
                 else if (key_value[1] == "disabled")
                 {
-                    // TODO: Fix.
                     // get_m_scene_manager()->getSkyBoxNode()->setVisible(false);
                 }
             }
@@ -522,13 +489,13 @@ namespace Gecko
         */
     }
 
-    Map* Game::get_active_map() const
+    MapPtr Game::get_active_map() const
     {
         // TODO: Hardcoded first map.
         return MapManager::getSingleton().begin()->second;
     }
 
-    Player* Game::get_active_player() const
+    PlayerPtr Game::get_active_player() const
     {
         return PlayerManager::getSingleton().get(m_active_player_id);
     }

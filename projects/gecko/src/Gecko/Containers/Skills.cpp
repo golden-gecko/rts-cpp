@@ -68,7 +68,6 @@ namespace Gecko
 
     void Skills::activate(const std::string& name, const Id& id)
     {
-        // TODO: ID should be passed here, because object may have more than one skill?
         for (const auto& i : m_items)
         {
             if (i->get_configuration()->get_name() == name)
@@ -82,7 +81,6 @@ namespace Gecko
 
     void Skills::activate(const std::string& name, const Ogre::Vector3& position)
     {
-        // TODO: ID should be passed here, because object may have more than one skill?
         for (const auto& i : m_items)
         {
             if (i->get_configuration()->get_name() == name)
@@ -92,5 +90,18 @@ namespace Gecko
                 break;
             }
         }
+    }
+
+    bool Skills::is_available(const std::string& name) const
+    {
+        for (const auto& i : m_items)
+        {
+            if (i->get_name() == name)
+            {
+                return i->is_available();
+            }
+        }
+
+        return false;
     }
 }

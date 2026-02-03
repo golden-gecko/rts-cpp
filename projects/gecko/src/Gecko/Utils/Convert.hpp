@@ -11,6 +11,9 @@ namespace Gecko::Utils::Convert
 
     Layer* to_layer(Ogre::Entity* entity);
 
+    Ogre::PolygonMode to_polygon_mode(const std::string& polygon_mode);
+    Ogre::ProjectionType to_projection_type(const std::string& projection_type);
+
     Ogre::RealRect to_rectangle_coordinates(const Ogre::RealRect& rect);
 
     int to_rmlui_button(OIS::MouseButtonID button);

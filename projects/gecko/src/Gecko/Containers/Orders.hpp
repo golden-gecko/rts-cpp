@@ -84,7 +84,6 @@ namespace Gecko
         }
 
     public:
-        // TODO: Iterate over m_available or m_queue?
         auto begin()
         {
             return m_available.begin();

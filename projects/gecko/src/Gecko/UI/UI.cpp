@@ -22,6 +22,7 @@
 #include "Gecko/System.hpp"
 #include "Gecko/Technologies/TechnologyTree.hpp"
 #include "Gecko/UI/Cursor.hpp"
+#include "Gecko/UI/EventListener.hpp"
 #include "Gecko/UI/EventListenerInstancer.hpp"
 #include "Gecko/UI/Indicators/Indicator.hpp"
 #include "Gecko/UI/Minimap.hpp"
@@ -49,8 +50,9 @@ namespace Gecko
 
     void UI::init()
     {
-        // TODO: Get window size.
-        m_render_interface = std::make_shared<RenderInterface>(1920, 1200);
+        Ogre::RenderWindow* render_window = Game::getSingleton().getRenderWindow();
+
+        m_render_interface = std::make_shared<RenderInterface>(render_window->getWidth(), render_window->getHeight());
         m_system_interface = std::make_shared<SystemInterface>();
 
         Rml::SetRenderInterface(m_render_interface.get());
@@ -58,38 +60,10 @@ namespace Gecko
 
         Rml::Initialise();
 
-        // TODO: Get window size.
-        m_context = Rml::CreateContext("main", Rml::Vector2i(1920, 1200));
+        m_context = Rml::CreateContext("main", Rml::Vector2i(render_window->getWidth(), render_window->getHeight()));
 
         init_data_bindings();
-
-        // TODO: Move to configuration.
-        if (false)
-        {
-            Rml::Debugger::Initialise(m_context);
-        }
-
-        // Load fonts.
         init_fonts();
-
-        // Setup events.
-        // DemoEventListenerInstancer event_listener_instancer{ &demo_window };
-        // Rml::Factory::RegisterEventListenerInstancer(&event_listener_instancer);
-
-        // demo_window.GetDocument()->AddEventListener(Rml::EventId::Keydown, &demo_window);
-        // demo_window.GetDocument()->AddEventListener(Rml::EventId::Keyup, &demo_window);
-        // demo_window.GetDocument()->AddEventListener(Rml::EventId::Animationend, &demo_window);
-
-        // Load cursor.
-        /*
-        Rml::ElementDocument* cursor = m_context->LoadMouseCursor(getResourceFullPath("cursor.rml").c_str());
-
-        if (cursor)
-        {
-            // cursor->RemoveReference();
-        }
-        */
-
         init_components();
         init_events();
         init_documents();
@@ -169,6 +143,7 @@ namespace Gecko
                 info["Memory"] = Utils::Convert::to_string(static_cast<float>(memory.virtual_memory) / 1024.0f / 1024.0f) + " MB";
 
                 /*
+                TODO: Enable.
                 const auto& seasons = MapManager::getSingleton().get_items().begin()->second->get_seasons();
 
                 for (const auto& i : seasons)
@@ -196,8 +171,7 @@ namespace Gecko
 
             // TODO: Enable.
             // set_diplomacy();
-            // TODO: First map.
-            // set_layers(MapManager::getSingleton().begin()->second->get_layers());
+            // set_layers(Game::getSingleton()->get_active_map()->get_layers());
             // set_maps(Game::getSingleton().get_maps());
             set_objects_admin();
             set_orders_admin();
@@ -208,6 +182,7 @@ namespace Gecko
                 set_resources(Game::getSingleton().get_active_player()->get_resources());
             }
 
+            // TODO: Enable.
             // set_saves(Game::getSingleton().get_saves());
         }
     }
@@ -245,8 +220,6 @@ namespace Gecko
             return;
         }
 
-        m_context->Update();
-
         // Set up the projection and view matrices.
         float z_near = -1.0f;
         float z_far = 1.0f;
@@ -262,7 +235,6 @@ namespace Gecko
         
         render_system->_setProjectionMatrix(projection_matrix);
         render_system->_setViewMatrix(Ogre::Matrix4::IDENTITY);
-
         render_system->setLightingEnabled(false);
         render_system->_setDepthBufferParams(false, false);
         render_system->_setCullingMode(Ogre::CULL_CLOCKWISE);
@@ -270,30 +242,15 @@ namespace Gecko
         render_system->_setColourBufferWriteEnabled(true, true, true, true);
         render_system->unbindGpuProgram(Ogre::GPT_FRAGMENT_PROGRAM);
         render_system->unbindGpuProgram(Ogre::GPT_VERTEX_PROGRAM);
-
-        // TODO: Investigate.
-        /*
-        Ogre::TextureUnitState::UVWAddressingMode addressing_mode;
-
-        addressing_mode.u = Ogre::TextureUnitState::TAM_CLAMP;
-        addressing_mode.v = Ogre::TextureUnitState::TAM_CLAMP;
-        addressing_mode.w = Ogre::TextureUnitState::TAM_CLAMP;
-
-        render_system->_setTextureAddressingMode(0, addressing_mode);
-        */
-
         render_system->_setTextureCoordSet(0, 0);
         render_system->_setTextureCoordCalculation(0, Ogre::TEXCALC_NONE);
-
-        // TODO: Investigate.
-        // render_system->_setTextureUnitFiltering(0, Ogre::FO_LINEAR, Ogre::FO_LINEAR, Ogre::FO_POINT);
-
         render_system->_setTextureMatrix(0, Ogre::Matrix4::IDENTITY);
         render_system->_setAlphaRejectSettings(Ogre::CMPF_GREATER, 0, false);
         render_system->_disableTextureUnitsFrom(1);
         render_system->_setSceneBlending(Ogre::SBF_SOURCE_ALPHA, Ogre::SBF_ONE_MINUS_SOURCE_ALPHA);
         render_system->_setDepthBias(0, 0);
 
+        m_context->Update();
         m_context->Render();
     }
 
@@ -469,8 +426,6 @@ namespace Gecko
                 {
                     auto order = OrderManager::getSingleton().order_destroy(Id::Empty, object_id);
 
-                    // TODO: Throw exception.
-
                     if (Input::getSingleton().is_key_pressed(Command::Value::Multiple_Order) == false)
                     {
                         object->get_orders()->remove_all_orders();
@@ -496,8 +451,6 @@ namespace Gecko
 
                     auto order = OrderManager::getSingleton().order_disable(Id::Empty, object_id);
 
-                    // TODO: Throw exception.
-
                     object->get_orders()->add_last(order->get_id());
                 }
             }
@@ -518,8 +471,6 @@ namespace Gecko
 
                     auto order = OrderManager::getSingleton().order_enable(Id::Empty, object_id);
 
-                    // TODO: Throw exception.
-
                     object->get_orders()->add_last(order->get_id());
                 }
             }
@@ -539,8 +490,6 @@ namespace Gecko
                     }
 
                     auto order = OrderManager::getSingleton().order_stop(Id::Empty, object_id);
-
-                    // TODO: Throw exception.
 
                     object->get_orders()->add_last(order->get_id());
                 }
@@ -582,7 +531,6 @@ namespace Gecko
 
     void UI::inject_key_press(char key_code)
     {
-        // TODO: Fill the last argument.
         m_context->ProcessKeyDown(Utils::Convert::to_rmlui_key(key_code), 0);
 
         switch (Utils::Convert::to_rmlui_key(key_code))
@@ -599,25 +547,21 @@ namespace Gecko
 
     void UI::inject_key_release(char key_code)
     {
-        // TODO: Fill the last argument.
         m_context->ProcessKeyUp(Utils::Convert::to_rmlui_key(key_code), 0);
     }
 
     void UI::inject_mouse_move(std::size_t x, std::size_t y)
     {
-        // TODO: Convert types and fill the last argument.
         m_context->ProcessMouseMove(x, y, 0);
     }
 
     void UI::inject_mouse_press(std::size_t x, std::size_t y, OIS::MouseButtonID id)
     {
-        // TODO: Fill the last argument.
         m_context->ProcessMouseButtonDown(Utils::Convert::to_rmlui_button(id), 0);
     }
 
     void UI::inject_mouse_release(std::size_t x, std::size_t y, OIS::MouseButtonID id)
     {
-        // TODO: Fill the last argument.
         m_context->ProcessMouseButtonUp(Utils::Convert::to_rmlui_button(id), 0);
     }
 
@@ -787,9 +731,6 @@ namespace Gecko
 
     void UI::set_configurations(const std::set<std::string>& configurations)
     {
-        // Update cache.
-        // TODO: Implement.
-
         // Update UI.
         m_configurations.clear();
 
@@ -806,19 +747,6 @@ namespace Gecko
 
     void UI::set_diplomacy()
     {
-        // TODO: Fix cache.
-        /*
-        // Update cache.
-        static PlayerManager::Container players_cache;
-
-        if (players_cache == players)
-        {
-            return;
-        }
-
-        players_cache = players;
-        */
-
         // Update UI.
         m_diplomacy.clear();
 
@@ -991,18 +919,6 @@ namespace Gecko
 
     void UI::set_orders_admin()
     {
-        /* TODO: Fix cache.
-        // Update cache.
-        static OrderManager::Container orders_cache;
-
-        if (orders_cache == orders)
-        {
-            return;
-        }
-
-        orders_cache = orders;
-        */
-
         // Update UI.
         m_orders_admin.clear();
 
@@ -1073,9 +989,6 @@ namespace Gecko
 
     void UI::set_orders(const std::set<std::string>& orders)
     {
-        // Update cache.
-        // TODO: Implement.
-
         // Update UI.
         m_orders.clear();
 
@@ -1154,9 +1067,6 @@ namespace Gecko
 
     void UI::set_skills(const std::set<std::string>& skills)
     {
-        // Update cache.
-        // TODO: Implement.
-
         // Update UI.
         m_skills.clear();
 
@@ -1484,7 +1394,6 @@ namespace Gecko
 
     void UI::init_documents()
     {
-        // TODO: Warning on first call.
         Rml::Debugger::Shutdown();
 
         m_context->UnloadAllDocuments();
@@ -1563,7 +1472,7 @@ namespace Gecko
 
     void UI::log_write(const std::string& message, const std::string& type, Id id)
     {
-        if (m_log_model) // TODO: Delete.
+        if (m_log_model)
         {
             m_log.push_back({ type, message });
 

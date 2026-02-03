@@ -21,44 +21,5 @@ namespace Gecko
         };
 
         static State from_name(const std::string& name);
-
-    /*
-    public:
-        void clear()
-        {
-            m_items.clear();
-        }
-
-        auto empty() const
-        {
-            return m_items.empty();
-        }
-
-        auto size() const
-        {
-            return m_items.size();
-        }
-
-    public:
-        auto begin()
-        {
-            return m_items.begin();
-        }
-
-        auto end()
-        {
-            return m_items.end();
-        }
-
-        auto cbegin() const
-        {
-            return m_items.cbegin();
-        }
-
-        auto cend() const
-        {
-            return m_items.cend();
-        }
-    */
     };
 }

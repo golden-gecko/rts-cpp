@@ -69,17 +69,13 @@ namespace Gecko
 
     Mesh::~Mesh()
     {
-        // TODO: Fix.
-        if (Game::getSingletonPtr())
-        {
-            Game::getSingleton().destroy_scene_node(m_scene_node);
-            Game::getSingleton().destroy_entity(m_entity);
-        }
+        Game::getSingleton().destroy_scene_node(m_scene_node);
+        Game::getSingleton().destroy_entity(m_entity);
     }
 
     Ogre::Vector3 Mesh::get_direction() const
     {
-        return Utils::get_node_direction(*m_scene_node);
+        return Utils::get_node_direction(m_scene_node);
     }
 
     void Mesh::set_owner(Object* _owner)

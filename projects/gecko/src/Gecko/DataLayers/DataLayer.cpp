@@ -7,12 +7,6 @@
 
 namespace Gecko
 {
-    DataLayer::DataLayer(Layer* owner, const std::string& name, const Configuration& configuration) :
-        m_owner(owner), m_name(name)
-    {
-        m_source = configuration.get_string("source", "");
-    }
-
     void DataLayer::init()
     {
         auto size = m_owner->get_size();
@@ -109,6 +103,27 @@ namespace Gecko
 
             m_dirty = false;
         }
+    }
+
+    DataLayer::DataLayer(Layer* owner, const std::string& name, const Configuration& configuration) :
+        m_owner(owner), m_name(name)
+    {
+        m_source = configuration.get_string("source", "");
+    }
+
+    int DataLayer::get_data(int x, int z) const
+    {
+        if (x < m_data.size())
+        {
+            if (z < m_data[x].size())
+            {
+                return m_data[x][z];
+            }
+        }
+
+        L_WARNING << "DataLayer::get_data(" << x << ", " << z << "): Index outside range.";
+
+        return 0;
     }
 
     void DataLayer::add(const Navigation::Coordinate& index, const Area& area, int value)

@@ -12,7 +12,6 @@ namespace Gecko
     {
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
-            // TODO: Remove default value.
             auto type = configuration->get_string("type", "");
 
             if (type == "Technology")

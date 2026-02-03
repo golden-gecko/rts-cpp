@@ -58,11 +58,7 @@ namespace Gecko
 
     SquareLayer::~SquareLayer()
     {
-        // TODO: Remove in correct order.
-        if (Game::getSingletonPtr())
-        {
-            Game::getSingleton().destroy_scene_node(m_scene_node);
-        }
+        Game::getSingleton().destroy_scene_node(m_scene_node);
     }
 
     void SquareLayer::init()

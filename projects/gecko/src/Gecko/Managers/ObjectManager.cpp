@@ -46,7 +46,6 @@ namespace Gecko
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            // TODO: Remove default value.
             auto type = configuration->get_string("type", "");
 
             if (type == "Factory")

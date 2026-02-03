@@ -68,7 +68,7 @@ namespace Gecko::Navigation
         };
 
         auto snap_type = PathPointSnapType::Road;
-        auto data_layer = m_layer.get_data_layer("Roads"); // TODO: Remove hardcoded value.
+        auto data_layer = m_layer.get_data_layer("Roads");
 
         while (nodes.size() > 0)
         {
@@ -100,8 +100,6 @@ namespace Gecko::Navigation
 
                 auto data_layer_value = data_layer->get_data(next.x, next.z);
 
-                // TODO: Remove hardcoded value.
-                // TODO: Fix.
                 if (data_layer_value == 255)
                 {
                     if (visited[next.x][next.z] == 0)

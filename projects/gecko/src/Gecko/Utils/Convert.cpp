@@ -209,6 +209,43 @@ namespace Gecko::Utils::Convert
         return Ogre::any_cast<Layer*>(user_any);
     }
 
+    Ogre::PolygonMode to_polygon_mode(const std::string& polygon_mode)
+    {
+        static std::map<std::string, Ogre::PolygonMode> modes =
+        {
+            { "points"   , Ogre::PolygonMode::PM_POINTS    },
+            { "wireframe", Ogre::PolygonMode::PM_WIREFRAME },
+            { "solid"    , Ogre::PolygonMode::PM_SOLID     }
+        };
+
+        auto mode = modes.find(polygon_mode);
+
+        if (mode != modes.end())
+        {
+            return mode->second;
+        }
+
+        return Ogre::PolygonMode::PM_SOLID;
+    }
+
+    Ogre::ProjectionType to_projection_type(const std::string& projection_type)
+    {
+        static std::map<std::string, Ogre::ProjectionType> types =
+        {
+            { "orthographic", Ogre::ProjectionType::PT_ORTHOGRAPHIC },
+            { "perspective" , Ogre::ProjectionType::PT_PERSPECTIVE  }
+        };
+
+        auto type = types.find(projection_type);
+
+        if (type != types.end())
+        {
+            return type->second;
+        }
+
+        return Ogre::ProjectionType::PT_PERSPECTIVE;
+    }
+
     Ogre::RealRect to_rectangle_coordinates(const Ogre::RealRect& rect)
     {
         float left = 2.0f * rect.left - 1.0f;
@@ -332,14 +369,4 @@ namespace Gecko::Utils::Convert
 
         return stream.str();
     }
-
-    /*
-    Window* to_window(const SDL_Event& event)
-    {
-        auto sdl_window = SDL_GetWindowFromID(event.window.windowID);
-        auto window_data = SDL_GetWindowData(sdl_window, "window");
-
-        return reinterpret_cast<Window*>(window_data);
-    }
-    */
 }

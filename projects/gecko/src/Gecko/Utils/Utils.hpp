@@ -7,9 +7,9 @@
 
 namespace Gecko::Utils
 {
-    Ogre::Vector3 get_node_direction(Ogre::SceneNode& scene_node);
+    Ogre::Vector3 get_node_direction(Ogre::SceneNode* scene_node);
 
-    const Ogre::Vector3& get_node_position(Ogre::SceneNode& scene_node);
+    const Ogre::Vector3& get_node_position(Ogre::SceneNode* scene_node);
 
     Navigation::Coordinate get_index_from_position(float x, float z, const Ogre::Vector3& scale);
     Navigation::Coordinate get_index_from_position(const Ogre::Vector3& position, const Ogre::Vector3& scale);
@@ -18,7 +18,7 @@ namespace Gecko::Utils
 
     std::size_t get_window_handle(Ogre::RenderWindow* render_window);
 
-    void rotate_node_towards_position(Ogre::SceneNode& scene_node, const Ogre::Vector3& position, float time);
+    void rotate_node_towards_position(Ogre::SceneNode* scene_node, const Ogre::Vector3& position, float time);
 
     bool is_close_enough(const Ogre::Vector3& position, const Ogre::Vector3& target, float distance = Settings::Game::DistanceComparisionMinValue);
 

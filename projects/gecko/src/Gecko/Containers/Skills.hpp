@@ -48,11 +48,7 @@ namespace Gecko
             return false;
         }
 
-        bool is_available(const std::string& name) const
-        {
-            // TODO: Implement.
-            return false;
-        }
+        bool is_available(const std::string& name) const;
 
         auto size() const
         {

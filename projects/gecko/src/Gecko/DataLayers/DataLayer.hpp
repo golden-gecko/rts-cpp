@@ -24,11 +24,7 @@ namespace Gecko
         explicit DataLayer(Layer* owner, const std::string& name, const Configuration& configuration);
 
     public:
-        const auto get_data(int x, int z) const
-        {
-            // TODO: Check range.
-            return m_data[x][z];
-        }
+        int get_data(int x, int z) const;
 
         const auto& get_name() const
         {

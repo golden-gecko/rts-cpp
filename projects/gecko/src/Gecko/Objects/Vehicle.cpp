@@ -81,7 +81,6 @@ namespace Gecko
         auto resource_name = load_order->get_resource_name();
         auto resource_ordered = load_order->get_resource_value();
 
-        // TODO: Remove (only for debugging now).
         if (target->get_resources()->has_resource(resource_name, resource_ordered) == false)
         {
             L_WARNING << "Object " << load_order->get_target_id() << " has no " << resource_ordered << " " << resource_name << ".";
@@ -236,7 +235,6 @@ namespace Gecko
         auto resource_name = unload_order->get_resource_name();
         auto resource_ordered = unload_order->get_resource_value();
 
-        // TODO: Remove (only for debugging now).
         if (target->get_resources()->has_storage(resource_name, resource_ordered) == false)
         {
             L_WARNING << "Object " << unload_order->get_target_id() << " has no storage for " << resource_ordered << " " << resource_name << ".";

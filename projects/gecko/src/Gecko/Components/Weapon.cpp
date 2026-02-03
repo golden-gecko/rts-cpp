@@ -54,7 +54,6 @@ namespace Gecko
 
     void Weapon::update(float time)
     {
-        // TODO: Get target from object.
         /*
         reload_timer.update(time);
 

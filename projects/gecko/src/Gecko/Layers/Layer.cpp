@@ -21,7 +21,6 @@ namespace Gecko
 
     std::optional<Navigation::Path::Points> Layer::search(const Ogre::Vector3& from, const Ogre::Vector3& to) const
     {
-        // TODO: Check.
         return m_search->get_path(from, to);
     }
 
@@ -34,17 +33,16 @@ namespace Gecko
             throw Exception("Data layer '" + data_layer_name + "' not found.");
         }
 
-        // TODO: Rename material to material_name.
         // Get material.
-        auto _material = Ogre::MaterialManager::getSingleton().getByName(m_material_name);
+        auto material = Ogre::MaterialManager::getSingleton().getByName(m_material_name);
 
-        if (_material.isNull())
+        if (material.isNull())
         {
             return;
         }
 
         // Set texture.
-        for (const auto& technique : _material->getTechniques())
+        for (const auto& technique : material->getTechniques())
         {
             for (const auto& pass : technique->getPasses())
             {

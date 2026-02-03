@@ -169,7 +169,6 @@ namespace Gecko
         virtual void update_resources(float time);
         virtual void update_skills(float time);
 
-        // TODO: Move to order resolver.
         virtual OrderStatus on_attack(Order* order, float time);
         virtual OrderStatus on_create(Order* order, float time);
         virtual OrderStatus on_destroy(Order* order, float time);
@@ -184,7 +183,6 @@ namespace Gecko
         virtual OrderStatus on_stop(Order* order, float time);
         virtual OrderStatus on_unload(Order* order, float time);
         virtual OrderStatus on_wait(Order* order, float time);
-        // TODO: End.
 
     private:
         Map* m_owner = nullptr;

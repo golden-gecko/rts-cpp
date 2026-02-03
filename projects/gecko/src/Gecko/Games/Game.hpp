@@ -43,7 +43,6 @@ namespace Gecko
         void save();
         void stop();
         void unload_map();
-        void update_input(float time);
 
         Ogre::Entity* create_entity(const std::string& name) const;
         void destroy_entity(Ogre::Entity* entity) const;
@@ -105,10 +104,11 @@ namespace Gecko
         Id m_active_player_id;
 
     private:
-        Ogre::SceneManager* m_scene_manager = nullptr;
+        Ogre::SceneManager* m_scene_manager    = nullptr;
+        Ogre::Light*        m_light            = nullptr;
+        Ogre::SceneNode*    m_light_scene_node = nullptr;
 
-        Ogre::Light* m_light = nullptr;
-        Ogre::SceneNode* m_light_scene_node = nullptr;
+        MapPtr m_active_map = nullptr;
 
         void init_meshes();
         void init_root();

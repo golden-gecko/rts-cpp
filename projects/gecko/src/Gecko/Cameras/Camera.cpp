@@ -1,6 +1,7 @@
 #include "Gecko/Cameras/Camera.hpp"
 
 #include "Gecko/Configuration.hpp"
+#include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Input.hpp"
 #include "Gecko/Managers/MapManager.hpp"
 #include "Gecko/Maps/Map.hpp"
@@ -25,31 +26,8 @@ namespace Gecko
         // TODO: Remove this from constructor. Does not work.
         deserialize(configuration);
 
-        auto polygon_mode = configuration->get_string("polygon_mode", Settings::Camera::PolygonMode);
-
-        if (polygon_mode == "points")
-        {
-            m_camera->setPolygonMode(Ogre::PolygonMode::PM_POINTS);
-        }
-        else if (polygon_mode == "solid")
-        {
-            m_camera->setPolygonMode(Ogre::PolygonMode::PM_SOLID);
-        }
-        else if (polygon_mode == "wireframe")
-        {
-            m_camera->setPolygonMode(Ogre::PolygonMode::PM_WIREFRAME);
-        }
-
-        auto projection_type = configuration->get_string("projection_type", Settings::Camera::ProjectionType);
-
-        if (projection_type == "orthographic")
-        {
-            m_camera->setProjectionType(Ogre::ProjectionType::PT_ORTHOGRAPHIC);
-        }
-        else if (projection_type == "perspective")
-        {
-            m_camera->setProjectionType(Ogre::ProjectionType::PT_PERSPECTIVE);
-        }
+        m_camera->setPolygonMode(Utils::Convert::to_polygon_mode(configuration->get_string("polygon_mode", Settings::Camera::PolygonMode)));
+        m_camera->setProjectionType(Utils::Convert::to_projection_type(configuration->get_string("projection_type", Settings::Camera::ProjectionType)));
 
         if (root->getRenderSystem()->getCapabilities()->hasCapability(Ogre::Capabilities::RSC_INFINITE_FAR_PLANE))
         {

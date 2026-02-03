@@ -273,14 +273,11 @@ namespace Gecko
 
     Ogre::Vector3 Object::get_direction() const
     {
-        return Utils::get_node_direction(*m_scene_node);
+        return Utils::get_node_direction(m_scene_node);
     }
 
     Entrance Object::get_entrance() const
     {
-        // TODO: Fix get_size() function.
-        auto area = get_size();
-
         // TODO: Hardcoded.
         auto layer = m_owner->get_layer("Terrain");
         auto data_layer = layer->get_data_layer("Navigation");
@@ -340,7 +337,6 @@ namespace Gecko
 
     float Object::get_heading() const
     {
-        // TODO: Test.
         auto forward = Ogre::Vector3::NEGATIVE_UNIT_Z;
         auto normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
         auto direction = get_direction();
@@ -417,7 +413,6 @@ namespace Gecko
         {
             player->set_unit_position(get_id(), get_position(), get_visibility_range());
 
-            // TODO: Fix.
             // selection_entity->setMaterialName(player->get_color());
         }
         */
@@ -493,7 +488,7 @@ namespace Gecko
 
     const Ogre::Vector3& Object::get_position() const
     {
-        return Utils::get_node_position(*m_scene_node);
+        return Utils::get_node_position(m_scene_node);
     }
 
     std::map<std::string, float> Object::get_progress_bars() const
@@ -573,7 +568,6 @@ namespace Gecko
             return;
         }
 
-        // TODO: Optimize. Do not create on each function call.
         // Get handler for order.
         const std::map<order_type::Value, std::function<OrderStatus(Order*, float)>> handlers =
         {

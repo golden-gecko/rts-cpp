@@ -19,8 +19,8 @@ namespace Gecko
 			return;
 		}
 
-		const std::string function = segments[0];
-		const std::string argument = segments[1];
+		std::string function = segments[0];
+		std::string argument = segments[1];
 
 		if (m_value == "call:quit-to-menu")
 		{
@@ -68,6 +68,7 @@ namespace Gecko
 	EventListener::EventListener(const Rml::String& value) :
 		m_value(value)
 	{
+		L_TRACE << "EventListener::EventListener(" << value << ")";
 	}
 
 	Rml::Element* EventListener::get_element(const std::string& element) const

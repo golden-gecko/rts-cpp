@@ -22,13 +22,9 @@ namespace Gecko
             Ogre::TU_RENDERTARGET
         );
 
-        MapPtr map = Game::getSingleton().get_active_map();
-
-        if (map)
+        if (MapPtr map = Game::getSingleton().get_active_map())
         {
-            CameraPtr camera = map->get_camera("Preview");
-
-            if (camera)
+            if (CameraPtr camera = map->get_camera("Preview"))
             {
                 m_render_texture = m_texture->getBuffer()->getRenderTarget();
 

@@ -129,13 +129,18 @@ namespace Gecko
 
     bool Map::is_position_valid(const Ogre::Vector3& position) const
     {
-        return get_layer("Terrain")->is_position_valid(position); // TODO: Hardcoded layer name.
+        // TODO: Hardcoded layer name.
+        return get_layer("Terrain")->is_position_valid(position);
     }
 
     void Map::show_data_layer(const std::string& layer_name, const std::string& data_layer_name)
     {
-        // TODO: Check if layer exists.
-        get_layer(layer_name)->show_data_layer(data_layer_name);
+        auto layer = get_layer(layer_name);
+
+        if (layer)
+        {
+            layer->show_data_layer(data_layer_name);
+        }
     }
 
     std::shared_ptr<Layer> Map::get_layer(const std::string& name) const

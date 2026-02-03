@@ -38,6 +38,11 @@ namespace Gecko
         }
 
     public:
+        virtual bool is_available()
+        {
+            return m_refresh_timer;
+        }
+
         virtual void set_owner(Object* owner)
         {
             m_owner = owner;

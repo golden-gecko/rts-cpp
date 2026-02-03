@@ -8,14 +8,14 @@
 
 namespace Gecko::Utils
 {
-    Ogre::Vector3 get_node_direction(Ogre::SceneNode& scene_node)
+    Ogre::Vector3 get_node_direction(Ogre::SceneNode* scene_node)
     {
-        return scene_node._getDerivedOrientation() * Ogre::Vector3::NEGATIVE_UNIT_Z;
+        return scene_node->_getDerivedOrientation() * Ogre::Vector3::NEGATIVE_UNIT_Z;
     }
 
-    const Ogre::Vector3& get_node_position(Ogre::SceneNode& scene_node)
+    const Ogre::Vector3& get_node_position(Ogre::SceneNode* scene_node)
     {
-        return scene_node._getDerivedPosition();
+        return scene_node->_getDerivedPosition();
     }
 
     Navigation::Coordinate get_index_from_position(float x, float z, const Ogre::Vector3& scale)
@@ -80,7 +80,8 @@ namespace Gecko::Utils
         return render_window_handle;
     }
 
-    void rotate_node_towards_position(Ogre::SceneNode& scene_node, const Ogre::Vector3& position, float time)
+    // TODO: Replace with lookAt.
+    void rotate_node_towards_position(Ogre::SceneNode* scene_node, const Ogre::Vector3& position, float time)
     {
         auto current_position = get_node_position(scene_node);
         current_position.y = 0.0f;
@@ -101,7 +102,7 @@ namespace Gecko::Utils
             float y_direction = y > 0.0f ? 1.0f : -1.0f;
             float y_turn_value = y_direction * y_speed * time;
 
-            scene_node.yaw(Ogre::Degree(y_turn_value));
+            scene_node->yaw(Ogre::Degree(y_turn_value));
         }
 
         if (std::fabsf(p) > 1.0f)
@@ -110,8 +111,7 @@ namespace Gecko::Utils
             float p_direction = p > 0.0f ? 1.0f : -1.0f;
             float p_turn_value = p_direction * p_speed * time;
 
-            // TODO: Fix.
-            // scene_node.pitch(Ogre::Degree(p_turn_value));
+            scene_node->pitch(Ogre::Degree(p_turn_value));
         }
     }
 

@@ -54,13 +54,12 @@ namespace Gecko
             return m_items.end();
         }
 
-        // TODO: Change to cbegin?
-        const auto begin() const
+        auto cbegin() const
         {
             return m_items.cbegin();
         }
 
-        const auto end() const
+        auto cend() const
         {
             return m_items.cend();
         }

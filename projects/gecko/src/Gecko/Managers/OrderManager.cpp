@@ -44,7 +44,6 @@ namespace Gecko
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            // TODO: Remove default value.
             auto type = configuration->get_string("type", "");
 
             if (type == "Attack")
@@ -297,7 +296,6 @@ namespace Gecko
 
         auto order_move = dynamic_cast<OrderMove*>(order);
 
-        // TODO: Refactor get_entrance to always return value.
         order_move->set_target_position(object->get_entrance().get_position());
 
         return order;

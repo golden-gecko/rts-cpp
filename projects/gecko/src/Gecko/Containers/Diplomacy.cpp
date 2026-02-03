@@ -8,7 +8,7 @@ namespace Gecko
     {
         static const std::map<std::string, State> types =
         {
-            { "Ally", State::Ally },
+            { "Ally" , State::Ally  },
             { "Enemy", State::Enemy }
         };
 
@@ -24,17 +24,10 @@ namespace Gecko
 
     ConfigurationPtr Diplomacy::serialize() const
     {
-        auto configuration = std::make_shared<Configuration>();
-
-        // TODO: Implement.
-
-        return configuration;
+        return std::make_shared<Configuration>();
     }
 
     void Diplomacy::deserialize(const ConfigurationPtr& configuration)
     {
-        // clear();
-
-        // TODO: Implement.
     }
 }
