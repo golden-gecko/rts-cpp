@@ -151,14 +151,20 @@ namespace Gecko
 
     bool Input::mouseMoved(const OIS::MouseEvent& arg)
     {
+        /*
+        L_TRACE << "Input::mouseMoved():"
+                << " x: " << arg.state.X.abs << " y: " << arg.state.Y.abs << " z: " << arg.state.Z.abs
+                << " x: " << arg.state.X.rel << " y: " << arg.state.Y.rel << " z: " << arg.state.Z.rel;
+        */
+
         auto x = static_cast<float>(arg.state.X.rel);
         auto y = static_cast<float>(arg.state.Y.rel);
 
-        UI::getSingleton().inject_mouse_move(arg.state.X.abs, arg.state.Y.abs);
+        UI::getSingleton().inject_mouse_move(arg.state.X.abs, arg.state.Y.abs, arg.state.Z.rel);
         UI::getSingleton().get_cursor().set_visible(false);
 
         // TODO: Hardcoded map.
-        auto camera = MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::MainName);
+        auto camera = MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::Main);
 
         if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
         {

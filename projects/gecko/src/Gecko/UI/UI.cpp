@@ -68,6 +68,9 @@ namespace Gecko
         init_events();
         init_documents();
         init_visibility_types();
+
+        m_minimap->init_events(m_document->GetElementById("minimap"));
+        m_preview->init_events(m_document->GetElementById("preview"));
     }
 
     void UI::deinit()
@@ -550,22 +553,29 @@ namespace Gecko
         m_context->ProcessKeyUp(Utils::Convert::to_rmlui_key(key_code), 0);
     }
 
-    void UI::inject_mouse_move(std::size_t x, std::size_t y)
+    void UI::inject_mouse_move(int x, int y, int z)
     {
-        m_context->ProcessMouseMove(x, y, 0);
+        if (z == 0)
+        {
+            m_context->ProcessMouseMove(x, y, 0);
+        }
+        else
+        {
+            m_context->ProcessMouseWheel(static_cast<float>(z), 0);
+        }
     }
 
-    void UI::inject_mouse_press(std::size_t x, std::size_t y, OIS::MouseButtonID id)
+    void UI::inject_mouse_press(int x, int y, OIS::MouseButtonID id)
     {
         m_context->ProcessMouseButtonDown(Utils::Convert::to_rmlui_button(id), 0);
     }
 
-    void UI::inject_mouse_release(std::size_t x, std::size_t y, OIS::MouseButtonID id)
+    void UI::inject_mouse_release(int x, int y, OIS::MouseButtonID id)
     {
         m_context->ProcessMouseButtonUp(Utils::Convert::to_rmlui_button(id), 0);
     }
 
-    bool UI::is_mouse_inside(std::size_t x, std::size_t y)
+    bool UI::is_mouse_inside(int x, int y)
     {
         Rml::ElementList elements;
 
@@ -643,7 +653,7 @@ namespace Gecko
 
         if (preview_state != state.end())
         {
-            get_preview().set_visible(preview_state->second);
+            // get_preview().set_visible(preview_state->second);
         }
 
         auto selection_box_state = state.find("selection_box");
@@ -689,7 +699,7 @@ namespace Gecko
         show_layers(visible);
 
         get_cursor().set_visible(visible);
-        get_preview().set_visible(visible);
+        // get_preview().set_visible(visible);
     }
 
     void UI::set_configuration_name(const std::string& configuration_name)
@@ -769,7 +779,7 @@ namespace Gecko
         // Create RML.
         Rml::String rml;
 
-        auto camera = MapManager::getSingleton().begin()->second->get_camera("Main")->get_camera();
+        auto camera = MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::Main)->get_camera();
         auto window = Game::getSingleton().getRenderWindow();
 
         for (const auto& [id, object] : ObjectManager::getSingleton())

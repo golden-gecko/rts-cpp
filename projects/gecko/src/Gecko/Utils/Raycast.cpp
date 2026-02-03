@@ -17,7 +17,7 @@ namespace Gecko
         auto x = static_cast<float>(arg.state.X.abs) / static_cast<float>(arg.state.width);
         auto y = static_cast<float>(arg.state.Y.abs) / static_cast<float>(arg.state.height);
 
-        return MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::MainName)->get_camera()->getCameraToViewportRay(x, y);
+        return MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::Main)->get_camera()->getCameraToViewportRay(x, y);
     }
 
     std::set<Id> from_plane(const Ogre::Vector2& start, const Ogre::Vector2& end, Ogre::uint32 query_mask)
@@ -42,7 +42,7 @@ namespace Gecko
             return std::set<Id>();
         }
 
-        auto camera = MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::MainName)->get_camera();
+        auto camera = MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::Main)->get_camera();
 
         auto topLeft = camera->getCameraToViewportRay(left, top);
         auto topRight = camera->getCameraToViewportRay(right, top);

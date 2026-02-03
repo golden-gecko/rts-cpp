@@ -6,19 +6,25 @@
 
 namespace Gecko
 {
-    class Preview
+    class Preview :
+        public Rml::EventListener
     {
+	public:
+		// From Rml::EventListener.
+		void ProcessEvent(Rml::Event& event) override;
+
     public:
         explicit Preview();
 
         virtual ~Preview();
 
-    public:
-        std::shared_ptr<ObjectFollowCamera> get_camera() const;
+        void init_events(Rml::Element* element);
+
+        void zoom_in();
+        void zoom_out();
 
     public:
-        void set_position(std::uint32_t left, std::uint32_t top, const Id& id);
-        void set_visible(bool visible);
+        std::shared_ptr<ObjectFollowCamera> get_camera() const;
 
     private:
         Ogre::TexturePtr     m_texture        = nullptr;

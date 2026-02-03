@@ -427,8 +427,6 @@ namespace Gecko
         ConfigurationPtr options = m_configuration->get_child("options");
 
         /*
-        TODO: Implement.
-
         Game::getSingleton().set_fog_of_war_color(
             options.get<std::string>("scene.fog_of_war.color.r"),
             options.get<std::string>("scene.fog_of_war.color.g"),
@@ -450,19 +448,13 @@ namespace Gecko
         );
 
         /*
-        TODO: Implement.
-
         UI::getSingleton().get_minimap().set_visible(
             options->get_bool("ui.minimap.visible", Settings::UI::MinimapVisibility)
         );
-        */
 
         UI::getSingleton().get_preview().set_visible(
             options->get_bool("ui.preview.visible", Settings::UI::PreviewVisibility)
         );
-
-        /*
-        TODO: Implement.
 
         const auto fog_of_war_type = options->get_string("scene.map.fog_of_war.type", "fuzzy");
 

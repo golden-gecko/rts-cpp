@@ -61,11 +61,11 @@ namespace Gecko
 
         void inject_key_press(char key_code);
         void inject_key_release(char key_code);
-        void inject_mouse_move(std::size_t x, std::size_t y);
-        void inject_mouse_press(std::size_t x, std::size_t y, OIS::MouseButtonID id);
-        void inject_mouse_release(std::size_t x, std::size_t y, OIS::MouseButtonID id);
+        void inject_mouse_move(int x, int y, int z);
+        void inject_mouse_press(int x, int y, OIS::MouseButtonID id);
+        void inject_mouse_release(int x, int y, OIS::MouseButtonID id);
 
-        bool is_mouse_inside(std::size_t x, std::size_t y);
+        bool is_mouse_inside(int x, int y);
 
         bool is_visible() const
         {

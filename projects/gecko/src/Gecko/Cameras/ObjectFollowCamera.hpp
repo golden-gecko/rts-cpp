@@ -37,7 +37,7 @@ namespace Gecko
     public:
         void set_distance(float distance)
         {
-            m_distance = m_distance;
+            m_distance = distance;
         }
 
         void set_target_id(Id target_id)

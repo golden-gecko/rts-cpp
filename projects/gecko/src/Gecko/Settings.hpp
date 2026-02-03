@@ -14,11 +14,13 @@ namespace Gecko
         namespace Camera
         {
             const float       FarClipDistance  = 1000.0f;
-            const std::string MainName         = "Main";
+            const std::string Main             = "Main";
             const float       MaxHeight        = 100.0f;
             const float       MinHeight        = 10.0f;
+            const std::string Minimap          = "Minimap";
             const float       NearClipDistance = 1.0f;
             const std::string PolygonMode      = "solid";
+            const std::string Preview          = "Preview";
             const std::string ProjectionType   = "perspective";
         }
 

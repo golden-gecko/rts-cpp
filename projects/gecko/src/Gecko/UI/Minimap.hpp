@@ -4,16 +4,23 @@
 
 namespace Gecko
 {
-    class Minimap
+    class Minimap :
+        public Rml::EventListener
     {
+	public:
+		// From Rml::EventListener.
+		void ProcessEvent(Rml::Event& event) override;
+
     public:
         explicit Minimap();
 
         virtual ~Minimap();
 
+        void init_events(Rml::Element* element);
+
     public:
-        void click(int x, int y);
-        void move(int x, int y);
+        void click(float x, float y);
+        void move(float x, float y);
         void zoom_in();
         void zoom_out();
 
