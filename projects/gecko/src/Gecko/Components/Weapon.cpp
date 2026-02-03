@@ -59,7 +59,6 @@ namespace Gecko
 
         const auto& current_position = Utils::get_node_position(get_scene_node());
 
-        // TODO: Remove y = 0 after fixing Utils::rotate_node_towards_position.
         auto current_direction = Utils::get_node_direction(get_scene_node());
         current_direction.y = 0.0f;
         current_direction.normalise();

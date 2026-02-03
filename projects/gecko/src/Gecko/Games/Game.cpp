@@ -306,6 +306,19 @@ namespace Gecko
         }
     }
 
+    Ogre::PlaneBoundedVolumeListSceneQuery* Game::create_plane_volume_query(const Ogre::PlaneBoundedVolumeList& volumes, Ogre::uint32 mask) const
+    {
+        return m_scene_manager->createPlaneBoundedVolumeQuery(volumes, mask);
+    }
+
+    void Game::destroy_query(Ogre::SceneQuery* scene_query)
+    {
+        if (scene_query)
+        {
+            m_scene_manager->destroyQuery(scene_query);
+        }
+    }
+
     Ogre::RaySceneQuery* Game::create_ray_scene_query(const Ogre::Ray& ray) const
     {
         auto ray_scene_query = m_scene_manager->createRayQuery(ray);
@@ -483,8 +496,7 @@ namespace Gecko
 
     MapPtr Game::get_active_map() const
     {
-        // TODO: Hardcoded first map.
-        return MapManager::getSingleton().begin()->second;
+        return MapManager::getSingleton().begin()->second; // TODO: Hardcoded.
     }
 
     PlayerPtr Game::get_active_player() const
@@ -583,8 +595,7 @@ namespace Gecko
         {
             auto selection = create_manual_object();
 
-            // TODO: Hardcoded.
-            selection->begin("white");
+            selection->begin("white"); // TODO: Hardcoded.
 
             selection->position(-0.5f, 0.0f, -0.5f);
             selection->normal(Ogre::Vector3::UNIT_Y);

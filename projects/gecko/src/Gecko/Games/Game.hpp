@@ -50,6 +50,9 @@ namespace Gecko
         Ogre::ManualObject* create_manual_object() const;
         void destroy_manual_object(Ogre::ManualObject* manual_object) const;
 
+        Ogre::PlaneBoundedVolumeListSceneQuery* create_plane_volume_query(const Ogre::PlaneBoundedVolumeList& volumes, Ogre::uint32 mask) const;
+        void destroy_query(Ogre::SceneQuery* scene_query);
+
         Ogre::RaySceneQuery* create_ray_scene_query(const Ogre::Ray& ray) const;
         void destroy_ray_scene_query(Ogre::RaySceneQuery* ray_scene_query);
 

@@ -30,11 +30,9 @@ namespace Gecko
             /*
             // Load texture.
 
-            // TODO: Read data from texture.
             // Load data.
             auto image = Utils::Texture::load_square_image(m_source);
 
-            // TODO: Remove. Refactor.
             if (source != owner.get_heightmap())
             {
                 // TODO: Make scale and grid scale a scalar.

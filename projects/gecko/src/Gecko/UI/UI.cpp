@@ -75,12 +75,17 @@ namespace Gecko
 
     void UI::deinit()
     {
+        m_minimap->deinit_events(m_document->GetElementById("minimap"));
+        m_preview->deinit_events(m_document->GetElementById("preview"));
+
         m_cursor.reset();
         m_minimap.reset();
         m_preview.reset();
         m_selection_box.reset();
 
         refresh_indicators(Id::Empty);
+
+        m_context->UnloadAllDocuments();
 
         Rml::Shutdown();
     }

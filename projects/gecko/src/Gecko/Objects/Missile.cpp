@@ -68,8 +68,7 @@ namespace Gecko
             }
             else
             {
-                // TODO: Hardcoded layer name.
-                auto layer_position = map->get_layer("Terrain")->get_position(position);
+                auto layer_position = map->get_layer("Terrain")->get_position(position); // TODO: Hardcoded.
 
                 if (position.y <= layer_position.y)
                 {

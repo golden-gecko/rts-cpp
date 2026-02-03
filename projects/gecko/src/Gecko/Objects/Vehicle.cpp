@@ -122,8 +122,7 @@ namespace Gecko
         position.y = 0.0f;
         target_position.y = 0.0f;
 
-        // TODO: Hardcoded layer name.
-        const auto& layer = get_owner()->get_layer("Terrain");
+        const auto& layer = get_owner()->get_layer("Terrain"); // TODO: Hardcoded.
 
         // Do we have everything needed to complete order?
         if (move_order->get_path().get_points().empty())

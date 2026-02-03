@@ -19,6 +19,7 @@ namespace Gecko
         virtual ~Preview();
 
         void init_events(Rml::Element* element);
+        void deinit_events(Rml::Element* element);
 
         void zoom_in();
         void zoom_out();

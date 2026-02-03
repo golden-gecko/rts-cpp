@@ -80,6 +80,7 @@ namespace Gecko
                 }
             }
         }
+        /*
         else
         {
             for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
@@ -90,6 +91,7 @@ namespace Gecko
                 }
             }
         }
+        */
 
         auto& ui = UI::getSingleton();
 

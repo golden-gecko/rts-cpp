@@ -20,15 +20,10 @@ namespace Gecko
 
     void SquareTile::deinit()
     {
-        // TODO: Remove in correct order.
-        if (Game::getSingletonPtr())
-        {
-            Game::getSingleton().destroy_entity(m_entity);
-            Game::getSingleton().destroy_scene_node(m_scene_node);
+        Game::getSingleton().destroy_entity(m_entity);
+        Game::getSingleton().destroy_scene_node(m_scene_node);
 
-            // TODO: Test.
-            Ogre::MeshManager::getSingleton().remove(get_mesh_name());
-        }
+        Ogre::MeshManager::getSingleton().remove(get_mesh_name());
     }
 
     std::string SquareTile::get_mesh_name() const

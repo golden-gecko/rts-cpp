@@ -61,6 +61,11 @@ namespace Gecko
         element->AddEventListener(Rml::EventId::Mousescroll, this);
     }
 
+    void Preview::deinit_events(Rml::Element* element)
+    {
+        element->RemoveEventListener(Rml::EventId::Mousescroll, this);
+    }
+
     void Preview::zoom_in()
     {
         L_TRACE << "Preview::zoom_in()";

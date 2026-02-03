@@ -124,6 +124,13 @@ namespace Gecko
         element->AddEventListener(Rml::EventId::Mouseup, this);
     }
 
+    void Minimap::deinit_events(Rml::Element* element)
+    {
+        element->RemoveEventListener(Rml::EventId::Mousedown, this);
+        element->RemoveEventListener(Rml::EventId::Mousescroll, this);
+        element->RemoveEventListener(Rml::EventId::Mouseup, this);
+    }
+
     void Minimap::click(float x, float y)
     {
         L_TRACE << "Minimap::click(" << x << ", " << y << ")";

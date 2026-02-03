@@ -116,8 +116,7 @@ namespace Gecko
 
     void JobManager::remove_in(const Id& requester, const std::string& resource_name)
     {
-        std::erase_if(m_in_queue,
-            [&](const auto& x)
+        std::erase_if(m_in_queue, [&requester, &resource_name](const auto& x)
             {
                 return x.requester_id == requester && x.resource_name == resource_name;
             }
@@ -126,8 +125,7 @@ namespace Gecko
 
     void JobManager::remove_out(const Id& requester, const std::string& resource_name)
     {
-        std::erase_if(m_out_queue,
-            [&](const auto& x)
+        std::erase_if(m_out_queue, [&requester, &resource_name](const auto& x)
             {
                 return x.requester_id == requester && x.resource_name == resource_name;
             }
@@ -144,8 +142,6 @@ namespace Gecko
         auto object = object_manager.get_in_range();
 
         return {
-            // TODO: Replace with transport order.
-            // TODO: Remove wait orders (only for debbuging).
             order_manager.order_wait(id, id, 0.1f),
             order_manager.order_attack(id, id, 0.1f),
             order_manager.order_wait(id, id, 0.1f)
@@ -193,7 +189,6 @@ namespace Gecko
                 // TODO: Maybe we could ask input requester for current storage?
                 auto jobs = {
                     // TODO: Replace with transport order.
-                    // TODO: Remove wait orders (only for debbuging).
                     order_manager->order_wait(id, id, 0.1f),
                     order_manager->order_move(id, id, out_request->requester_id),
                     order_manager->order_wait(id, id, 0.1f),
@@ -231,7 +226,6 @@ namespace Gecko
 
             // Create orders.
             auto jobs = {
-                // TODO: Remove wait orders (only for debbuging).
                 order_manager->order_wait(id, id, 0.1f),
                 order_manager->order_move(id, id, in_request->requester_id),
                 order_manager->order_wait(id, id, 0.1f),

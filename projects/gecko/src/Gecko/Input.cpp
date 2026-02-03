@@ -770,8 +770,7 @@ namespace Gecko
         auto possible_order_name = ui.get_order_type();
         const auto& skill_name = ui.get_skill_name();
 
-        // TODO: Do something with "None".
-        if (configuration_name != "None")
+        if (configuration_name != "None") // TODO: Hardcoded.
         {
             auto layer_cast = Utils::Raycast::to_layer(arg);
 
@@ -833,8 +832,7 @@ namespace Gecko
                 UI::getSingleton().reset();
             }
         }
-        // TODO: Do something with "None".
-        else if (skill_name != "None")
+        else if (skill_name != "None") // TODO: Hardcoded.
         {
             process_skill(arg, skill_name);
         }

@@ -17,6 +17,7 @@ namespace Gecko
         virtual ~Minimap();
 
         void init_events(Rml::Element* element);
+        void deinit_events(Rml::Element* element);
 
     public:
         void click(float x, float y);

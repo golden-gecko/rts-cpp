@@ -129,8 +129,7 @@ namespace Gecko
 
     bool Map::is_position_valid(const Ogre::Vector3& position) const
     {
-        // TODO: Hardcoded layer name.
-        return get_layer("Terrain")->is_position_valid(position);
+        return get_layer("Terrain")->is_position_valid(position); // TODO: Hardcoded.
     }
 
     void Map::show_data_layer(const std::string& layer_name, const std::string& data_layer_name)

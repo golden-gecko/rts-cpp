@@ -65,8 +65,7 @@ namespace Gecko
         Ogre::PlaneBoundedVolumeList volList;
         volList.push_back(vol);
 
-        // TODO: Move to game class.
-        static auto query = Game::getSingleton().get_scene_manager()->createPlaneBoundedVolumeQuery(volList, query_mask);
+        static auto query = Game::getSingleton().create_plane_volume_query(volList, query_mask);
 
         query->setVolumes(volList);
         query->setQueryMask(query_mask);

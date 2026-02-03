@@ -79,5 +79,21 @@ int main(int argc, char* argv[])
     game->load_options();
     game->run();
 
+    // Deinit in correct order.
+    ui->deinit();
+    technology_tree->deinit();
+    input->deinit();
+
+    /*
+    skill_manager->deinit();
+    component_manager->deinit();
+    order_manager->deinit();
+    player_manager->deinit();
+    object_manager->deinit();
+    map_manager->deinit();
+    */
+
+    game->deinit();
+
     return 0;
 }

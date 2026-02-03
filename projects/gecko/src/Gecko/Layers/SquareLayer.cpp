@@ -390,7 +390,6 @@ namespace Gecko
 
         if (Utils::Math::is_power_2(shards) == false)
         {
-            // TODO: Check if this is true.
             throw Exception("'shards' must be one of 1, 4, 16 or 64.");
         }
 
@@ -399,7 +398,7 @@ namespace Gecko
 
         if (heightmap_size % shards_per_row != 0)
         {
-            throw Exception("'shards' is not multiple of heightmap size.");
+            throw Exception("'shards' must be a multiple of heightmap size.");
         }
 
         // Get tiles.

@@ -121,7 +121,6 @@ namespace Gecko
         set_visible(true);
 
         /*
-        // TODO: Move to configuration.
         if (type != Type::Value::Missile)
         {
             // map->get_terrain().set_unit_position(get_id(), get_position());
