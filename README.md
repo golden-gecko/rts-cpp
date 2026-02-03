@@ -1,6 +1,16 @@
 # RTS
 
-RTS engine.
+RTS engine written in C++ using only open source libraries. Features:
+
+- Unit editor.
+- Path finding.
+- Technology tree.
+- Diplomacy.
+- Order queue.
+- Skills.
+- Destructible terrain.
+- Custom memory manager.
+- UI based on HTML and CSS.
 
 ## Media
 
@@ -51,7 +61,7 @@ cd build
 cmake -DCMAKE_DEBUG_POSTFIX=d -DCMAKE_INSTALL_PREFIX=/sdk/JsonCpp ..
 ```
 
-### Ogre3D 1.14.1
+### Ogre3D 14.5.1
 
 ```bash
 mkdir build
@@ -67,7 +77,7 @@ cd build
 cmake -DCMAKE_INSTALL_PREFIX=/sdk/OIS ..
 ```
 
-### RmlUi 6.1
+### RmlUi 6.2
 
 ```bash
 mkdir build
