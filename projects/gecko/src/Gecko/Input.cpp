@@ -18,9 +18,9 @@
 #include "Gecko/Players/Player.hpp"
 #include "Gecko/Statistics.hpp"
 #include "Gecko/Containers/Skills.hpp"
+#include "Gecko/UI/Components/Cursor.hpp"
+#include "Gecko/UI/Components/Preview.hpp"
 #include "Gecko/UI/UI.hpp"
-#include "Gecko/UI/Cursor.hpp"
-#include "Gecko/UI/Preview.hpp"
 #include "Gecko/UI/SelectionBox.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Raycast.hpp"
@@ -62,8 +62,32 @@ namespace Gecko
 
     bool Input::keyPressed(const OIS::KeyEvent& arg)
     {
-        // Process UI.
-        UI::getSingleton().inject_key_press(arg.key);
+        // L_TRACE << "Input::keyPressed(" << arg.text << ")";
+
+        /*
+        if (UI::getSingleton().inject_key_press(Utils::Convert::to_rmlui_key(arg.key)) == false)
+        {
+            return true;
+        }
+
+        if (UI::getSingleton().inject_text(arg.text) == false)
+        {
+            return true;
+        }
+        */
+
+        bool result = UI::getSingleton().inject_key_press(Utils::Convert::to_rmlui_key(arg.key));
+
+        // Pass only ASCII characters.
+        if (arg.text >= 32 && arg.text <= 127)
+        {
+            result &= UI::getSingleton().inject_text(arg.text);
+        }
+
+        if (result == false)
+        {
+            return true;
+        }
 
         // Call command based on pressed key.
         auto assign_to_group = [](std::uint8_t group_number)
@@ -144,7 +168,12 @@ namespace Gecko
 
     bool Input::keyReleased(const OIS::KeyEvent& arg)
     {
-        UI::getSingleton().inject_key_release(arg.key);
+        // L_TRACE << "Input::keyReleased(" << arg.text << ")";
+
+        if (UI::getSingleton().inject_key_release(Utils::Convert::to_rmlui_key(arg.key)) == false)
+        {
+            return true;
+        }
 
         return true;
     }
@@ -160,51 +189,58 @@ namespace Gecko
         auto x = static_cast<float>(arg.state.X.rel);
         auto y = static_cast<float>(arg.state.Y.rel);
 
-        UI::getSingleton().inject_mouse_move(arg.state.X.abs, arg.state.Y.abs, arg.state.Z.rel);
+        if (UI::getSingleton().inject_mouse_move(arg.state.X.abs, arg.state.Y.abs, arg.state.Z.rel))
+        {
+            return true;
+        }
+
         UI::getSingleton().get_cursor().set_visible(false);
 
-        // TODO: Hardcoded map.
-        auto camera = MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::Main);
-
-        if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
+        if (MapPtr map = Game::getSingleton().get_active_map())
         {
-            UI::getSingleton().get_selection_box().set_visible(false);
-        }
-        else if (is_mouse_button_pressed(OIS::MouseButtonID::MB_Left))
-        {
-            auto& selection_box = UI::getSingleton().get_selection_box();
-
-            selection_box.set_end(Utils::Convert::to_screen_coordinates(arg));
-            selection_box.update();
-
-            UI::getSingleton().get_cursor().set_visible(true);
-        }
-        else if (is_mouse_button_pressed(OIS::MouseButtonID::MB_Middle))
-        {
-            camera->rotate(Ogre::Degree(x * m_mouse_sensitivity.x), Ogre::Degree(y * m_mouse_sensitivity.y));
-
-            UI::getSingleton().get_cursor().set_visible(true);
-        }
-        else
-        {
-            auto object_cast = Utils::Raycast::to_object(arg);
-
-            if (object_cast)
+            if (CameraPtr camera = map->get_camera(Settings::Camera::Main))
             {
-                UI::getSingleton().set_hovered_object_id(object_cast->first);
-                UI::getSingleton().get_cursor().set_visible(true);
-            }
-            else
-            {
-                UI::getSingleton().set_hovered_object_id(Id::Empty);
-                UI::getSingleton().get_preview().get_camera()->set_target_id(Id::Empty);
-
-                auto layer_cast = Utils::Raycast::to_layer(arg);
-
-                if (layer_cast)
+                if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
                 {
-                    UI::getSingleton().get_cursor().update(layer_cast.value());
+                    UI::getSingleton().get_selection_box().set_visible(false);
+                }
+                else if (is_mouse_button_pressed(OIS::MouseButtonID::MB_Left))
+                {
+                    auto& selection_box = UI::getSingleton().get_selection_box();
+
+                    selection_box.set_end(Utils::Convert::to_screen_coordinates(arg));
+                    selection_box.update();
+
                     UI::getSingleton().get_cursor().set_visible(true);
+                }
+                else if (is_mouse_button_pressed(OIS::MouseButtonID::MB_Middle))
+                {
+                    camera->rotate(Ogre::Degree(x * m_mouse_sensitivity.x), Ogre::Degree(y * m_mouse_sensitivity.y));
+
+                    UI::getSingleton().get_cursor().set_visible(true);
+                }
+                else
+                {
+                    auto object_cast = Utils::Raycast::to_object(arg);
+
+                    if (object_cast)
+                    {
+                        UI::getSingleton().set_hovered_object_id(object_cast->first);
+                        UI::getSingleton().get_cursor().set_visible(true);
+                    }
+                    else
+                    {
+                        UI::getSingleton().set_hovered_object_id(Id::Empty);
+                        UI::getSingleton().get_preview().get_camera()->set_target_id(Id::Empty);
+
+                        auto layer_cast = Utils::Raycast::to_layer(arg);
+
+                        if (layer_cast)
+                        {
+                            UI::getSingleton().get_cursor().update(layer_cast.value());
+                            UI::getSingleton().get_cursor().set_visible(true);
+                        }
+                    }
                 }
             }
         }
@@ -216,11 +252,12 @@ namespace Gecko
 
     bool Input::mousePressed(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
     {
-        if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
+        if (UI::getSingleton().inject_mouse_press(Utils::Convert::to_rmlui_button(id)))
         {
-            UI::getSingleton().inject_mouse_press(arg.state.X.abs, arg.state.Y.abs, id);
+            return true;
         }
-        else if (id == OIS::MouseButtonID::MB_Left)
+
+        if (id == OIS::MouseButtonID::MB_Left)
         {
             UI::getSingleton().get_selection_box().set_start(Utils::Convert::to_screen_coordinates(arg));
         }
@@ -230,11 +267,12 @@ namespace Gecko
 
     bool Input::mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
     {
-        if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
+        if (UI::getSingleton().inject_mouse_release(Utils::Convert::to_rmlui_button(id)))
         {
-            UI::getSingleton().inject_mouse_release(arg.state.X.abs, arg.state.Y.abs, id);
+            return true;
         }
-        else if (id == OIS::MouseButtonID::MB_Left)
+
+        if (id == OIS::MouseButtonID::MB_Left)
         {
             handle_left_mouse_button(arg);
         }

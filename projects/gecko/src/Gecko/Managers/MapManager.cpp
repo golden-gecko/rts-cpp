@@ -43,4 +43,9 @@ namespace Gecko
             }
         }
     }
+
+    void MapManager::deinit()
+    {
+        deallocate();
+    }
 }

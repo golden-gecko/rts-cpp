@@ -79,6 +79,11 @@ namespace Gecko
         }
     }
 
+    void ObjectManager::deinit()
+    {
+        deallocate();
+    }
+
     ObjectManager::ObjectsInRange ObjectManager::get_in_range(const Ogre::Vector3& position, float range)
     {
         ObjectsInRange objects_in_range;

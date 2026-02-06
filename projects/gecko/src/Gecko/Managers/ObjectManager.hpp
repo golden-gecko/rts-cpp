@@ -23,6 +23,7 @@ namespace Gecko
 
     public:
         void init(const ConfigurationPtr& configuration);
+        void deinit();
 
         Object* create(const std::string& name);
 

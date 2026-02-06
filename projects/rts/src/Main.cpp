@@ -84,14 +84,12 @@ int main(int argc, char* argv[])
     technology_tree->deinit();
     input->deinit();
 
-    /*
     skill_manager->deinit();
     component_manager->deinit();
     order_manager->deinit();
     player_manager->deinit();
     object_manager->deinit();
     map_manager->deinit();
-    */
 
     game->deinit();
 

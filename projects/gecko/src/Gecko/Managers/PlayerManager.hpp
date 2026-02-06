@@ -20,5 +20,6 @@ namespace Gecko
 
     public:
         void init(const ConfigurationPtr& configuration);
+        void deinit();
     };
 }

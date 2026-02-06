@@ -190,8 +190,12 @@ namespace Gecko
 
     ConfigurationPtr Configuration::get_element(Json::Value::ArrayIndex index) const
     {
-        // TODO: Add assert.
-        return std::make_shared<Configuration>(m_value[index]);
+        if (index < m_value.size())
+        {
+            return std::make_shared<Configuration>(m_value[index]);
+        }
+
+        return {};
     }
 
     float Configuration::get_float() const

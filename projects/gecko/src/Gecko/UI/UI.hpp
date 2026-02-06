@@ -4,9 +4,10 @@
 #include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Timer.hpp"
-#include "Gecko/UI/Cursor.hpp"
-#include "Gecko/UI/Minimap.hpp"
-#include "Gecko/UI/Preview.hpp"
+#include "Gecko/UI/Components/Console.hpp"
+#include "Gecko/UI/Components/Cursor.hpp"
+#include "Gecko/UI/Components/Minimap.hpp"
+#include "Gecko/UI/Components/Preview.hpp"
 #include "Gecko/UI/SelectionBox.hpp"
 
 namespace Gecko
@@ -59,11 +60,12 @@ namespace Gecko
         void engine_ui_set_skill(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args);
         */
 
-        void inject_key_press(char key_code);
-        void inject_key_release(char key_code);
-        void inject_mouse_move(int x, int y, int z);
-        void inject_mouse_press(int x, int y, OIS::MouseButtonID id);
-        void inject_mouse_release(int x, int y, OIS::MouseButtonID id);
+        bool inject_key_press(Rml::Input::KeyIdentifier key);
+        bool inject_key_release(Rml::Input::KeyIdentifier key);
+        bool inject_text(unsigned int text);
+        bool inject_mouse_move(int x, int y, int z);
+        bool inject_mouse_press(int button);
+        bool inject_mouse_release(int button);
 
         bool is_mouse_inside(int x, int y);
 
@@ -155,6 +157,7 @@ namespace Gecko
         }
 
     public:
+        void set_commands();
         void set_configuration_name(const std::string& configuration_name);
         void set_configurations(const std::set<std::string>& configurations);
         void set_diplomacy();
@@ -186,9 +189,11 @@ namespace Gecko
         Rml::Context* m_context = nullptr;
         Rml::ElementDocument* m_document = nullptr;
 
-        std::unique_ptr<Cursor> m_cursor;
+        std::unique_ptr<Console> m_console;
+        std::unique_ptr<Cursor>  m_cursor;
         std::unique_ptr<Minimap> m_minimap;
         std::unique_ptr<Preview> m_preview;
+
         std::unique_ptr<SelectionBox> m_selection_box;
         std::vector<std::shared_ptr<Indicator>> m_indicators;
 
@@ -274,6 +279,7 @@ namespace Gecko
             std::string value;
         };
 
+        Rml::DataModelHandle m_console_model;
         Rml::DataModelHandle m_configurations_model;
         Rml::DataModelHandle m_diplomacy_model;
         Rml::DataModelHandle m_info_model;
@@ -289,6 +295,7 @@ namespace Gecko
         Rml::DataModelHandle m_statistics_model;
         Rml::DataModelHandle m_technologies_model;
 
+        Rml::Vector<Console::Command> m_commands;
         Rml::Vector<std::string> m_configurations;
         Rml::Vector<Data_Diplomacy> m_diplomacy;
         std::string m_info;

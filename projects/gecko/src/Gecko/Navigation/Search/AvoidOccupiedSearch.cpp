@@ -81,8 +81,7 @@ namespace Gecko::Navigation
 
         open.push_back(from_node);
 
-        // TODO: Hardcoded.
-        auto navigation_layer = m_layer.get_data_layer("Navigation");
+        auto navigation_layer = m_layer.get_data_layer("Navigation"); // TODO: Hardcoded.
         bool target_found = false;
 
         // TODO: If target is blocked, find nearest available one.

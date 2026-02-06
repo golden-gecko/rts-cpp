@@ -1,4 +1,4 @@
-#include "Gecko/UI/Cursor.hpp"
+#include "Gecko/UI/Components/Cursor.hpp"
 
 #include "Gecko/Components/Component.hpp"
 #include "Gecko/Configuration.hpp"

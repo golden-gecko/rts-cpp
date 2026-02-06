@@ -3,6 +3,7 @@
 #pragma warning(push, 0)
 
 // STL
+#include <ctime>
 #include <filesystem>
 #include <random>
 

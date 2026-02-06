@@ -21,12 +21,13 @@
 #include "Gecko/Statistics.hpp"
 #include "Gecko/System.hpp"
 #include "Gecko/Technologies/TechnologyTree.hpp"
-#include "Gecko/UI/Cursor.hpp"
+#include "Gecko/UI/Components/Console.hpp"
+#include "Gecko/UI/Components/Cursor.hpp"
+#include "Gecko/UI/Components/Minimap.hpp"
+#include "Gecko/UI/Components/Preview.hpp"
 #include "Gecko/UI/EventListener.hpp"
 #include "Gecko/UI/EventListenerInstancer.hpp"
 #include "Gecko/UI/Indicators/Indicator.hpp"
-#include "Gecko/UI/Minimap.hpp"
-#include "Gecko/UI/Preview.hpp"
 #include "Gecko/UI/RenderInterface.hpp"
 #include "Gecko/UI/SelectionBox.hpp"
 #include "Gecko/UI/SystemInterface.hpp"
@@ -69,15 +70,18 @@ namespace Gecko
         init_documents();
         init_visibility_types();
 
+        m_console->init_events(m_document->GetElementById("console"));
         m_minimap->init_events(m_document->GetElementById("minimap"));
         m_preview->init_events(m_document->GetElementById("preview"));
     }
 
     void UI::deinit()
     {
+        m_console->deinit_events(m_document->GetElementById("console"));
         m_minimap->deinit_events(m_document->GetElementById("minimap"));
         m_preview->deinit_events(m_document->GetElementById("preview"));
 
+        m_console.reset();
         m_cursor.reset();
         m_minimap.reset();
         m_preview.reset();
@@ -181,6 +185,7 @@ namespace Gecko
             // set_diplomacy();
             // set_layers(Game::getSingleton()->get_active_map()->get_layers());
             // set_maps(Game::getSingleton().get_maps());
+            set_commands();
             set_objects_admin();
             set_orders_admin();
             set_players();
@@ -537,47 +542,68 @@ namespace Gecko
     }
     */
 
-    void UI::inject_key_press(char key_code)
+    bool UI::inject_key_press(Rml::Input::KeyIdentifier key)
     {
-        m_context->ProcessKeyDown(Utils::Convert::to_rmlui_key(key_code), 0);
+        // L_TRACE << "UI::inject_key_press(" << key << ")";
 
-        switch (Utils::Convert::to_rmlui_key(key_code))
+        switch (key)
         {
+            case Rml::Input::KeyIdentifier::KI_F1:
+                m_document->GetElementById("console")->SetClass("hidden", !m_document->GetElementById("console")->IsClassSet("hidden"));
+                return true;
+
             case Rml::Input::KeyIdentifier::KI_F5:
                 init_documents();
-                break;
+                return true;
 
             case Rml::Input::KeyIdentifier::KI_F8:
                 Rml::Debugger::SetVisible(!Rml::Debugger::IsVisible());
-                break;
+                return true;
         }
+
+        bool r = m_context->ProcessKeyDown(key, 0); // TODO: Why it always returns true?
+
+        return r;
     }
 
-    void UI::inject_key_release(char key_code)
+    bool UI::inject_key_release(Rml::Input::KeyIdentifier key)
     {
-        m_context->ProcessKeyUp(Utils::Convert::to_rmlui_key(key_code), 0);
+        // L_TRACE << "UI::inject_key_release(" << key << ")";
+
+        bool r = m_context->ProcessKeyUp(key, 0); // TODO: Why it always returns true?
+
+        return false;
     }
 
-    void UI::inject_mouse_move(int x, int y, int z)
+    bool UI::inject_text(unsigned int text)
+    {
+        // L_TRACE << "UI::inject_text(" << text << ")";
+
+        bool r = m_context->ProcessTextInput(static_cast<char>(text));
+
+        return r;
+    }
+
+    bool UI::inject_mouse_move(int x, int y, int z)
     {
         if (z == 0)
         {
-            m_context->ProcessMouseMove(x, y, 0);
+            return m_context->ProcessMouseMove(x, y, 0);
         }
         else
         {
-            m_context->ProcessMouseWheel(static_cast<float>(z), 0);
+            return m_context->ProcessMouseWheel(static_cast<float>(z), 0);
         }
     }
 
-    void UI::inject_mouse_press(int x, int y, OIS::MouseButtonID id)
+    bool UI::inject_mouse_press(int button)
     {
-        m_context->ProcessMouseButtonDown(Utils::Convert::to_rmlui_button(id), 0);
+        return m_context->ProcessMouseButtonDown(button, 0);
     }
 
-    void UI::inject_mouse_release(int x, int y, OIS::MouseButtonID id)
+    bool UI::inject_mouse_release(int button)
     {
-        m_context->ProcessMouseButtonUp(Utils::Convert::to_rmlui_button(id), 0);
+        return m_context->ProcessMouseButtonUp(button, 0);
     }
 
     bool UI::is_mouse_inside(int x, int y)
@@ -742,6 +768,16 @@ namespace Gecko
             reset_order();
         }
         */
+    }
+
+    void UI::set_commands()
+    {
+        m_commands = m_console->get_commands();
+
+        if (m_console_model)
+        {
+            m_console_model.DirtyVariable("console");
+        }
     }
 
     void UI::set_configurations(const std::set<std::string>& configurations)
@@ -1186,6 +1222,7 @@ namespace Gecko
 
     void UI::init_components()
     {
+        m_console = std::make_unique<Console>();
         m_cursor = std::make_unique<Cursor>();
         m_minimap = std::make_unique<Minimap>();
         m_preview = std::make_unique<Preview>();
@@ -1198,6 +1235,12 @@ namespace Gecko
         {
             if (auto constructor = m_context->CreateDataModel("types"))
             {
+                if (auto handle = constructor.RegisterStruct<Console::Command>())
+                {
+                    handle.RegisterMember("timestamp", &Console::Command::timestamp);
+                    handle.RegisterMember("command", &Console::Command::command);
+                }
+
                 if (auto handle = constructor.RegisterStruct<Data_Diplomacy>())
                 {
                     handle.RegisterMember("id", &Data_Diplomacy::id);
@@ -1250,6 +1293,7 @@ namespace Gecko
                     handle.RegisterMember("value", &Data_Statistic::value);
                 }
 
+                constructor.RegisterArray<Rml::Vector<Console::Command>>();
                 constructor.RegisterArray<Rml::Vector<std::string>>();
                 constructor.RegisterArray<Rml::Vector<Data_Diplomacy>>();
                 constructor.RegisterArray<Rml::Vector<Data_Log>>();
@@ -1258,6 +1302,16 @@ namespace Gecko
                 constructor.RegisterArray<Rml::Vector<Data_Player>>();
                 constructor.RegisterArray<Rml::Vector<Data_Resource>>();
                 constructor.RegisterArray<Rml::Vector<Data_Statistic>>();
+            }
+        }
+
+        // Console.
+        {
+            if (auto constructor = m_context->CreateDataModel("console"))
+            {
+                constructor.Bind("console", &m_commands);
+
+                m_console_model = constructor.GetModelHandle();
             }
         }
 

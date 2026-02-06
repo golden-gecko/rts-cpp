@@ -265,63 +265,98 @@ namespace Gecko::Utils::Convert
             case OIS::MouseButtonID::MB_Middle: return 2;
         }
 
-        return OIS::MouseButtonID::MB_Left;
+        return 0;
     }
 
-    Rml::Input::KeyIdentifier Convert::to_rmlui_key(char key)
+    Rml::Input::KeyIdentifier Convert::to_rmlui_key(OIS::KeyCode key)
     {
         switch (key)
         {
-            case 'a': return Rml::Input::KeyIdentifier::KI_A;
-            case 'b': return Rml::Input::KeyIdentifier::KI_B;
-            case 'c': return Rml::Input::KeyIdentifier::KI_C;
-            case 'd': return Rml::Input::KeyIdentifier::KI_D;
-            case 'e': return Rml::Input::KeyIdentifier::KI_E;
-            case 'f': return Rml::Input::KeyIdentifier::KI_F;
-            case 'g': return Rml::Input::KeyIdentifier::KI_G;
-            case 'h': return Rml::Input::KeyIdentifier::KI_H;
-            case 'i': return Rml::Input::KeyIdentifier::KI_I;
-            case 'j': return Rml::Input::KeyIdentifier::KI_J;
-            case 'k': return Rml::Input::KeyIdentifier::KI_K;
-            case 'l': return Rml::Input::KeyIdentifier::KI_L;
-            case 'm': return Rml::Input::KeyIdentifier::KI_M;
-            case 'n': return Rml::Input::KeyIdentifier::KI_N;
-            case 'o': return Rml::Input::KeyIdentifier::KI_O;
-            case 'p': return Rml::Input::KeyIdentifier::KI_P;
-            case 'q': return Rml::Input::KeyIdentifier::KI_Q;
-            case 'r': return Rml::Input::KeyIdentifier::KI_R;
-            case 's': return Rml::Input::KeyIdentifier::KI_S;
-            case 't': return Rml::Input::KeyIdentifier::KI_T;
-            case 'u': return Rml::Input::KeyIdentifier::KI_U;
-            case 'v': return Rml::Input::KeyIdentifier::KI_V;
-            case 'w': return Rml::Input::KeyIdentifier::KI_W;
-            case 'x': return Rml::Input::KeyIdentifier::KI_X;
-            case 'y': return Rml::Input::KeyIdentifier::KI_Y;
-            case 'z': return Rml::Input::KeyIdentifier::KI_Z;
+            case OIS::KeyCode::KC_A: return Rml::Input::KeyIdentifier::KI_A;
+            case OIS::KeyCode::KC_B: return Rml::Input::KeyIdentifier::KI_B;
+            case OIS::KeyCode::KC_C: return Rml::Input::KeyIdentifier::KI_C;
+            case OIS::KeyCode::KC_D: return Rml::Input::KeyIdentifier::KI_D;
+            case OIS::KeyCode::KC_E: return Rml::Input::KeyIdentifier::KI_E;
+            case OIS::KeyCode::KC_F: return Rml::Input::KeyIdentifier::KI_F;
+            case OIS::KeyCode::KC_G: return Rml::Input::KeyIdentifier::KI_G;
+            case OIS::KeyCode::KC_H: return Rml::Input::KeyIdentifier::KI_H;
+            case OIS::KeyCode::KC_I: return Rml::Input::KeyIdentifier::KI_I;
+            case OIS::KeyCode::KC_J: return Rml::Input::KeyIdentifier::KI_J;
+            case OIS::KeyCode::KC_K: return Rml::Input::KeyIdentifier::KI_K;
+            case OIS::KeyCode::KC_L: return Rml::Input::KeyIdentifier::KI_L;
+            case OIS::KeyCode::KC_M: return Rml::Input::KeyIdentifier::KI_M;
+            case OIS::KeyCode::KC_N: return Rml::Input::KeyIdentifier::KI_N;
+            case OIS::KeyCode::KC_O: return Rml::Input::KeyIdentifier::KI_O;
+            case OIS::KeyCode::KC_P: return Rml::Input::KeyIdentifier::KI_P;
+            case OIS::KeyCode::KC_Q: return Rml::Input::KeyIdentifier::KI_Q;
+            case OIS::KeyCode::KC_R: return Rml::Input::KeyIdentifier::KI_R;
+            case OIS::KeyCode::KC_S: return Rml::Input::KeyIdentifier::KI_S;
+            case OIS::KeyCode::KC_T: return Rml::Input::KeyIdentifier::KI_T;
+            case OIS::KeyCode::KC_U: return Rml::Input::KeyIdentifier::KI_U;
+            case OIS::KeyCode::KC_V: return Rml::Input::KeyIdentifier::KI_V;
+            case OIS::KeyCode::KC_W: return Rml::Input::KeyIdentifier::KI_W;
+            case OIS::KeyCode::KC_X: return Rml::Input::KeyIdentifier::KI_X;
+            case OIS::KeyCode::KC_Y: return Rml::Input::KeyIdentifier::KI_Y;
+            case OIS::KeyCode::KC_Z: return Rml::Input::KeyIdentifier::KI_Z;
 
-            case '0': return Rml::Input::KeyIdentifier::KI_0;
-            case '1': return Rml::Input::KeyIdentifier::KI_1;
-            case '2': return Rml::Input::KeyIdentifier::KI_2;
-            case '3': return Rml::Input::KeyIdentifier::KI_3;
-            case '4': return Rml::Input::KeyIdentifier::KI_4;
-            case '5': return Rml::Input::KeyIdentifier::KI_5;
-            case '6': return Rml::Input::KeyIdentifier::KI_6;
-            case '7': return Rml::Input::KeyIdentifier::KI_7;
-            case '8': return Rml::Input::KeyIdentifier::KI_8;
-            case '9': return Rml::Input::KeyIdentifier::KI_9;
+            case OIS::KeyCode::KC_1: return Rml::Input::KeyIdentifier::KI_0;
+            case OIS::KeyCode::KC_2: return Rml::Input::KeyIdentifier::KI_1;
+            case OIS::KeyCode::KC_3: return Rml::Input::KeyIdentifier::KI_2;
+            case OIS::KeyCode::KC_4: return Rml::Input::KeyIdentifier::KI_3;
+            case OIS::KeyCode::KC_5: return Rml::Input::KeyIdentifier::KI_4;
+            case OIS::KeyCode::KC_6: return Rml::Input::KeyIdentifier::KI_5;
+            case OIS::KeyCode::KC_7: return Rml::Input::KeyIdentifier::KI_6;
+            case OIS::KeyCode::KC_8: return Rml::Input::KeyIdentifier::KI_7;
+            case OIS::KeyCode::KC_9: return Rml::Input::KeyIdentifier::KI_8;
+            case OIS::KeyCode::KC_0: return Rml::Input::KeyIdentifier::KI_9;
 
-            case 59: return Rml::Input::KI_F1;
-            case 60: return Rml::Input::KI_F2;
-            case 61: return Rml::Input::KI_F3;
-            case 62: return Rml::Input::KI_F4;
-            case 63: return Rml::Input::KI_F5;
-            case 64: return Rml::Input::KI_F6;
-            case 65: return Rml::Input::KI_F7;
-            case 66: return Rml::Input::KI_F8;
-            case 67: return Rml::Input::KI_F9;
-            case 68: return Rml::Input::KI_F10;
-            case 69: return Rml::Input::KI_F11;
-            case 70: return Rml::Input::KI_F12;
+	        case OIS::KeyCode::KC_BACK: return Rml::Input::KI_BACK;
+	        case OIS::KeyCode::KC_TAB: return Rml::Input::KI_TAB;
+	        case OIS::KeyCode::KC_RETURN: return Rml::Input::KI_RETURN;
+	        case OIS::KeyCode::KC_PAUSE: return Rml::Input::KI_PAUSE;
+	        case OIS::KeyCode::KC_CAPITAL: return Rml::Input::KI_CAPITAL;
+	        case OIS::KeyCode::KC_ESCAPE: return Rml::Input::KI_ESCAPE;
+	        case OIS::KeyCode::KC_SPACE: return Rml::Input::KI_SPACE;
+	        case OIS::KeyCode::KC_END: return Rml::Input::KI_END;
+	        case OIS::KeyCode::KC_HOME: return Rml::Input::KI_HOME;
+	        case OIS::KeyCode::KC_LEFT: return Rml::Input::KI_LEFT;
+	        case OIS::KeyCode::KC_UP: return Rml::Input::KI_UP;
+	        case OIS::KeyCode::KC_RIGHT: return Rml::Input::KI_RIGHT;
+	        case OIS::KeyCode::KC_DOWN: return Rml::Input::KI_DOWN;
+	        case OIS::KeyCode::KC_INSERT: return Rml::Input::KI_INSERT;
+	        case OIS::KeyCode::KC_DELETE: return Rml::Input::KI_DELETE;
+	        case OIS::KeyCode::KC_LWIN: return Rml::Input::KI_LWIN;
+	        case OIS::KeyCode::KC_RWIN: return Rml::Input::KI_RWIN;
+
+	        case OIS::KeyCode::KC_NUMPAD0: return Rml::Input::KI_NUMPAD0;
+	        case OIS::KeyCode::KC_NUMPAD1: return Rml::Input::KI_NUMPAD1;
+	        case OIS::KeyCode::KC_NUMPAD2: return Rml::Input::KI_NUMPAD2;
+	        case OIS::KeyCode::KC_NUMPAD3: return Rml::Input::KI_NUMPAD3;
+	        case OIS::KeyCode::KC_NUMPAD4: return Rml::Input::KI_NUMPAD4;
+	        case OIS::KeyCode::KC_NUMPAD5: return Rml::Input::KI_NUMPAD5;
+	        case OIS::KeyCode::KC_NUMPAD6: return Rml::Input::KI_NUMPAD6;
+	        case OIS::KeyCode::KC_NUMPAD7: return Rml::Input::KI_NUMPAD7;
+	        case OIS::KeyCode::KC_NUMPAD8: return Rml::Input::KI_NUMPAD8;
+	        case OIS::KeyCode::KC_NUMPAD9: return Rml::Input::KI_NUMPAD9;
+	        case OIS::KeyCode::KC_NUMPADENTER: return Rml::Input::KI_NUMPADENTER;
+	        case OIS::KeyCode::KC_MULTIPLY: return Rml::Input::KI_MULTIPLY;
+	        case OIS::KeyCode::KC_ADD: return Rml::Input::KI_ADD;
+	        case OIS::KeyCode::KC_SUBTRACT: return Rml::Input::KI_SUBTRACT;
+	        case OIS::KeyCode::KC_DECIMAL: return Rml::Input::KI_DECIMAL;
+	        case OIS::KeyCode::KC_DIVIDE: return Rml::Input::KI_DIVIDE;
+
+            case OIS::KeyCode::KC_F1: return Rml::Input::KI_F1;
+            case OIS::KeyCode::KC_F2: return Rml::Input::KI_F2;
+            case OIS::KeyCode::KC_F3: return Rml::Input::KI_F3;
+            case OIS::KeyCode::KC_F4: return Rml::Input::KI_F4;
+            case OIS::KeyCode::KC_F5: return Rml::Input::KI_F5;
+            case OIS::KeyCode::KC_F6: return Rml::Input::KI_F6;
+            case OIS::KeyCode::KC_F7: return Rml::Input::KI_F7;
+            case OIS::KeyCode::KC_F8: return Rml::Input::KI_F8;
+            case OIS::KeyCode::KC_F9: return Rml::Input::KI_F9;
+            case OIS::KeyCode::KC_F10: return Rml::Input::KI_F10;
+            case OIS::KeyCode::KC_F11: return Rml::Input::KI_F11;
+            case OIS::KeyCode::KC_F12: return Rml::Input::KI_F12;
         }
 
         return Rml::Input::KeyIdentifier::KI_UNKNOWN;

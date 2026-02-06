@@ -1,4 +1,4 @@
-#include "Gecko/UI/Preview.hpp"
+#include "Gecko/UI/Components/Preview.hpp"
 
 #include "Gecko/Cameras/Camera.hpp"
 #include "Gecko/Games/Game.hpp"
@@ -19,6 +19,7 @@ namespace Gecko
             case Rml::EventId::Mousescroll:
             {
                 event.GetParameter<float>("wheel_delta_y", 0) > 0.0f ? zoom_in() : zoom_out();
+                event.StopPropagation();
 
                 break;
             }

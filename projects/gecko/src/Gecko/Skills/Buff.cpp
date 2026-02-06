@@ -6,26 +6,18 @@ namespace Gecko
 {
     ConfigurationPtr Buff::serialize() const
     {
-        auto configuration = std::make_shared<Configuration>();
-
-        // TODO: Implement.
-
-        return configuration;
+        return std::make_shared<Configuration>();
     }
 
     void Buff::deserialize(const ConfigurationPtr& configuration)
     {
         base_type::deserialize(configuration);
-
-        // TODO: Implement.
     }
 
     void Buff::activate(const Id& id)
     {
         if (m_refresh_timer)
         {
-            // TODO: Implement.
-
             ++m_activation_count;
 
             m_refresh_timer.reset();
@@ -36,8 +28,6 @@ namespace Gecko
     {
         if (m_refresh_timer)
         {
-            // TODO: Implement.
-
             ++m_activation_count;
 
             m_refresh_timer.reset();

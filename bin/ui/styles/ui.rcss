@@ -103,6 +103,14 @@ td.text {
 	left: 550dp;
 }
 
+/*** Console ***/
+
+#console input.text {
+	bottom: 5dp;
+	left: 5dp;
+	position: absolute;
+}
+
 /*** Game Menu ***/
 
 #game-menu {

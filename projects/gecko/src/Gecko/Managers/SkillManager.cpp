@@ -48,4 +48,9 @@ namespace Gecko
             }
         }
     }
+
+    void SkillManager::deinit()
+    {
+        deallocate();
+    }
 }

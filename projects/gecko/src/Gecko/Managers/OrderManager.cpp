@@ -145,6 +145,11 @@ namespace Gecko
         }
     }
 
+    void OrderManager::deinit()
+    {
+        deallocate();
+    }
+
     Order* OrderManager::order_attack(Id sender_id, Id receiver_id, Id target_id)
     {
         auto order = base_type::create("attack");

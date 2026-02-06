@@ -14,6 +14,14 @@
             </template>
         </div>
 
+        <!-- Console -->
+        <div id="console" class="ackground hidden popup panel" data-model="console">
+            <template src="window">
+                <p data-for="i : console">{{i.timestamp}} {{i.command}}</p>
+                <input id="console-input" class="text" type="text" />
+            </template>
+        </div>
+
         <!-- Diplomacy -->
         <div id="diplomacy" class="background hidden popup panel" data-model="diplomacy">
             <template src="window">

@@ -21,6 +21,7 @@ namespace Gecko
 
     public:
         void init(const ConfigurationPtr& configuration);
+        void deinit();
 
         Order* order_attack(Id sender_id, Id receiver_id, Id target_id);
         Order* order_attack(Id sender_id, Id receiver_id, const Ogre::Vector3& target_position);

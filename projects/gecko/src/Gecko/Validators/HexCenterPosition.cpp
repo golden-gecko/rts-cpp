@@ -11,7 +11,6 @@ namespace Gecko
 
     Ogre::Vector3 HexCenterPosition::validate(const Ogre::Vector3& position, const Ogre::Vector3& direction) const
     {
-        // TODO: Implement.
         return Ogre::Vector3::ZERO;
     }
 }

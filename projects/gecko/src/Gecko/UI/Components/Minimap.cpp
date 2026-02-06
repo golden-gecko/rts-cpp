@@ -1,4 +1,4 @@
-#include "Gecko/UI/Minimap.hpp"
+#include "Gecko/UI/Components/Minimap.hpp"
 
 #include "Gecko/Cameras/Camera.hpp"
 #include "Gecko/Games/Game.hpp"
@@ -29,12 +29,15 @@ namespace Gecko
                 mouse_start_x = event.GetParameter<float>("mouse_x", 0.0f);
                 mouse_start_y = event.GetParameter<float>("mouse_y", 0.0f);
 
+                event.StopPropagation();
+
                 break;
             }
 
             case Rml::EventId::Mousescroll:
             {
                 event.GetParameter<float>("wheel_delta_y", 0) > 0.0f ? zoom_in() : zoom_out();
+                event.StopPropagation();
 
                 break;
             }
@@ -69,6 +72,8 @@ namespace Gecko
                         move(diff_x, diff_y);
                     }
                 }
+
+                event.StopPropagation();
 
                 break;
             }

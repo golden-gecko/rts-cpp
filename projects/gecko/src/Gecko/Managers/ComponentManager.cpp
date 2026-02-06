@@ -88,4 +88,9 @@ namespace Gecko
             }
         }
     }
+
+    void ComponentManager::deinit()
+    {
+        deallocate();
+    }
 }
