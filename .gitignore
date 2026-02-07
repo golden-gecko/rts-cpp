@@ -4,6 +4,7 @@ bin/cache
 bin/downloads
 bin/media
 build
+cppcheck/cppcheck-cppcheck-build-dir
 *.exe
 *.lib
 *.log

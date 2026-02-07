@@ -33,7 +33,7 @@ namespace Gecko
     public:
         explicit Game(const ConfigurationPtr& configuration);
 
-        virtual ~Game() = default;
+        ~Game() override = default;
 
     public:
         void load_map(const std::string& map_name);

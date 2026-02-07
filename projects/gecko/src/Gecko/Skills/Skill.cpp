@@ -33,10 +33,10 @@ namespace Gecko
     }
 
     Skill::Skill(const Skill& other) :
-        base_type(other)
+        base_type(other),
+        m_name(other.m_name),
+        m_refresh_timer(other.m_refresh_timer),
+        m_activation_count(other.m_activation_count)
     {
-        m_name = other.m_name;
-        m_refresh_timer = other.m_refresh_timer;
-        m_activation_count = other.m_activation_count;
     }
 }

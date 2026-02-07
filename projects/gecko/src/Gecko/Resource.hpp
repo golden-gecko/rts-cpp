@@ -20,7 +20,7 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        Resource(const std::string& name);
+        explicit Resource(const std::string& name);
 
     public:
         float add(float value);

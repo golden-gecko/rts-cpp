@@ -25,7 +25,7 @@ namespace Gecko
         explicit Skill() = default;
         explicit Skill(const Skill& other);
 
-        virtual ~Skill() = default;
+        ~Skill() override = default;
 
     public:
         virtual void activate(const Id& id) = 0;

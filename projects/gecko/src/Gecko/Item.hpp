@@ -26,7 +26,7 @@ namespace Gecko
         explicit Item() = default;
         explicit Item(const Item& other);
 
-        virtual ~Item() = default;
+        ~Item() override = default;
 
     public:
         const auto& get_configuration() const

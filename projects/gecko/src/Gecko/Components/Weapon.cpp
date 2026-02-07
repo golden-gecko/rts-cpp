@@ -15,12 +15,12 @@ namespace Gecko
     }
 
     Weapon::Weapon(const Weapon& other) :
-        base_type(other)
+        base_type(other),
+        m_missile_configuration(other.m_missile_configuration),
+        m_missiles_fired(other.m_missiles_fired),
+        m_rotation_speed(other.m_rotation_speed),
+        m_reload_timer(other.m_reload_timer)
     {
-        m_missile_configuration = other.m_missile_configuration;
-        m_missiles_fired = other.m_missiles_fired;
-        m_rotation_speed = other.m_rotation_speed;
-        m_reload_timer = other.m_reload_timer;
     }
 
     void Weapon::init()

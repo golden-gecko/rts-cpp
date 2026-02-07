@@ -35,8 +35,7 @@ namespace Gecko
 
         ~Collection()
         {
-            // TODO: Is this correct?
-            deallocate();
+            deallocate(); // TODO: Probably incorrect because it is virtual.
         }
 
         bool allocate(int max_size) override

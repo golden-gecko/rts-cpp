@@ -55,13 +55,9 @@ namespace Gecko
         {
             Items items;
 
-            for (const auto& i : m_items)
-            {
-                if (dynamic_cast<Type*>(i))
-                {
-                    items.emplace_back(i);
-                }
-            }
+            std::copy_if(m_items.begin(), m_items.end(), items.begin(), [](Component* i) {
+                return dynamic_cast<Type*>(i) != nullptr;
+            });
 
             return items;
         }

@@ -6,8 +6,6 @@
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Settings.hpp"
 
-#include <OIS.h>
-
 namespace Gecko
 {
     class Input :
@@ -50,7 +48,7 @@ namespace Gecko
     public:
         explicit Input(const ConfigurationPtr& configuration);
 
-        virtual ~Input() = default;
+        ~Input() override = default;
 
     public:
         bool is_key_pressed(Command::Value command) const;

@@ -81,14 +81,13 @@ namespace Gecko
 
     void Skills::activate(const std::string& name, const Ogre::Vector3& position)
     {
-        for (const auto& i : m_items)
-        {
-            if (i->get_configuration()->get_name() == name)
-            {
-                i->activate(position);
+        auto skill = std::find_if(m_items.begin(), m_items.end(), [name](Skill* i) {
+            return i->get_configuration()->get_name() == name;
+        });
 
-                break;
-            }
+        if (skill != m_items.end())
+        {
+            (*skill)->activate(position);
         }
     }
 

@@ -452,10 +452,9 @@ namespace Gecko
 
                 includes.emplace_back(include_path);
 
-                for (const auto& j : get_includes(Configuration(include_path)))
-                {
-                    includes.emplace_back(j);
-                }
+                auto includes_from_child = get_includes(Configuration(include_path));
+
+                std::copy(includes_from_child.begin(), includes_from_child.end(), includes.begin());
             }
         }
 

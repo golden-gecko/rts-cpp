@@ -381,19 +381,9 @@ namespace Gecko
             return false;
         }
 
-        bool pressed = true;
-
-        for (const auto& key : keys->second)
-        {
-            if (is_key_pressed(key) == false)
-            {
-                pressed = false;
-
-                break;
-            }
-        }
-
-        return pressed;
+        return std::all_of(keys->second.begin(), keys->second.end(), [this](OIS::KeyCode key) {
+            return is_key_pressed(key);
+        });
     }
 
     bool Input::is_mouse_button_pressed(OIS::MouseButtonID mouse_button) const

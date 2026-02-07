@@ -25,7 +25,8 @@ namespace Gecko
         void init_events(Rml::ElementDocument* document) override;
         void deinit_events(Rml::ElementDocument* document) override;
 
-        void update() override;
+    public:
+        void update();
 
     private:
         Rml::Vector<Item> m_items;

@@ -17,7 +17,7 @@ namespace Gecko
 
     ConfigurationPtr Timer::serialize() const
     {
-        auto configuration = std::make_shared<Configuration>();
+        ConfigurationPtr configuration = std::make_shared<Configuration>();
 
         configuration->set("current", m_current);
         configuration->set("max", m_max);

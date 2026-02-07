@@ -13,7 +13,7 @@ namespace Gecko::Utils::Time
     class Scope
     {
     public:
-        Scope(const std::string& name);
+        explicit Scope(const std::string& name);
 
         ~Scope();
 

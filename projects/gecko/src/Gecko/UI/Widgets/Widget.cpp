@@ -13,8 +13,4 @@ namespace Gecko
     void Widget::deinit_events(Rml::ElementDocument* document)
     {
     }
-
-    void Widget::update()
-    {
-    }
 }

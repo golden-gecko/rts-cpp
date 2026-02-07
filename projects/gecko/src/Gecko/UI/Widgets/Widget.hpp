@@ -14,8 +14,6 @@ namespace Gecko
         virtual void init_events(Rml::ElementDocument* document);
         virtual void deinit_events(Rml::ElementDocument* document);
 
-        virtual void update();
-
     protected:
         Rml::DataModelHandle m_model;
     };

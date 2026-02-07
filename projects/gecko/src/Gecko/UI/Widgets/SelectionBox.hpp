@@ -15,7 +15,7 @@ namespace Gecko
     public:
         explicit SelectionBoxWidget();
 
-        virtual ~SelectionBoxWidget();
+        ~SelectionBoxWidget() override;
 
         const Ogre::Vector2& get_start() const
         {
