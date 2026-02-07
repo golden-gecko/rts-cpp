@@ -1,6 +1,6 @@
 #include "Gecko/UI/UI.hpp"
 
-#include "Gecko/Cameras/Camera.hpp"
+#include "Gecko/Cameras/ObjectFollowCamera.hpp"
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Components.hpp"
 #include "Gecko/Containers/Orders.hpp"
@@ -21,16 +21,25 @@
 #include "Gecko/Statistics.hpp"
 #include "Gecko/System.hpp"
 #include "Gecko/Technologies/TechnologyTree.hpp"
-#include "Gecko/UI/Components/Console.hpp"
-#include "Gecko/UI/Components/Cursor.hpp"
-#include "Gecko/UI/Components/Minimap.hpp"
-#include "Gecko/UI/Components/Preview.hpp"
 #include "Gecko/UI/EventListener.hpp"
 #include "Gecko/UI/EventListenerInstancer.hpp"
 #include "Gecko/UI/Indicators/Indicator.hpp"
 #include "Gecko/UI/RenderInterface.hpp"
-#include "Gecko/UI/SelectionBox.hpp"
 #include "Gecko/UI/SystemInterface.hpp"
+#include "Gecko/UI/Widgets/Configurations.hpp"
+#include "Gecko/UI/Widgets/Console.hpp"
+#include "Gecko/UI/Widgets/Cursor.hpp"
+#include "Gecko/UI/Widgets/Diplomacy.hpp"
+#include "Gecko/UI/Widgets/Info.hpp"
+#include "Gecko/UI/Widgets/Log.hpp"
+#include "Gecko/UI/Widgets/Minimap.hpp"
+#include "Gecko/UI/Widgets/Orders.hpp"
+#include "Gecko/UI/Widgets/Players.hpp"
+#include "Gecko/UI/Widgets/Preview.hpp"
+#include "Gecko/UI/Widgets/Resources.hpp"
+#include "Gecko/UI/Widgets/SelectionBox.hpp"
+#include "Gecko/UI/Widgets/Skills.hpp"
+#include "Gecko/UI/Widgets/Statistics.hpp"
 #include "Gecko/Utils/Utils.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/String.hpp"
@@ -62,21 +71,21 @@ namespace Gecko
         Rml::Initialise();
 
         m_context = Rml::CreateContext("main", Rml::Vector2i(render_window->getWidth(), render_window->getHeight()));
+        m_event_listener_instancer = std::make_shared<EventListenerInstancer>();
 
+    	Rml::Factory::RegisterEventListenerInstancer(m_event_listener_instancer.get());
+
+        init_components();
         init_data_bindings();
         init_fonts();
-        init_components();
-        init_events();
         init_documents();
+        init_events();
         init_visibility_types();
-
-        m_console->init_events(m_document->GetElementById("console"));
-        m_minimap->init_events(m_document->GetElementById("minimap"));
-        m_preview->init_events(m_document->GetElementById("preview"));
     }
 
     void UI::deinit()
     {
+        /*
         m_console->deinit_events(m_document->GetElementById("console"));
         m_minimap->deinit_events(m_document->GetElementById("minimap"));
         m_preview->deinit_events(m_document->GetElementById("preview"));
@@ -88,6 +97,7 @@ namespace Gecko
         m_selection_box.reset();
 
         refresh_indicators(Id::Empty);
+        */
 
         m_context->UnloadAllDocuments();
 
@@ -100,7 +110,7 @@ namespace Gecko
         {
             m_refresh_time.reset();
 
-            auto hovered_object = ObjectManager::getSingleton().get(m_hovered_object_id);
+            ObjectPtr hovered_object = ObjectManager::getSingleton().get(m_hovered_object_id);
 
             if (hovered_object)
             {
@@ -108,7 +118,7 @@ namespace Gecko
 
                 refresh_indicators(m_hovered_object_id);
 
-                UI::getSingleton().get_preview().get_camera()->set_target_id(hovered_object->get_id());
+                m_preview->get_camera()->set_target_id(hovered_object->get_id());
             }
             else if (Game::getSingleton().get_active_player() && Game::getSingleton().get_active_player()->get_selected()->size())
             {
@@ -121,23 +131,21 @@ namespace Gecko
 
                     refresh_indicators(selected_id);
 
-                    UI::getSingleton().get_preview().get_camera()->set_target_id(selected_id);
+                    m_preview->get_camera()->set_target_id(selected_id);
                 }
             }
             else
             {
-                auto memory = System::get_memory_usage();
-                auto& game = Game::getSingleton();
+                System::memory_t memory = System::get_memory_usage();
+                const Ogre::RenderTarget::FrameStats& window_statistics = Game::getSingleton().getRenderWindow()->getStatistics();
 
                 Json::Value info;
-
-                const Ogre::RenderTarget::FrameStats& window_statistics = Game::getSingleton().getRenderWindow()->getStatistics();
 
                 info["Average FPS"] = Utils::Convert::to_string(window_statistics.avgFPS, 2);
                 info["Last FPS"] = Utils::Convert::to_string(window_statistics.lastFPS, 2);
                 info["Triangles"] = window_statistics.triangleCount;
                 info["Active player ID"] = Game::getSingleton().get_active_player_id();
-                info["Cursor"] = get_cursor().get_position().to_string();
+                info["Cursor"] = m_cursor->get_position().to_string();
                 info["Maps"] = MapManager::getSingleton().size();
                 info["Name"] = Game::getSingleton().get_name();
                 info["Objects"] = ObjectManager::getSingleton().size();
@@ -154,6 +162,8 @@ namespace Gecko
                 info["CPU"] = Utils::Convert::to_string(System::get_cpu_usage()) + "%";
                 info["Memory"] = Utils::Convert::to_string(static_cast<float>(memory.virtual_memory) / 1024.0f / 1024.0f) + " MB";
 
+                set_info(std::make_shared<Configuration>(info));
+
                 /*
                 TODO: Enable.
                 const auto& seasons = MapManager::getSingleton().get_items().begin()->second->get_seasons();
@@ -162,21 +172,15 @@ namespace Gecko
                 {
                     info.emplace(i.get_name(), i.get_current().get_name());
                 }
-                */
-
-                set_info(std::make_shared<Configuration>(info));
 
                 refresh_indicators(Id::Empty);
+                */
 
-                std::map<std::string, std::string> statistics;
-
-                for (const auto& i : Statistics::getSingleton())
-                {
-                    statistics.emplace(i.first, Utils::Convert::to_string(i.second));
-                }
-
-                set_statistics(statistics);
+                
             }
+
+            m_players->update();
+            m_statistics->update();
 
             // TODO: Optimize.
             // set_floating_descriptions();
@@ -185,14 +189,12 @@ namespace Gecko
             // set_diplomacy();
             // set_layers(Game::getSingleton()->get_active_map()->get_layers());
             // set_maps(Game::getSingleton().get_maps());
-            set_commands();
-            set_objects_admin();
-            set_orders_admin();
-            set_players();
+            // set_objects_admin();
+            // set_orders_admin();
 
             if (Game::getSingleton().get_active_player())
             {
-                set_resources(Game::getSingleton().get_active_player()->get_resources());
+                m_resources->update(Game::getSingleton().get_active_player()->get_resources());
             }
 
             // TODO: Enable.
@@ -561,27 +563,21 @@ namespace Gecko
                 return true;
         }
 
-        bool r = m_context->ProcessKeyDown(key, 0); // TODO: Why it always returns true?
-
-        return r;
+        return m_context->ProcessKeyDown(key, 0);
     }
 
     bool UI::inject_key_release(Rml::Input::KeyIdentifier key)
     {
         // L_TRACE << "UI::inject_key_release(" << key << ")";
 
-        bool r = m_context->ProcessKeyUp(key, 0); // TODO: Why it always returns true?
-
-        return false;
+        return m_context->ProcessKeyUp(key, 0);
     }
 
     bool UI::inject_text(unsigned int text)
     {
         // L_TRACE << "UI::inject_text(" << text << ")";
 
-        bool r = m_context->ProcessTextInput(static_cast<char>(text));
-
-        return r;
+        return m_context->ProcessTextInput(static_cast<char>(text));
     }
 
     bool UI::inject_mouse_move(int x, int y, int z)
@@ -642,9 +638,9 @@ namespace Gecko
 
     void UI::reset_configuration()
     {
-        if (get_configuration_name() != "None")
+        if (get_configuration_name().empty() == false)
         {
-            set_configuration_name("None");
+            // set_configuration_name("");
         }
     }
 
@@ -652,15 +648,15 @@ namespace Gecko
     {
         if (get_order_type() != order_type::Value::None)
         {
-            set_order_type(order_type::Value::None);
+            // set_order_type(order_type::Value::None);
         }
     }
 
     void UI::reset_skill()
     {
-        if (get_skill_name() != "None")
+        if (get_skill_name().empty() == false)
         {
-            set_skill_name("None");
+            // set_skill_name("");
         }
     }
 
@@ -670,7 +666,7 @@ namespace Gecko
 
         if (cursor_state != state.end())
         {
-            get_cursor().set_visible(cursor_state->second);
+            // get_cursor().set_visible(cursor_state->second);
         }
 
         auto minimap_state = state.find("minimap");
@@ -723,13 +719,14 @@ namespace Gecko
         m_floating_description = !m_floating_description;
     }
 
+    /*
     void UI::set_visible(bool visible)
     {
-        m_visible = visible;
+        // m_visible = visible;
 
-        show_layers(visible);
+        // show_layers(visible);
 
-        get_cursor().set_visible(visible);
+        // get_cursor().set_visible(visible);
         // get_preview().set_visible(visible);
     }
 
@@ -744,11 +741,10 @@ namespace Gecko
             m_configurations_model.DirtyVariable("configuration_name");
         }
 
-        /*
         TODO: Fix cursor.
 
         // Update cursor.
-        if (configuration_name == "None")
+        if (configuration_name.empty() == false)
         {
             get_cursor().set_type(Cursor::Type::Square);
         }
@@ -766,17 +762,6 @@ namespace Gecko
         if (m_order_type != order_type::Value::None)
         {
             reset_order();
-        }
-        */
-    }
-
-    void UI::set_commands()
-    {
-        m_commands = m_console->get_commands();
-
-        if (m_console_model)
-        {
-            m_console_model.DirtyVariable("console");
         }
     }
 
@@ -796,6 +781,15 @@ namespace Gecko
         }
     }
 
+            struct Order
+        {
+            int         id;
+            std::string name;
+            std::string sender_name;
+            std::string receiver_name;
+            std::string attempts;
+        };
+
     void UI::set_diplomacy()
     {
         // Update UI.
@@ -814,7 +808,6 @@ namespace Gecko
 
     void UI::set_floating_descriptions()
     {
-        /*
         TODO: Works very slow.
 
         // Create RML.
@@ -847,12 +840,10 @@ namespace Gecko
 
         // Update UI.
         floating_descriptions_body->SetInnerRML(rml);
-        */
     }
 
     void UI::set_layers(const std::map<std::string, std::shared_ptr<Layer>>& layers)
     {
-        /*
         TODO: Fix.
         
         // Update cache.
@@ -891,7 +882,6 @@ namespace Gecko
         stream << "app.layers.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
-        */
     }
 
     void UI::set_maps(const std::vector<std::string>& maps)
@@ -912,6 +902,7 @@ namespace Gecko
             m_map_menu_model.DirtyVariable("maps");
         }
     }
+    */
 
     void UI::set_hovered_object_id(const Id& hovered_object_id)
     {
@@ -920,26 +911,24 @@ namespace Gecko
 
     void UI::set_info(const ConfigurationPtr& info)
     {
-        m_info = info->to_string("  ");
+        std::string str = info->to_string("  ");
 
-        boost::algorithm::replace_all(m_info, "\"", "");
-        boost::algorithm::replace_all(m_info, "{", "");
-        boost::algorithm::replace_all(m_info, "}", "");
-        boost::algorithm::replace_all(m_info, " [", "");
-        boost::algorithm::replace_all(m_info, "]", "");
-        boost::algorithm::replace_all(m_info, ",", "");
-        boost::algorithm::replace_all(m_info, " :", ":");
+        boost::algorithm::replace_all(str, "\"", "");
+        boost::algorithm::replace_all(str, "{", "");
+        boost::algorithm::replace_all(str, "}", "");
+        boost::algorithm::replace_all(str, " [", "");
+        boost::algorithm::replace_all(str, "]", "");
+        boost::algorithm::replace_all(str, ",", "");
+        boost::algorithm::replace_all(str, " :", ":");
 
-        m_info = boost::regex_replace(m_info, boost::regex(" +\n"), "\n");
-        m_info = boost::regex_replace(m_info, boost::regex("\n+"), "\n");
-        m_info = boost::regex_replace(m_info, boost::regex("\n  "), "\n");
+        str = boost::regex_replace(str, boost::regex(" +\n"), "\n");
+        str = boost::regex_replace(str, boost::regex("\n+"), "\n");
+        str = boost::regex_replace(str, boost::regex("\n  "), "\n");
 
-        if (m_info_model)
-        {
-            m_info_model.DirtyVariable("info");
-        }
+        m_info->set_description(str);
     }
 
+    /*
     void UI::set_objects_admin()
     {
         // Update UI.
@@ -1006,22 +995,6 @@ namespace Gecko
         if (m_orders_admin_model)
         {
             m_orders_admin_model.DirtyVariable("orders_admin");
-        }
-    }
-
-    void UI::set_players()
-    {
-        // Update UI.
-        m_players.clear();
-
-        for (const auto& [id, player] : PlayerManager::getSingleton())
-        {
-            m_players.push_back({ id.get(), player->get_name(), player->get_color()});
-        }
-
-        if (m_players_model)
-        {
-            m_players_model.DirtyVariable("players");
         }
     }
 
@@ -1186,7 +1159,6 @@ namespace Gecko
         stream << "app.terrain.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
-        */
     }
 
     void UI::set_water_layers(const std::set<std::string>& layers)
@@ -1201,7 +1173,6 @@ namespace Gecko
 
         layers_cache = layers;
 
-        /*
         // Create JSON.
         Json::Value json_layers;
 
@@ -1217,133 +1188,51 @@ namespace Gecko
         stream << "app.water.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
-        */
     }
+    */
 
     void UI::init_components()
     {
-        m_console = std::make_unique<Console>();
-        m_cursor = std::make_unique<Cursor>();
-        m_minimap = std::make_unique<Minimap>();
-        m_preview = std::make_unique<Preview>();
-        m_selection_box = std::make_unique<SelectionBox>();
+        m_configurations = std::make_shared<ConfigurationsWidget>();
+        m_console = std::make_shared<ConsoleWidget>();
+        m_cursor = std::make_shared<CursorWidget>();
+        m_diplomacy = std::make_shared<DiplomacyWidget>();
+        m_info = std::make_shared<InfoWidget>();
+        m_log = std::make_shared<LogWidget>();
+        m_minimap = std::make_shared<MinimapWidget>();
+        m_orders = std::make_shared<OrdersWidget>();
+        m_players = std::make_shared<PlayersWidget>();
+        m_preview = std::make_shared<PreviewWidget>();
+        m_resources = std::make_shared<ResourcesWidget>();
+        m_selection_box = std::make_shared<SelectionBoxWidget>();
+        m_skills = std::make_shared<SkillsWidget>();
+        m_statistics = std::make_shared<StatisticsWidget>();
     }
 
     void UI::init_data_bindings()
     {
-        // Register types.
+        m_configurations->init_data_bindigs(m_context);
+        m_console->init_data_bindigs(m_context);
+        m_cursor->init_data_bindigs(m_context);
+        m_diplomacy->init_data_bindigs(m_context);
+        m_info->init_data_bindigs(m_context);
+        m_log->init_data_bindigs(m_context);
+        m_minimap->init_data_bindigs(m_context);
+        m_orders->init_data_bindigs(m_context);
+        m_players->init_data_bindigs(m_context);
+        m_preview->init_data_bindigs(m_context);
+        m_resources->init_data_bindigs(m_context);
+        m_selection_box->init_data_bindigs(m_context);
+        m_skills->init_data_bindigs(m_context);
+        m_statistics->init_data_bindigs(m_context);
+
+        /*
+        if (auto handle = constructor.RegisterStruct<Data_Object>())
         {
-            if (auto constructor = m_context->CreateDataModel("types"))
-            {
-                if (auto handle = constructor.RegisterStruct<Console::Command>())
-                {
-                    handle.RegisterMember("timestamp", &Console::Command::timestamp);
-                    handle.RegisterMember("command", &Console::Command::command);
-                }
-
-                if (auto handle = constructor.RegisterStruct<Data_Diplomacy>())
-                {
-                    handle.RegisterMember("id", &Data_Diplomacy::id);
-                    handle.RegisterMember("name", &Data_Diplomacy::name);
-                    handle.RegisterMember("color", &Data_Diplomacy::color);
-                }
-
-                if (auto handle = constructor.RegisterStruct<Data_Log>())
-                {
-                    handle.RegisterMember("type", &Data_Log::type);
-                    handle.RegisterMember("message", &Data_Log::message);
-                }
-
-                if (auto handle = constructor.RegisterStruct<Data_Object>())
-                {
-                    handle.RegisterMember("id", &Data_Object::id);
-                    handle.RegisterMember("name", &Data_Object::name);
-                    handle.RegisterMember("order_count", &Data_Object::order_count);
-                    handle.RegisterMember("order_name", &Data_Object::order_name);
-                }
-
-                if (auto handle = constructor.RegisterStruct<Data_Order>())
-                {
-                    handle.RegisterMember("id", &Data_Order::id);
-                    handle.RegisterMember("name", &Data_Order::name);
-                    handle.RegisterMember("sender_name", &Data_Order::sender_name);
-                    handle.RegisterMember("receiver_name", &Data_Order::receiver_name);
-                    handle.RegisterMember("attempts", &Data_Order::attempts);
-                }
-
-                if (auto handle = constructor.RegisterStruct<Data_Player>())
-                {
-                    handle.RegisterMember("id", &Data_Player::id);
-                    handle.RegisterMember("name", &Data_Player::name);
-                    handle.RegisterMember("color", &Data_Player::color);
-                }
-
-                if (auto handle = constructor.RegisterStruct<Data_Resource>())
-                {
-                    handle.RegisterMember("name", &Data_Resource::name);
-                    handle.RegisterMember("current", &Data_Resource::current);
-                    handle.RegisterMember("max", &Data_Resource::max);
-                    handle.RegisterMember("direction", &Data_Resource::direction);
-                    handle.RegisterMember("ratio", &Data_Resource::ratio);
-                }
-
-                if (auto handle = constructor.RegisterStruct<Data_Statistic>())
-                {
-                    handle.RegisterMember("name", &Data_Statistic::name);
-                    handle.RegisterMember("value", &Data_Statistic::value);
-                }
-
-                constructor.RegisterArray<Rml::Vector<Console::Command>>();
-                constructor.RegisterArray<Rml::Vector<std::string>>();
-                constructor.RegisterArray<Rml::Vector<Data_Diplomacy>>();
-                constructor.RegisterArray<Rml::Vector<Data_Log>>();
-                constructor.RegisterArray<Rml::Vector<Data_Object>>();
-                constructor.RegisterArray<Rml::Vector<Data_Order>>();
-                constructor.RegisterArray<Rml::Vector<Data_Player>>();
-                constructor.RegisterArray<Rml::Vector<Data_Resource>>();
-                constructor.RegisterArray<Rml::Vector<Data_Statistic>>();
-            }
-        }
-
-        // Console.
-        {
-            if (auto constructor = m_context->CreateDataModel("console"))
-            {
-                constructor.Bind("console", &m_commands);
-
-                m_console_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Configurations.
-        {
-            if (auto constructor = m_context->CreateDataModel("configurations"))
-            {
-                constructor.Bind("configuration_name", &m_configuration_name);
-                constructor.Bind("configurations", &m_configurations);
-
-                m_configurations_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Diplomacy.
-        {
-            if (auto constructor = m_context->CreateDataModel("diplomacy"))
-            {
-                constructor.Bind("diplomacy", &m_diplomacy);
-
-                m_diplomacy_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Info.
-        {
-            if (auto constructor = m_context->CreateDataModel("info"))
-            {
-                constructor.Bind("info", &m_info);
-
-                m_info_model = constructor.GetModelHandle();
-            }
+            handle.RegisterMember("id", &Data_Object::id);
+            handle.RegisterMember("name", &Data_Object::name);
+            handle.RegisterMember("order_count", &Data_Object::order_count);
+            handle.RegisterMember("order_name", &Data_Object::order_name);
         }
 
         // Load menu.
@@ -1353,16 +1242,6 @@ namespace Gecko
                 constructor.Bind("saves", &m_saves);
 
                 m_load_menu_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Log.
-        {
-            if (auto constructor = m_context->CreateDataModel("log"))
-            {
-                constructor.Bind("log", &m_log);
-
-                m_log_model = constructor.GetModelHandle();
             }
         }
 
@@ -1386,17 +1265,6 @@ namespace Gecko
             }
         }
 
-        // Orders.
-        {
-            if (auto constructor = m_context->CreateDataModel("orders"))
-            {
-                constructor.Bind("order_name", &m_order_name);
-                constructor.Bind("orders", &m_orders);
-
-                m_orders_model = constructor.GetModelHandle();
-            }
-        }
-
         // Orders admin.
         {
             if (auto constructor = m_context->CreateDataModel("orders_admin"))
@@ -1404,47 +1272,6 @@ namespace Gecko
                 constructor.Bind("orders_admin", &m_orders_admin);
 
                 m_orders_admin_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Players.
-        {
-            if (auto constructor = m_context->CreateDataModel("players"))
-            {
-                constructor.Bind("players", &m_players);
-
-                m_players_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Resources.
-        {
-            if (auto constructor = m_context->CreateDataModel("resources"))
-            {
-                constructor.Bind("resources", &m_resources);
-
-                m_resources_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Statistics.
-        {
-            if (auto constructor = m_context->CreateDataModel("statistics"))
-            {
-                constructor.Bind("statistics", &m_statistics);
-
-                m_statistics_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Skills.
-        {
-            if (auto constructor = m_context->CreateDataModel("skills"))
-            {
-                constructor.Bind("skill_name", &m_skill_name);
-                constructor.Bind("skills", &m_skills);
-
-                m_skills_model = constructor.GetModelHandle();
             }
         }
 
@@ -1457,8 +1284,7 @@ namespace Gecko
                 m_technologies_model = constructor.GetModelHandle();
             }
         }
-
-        m_data_bindings_initialized = true;
+        */
     }
 
     void UI::init_documents()
@@ -1476,9 +1302,20 @@ namespace Gecko
 
     void UI::init_events()
     {
-        m_event_listener_instancer = std::make_shared<EventListenerInstancer>();
-
-    	Rml::Factory::RegisterEventListenerInstancer(m_event_listener_instancer.get());
+        m_configurations->init_events(m_document);
+        m_console->init_events(m_document);
+        m_cursor->init_events(m_document);
+        m_diplomacy->init_events(m_document);
+        m_info->init_events(m_document);
+        m_log->init_events(m_document);
+        m_minimap->init_events(m_document);
+        m_orders->init_events(m_document);
+        m_players->init_events(m_document);
+        m_preview->init_events(m_document);
+        m_resources->init_events(m_document);
+        m_selection_box->init_events(m_document);
+        m_skills->init_events(m_document);
+        m_statistics->init_events(m_document);
     }
 
     void UI::init_fonts()
@@ -1507,6 +1344,7 @@ namespace Gecko
 
     void UI::refresh_indicators(Id id)
     {
+        /*
         m_indicators.clear();
 
         if (ObjectPtr hovered_object = ObjectManager::getSingleton().get(id))
@@ -1537,20 +1375,14 @@ namespace Gecko
                 }
             }
         }
+        */
     }
 
-    void UI::log_write(const std::string& message, const std::string& type, Id id)
+    void UI::log_write(const std::string& message, const std::string& type, const Id& id)
     {
-        if (m_log_model)
+        if (m_log)
         {
-            m_log.push_back({ type, message });
-
-            if (m_log.size() > 3)
-            {
-                m_log.erase(m_log.cbegin(), m_log.cbegin() + (m_log.size() - 3));
-            }
-
-            m_log_model.DirtyVariable("log");
+            m_log->write(type, message, id);
         }
     }
 }

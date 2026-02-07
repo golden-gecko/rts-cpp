@@ -1,6 +1,7 @@
 #include "Gecko/Configuration.hpp"
 
 #include "Gecko/Exception.hpp"
+#include "Gecko/Log.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Utils.hpp"
 
@@ -340,9 +341,9 @@ namespace Gecko
 
     void Configuration::set(const std::string& path, const std::map<std::string, float>& value)
     {
-        for (const auto& [key, value] : value)
+        for (const auto& [key, _value] : value)
         {
-            set(path + ".key", value);
+            set(path + "." + key, _value);
         }
     }
 

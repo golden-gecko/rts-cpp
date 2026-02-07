@@ -4,6 +4,7 @@
 #include "Gecko/DataLayers/DataLayer.hpp"
 #include "Gecko/Exception.hpp"
 #include "Gecko/Games/Game.hpp"
+#include "Gecko/Log.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Math.hpp"
 #include "Gecko/Utils/Texture.hpp"

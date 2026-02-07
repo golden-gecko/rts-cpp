@@ -48,7 +48,6 @@ namespace Gecko
 {
     class Application;
     class Area;
-    class Armour;
     class Buff;
     class Camera;
     class Component;
@@ -59,9 +58,7 @@ namespace Gecko
     class Configurations;
     class Cursor;
     class DataLayer;
-    class Debug;
     class Diplomacy;
-    class Drive;
     class Entrance;
     class EventListener;
     class EventListenerInstancer;
@@ -73,7 +70,6 @@ namespace Gecko
     class HexCenterPosition;
     class HexLayer;
     class HexTile;
-    class Hull;
     class Id;
     class Indicator;
     class Initializable;
@@ -88,10 +84,57 @@ namespace Gecko
     class Mesh;
     class Minimap;
     class MinimapCamera;
-    class Missile;
-    class Object;
     class ObjectFollowCamera;
     class ObjectManager;
+    class Path;
+    class Player;
+    class PlayerManager;
+    class Point;
+    class PositionValidator;
+    class Preview;
+    class Process;
+    class Processes;
+    class RenderInterface;
+    class Repair;
+    class Resource;
+    class Resources;
+    class RoadPosition;
+    class Season;
+    class Selected;
+    class Serializable;
+    class Skill;
+    class SkillManager;
+    class Skills;
+    class SquareCenterPosition;
+    class SquareLayer;
+    class SquareTile;
+    class Statistics;
+    class System;
+    class SystemInterface;
+    class Technology;
+    class TechnologyTree;
+    class Tile;
+    class Timer;
+    class TopDownCamera;
+    class UI;
+    class Updatable;
+
+    // Components
+    class Armour;
+    class Debug;
+    class Drive;
+    class Hull;
+    class Radar;
+    class Shield;
+    class Storage;
+    class Weapon;
+
+    // Objects
+    class Missile;
+    class Object;
+    class Vehicle;
+
+    // Orders
     class Order;
     class OrderAttack;
     class OrderCreate;
@@ -107,45 +150,24 @@ namespace Gecko
     class OrderStop;
     class OrderUnload;
     class OrderWait;
-    class Path;
-    class Player;
-    class PlayerManager;
-    class Point;
-    class PositionValidator;
-    class Preview;
-    class Process;
-    class Processes;
-    class Radar;
-    class RenderInterface;
-    class Repair;
-    class Resource;
-    class Resources;
-    class RoadPosition;
-    class Season;
-    class Selected;
-    class SelectionBox;
-    class Serializable;
-    class Shield;
-    class Skill;
-    class SkillManager;
-    class Skills;
-    class SquareCenterPosition;
-    class SquareLayer;
-    class SquareTile;
-    class Statistics;
-    class Storage;
-    class System;
-    class SystemInterface;
-    class Technology;
-    class TechnologyTree;
-    class Tile;
-    class Timer;
-    class TopDownCamera;
-    class UI;
-    class Updatable;
-    class Vehicle;
-    class Weapon;
 
+    // Widgets
+    class ConfigurationsWidget;
+    class ConsoleWidget;
+    class CursorWidget;
+    class DiplomacyWidget;
+    class InfoWidget;
+    class LogWidget;
+    class MinimapWidget;
+    class OrdersWidget;
+    class PlayersWidget;
+    class PreviewWidget;
+    class ResourcesWidget;
+    class SelectionBoxWidget;
+    class SkillsWidget;
+    class StatisticsWidget;
+
+    // Pointers
     using CameraPtr = std::shared_ptr<Camera>;
     using ConfigurationPtr = std::shared_ptr<Configuration>;
     using LayerPtr = std::shared_ptr<Layer>;
@@ -158,6 +180,7 @@ namespace Gecko
     using SeasonPtr = std::shared_ptr<Season>;
     using TechnologyPtr = std::shared_ptr<Technology>;
 
+    // Types
     typedef std::vector<Ogre::uint32> Indices;
     typedef std::vector<std::vector<Ogre::Vector3>> Normals;
     typedef std::vector<std::vector<std::vector<Ogre::Vector2>>> TextureCoordinates;

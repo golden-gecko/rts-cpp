@@ -156,14 +156,9 @@ namespace Gecko::Utils
 
     void json_to_file(const Json::Value& value, const std::string& file_name, bool minify)
     {
-        Json::StreamWriterBuilder builder;
-
-        builder["commentStyle"] = "None";
-        builder["indentation"] = "";
-
         std::ofstream stream(file_name, std::ifstream::binary);
 
-        stream << Json::writeString(builder, value);
+        stream << json_to_string(value, minify);
     }
 
     bool is_friendly(const Object& object, const Player& player)

@@ -3,6 +3,7 @@
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Exception.hpp"
 #include "Gecko/Layers/Layer.hpp"
+#include "Gecko/Log.hpp"
 #include "Gecko/Utils/Texture.hpp"
 
 namespace Gecko

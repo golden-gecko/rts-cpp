@@ -2,18 +2,20 @@
 
 #include "Gecko/Managers/ConfigurationManager.hpp"
 #include "Gecko/Navigation/Coordinate.hpp"
+#include "Gecko/UI/Widgets/Widget.hpp"
 
 namespace Gecko
 {
-    struct CursorMesh
-    {
-        Ogre::Entity* entity = nullptr;
-        Ogre::Vector3 scale = Ogre::Vector3::ZERO;
-    };
-
-    class Cursor
+    class CursorWidget :
+        public Widget
     {
     public:
+        struct Mesh
+        {
+            Ogre::Entity* entity = nullptr;
+            Ogre::Vector3 scale = Ogre::Vector3::ZERO;
+        };
+
         enum class Type
         {
             Component,
@@ -22,9 +24,13 @@ namespace Gecko
         };
 
     public:
-        explicit Cursor();
+		// From Rml::EventListener.
+        void ProcessEvent(Rml::Event& event) override;
 
-        virtual ~Cursor();
+    public:
+        explicit CursorWidget();
+
+        ~CursorWidget() override;
 
         void update(const std::pair<Layer*, Ogre::Vector3>& cast);
 

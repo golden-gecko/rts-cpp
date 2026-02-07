@@ -11,6 +11,9 @@
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/Skills/Skill.hpp"
 #include "Gecko/UI/UI.hpp"
+#include "Gecko/UI/Widgets/Configurations.hpp"
+#include "Gecko/UI/Widgets/Orders.hpp"
+#include "Gecko/UI/Widgets/Skills.hpp"
 #include "Gecko/Utils/Convert.hpp"
 
 namespace Gecko
@@ -80,26 +83,20 @@ namespace Gecko
                 }
             }
         }
-        /*
-        else
+
+        if (UI::getSingleton().get_configurations())
         {
-            for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
-            {
-                if (configuration->get_bool("creatable.by_player", false))
-                {
-                    configurations.emplace(name);
-                }
-            }
+            UI::getSingleton().get_configurations()->update(configurations);
         }
-        */
 
-        auto& ui = UI::getSingleton();
-
-        if (ui.m_data_bindings_initialized)
+        if (UI::getSingleton().get_orders())
         {
-            ui.set_configurations(configurations);
-            ui.set_orders(orders);
-            ui.set_skills(skills);
+            UI::getSingleton().get_orders()->update(orders);
+        }
+
+        if (UI::getSingleton().get_skills())
+        {
+            UI::getSingleton().get_skills()->update(skills);
         }
     }
 

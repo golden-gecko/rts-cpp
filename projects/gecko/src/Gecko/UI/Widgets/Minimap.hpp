@@ -1,23 +1,27 @@
 #pragma once
 
-#include "Gecko/Interfaces/Updatable.hpp"
+#include "Gecko/UI/Widgets/Widget.hpp"
 
 namespace Gecko
 {
-    class Minimap :
-        public Rml::EventListener
+    class MinimapWidget :
+        public Widget
     {
 	public:
 		// From Rml::EventListener.
 		void ProcessEvent(Rml::Event& event) override;
 
     public:
-        explicit Minimap();
+        // From Widget.
+        void init_data_bindigs(Rml::Context* context) override;
 
-        virtual ~Minimap();
+        void init_events(Rml::ElementDocument* document) override;
+        void deinit_events(Rml::ElementDocument* document) override;
 
-        void init_events(Rml::Element* element);
-        void deinit_events(Rml::Element* element);
+    public:
+        explicit MinimapWidget();
+
+        ~MinimapWidget() override;
 
     public:
         void click(float x, float y);

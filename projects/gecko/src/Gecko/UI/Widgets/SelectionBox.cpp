@@ -1,11 +1,15 @@
-#include "Gecko/UI/SelectionBox.hpp"
+#include "Gecko/UI/Widgets/SelectionBox.hpp"
 
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Utils/Convert.hpp"
 
 namespace Gecko
 {
-    SelectionBox::SelectionBox()
+    void SelectionBoxWidget::ProcessEvent(Rml::Event& event)
+    {
+    }
+
+    SelectionBoxWidget::SelectionBoxWidget()
     {
         m_manual_object = Game::getSingleton().create_manual_object();
         m_manual_object->setBoundingBox(Ogre::AxisAlignedBox::BOX_INFINITE);
@@ -19,13 +23,13 @@ namespace Gecko
         set_visible(false);
     }
 
-    SelectionBox::~SelectionBox()
+    SelectionBoxWidget::~SelectionBoxWidget()
     {
         Game::getSingleton().destroy_manual_object(m_manual_object);
         Game::getSingleton().destroy_scene_node(m_scene_node);
     }
 
-    void SelectionBox::update()
+    void SelectionBoxWidget::update()
     {
         auto left = m_start.x;
         auto top = m_start.y;

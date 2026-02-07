@@ -1,4 +1,4 @@
-#include "Gecko/UI/Components/Cursor.hpp"
+#include "Gecko/UI/Widgets/Cursor.hpp"
 
 #include "Gecko/Components/Component.hpp"
 #include "Gecko/Configuration.hpp"
@@ -12,7 +12,11 @@
 
 namespace Gecko
 {
-    Cursor::Cursor()
+    void CursorWidget::ProcessEvent(Rml::Event& event)
+    {
+    }
+
+    CursorWidget::CursorWidget()
     {
         m_square = Game::getSingleton().create_manual_object();
         m_square->setQueryFlags(QueryFlags::QF_Cursor);
@@ -22,13 +26,13 @@ namespace Gecko
         m_scene_node->setPosition(Settings::UI::CursorOffset);
     }
 
-    Cursor::~Cursor()
+    CursorWidget::~CursorWidget()
     {
         Game::getSingleton().destroy_scene_node(m_scene_node);
         Game::getSingleton().destroy_manual_object(m_square);
     }
 
-    void Cursor::set_mesh(const ConfigurationPtr& configuration)
+    void CursorWidget::set_mesh(const ConfigurationPtr& configuration)
     {
         set_visible(false);
 
@@ -94,7 +98,7 @@ namespace Gecko
         }
     }
 
-    void Cursor::set_type(Type type)
+    void CursorWidget::set_type(Type type)
     {
         set_visible(false);
 
@@ -130,7 +134,7 @@ namespace Gecko
         }
     }
 
-    void Cursor::set_visible(bool visible)
+    void CursorWidget::set_visible(bool visible)
     {
         // Hide all.
         m_scene_node->setVisible(false);
@@ -177,7 +181,7 @@ namespace Gecko
         }
     }
 
-    void Cursor::update(const std::pair<Layer*, Ogre::Vector3>& cast)
+    void CursorWidget::update(const std::pair<Layer*, Ogre::Vector3>& cast)
     {
         if (cast.first == nullptr)
         {

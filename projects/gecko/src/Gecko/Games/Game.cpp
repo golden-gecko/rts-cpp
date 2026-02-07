@@ -6,6 +6,7 @@
 #include "Gecko/Containers/Selected.hpp"
 #include "Gecko/Exception.hpp"
 #include "Gecko/Input.hpp"
+#include "Gecko/Log.hpp"
 #include "Gecko/Managers/ComponentManager.hpp"
 #include "Gecko/Managers/ConfigurationManager.hpp"
 #include "Gecko/Managers/MapManager.hpp"
@@ -18,9 +19,9 @@
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/Players/Player.hpp"
 #include "Gecko/Skills/Skill.hpp"
-#include "Gecko/UI/Components/Cursor.hpp"
-#include "Gecko/UI/Components/Minimap.hpp"
-#include "Gecko/UI/Components/Preview.hpp"
+#include "Gecko/UI/Widgets/Cursor.hpp"
+#include "Gecko/UI/Widgets/Minimap.hpp"
+#include "Gecko/UI/Widgets/Preview.hpp"
 #include "Gecko/UI/UI.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Mesh.hpp"
@@ -456,9 +457,11 @@ namespace Gecko
             options->get_vector2("input.mouse.sensitivity")
         );
 
+        /*
         UI::getSingleton().get_cursor().set_visible(
             options->get_bool("ui.cursor.visible", Settings::UI::CursorVisibility)
         );
+        */
 
         /*
         UI::getSingleton().get_minimap().set_visible(

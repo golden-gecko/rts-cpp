@@ -57,7 +57,7 @@ namespace Gecko
             const bool          MinimapVisibility   = true;
             const bool          PreviewVisibility   = true;
             const float         RefreshInterval     = 1.0f / 10.0f;
-            const float         SelectionBoxMinSize = 0.0001f;
+            const float         SelectionBoxWidgetMinSize = 0.0001f;
             const std::string   SelectionMesh       = "selection.mesh";
             const Ogre::Vector3 SelectionOffset     = Ogre::Vector3(0.0f, 0.1f, 0.0f);
             const Ogre::Vector3 SelectionScale      = Ogre::Vector3(1.2f, 1.0f, 1.2f);

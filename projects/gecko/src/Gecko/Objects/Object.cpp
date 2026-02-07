@@ -21,6 +21,7 @@
 #include "Gecko/Managers/PlayerManager.hpp"
 #include "Gecko/Maps/Map.hpp"
 #include "Gecko/Layers/Layer.hpp"
+#include "Gecko/Log.hpp"
 #include "Gecko/Orders/OrderWait.hpp"
 #include "Gecko/Players/Player.hpp"
 #include "Gecko/Rectangle.hpp"

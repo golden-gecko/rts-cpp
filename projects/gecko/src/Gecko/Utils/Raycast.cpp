@@ -37,7 +37,7 @@ namespace Gecko
             std::swap(top, bottom);
         }
 
-        if ((right - left) * (bottom - top) < Settings::UI::SelectionBoxMinSize)
+        if ((right - left) * (bottom - top) < Settings::UI::SelectionBoxWidgetMinSize)
         {
             return std::set<Id>();
         }

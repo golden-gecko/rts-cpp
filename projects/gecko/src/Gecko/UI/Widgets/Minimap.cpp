@@ -1,4 +1,4 @@
-#include "Gecko/UI/Components/Minimap.hpp"
+#include "Gecko/UI/Widgets/Minimap.hpp"
 
 #include "Gecko/Cameras/Camera.hpp"
 #include "Gecko/Games/Game.hpp"
@@ -9,16 +9,8 @@
 
 namespace Gecko
 {
-    void Minimap::ProcessEvent(Rml::Event& event)
+    void MinimapWidget::ProcessEvent(Rml::Event& event)
     {
-        /*
-		L_TRACE << "Minimap::ProcessEvent():"
-                << " mouse_x: " << event.GetParameter<int>("mouse_x", 0)
-                << " mouse_y: " << event.GetParameter<int>("mouse_y", 0)
-                << " wheel_delta_x: " << event.GetParameter<float>("wheel_delta_x", 0)
-                << " wheel_delta_y: " << event.GetParameter<float>("wheel_delta_y", 0);
-        */
-
         static float mouse_start_x = 0.0f;
         static float mouse_start_y = 0.0f;
 
@@ -80,7 +72,35 @@ namespace Gecko
         }
     }
 
-    Minimap::Minimap()
+    void MinimapWidget::init_data_bindigs(Rml::Context* context)
+    {
+    }
+
+    void MinimapWidget::init_events(Rml::ElementDocument* document)
+    {
+        Rml::Element* element = document->GetElementById("minimap");
+
+        if (element)
+        {
+            element->AddEventListener(Rml::EventId::Mousedown, this);
+            element->AddEventListener(Rml::EventId::Mousescroll, this);
+            element->AddEventListener(Rml::EventId::Mouseup, this);
+        }
+    }
+
+    void MinimapWidget::deinit_events(Rml::ElementDocument* document)
+    {
+        Rml::Element* element = document->GetElementById("minimap");
+
+        if (element)
+        {
+            element->RemoveEventListener(Rml::EventId::Mousedown, this);
+            element->RemoveEventListener(Rml::EventId::Mousescroll, this);
+            element->RemoveEventListener(Rml::EventId::Mouseup, this);
+        }
+    }
+
+    MinimapWidget::MinimapWidget()
     {
         m_texture = Ogre::TextureManager::getSingleton().createManual(
             m_texture_name,
@@ -117,26 +137,12 @@ namespace Gecko
         }
     }
 
-    Minimap::~Minimap()
+    MinimapWidget::~MinimapWidget()
     {
         Ogre::TextureManager::getSingleton().remove(m_texture);
     }
 
-    void Minimap::init_events(Rml::Element* element)
-    {
-        element->AddEventListener(Rml::EventId::Mousedown, this);
-        element->AddEventListener(Rml::EventId::Mousescroll, this);
-        element->AddEventListener(Rml::EventId::Mouseup, this);
-    }
-
-    void Minimap::deinit_events(Rml::Element* element)
-    {
-        element->RemoveEventListener(Rml::EventId::Mousedown, this);
-        element->RemoveEventListener(Rml::EventId::Mousescroll, this);
-        element->RemoveEventListener(Rml::EventId::Mouseup, this);
-    }
-
-    void Minimap::click(float x, float y)
+    void MinimapWidget::click(float x, float y)
     {
         L_TRACE << "Minimap::click(" << x << ", " << y << ")";
 
@@ -155,7 +161,7 @@ namespace Gecko
         }
     }
 
-    void Minimap::move(float x, float y)
+    void MinimapWidget::move(float x, float y)
     {
         L_TRACE << "Minimap::move(" << x << ", " << y << ")";
 
@@ -171,7 +177,7 @@ namespace Gecko
         }
     }
 
-    void Minimap::zoom_in()
+    void MinimapWidget::zoom_in()
     {
         L_TRACE << "Minimap::zoom_in()";
 
@@ -187,7 +193,7 @@ namespace Gecko
         }
     }
 
-    void Minimap::zoom_out()
+    void MinimapWidget::zoom_out()
     {
         L_TRACE << "Minimap::zoom_out()";
 

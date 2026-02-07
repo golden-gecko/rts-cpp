@@ -1,15 +1,21 @@
 #pragma once
 
 #include "Gecko/Settings.hpp"
+#include "Gecko/UI/Widgets/Widget.hpp"
 
 namespace Gecko
 {
-    class SelectionBox
+    class SelectionBoxWidget :
+        public Widget
     {
     public:
-        explicit SelectionBox();
+		// From Rml::EventListener.
+		void ProcessEvent(Rml::Event& event) override;
 
-        virtual ~SelectionBox();
+    public:
+        explicit SelectionBoxWidget();
+
+        virtual ~SelectionBoxWidget();
 
         const Ogre::Vector2& get_start() const
         {
@@ -38,7 +44,7 @@ namespace Gecko
                 std::swap(top, bottom);
             }
 
-            return (right - left) * (bottom - top) >= Settings::UI::SelectionBoxMinSize;
+            return (right - left) * (bottom - top) >= Settings::UI::SelectionBoxWidgetMinSize;
         }
 
         bool is_visible() const

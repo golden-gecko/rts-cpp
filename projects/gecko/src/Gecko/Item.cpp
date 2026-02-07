@@ -4,10 +4,9 @@
 
 namespace Gecko
 {
-    Item::Item(const Item& other)
+    Item::Item(const Item& other) :
+        m_configuration(other.m_configuration), m_id(other.m_id)
     {
-        m_configuration = other.m_configuration;
-        m_id = other.m_id;
     }
 
     void Item::init()

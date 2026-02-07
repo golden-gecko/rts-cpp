@@ -58,17 +58,20 @@ namespace Gecko
 
 	void EventListener::OnAttach(Rml::Element* element)
 	{
+		L_TRACE << "EventListener::OnAttach()";
 	}
 
 	void EventListener::OnDetach(Rml::Element* element)
 	{
+		L_TRACE << "EventListener::OnDetach()";
+
 		delete this;
 	}
 
 	EventListener::EventListener(const Rml::String& value) :
 		m_value(value)
 	{
-		L_TRACE << "EventListener::EventListener(" << value << ")";
+		L_TRACE << "EventListener::EventListener()";
 	}
 
 	Rml::Element* EventListener::get_element(const std::string& element) const
@@ -102,8 +105,6 @@ namespace Gecko
 
 	void EventListener::on_menu(const std::string& value) const
 	{
-		L_TRACE << "EventListener::on_menu(" << value << ")";
-
 		get_element("load-menu")->SetClass("hidden", true);
 		get_element("main-menu")->SetClass("hidden", true);
 		get_element("map-menu")->SetClass("hidden", true);
@@ -137,7 +138,7 @@ namespace Gecko
 
 	void EventListener::on_order(const std::string& value) const
 	{
-		UI::getSingleton().set_order_type(order_type::from_string(value));
+		// UI::getSingleton().set_order_type(order_type::from_string(value));
 	}
 
 	void EventListener::on_quit_to_menu() const

@@ -7,9 +7,9 @@
         <!-- Configurations -->
         <div id="configurations" class="panel" data-model="configurations">
             <template src="window">
-                <div class="panel-header">Configurations - {{configuration_name}}</div>
+                <div class="panel-header">Configurations - {{selected_configuration}}</div>
                 <div>
-                    <button type="button" class="button" onclick="configuration:{{i}}" data-for="i : configurations">{{i}}</button>
+                    <button type="button" class="button" onclick="configuration:{{i.name}}" data-for="i : configurations">{{i.name}}</button>
                 </div>
             </template>
         </div>
@@ -17,7 +17,7 @@
         <!-- Console -->
         <div id="console" class="ackground hidden popup panel" data-model="console">
             <template src="window">
-                <p data-for="i : console">{{i.timestamp}} {{i.command}}</p>
+                <p data-for="i : commands">{{i.timestamp}} {{i.command}}</p>
                 <input id="console-input" class="text" type="text" />
             </template>
         </div>
@@ -31,14 +31,12 @@
                             <tr>
                                 <td class="number">ID</td>
                                 <td class="text">Name</td>
-                                <td class="text">Color</td>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr data-for="i : diplomacy">
+                            <tr data-for="i : players">
                                 <td class="number">{{i.id}}</td>
                                 <td class="text">{{i.name}}</td>
-                                <td class="text">{{i.color}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -66,7 +64,7 @@
         <!-- Info -->
         <div id="info" class="panel" data-model="info">
             <template src="window">
-                <pre>{{info}}</pre>
+                <pre>{{description.text}}</pre>
             </template>
         </div>
 
@@ -150,9 +148,9 @@
         <!-- Orders -->
         <div id="orders" class="panel" data-model="orders">
             <template src="window">
-                <div class="panel-header">Orders - {{order_name}}</div>
+                <div class="panel-header">Orders - {{selected_order}}</div>
                 <div>
-                    <button type="button" class="button" onclick="order:{{i}}" data-for="i : orders">{{i}}</button>
+                    <button type="button" class="button" onclick="order:{{i.name}}" data-for="i : orders">{{i.name}}</button>
                 </div>
             </template>
         </div>
@@ -238,9 +236,9 @@
         <!-- Skills -->
         <div id="skills" class="panel" data-model="skills">
             <template src="window">
-                <div class="panel-header">Skills - {{skill_name}}</div>
+                <div class="panel-header">Skills - {{selected_skill}}</div>
                 <div>
-                    <button type="button" class="button" onclick="skill:{{i}}" data-for="i : skills">{{i}}</button>
+                    <button type="button" class="button" onclick="skill:{{i.name}}" data-for="i : skills">{{i.name}}</button>
                 </div>
             </template>
         </div>
@@ -256,7 +254,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-for="i : statistics">
+                        <tr data-for="i : items">
                             <td class="name">{{i.name}}</td>
                             <td class="value number">{{i.value}}</td>
                         </tr>

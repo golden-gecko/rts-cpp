@@ -1,6 +1,6 @@
-#include "Gecko/UI/Components/Preview.hpp"
+#include "Gecko/UI/Widgets/Preview.hpp"
 
-#include "Gecko/Cameras/Camera.hpp"
+#include "Gecko/Cameras/ObjectFollowCamera.hpp"
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Layers/Layer.hpp"
 #include "Gecko/Log.hpp"
@@ -10,10 +10,8 @@
 
 namespace Gecko
 {
-    void Preview::ProcessEvent(Rml::Event& event)
+    void PreviewWidget::ProcessEvent(Rml::Event& event)
     {
-		L_TRACE << "Preview::ProcessEvent()";
-
         switch (event.GetId())
         {
             case Rml::EventId::Mousescroll:
@@ -26,7 +24,31 @@ namespace Gecko
         }
     }
 
-    Preview::Preview()
+    void PreviewWidget::init_data_bindigs(Rml::Context* context)
+    {
+    }
+
+    void PreviewWidget::init_events(Rml::ElementDocument* document)
+    {
+        Rml::Element* element = document->GetElementById("preview");
+
+        if (element)
+        {
+            element->AddEventListener(Rml::EventId::Mousescroll, this);
+        }
+    }
+
+    void PreviewWidget::deinit_events(Rml::ElementDocument* document)
+    {
+        Rml::Element* element = document->GetElementById("preview");
+
+        if (element)
+        {
+            element->RemoveEventListener(Rml::EventId::Mousescroll, this);
+        }
+    }
+
+    PreviewWidget::PreviewWidget()
     {
         m_texture = Ogre::TextureManager::getSingleton().createManual(
             m_texture_name,
@@ -52,22 +74,12 @@ namespace Gecko
         }
     }
 
-    Preview::~Preview()
+    PreviewWidget::~PreviewWidget()
     {
         Ogre::TextureManager::getSingleton().remove(m_texture);
     }
 
-    void Preview::init_events(Rml::Element* element)
-    {
-        element->AddEventListener(Rml::EventId::Mousescroll, this);
-    }
-
-    void Preview::deinit_events(Rml::Element* element)
-    {
-        element->RemoveEventListener(Rml::EventId::Mousescroll, this);
-    }
-
-    void Preview::zoom_in()
+    void PreviewWidget::zoom_in()
     {
         L_TRACE << "Preview::zoom_in()";
 
@@ -80,7 +92,7 @@ namespace Gecko
         }
     }
 
-    void Preview::zoom_out()
+    void PreviewWidget::zoom_out()
     {
         L_TRACE << "Preview::zoom_out()";
 
@@ -93,7 +105,7 @@ namespace Gecko
         }
     }
 
-    std::shared_ptr<ObjectFollowCamera> Preview::get_camera() const
+    std::shared_ptr<ObjectFollowCamera> PreviewWidget::get_camera() const
     {
         if (MapPtr map = Game::getSingleton().get_active_map())
         {
