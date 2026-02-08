@@ -2,7 +2,7 @@
     "options": {
         "cache": {
             "meshes": {
-                "enabled": false
+                "enabled": true
             }
         },
         "input": {

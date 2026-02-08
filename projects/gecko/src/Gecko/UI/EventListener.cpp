@@ -11,7 +11,7 @@ namespace Gecko
 {
 	void EventListener::ProcessEvent(Rml::Event& event)
 	{
-		L_TRACE << "EventListener::ProcessEvent()";
+		// L_TRACE << "EventListener::ProcessEvent()";
 
 		std::vector<std::string> segments;
 
@@ -49,12 +49,12 @@ namespace Gecko
 
 	void EventListener::OnAttach(Rml::Element* element)
 	{
-		L_TRACE << "EventListener::OnAttach()";
+		// L_TRACE << "EventListener::OnAttach()";
 	}
 
 	void EventListener::OnDetach(Rml::Element* element)
 	{
-		L_TRACE << "EventListener::OnDetach()";
+		// L_TRACE << "EventListener::OnDetach()";
 
 		delete this;
 	}
@@ -62,7 +62,7 @@ namespace Gecko
 	EventListener::EventListener(const Rml::String& value) :
 		m_value(value)
 	{
-		L_TRACE << "EventListener::EventListener()";
+		// L_TRACE << "EventListener::EventListener()";
 	}
 
 	Rml::Element* EventListener::get_element(const std::string& element) const

@@ -27,14 +27,14 @@ namespace Gecko
 
     void ConfigurationManager::parse_directory(const std::string& directory)
     {
-        L_INFO << "Parsing directory '" << directory << "'.";
+        // L_INFO << "Parsing directory '" << directory << "'.";
 
         for (auto i = std::filesystem::directory_iterator(directory); i != std::filesystem::directory_iterator(); i++)
         {
             std::string path = i->path().generic_string();
             std::string name = i->path().stem().generic_string();
 
-            L_INFO << "Parsing path '" << path << "'.";
+            // L_INFO << "Parsing path '" << path << "'.";
 
             if (std::filesystem::is_directory(i->path()))
             {

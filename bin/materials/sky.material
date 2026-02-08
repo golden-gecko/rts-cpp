@@ -1,0 +1,89 @@
+material Examples/CloudyNoonSkyBox
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			depth_write off
+
+			texture_unit
+			{
+				texture cloudy_noon.jpg cubic
+				tex_address_mode clamp
+			}
+		}
+	}
+}
+
+material Examples/EarlyMorningSkyBox
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			depth_write off
+
+			texture_unit
+			{
+				texture early_morning.jpg cubic
+				tex_address_mode clamp
+			}
+		}
+	}
+}
+
+material Examples/EveningSkyBox
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			depth_write off
+
+			texture_unit
+			{
+				texture evening.jpg cubic
+				tex_address_mode clamp
+			}
+		}
+	}
+}
+
+material Examples/MorningSkyBox
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			depth_write off
+
+			texture_unit
+			{
+				texture morning.jpg cubic
+				tex_address_mode clamp
+			}
+		}
+	}
+}
+
+material Examples/StormySkyBox
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			depth_write off
+
+			texture_unit
+			{
+				texture stormy.jpg cubic
+				tex_address_mode clamp
+			}
+		}
+	}
+}
