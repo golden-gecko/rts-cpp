@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Gecko/Settings.hpp"
 #include "Gecko/UI/Widgets/Widget.hpp"
 
 namespace Gecko
@@ -17,6 +16,10 @@ namespace Gecko
 
         ~SelectionBoxWidget() override;
 
+    public:
+        void update();
+
+    public:
         const Ogre::Vector2& get_start() const
         {
             return m_start;
@@ -27,31 +30,11 @@ namespace Gecko
             return m_end;
         }
 
-        bool is_valid() const
-        {
-            auto left = m_start.x;
-            auto top = m_start.y;
-            auto right = m_end.x;
-            auto bottom = m_end.y;
+    public:
+        bool is_valid() const;
+        bool is_visible() const;
 
-            if (left > right)
-            {
-                std::swap(left, right);
-            }
-
-            if (top > bottom)
-            {
-                std::swap(top, bottom);
-            }
-
-            return (right - left) * (bottom - top) >= Settings::UI::SelectionBoxMinSize;
-        }
-
-        bool is_visible() const
-        {
-            return m_manual_object->isVisible();
-        }
-
+    public:
         void set_start(const Ogre::Vector2& start)
         {
             m_start = start;
@@ -66,8 +49,6 @@ namespace Gecko
         {
             m_scene_node->setVisible(visible);
         }
-
-        void update();
 
     private:
         Ogre::ManualObject* m_manual_object { nullptr };
