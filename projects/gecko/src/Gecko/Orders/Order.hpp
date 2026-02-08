@@ -113,12 +113,12 @@ namespace Gecko
         }
 
     public:
-        void set_sender_id(Id sender_id)
+        void set_sender_id(const Id& sender_id)
         {
             m_sender_id = sender_id;
         }
 
-        void set_receiver_id(Id receiver_id)
+        void set_receiver_id(const Id& receiver_id)
         {
             m_receiver_id = receiver_id;
         }
@@ -129,7 +129,7 @@ namespace Gecko
         Id m_sender_id;
         Id m_receiver_id;
 
-        std::uint16_t m_attempts_to_complete = 0;
-        std::uint16_t m_max_attempts_to_complete = Settings::Game::OrderMaxAttemptsToComplete;
+        std::uint16_t m_attempts_to_complete     = 0;
+        std::uint16_t m_max_attempts_to_complete = Settings::Order::MaxAttemptsToComplete;
     };
 }

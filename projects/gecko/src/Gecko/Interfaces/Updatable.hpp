@@ -6,7 +6,8 @@ namespace Gecko
     {
     public:
         virtual ~Updatable() = default;
-
+        
+    public:
         virtual void update(float time) = 0;
     };
 }

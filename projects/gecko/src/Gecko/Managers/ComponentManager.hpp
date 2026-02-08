@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Gecko/Id.hpp"
-#include "Gecko/Interfaces/Initializable.hpp"
 #include "Gecko/Managers/Manager.hpp"
 
 namespace Gecko

@@ -171,7 +171,7 @@ namespace Gecko
         std::shared_ptr<SelectionBoxWidget>           m_selection_box;
         std::vector<std::shared_ptr<Indicator>> m_indicators;
 
-        void refresh_indicators(Id id);
+        void refresh_indicators(const Id& id);
 
         Id m_hovered_object_id;
 

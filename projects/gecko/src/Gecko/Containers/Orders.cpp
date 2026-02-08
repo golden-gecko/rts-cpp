@@ -39,14 +39,11 @@ namespace Gecko
     {
         clear();
 
-        // TODO: Move to method?
         m_available.clear();
 
         if (configuration->has_member("available"))
         {
-            auto child = configuration->get_child("available");
-
-            for (const auto& i : *(child))
+            for (const auto& i : *(configuration->get_child("available")))
             {
                 m_available.emplace(order_type::from_string(i.asString()));
             }
@@ -54,9 +51,7 @@ namespace Gecko
 
         if (configuration->has_member("m_queue"))
         {
-            auto child = configuration->get_child("m_queue");
-
-            for (const auto& i : *(child))
+            for (const auto& i : *(configuration->get_child("m_queue")))
             {
                 auto order_configuration = std::make_shared<Configuration>(i);
                 auto configuration = order_configuration->get_string("configuration");
@@ -74,7 +69,7 @@ namespace Gecko
         }
     }
 
-    bool Orders::add_first(Id order_id)
+    bool Orders::add_first(const Id& order_id)
     {
         auto order = OrderManager::getSingleton().get(order_id);
 
@@ -99,7 +94,7 @@ namespace Gecko
         return true;
     }
 
-    bool Orders::add_last(Id order_id)
+    bool Orders::add_last(const Id& order_id)
     {
         auto order = OrderManager::getSingleton().get(order_id);
 
@@ -124,7 +119,7 @@ namespace Gecko
         return true;
     }
 
-    void Orders::remove(Id order_id)
+    void Orders::remove(const Id& order_id)
     {
         auto i = std::ranges::find(m_queue, order_id);
 

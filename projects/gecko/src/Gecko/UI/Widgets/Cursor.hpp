@@ -32,7 +32,7 @@ namespace Gecko
 
         ~CursorWidget() override;
 
-        void update(const std::pair<Layer*, Ogre::Vector3>& cast);
+        void update(const std::pair<LayerPtr, Ogre::Vector3>& cast);
 
     public:
         const Navigation::Coordinate& get_position() const

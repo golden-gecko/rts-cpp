@@ -175,8 +175,6 @@ namespace Gecko
 
                 refresh_indicators(Id::Empty);
                 */
-
-                
             }
 
             m_players->update();
@@ -1342,7 +1340,7 @@ namespace Gecko
         */
     }
 
-    void UI::refresh_indicators(Id id)
+    void UI::refresh_indicators(const Id& id)
     {
         /*
         m_indicators.clear();
@@ -1382,7 +1380,7 @@ namespace Gecko
     {
         if (m_log)
         {
-            m_log->write(type, message, id);
+            m_log->write(message, type, id);
         }
     }
 }

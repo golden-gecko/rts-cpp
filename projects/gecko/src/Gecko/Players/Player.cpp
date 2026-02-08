@@ -10,17 +10,17 @@
 
 namespace Gecko
 {
-    Player* Player::create()
+    PlayerPtr Player::create()
     {
         return new Player();
     }
 
-    Player* Player::create(Player* memory)
+    PlayerPtr Player::create(PlayerPtr memory)
     {
         return new (memory) Player();
     }
 
-    Player* Player::create(const ConfigurationPtr& configuration)
+    PlayerPtr Player::create(const ConfigurationPtr& configuration)
     {
         auto player = new Player();
 
@@ -29,7 +29,7 @@ namespace Gecko
         return player;
     }
 
-    Player* Player::create(Player* memory, const ConfigurationPtr& configuration)
+    PlayerPtr Player::create(PlayerPtr memory, const ConfigurationPtr& configuration)
     {
         auto player = new (memory) Player();
 
@@ -102,5 +102,15 @@ namespace Gecko
                 }
             }
         }
+    }
+
+    Id Player::get_first_selected()
+    {
+        if (m_selected->size() > 0)
+        {
+            return *(m_selected->begin());
+        }
+
+        return Id::Empty;
     }
 }

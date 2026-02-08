@@ -26,8 +26,8 @@ namespace Gecko
             m_available.emplace(item);
         }
 
-        bool add_first(Id order_id);
-        bool add_last(Id order_id);
+        bool add_first(const Id& order_id);
+        bool add_last(const Id& order_id);
 
         void clear()
         {
@@ -51,7 +51,7 @@ namespace Gecko
 
         void move_first_to_end();
 
-        void remove(Id order_id);
+        void remove(const Id& order_id);
         void remove_current_order();
         void remove_all_orders();
 

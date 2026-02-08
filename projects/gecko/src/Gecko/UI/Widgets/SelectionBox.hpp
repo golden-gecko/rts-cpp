@@ -44,7 +44,7 @@ namespace Gecko
                 std::swap(top, bottom);
             }
 
-            return (right - left) * (bottom - top) >= Settings::UI::SelectionBoxWidgetMinSize;
+            return (right - left) * (bottom - top) >= Settings::UI::SelectionBoxMinSize;
         }
 
         bool is_visible() const
@@ -52,14 +52,14 @@ namespace Gecko
             return m_manual_object->isVisible();
         }
 
-        void set_start(const Ogre::Vector2& _start)
+        void set_start(const Ogre::Vector2& start)
         {
-            m_start = _start;
+            m_start = start;
         }
 
-        void set_end(const Ogre::Vector2& _end)
+        void set_end(const Ogre::Vector2& end)
         {
-            m_end = _end;
+            m_end = end;
         }
 
         void set_visible(bool visible)

@@ -35,7 +35,7 @@ namespace Gecko
 
             if (type == "Player")
             {
-                auto function = static_cast<Player*(*)(Player* memory, const ConfigurationPtr&)>(&Player::create);
+                auto function = static_cast<PlayerPtr(*)(PlayerPtr memory, const ConfigurationPtr&)>(&Player::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 player_manager.register_type<Player>(name, factory);

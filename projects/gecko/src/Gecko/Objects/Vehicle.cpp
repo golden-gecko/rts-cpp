@@ -70,7 +70,7 @@ namespace Gecko
         }
 
         // Check for distance to target object.
-        if (Utils::is_close_enough(get_position(), target->get_position(), Settings::Game::ResourceLoadingMinDistance) == false)
+        if (Utils::is_close_enough(get_position(), target->get_position(), Settings::Order::ResourceLoadingMinDistance) == false)
         {
             L_WARNING << "Object " << load_order->get_target_id() << " is too far to load.";
 
@@ -122,7 +122,7 @@ namespace Gecko
         position.y = 0.0f;
         target_position.y = 0.0f;
 
-        const auto& layer = get_owner()->get_layer("Terrain"); // TODO: Hardcoded.
+        const auto& layer = get_owner()->get_layer(Settings::Layer::Terrain);
 
         // Do we have everything needed to complete order?
         if (move_order->get_path().get_points().empty())
@@ -163,9 +163,7 @@ namespace Gecko
         // TODO: Get speed from Drive component.
         // Get distance that we can travel in this frame.
         auto next_distance = direction * 10.0f /* speed */ * time;
-
-        // TODO: Hardcoded.
-        auto navigation_layer = layer->get_data_layer("Navigation");
+        auto navigation_layer = layer->get_data_layer(Settings::Layer::Navigation);
 
         // If travel distance is greater than distance to next point in path,
         // move to next point in path. Otherwise, move to max distance.
@@ -223,7 +221,7 @@ namespace Gecko
         }
 
         // Check for distance to target object.
-        if (Utils::is_close_enough(get_position(), target->get_position(), Settings::Game::ResourceLoadingMinDistance) == false)
+        if (Utils::is_close_enough(get_position(), target->get_position(), Settings::Order::ResourceLoadingMinDistance) == false)
         {
             L_WARNING << "Object " << unload_order->get_target_id() << " is too far to unload.";
 

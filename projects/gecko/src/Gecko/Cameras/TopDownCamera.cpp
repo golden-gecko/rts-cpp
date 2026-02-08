@@ -42,14 +42,9 @@ namespace Gecko
         move(direction * m_speed * time);
 
         // Limit camera to layer.
-        auto map = Game::getSingleton().get_active_map();
-
-        if (map)
+        if (MapPtr map = Game::getSingleton().get_active_map())
         {
-            // TODO: Hardcoded layer name.
-            auto layer = map->get_layer("Terrain");
-
-            if (layer)
+            if (LayerPtr layer = map->get_layer(Settings::Layer::Terrain))
             {
                 auto camera_position = get_position();
                 auto layer_position = layer->get_position(camera_position);

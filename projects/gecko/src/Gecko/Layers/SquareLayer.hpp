@@ -39,7 +39,7 @@ namespace Gecko
         Ogre::Vector3 get_position(const Ogre::Vector3& position, bool validate = true) const override;
 
     public:
-        explicit SquareLayer(Map* owner, const std::string& name, const Configuration& configuration);
+        explicit SquareLayer(MapPtr owner, const std::string& name, const Configuration& configuration);
 
         ~SquareLayer() override;
 

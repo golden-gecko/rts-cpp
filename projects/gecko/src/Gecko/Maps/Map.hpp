@@ -11,10 +11,10 @@ namespace Gecko
         using base_type = Item;
 
     public:
-        static Map* create();
-        static Map* create(const ConfigurationPtr& configuration);
-        static Map* create(Map* memory);
-        static Map* create(Map* memory, const ConfigurationPtr& configuration);
+        static MapPtr create();
+        static MapPtr create(const ConfigurationPtr& configuration);
+        static MapPtr create(MapPtr memory);
+        static MapPtr create(MapPtr memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Map() = default;

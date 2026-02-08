@@ -2,6 +2,7 @@
 
 #include "Gecko/DataLayers/DataLayer.hpp"
 #include "Gecko/Layers/Layer.hpp"
+#include "Gecko/Settings.hpp"
 
 namespace Gecko::Navigation
 {
@@ -81,7 +82,7 @@ namespace Gecko::Navigation
 
         open.push_back(from_node);
 
-        auto navigation_layer = m_layer.get_data_layer("Navigation"); // TODO: Hardcoded.
+        auto navigation_layer = m_layer.get_data_layer(Settings::Layer::Navigation);
         bool target_found = false;
 
         // TODO: If target is blocked, find nearest available one.

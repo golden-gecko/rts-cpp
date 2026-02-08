@@ -113,7 +113,6 @@ namespace Gecko
             {
                 std::vector<Ogre::Vector3> vertices;
                 std::vector<Ogre::ColourValue> colors;
-                std::vector<std::vector<Ogre::Vector2>> texture_coordinates;
                 std::vector<Ogre::Vector3> normals;
                 std::vector<std::uint32_t> indices;
 
@@ -200,14 +199,6 @@ namespace Gecko
                     throw Exception("Normals has different size than vertices.");
                 }
 
-                for (auto i = 0; i < texture_coordinates.size(); i++)
-                {
-                    if (vertices.size() != texture_coordinates[i].size())
-                    {
-                        throw Exception("Texture coordinates has different size than vertices.");
-                    }
-                }
-
                 auto mesh = Game::getSingleton().create_manual_object();
                 auto material_name = m_configuration->get_string("mesh.material_name", "white");
 
@@ -218,14 +209,6 @@ namespace Gecko
                     mesh->position(vertices[i]);
                     mesh->colour(colors[i]);
                     mesh->normal(normals[i]);
-
-                    // TODO: Implement.
-                    mesh->textureCoord(0.0f, 0.0f);
-
-                    for (auto j = 0; j < texture_coordinates.size(); ++j)
-                    {
-                        mesh->textureCoord(texture_coordinates[j][i]);
-                    }
                 }
 
                 for (auto i : indices)

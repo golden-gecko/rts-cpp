@@ -45,7 +45,7 @@ namespace Gecko
         }
 
     public:
-        void set_target_id(Id new_target_id)
+        void set_target_id(const Id& new_target_id)
         {
             target_id = new_target_id;
         }

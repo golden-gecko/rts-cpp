@@ -61,15 +61,19 @@ namespace Gecko
 
     std::vector<std::shared_ptr<Indicator>> OrderMove::generate_indicators(int order_number) const
     {
-        // TODO: Hardcoded.
-        MapPtr map = Game::getSingleton().get_active_map();
-        LayerPtr layer = map->get_layer("Terrain");
+        if (MapPtr map = Game::getSingleton().get_active_map())
+        {
+            if (LayerPtr layer = map->get_layer(Settings::Layer::Terrain))
+            {
+                std::shared_ptr<Path> indicator = std::make_shared<Path>();
 
-        std::shared_ptr<Path> indicator = std::make_shared<Path>();
+                indicator->set_material_name(std::format("path_{}", order_number));
+                indicator->set_points(std::format("path_{}", order_number), get_path().get_points());
 
-        indicator->set_material_name(std::format("path_{}", order_number));
-        indicator->set_points(std::format("path_{}", order_number), get_path().get_points());
+                return { indicator };
+            }
+        }
 
-        return { indicator };
+        return {};
     }
 }

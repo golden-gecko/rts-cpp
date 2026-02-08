@@ -17,7 +17,7 @@ namespace Gecko
         typedef std::map<std::string, Process> Map;
 
     public:
-        void update(float time, Id id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources);
+        void update(float time, const Id& id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources);
 
     public:
         void clear()

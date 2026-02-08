@@ -279,8 +279,8 @@ namespace Gecko
     Entrance Object::get_entrance() const
     {
         // TODO: Hardcoded.
-        auto layer = m_owner->get_layer("Terrain");
-        auto data_layer = layer->get_data_layer("Navigation");
+        auto layer = m_owner->get_layer(Settings::Layer::Terrain);
+        auto data_layer = layer->get_data_layer(Settings::Layer::Navigation);
 
         auto index = layer->get_index(get_position());
 
@@ -383,7 +383,7 @@ namespace Gecko
     {
         const auto& aabb = m_scene_node->_getWorldAABB();
         // TODO: Hardcoded.
-        const auto& layer = m_owner->get_layer("Terrain");
+        const auto& layer = m_owner->get_layer(Settings::Layer::Terrain);
 
         return Area(); // layer->get_index(aabb.getMinimum()), layer->get_index(aabb.getMaximum()));
     }
@@ -393,7 +393,7 @@ namespace Gecko
         return m_scene_node->_getWorldAABB().getSize();
     }
 
-    void Object::set_player_id(Id player_id)
+    void Object::set_player_id(const Id& player_id)
     {
         /*
         auto player = PlayerManager::getSingleton().get(get_player_id());
@@ -433,7 +433,7 @@ namespace Gecko
         if (m_owner && m_layers->size())
         {
             // TODO: Hardcoded.
-            const auto& layer = get_owner()->get_layer("Terrain");
+            const auto& layer = get_owner()->get_layer(Settings::Layer::Terrain);
             auto new_position = layer->get_position(position, validate);
 
             auto normal = layer->get_normal(position);
@@ -468,8 +468,8 @@ namespace Gecko
         if (m_owner && m_layers->size())
         {
             // TODO: Hardcoded.
-            auto layer = m_owner->get_layer("Terrain");
-            auto data_layer = layer->get_data_layer("Navigation");
+            auto layer = m_owner->get_layer(Settings::Layer::Terrain);
+            auto data_layer = layer->get_data_layer(Settings::Layer::Navigation);
 
             m_scene_node->_update(true, true);
             m_scene_node->_updateBounds();
@@ -493,7 +493,6 @@ namespace Gecko
 
     std::map<std::string, float> Object::get_progress_bars() const
     {
-        // TODO: Optimize.
         std::map<std::string, float> progress_bars;
 
         float health = 0.0f;

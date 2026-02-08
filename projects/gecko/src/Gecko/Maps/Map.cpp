@@ -19,17 +19,17 @@
 
 namespace Gecko
 {
-    Map* Map::create()
+    MapPtr Map::create()
     {
         return new Map();
     }
 
-    Map* Map::create(Map* memory)
+    MapPtr Map::create(MapPtr memory)
     {
         return new (memory) Map();
     }
 
-    Map* Map::create(const ConfigurationPtr& configuration)
+    MapPtr Map::create(const ConfigurationPtr& configuration)
     {
         auto map = new Map();
 
@@ -38,7 +38,7 @@ namespace Gecko
         return map;
     }
 
-    Map* Map::create(Map* memory, const ConfigurationPtr& configuration)
+    MapPtr Map::create(MapPtr memory, const ConfigurationPtr& configuration)
     {
         auto map = new (memory) Map();
 
@@ -130,7 +130,7 @@ namespace Gecko
 
     bool Map::is_position_valid(const Ogre::Vector3& position) const
     {
-        return get_layer("Terrain")->is_position_valid(position); // TODO: Hardcoded.
+        return get_layer(Settings::Layer::Terrain)->is_position_valid(position);
     }
 
     void Map::show_data_layer(const std::string& layer_name, const std::string& data_layer_name)

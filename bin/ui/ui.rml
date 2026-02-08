@@ -9,7 +9,7 @@
             <template src="window">
                 <div class="panel-header">Configurations - {{selected_configuration}}</div>
                 <div>
-                    <button type="button" class="button" onclick="configuration:{{i.name}}" data-for="i : configurations">{{i.name}}</button>
+                    <button type="button" class="button" data-event-click="select(i.name)" data-for="i : configurations">{{i.name}}</button>
                 </div>
             </template>
         </div>
@@ -81,7 +81,7 @@
         <!-- Log -->
         <div id="log" class="panel" data-model="log">
             <template src="window">
-                <p class="{{i.level}}" data-for="i : log">{{i.message}}</p>
+                <p data-class-error="i.type == 'error'" data-class-info="i.type == 'info'" data-for="i : entries">{{i.message}}</p>
             </template>
         </div>
 
@@ -150,7 +150,7 @@
             <template src="window">
                 <div class="panel-header">Orders - {{selected_order}}</div>
                 <div>
-                    <button type="button" class="button" onclick="order:{{i.name}}" data-for="i : orders">{{i.name}}</button>
+                    <button type="button" class="button" data-event-click="select(i.name)" data-for="i : orders">{{i.name}}</button>
                 </div>
             </template>
         </div>
@@ -238,7 +238,7 @@
             <template src="window">
                 <div class="panel-header">Skills - {{selected_skill}}</div>
                 <div>
-                    <button type="button" class="button" onclick="skill:{{i.name}}" data-for="i : skills">{{i.name}}</button>
+                    <button type="button" class="button" data-event-click="select(i.name)" data-for="i : skills">{{i.name}}</button>
                 </div>
             </template>
         </div>

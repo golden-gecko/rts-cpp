@@ -3,6 +3,7 @@
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Layers/Layer.hpp"
 #include "Gecko/Maps/Map.hpp"
+#include "Gecko/Settings.hpp"
 
 namespace Gecko
 {
@@ -29,20 +30,22 @@ namespace Gecko
 
     void Path::set_points(const std::string& material_name, const Navigation::Path::Points& points)
     {
-        // TODO: Hardcoded.
-        MapPtr map = Game::getSingleton().get_active_map();
-        LayerPtr layer = map->get_layer("Terrain");
-
-        m_manual_object->begin(material_name, Ogre::RenderOperation::OperationType::OT_LINE_STRIP);
-
-        for (const auto& point : points)
+        if (MapPtr map = Game::getSingleton().get_active_map())
         {
-            m_manual_object->position(
-                point.x * layer->get_scale().x + layer->get_scale().x * 0.5f, 4.0f,
-                point.z * layer->get_scale().z + layer->get_scale().z * 0.5f
-            );
-        }
+            if (LayerPtr layer = map->get_layer(Settings::Layer::Terrain))
+            {
+                m_manual_object->begin(material_name, Ogre::RenderOperation::OperationType::OT_LINE_STRIP);
 
-        m_manual_object->end();
+                for (const auto& point : points)
+                {
+                    m_manual_object->position(
+                        point.x * layer->get_scale().x + layer->get_scale().x * 0.5f, 4.0f,
+                        point.z * layer->get_scale().z + layer->get_scale().z * 0.5f
+                    );
+                }
+
+                m_manual_object->end();
+            }
+        }
     }
 }

@@ -31,7 +31,7 @@ namespace Gecko
         }
     }
 
-    void Processes::update(float time, Id id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources)
+    void Processes::update(float time, const Id& id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources)
     {
         for (auto& [name, process] : m_items)
         {

@@ -41,7 +41,7 @@ namespace Gecko
         }
 
     public:
-        void set_player_id(Id new_player_id)
+        void set_player_id(const Id& new_player_id)
         {
             player_id = new_player_id;
         }

@@ -17,6 +17,7 @@ namespace Gecko
                 constructor.RegisterArray<Rml::Vector<Configuration>>();
                 constructor.Bind("configurations", &m_configurations);
                 constructor.Bind("selected_configuration", &m_selected_configuration);
+                constructor.BindEventCallback("select", &ConfigurationsWidget::select, this);
 
                 m_model = constructor.GetModelHandle();
             }
@@ -29,6 +30,13 @@ namespace Gecko
 
     void ConfigurationsWidget::deinit_events(Rml::ElementDocument* document)
     {
+    }
+
+    void ConfigurationsWidget::select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)
+    {
+        m_selected_configuration = (arguments.size() == 1 ? arguments[0].Get<std::string>() : "");
+
+        m_model.DirtyVariable("selected_configuration");
     }
 
     void ConfigurationsWidget::update(const std::set<std::string>& configurations)

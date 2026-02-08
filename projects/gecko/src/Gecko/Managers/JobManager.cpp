@@ -158,7 +158,6 @@ namespace Gecko
         // Start with output resources, because if there is not output resources then there is nothing to transport.
         for (auto out_request = m_out_queue.cbegin(); out_request != m_out_queue.cend(); ++out_request)
         {
-            // TODO: Optimize.
             for (auto in_request = m_in_queue.cbegin(); in_request != m_in_queue.cend(); ++in_request)
             {
                 // Check if output and input requesters are the same.

@@ -128,6 +128,6 @@ namespace Gecko
         float m_deposit_range = 0.0f;
         float m_storage_range = 0.0f;
 
-        float m_priority = Settings::Game::ResourcePriority;
+        float m_priority = Settings::Order::ResourcePriority;
     };
 }

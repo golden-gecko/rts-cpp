@@ -17,6 +17,7 @@ namespace Gecko
                 constructor.RegisterArray<Rml::Vector<Order>>();
                 constructor.Bind("orders", &m_orders);
                 constructor.Bind("selected_order", &m_selected_order);
+                constructor.BindEventCallback("select", &OrdersWidget::select, this);
 
                 m_model = constructor.GetModelHandle();
             }
@@ -29,6 +30,13 @@ namespace Gecko
 
     void OrdersWidget::deinit_events(Rml::ElementDocument* document)
     {
+    }
+
+    void OrdersWidget::select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)
+    {
+        m_selected_order = (arguments.size() == 1 ? arguments[0].Get<std::string>() : "");
+
+        m_model.DirtyVariable("selected_order");
     }
 
     void OrdersWidget::update(const std::set<std::string>& orders)

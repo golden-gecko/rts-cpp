@@ -29,7 +29,7 @@ namespace Gecko
 
         void create_group(std::uint16_t group_number);
 
-        void select(Id object_id, bool add = false);
+        void select(const Id& object_id, bool add = false);
         void select(const Items& object_ids, bool add = false);
         void select_group(std::uint16_t group_number);
 

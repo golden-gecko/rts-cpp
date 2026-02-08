@@ -63,8 +63,8 @@ namespace Gecko
         void load_options();
 
     public:
-        Map* get_active_map() const;
-        Player* get_active_player() const;
+        MapPtr get_active_map() const;
+        PlayerPtr get_active_player() const;
 
         auto get_active_player_id() const
         {

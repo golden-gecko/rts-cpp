@@ -150,7 +150,7 @@ namespace Gecko
         deallocate();
     }
 
-    Order* OrderManager::order_attack(Id sender_id, Id receiver_id, Id target_id)
+    Order* OrderManager::order_attack(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto order = base_type::create("attack");
 
@@ -161,7 +161,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_attack(Id sender_id, Id receiver_id, const Ogre::Vector3& target_position)
+    Order* OrderManager::order_attack(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
     {
         auto order = base_type::create("attack");
 
@@ -172,7 +172,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_create(Id sender_id, Id receiver_id, const std::string& configuration_name, const Ogre::Vector3& position, Id player_id)
+    Order* OrderManager::order_create(const Id& sender_id, const Id& receiver_id, const std::string& configuration_name, const Ogre::Vector3& position, const Id& player_id)
     {
         auto order = base_type::create("create");
 
@@ -189,7 +189,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_destroy(Id sender_id, Id receiver_id)
+    Order* OrderManager::order_destroy(const Id& sender_id, const Id& receiver_id)
     {
         auto order = base_type::create("destroy");
 
@@ -200,7 +200,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_disable(Id sender_id, Id receiver_id)
+    Order* OrderManager::order_disable(const Id& sender_id, const Id& receiver_id)
     {
         auto order = base_type::create("disable");
 
@@ -211,7 +211,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_enable(Id sender_id, Id receiver_id)
+    Order* OrderManager::order_enable(const Id& sender_id, const Id& receiver_id)
     {
         auto order = base_type::create("enable");
 
@@ -222,7 +222,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_follow(Id sender_id, Id receiver_id, Id target_id)
+    Order* OrderManager::order_follow(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto order = base_type::create("follow");
 
@@ -237,7 +237,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_guard(Id sender_id, Id receiver_id, Id target_id)
+    Order* OrderManager::order_guard(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto order = base_type::create("guard");
 
@@ -252,7 +252,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_guard(Id sender_id, Id receiver_id, const Ogre::Vector3& target_position)
+    Order* OrderManager::order_guard(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
     {
         auto order = base_type::create("guard");
 
@@ -267,7 +267,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_load(Id sender_id, Id receiver_id, Id target_id, const std::string& resource_name, float resource_value)
+    Order* OrderManager::order_load(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value)
     {
         auto order = base_type::create("load");
 
@@ -284,7 +284,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_move(Id sender_id, Id receiver_id, Id target_id)
+    Order* OrderManager::order_move(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto object = ObjectManager::getSingleton().get(target_id);
 
@@ -306,7 +306,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_move(Id sender_id, Id receiver_id, const Ogre::Vector3& target_position)
+    Order* OrderManager::order_move(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
     {
         auto order = base_type::create("move");
 
@@ -321,7 +321,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_patrol(Id sender_id, Id receiver_id, Id target_id)
+    Order* OrderManager::order_patrol(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto order = base_type::create("patrol");
 
@@ -336,7 +336,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_patrol(Id sender_id, Id receiver_id, const Ogre::Vector3& target_position)
+    Order* OrderManager::order_patrol(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
     {
         auto order = base_type::create("patrol");
 
@@ -351,7 +351,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_rally(Id sender_id, Id receiver_id, Id target_id)
+    Order* OrderManager::order_rally(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto order = base_type::create("rally");
 
@@ -366,7 +366,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_rally(Id sender_id, Id receiver_id, const Ogre::Vector3& target_position)
+    Order* OrderManager::order_rally(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
     {
         auto order = base_type::create("rally");
 
@@ -381,7 +381,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_stop(Id sender_id, Id receiver_id)
+    Order* OrderManager::order_stop(const Id& sender_id, const Id& receiver_id)
     {
         auto order = base_type::create("stop");
 
@@ -392,7 +392,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_unload(Id sender_id, Id receiver_id, Id target_id, const std::string& resource_name, float resource_value)
+    Order* OrderManager::order_unload(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value)
     {
         auto order = base_type::create("unload");
 
@@ -409,7 +409,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_wait(Id sender_id, Id receiver_id, float time)
+    Order* OrderManager::order_wait(const Id& sender_id, const Id& receiver_id, float time)
     {
         auto order = base_type::create("wait");
 

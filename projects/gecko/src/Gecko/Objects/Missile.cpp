@@ -51,32 +51,34 @@ namespace Gecko
 
     void Missile::set_position(const Ogre::Vector3& position, bool validate)
     {
-        auto map = get_owner();
-
-        if (map)
+        if (MapPtr map = get_owner())
         {
-            auto orders = get_orders();
-            auto& order_manager = OrderManager::getSingleton();
-
             if (map->is_position_valid(position) == false)
             {
-                auto order = order_manager.order_destroy(get_id(), get_id());
+                OrderPtr order = OrderManager::getSingleton().order_destroy(get_id(), get_id());
 
                 // TODO: Throw exception;
 
-                orders->add_last(order->get_id());
+                get_orders()->add_last(order->get_id());
             }
             else
             {
-                auto layer_position = map->get_layer("Terrain")->get_position(position); // TODO: Hardcoded.
-
-                if (position.y <= layer_position.y)
+                if (LayerPtr layer = map->get_layer(Settings::Layer::Terrain))
                 {
-                    auto order = order_manager.order_destroy(get_id(), get_id());
+                    Ogre::Vector3 layer_position = layer->get_position(position);
 
-                    // TODO: Throw exception;
+                    if (position.y <= layer_position.y)
+                    {
+                        OrderPtr order = OrderManager::getSingleton().order_destroy(get_id(), get_id());
 
-                    orders->add_last(order->get_id());
+                        // TODO: Throw exception;
+
+                        get_orders()->add_last(order->get_id());
+                    }
+                    else
+                    {
+                        base_type::set_position(position, validate);
+                    }
                 }
                 else
                 {

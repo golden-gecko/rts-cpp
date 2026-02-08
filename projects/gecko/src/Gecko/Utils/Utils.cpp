@@ -80,7 +80,6 @@ namespace Gecko::Utils
         return render_window_handle;
     }
 
-    // TODO: Replace with lookAt.
     void rotate_node_towards_position(Ogre::SceneNode* scene_node, const Ogre::Vector3& position, float time)
     {
         auto current_position = get_node_position(scene_node);
@@ -122,7 +121,7 @@ namespace Gecko::Utils
 
     bool is_enough_to_process(float resource)
     {
-        return resource >= Settings::Game::ResourceTransportMinValue;
+        return resource >= Settings::Order::ResourceTransportMinValue;
     }
 
     void move_resources(std::shared_ptr<Resources> source, std::shared_ptr<Resources> destination, const std::string& name, float value)
@@ -133,9 +132,8 @@ namespace Gecko::Utils
 
     std::string get_filename_from_date()
     {
-        // TODO: Refactor.
-        auto now = std::time(nullptr);
-        auto local_now = std::localtime(&now);
+        std::time_t now = std::time(nullptr);
+        std::tm* local_now = std::localtime(&now);
 
         std::ostringstream oss;
 

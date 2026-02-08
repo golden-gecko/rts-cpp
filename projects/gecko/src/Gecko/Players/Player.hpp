@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Gecko/Item.hpp"
-#include "Gecko/Containers/Selected.hpp"
 
 namespace Gecko
 {
@@ -12,10 +11,10 @@ namespace Gecko
         using base_type = Item;
 
     public:
-        static Player* create();
-        static Player* create(const ConfigurationPtr& configuration);
-        static Player* create(Player* memory);
-        static Player* create(Player* memory, const ConfigurationPtr& configuration);
+        static PlayerPtr create();
+        static PlayerPtr create(const ConfigurationPtr& configuration);
+        static PlayerPtr create(PlayerPtr memory);
+        static PlayerPtr create(PlayerPtr memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Player();
@@ -52,15 +51,7 @@ namespace Gecko
             return m_selected;
         }
 
-        Id get_first_selected()
-        {
-            if (m_selected->size() > 0)
-            {
-                return *(m_selected->begin());
-            }
-
-            return Id::Empty;
-        }
+        Id get_first_selected();
 
     private:
         std::string m_name;

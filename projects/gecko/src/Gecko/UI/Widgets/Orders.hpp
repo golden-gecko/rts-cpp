@@ -25,6 +25,7 @@ namespace Gecko
         void deinit_events(Rml::ElementDocument* document) override;
 
     public:
+        void select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
         void update(const std::set<std::string>& orders);
 
     private:

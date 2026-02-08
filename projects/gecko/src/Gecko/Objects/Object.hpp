@@ -82,7 +82,7 @@ namespace Gecko
             return m_orders;
         }
 
-        Map* get_owner() const
+        MapPtr get_owner() const
         {
             return m_owner;
         }
@@ -144,12 +144,12 @@ namespace Gecko
             m_scene_node->setDirection(direction, Ogre::Node::TransformSpace::TS_WORLD);
         }
 
-        void set_owner(Map* _owner)
+        void set_owner(MapPtr _owner)
         {
             m_owner = _owner;
         }
 
-        virtual void set_player_id(Id player_id);
+        virtual void set_player_id(const Id& player_id);
 
         virtual void set_position(const Ogre::Vector3& position, bool validate = true);
 
@@ -185,7 +185,7 @@ namespace Gecko
         virtual OrderStatus on_wait(Order* order, float time);
 
     private:
-        Map* m_owner = nullptr;
+        MapPtr m_owner = nullptr;
 
         std::string m_name;
         Id m_player_id;

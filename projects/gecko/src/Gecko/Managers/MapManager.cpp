@@ -35,7 +35,7 @@ namespace Gecko
 
             if (type == "Map")
             {
-                auto function = static_cast<Map*(*)(Map* memory, const ConfigurationPtr&)>(&Map::create);
+                auto function = static_cast<MapPtr(*)(MapPtr memory, const ConfigurationPtr&)>(&Map::create);
                 auto factory = std::bind(function, std::placeholders::_1, configuration);
 
                 map_manager.register_type<Map>(name, factory);

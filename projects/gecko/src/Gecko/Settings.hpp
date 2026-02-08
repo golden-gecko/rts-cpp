@@ -36,17 +36,34 @@ namespace Gecko
             const float         FrameTime                   = 1.0f / 60.0f;
             const float         MinCollisionDistance        = 0.1f;
             const float         MinWeaponAngle              = 1.0f;
-            const std::uint16_t OrderMaxAttemptsToComplete  = 3;
-            const float         OrderWaitTime               = 3.0f;
-            const float         ResourceLoadingMinDistance  = 20.0f;
-            const float         ResourcePriority            = 1.0f;
-            const float         ResourceTransportMinValue   = 1.0f;
             const std::string   SavesPath                   = "../saves";
         }
 
         namespace Input
         {
             const Ogre::Vector2 MouseSensivity = Ogre::Vector2(-0.2f, -0.2f);
+        }
+
+        namespace Layer
+        {
+            const std::string Air        = "Air";
+            const std::string Navigation = "Navigation";
+            const std::string Terrain    = "Terrain";
+            const std::string Water      = "Water";
+        }
+
+        namespace Material
+        {
+            const std::string Default = "white";
+        }
+
+        namespace Order
+        {
+            const std::uint16_t MaxAttemptsToComplete      = 3;
+            const float         ResourceLoadingMinDistance = 20.0f;
+            const float         ResourcePriority           = 1.0f;
+            const float         ResourceTransportMinValue  = 1.0f;
+            const float         WaitTime                   = 3.0f;
         }
 
         namespace UI
@@ -57,7 +74,7 @@ namespace Gecko
             const bool          MinimapVisibility   = true;
             const bool          PreviewVisibility   = true;
             const float         RefreshInterval     = 1.0f / 10.0f;
-            const float         SelectionBoxWidgetMinSize = 0.0001f;
+            const float         SelectionBoxMinSize = 0.0001f;
             const std::string   SelectionMesh       = "selection.mesh";
             const Ogre::Vector3 SelectionOffset     = Ogre::Vector3(0.0f, 0.1f, 0.0f);
             const Ogre::Vector3 SelectionScale      = Ogre::Vector3(1.2f, 1.0f, 1.2f);

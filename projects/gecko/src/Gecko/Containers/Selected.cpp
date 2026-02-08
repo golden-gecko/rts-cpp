@@ -112,7 +112,7 @@ namespace Gecko
         m_groups[group_number] = m_items;
     }
 
-    void Selected::select(Id object_id, bool add)
+    void Selected::select(const Id& object_id, bool add)
     {
         L_TRACE << "Player::select(" << object_id << ", " << add << ")";
 

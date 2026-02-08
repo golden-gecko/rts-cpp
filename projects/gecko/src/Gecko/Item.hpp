@@ -45,7 +45,7 @@ namespace Gecko
             m_configuration = configuration;
         }
 
-        void set_id(Id id)
+        void set_id(const Id& id)
         {
             m_id = id;
         }

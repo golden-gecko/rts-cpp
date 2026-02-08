@@ -598,7 +598,7 @@ namespace Gecko
         {
             auto selection = create_manual_object();
 
-            selection->begin("white"); // TODO: Hardcoded.
+            selection->begin(Settings::Material::Default);
 
             selection->position(-0.5f, 0.0f, -0.5f);
             selection->normal(Ogre::Vector3::UNIT_Y);

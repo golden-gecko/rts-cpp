@@ -27,7 +27,7 @@ namespace Gecko::Navigation
     protected:
         const Layer& m_layer;
 
-        Cache<std::pair<Coordinate, Coordinate>, Path::Points> m_cache; // TODO: Make private.
+        Cache<std::pair<Coordinate, Coordinate>, Path::Points> m_cache;
 
         void save_cache(const std::pair<Coordinate, Coordinate>& key, const Path::Points& points);
     };

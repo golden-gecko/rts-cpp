@@ -45,7 +45,7 @@ namespace Gecko
         m_deposit_range = configuration->get_float("deposit_range", 0.0f);
         m_storage_range = configuration->get_float("storage_range", 0.0f);
 
-        m_priority = configuration->get_float("priority", Settings::Game::ResourcePriority);
+        m_priority = configuration->get_float("priority", Settings::Order::ResourcePriority);
     }
 
     void Resource::update(float time)

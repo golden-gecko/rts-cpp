@@ -44,7 +44,7 @@ namespace Gecko
         }
     }
 
-    void Process::update(float time, Id id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources)
+    void Process::update(float time, const Id& id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources)
     {
         bool in_resources_available = true;
         bool out_resources_available = true;
@@ -176,7 +176,7 @@ namespace Gecko
         }
     }
 
-    Object* Process::get_deposit(const Resource& in_resource, Id id, const Ogre::Vector3& position, float time) const
+    Object* Process::get_deposit(const Resource& in_resource, const Id& id, const Ogre::Vector3& position, float time) const
     {
         auto deposits = ObjectManager::getSingleton().get_in_range(position, in_resource.get_deposit_range());
 
@@ -196,7 +196,7 @@ namespace Gecko
         return nullptr;
     }
 
-    Object* Process::get_storage(const Resource& out_resource, Id id, const Ogre::Vector3& position, float time) const
+    Object* Process::get_storage(const Resource& out_resource, const Id& id, const Ogre::Vector3& position, float time) const
     {
         auto storages = ObjectManager::getSingleton().get_in_range(position, out_resource.get_storage_range());
 

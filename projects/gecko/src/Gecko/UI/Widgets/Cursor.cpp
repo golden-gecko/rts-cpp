@@ -181,7 +181,7 @@ namespace Gecko
         }
     }
 
-    void CursorWidget::update(const std::pair<Layer*, Ogre::Vector3>& cast)
+    void CursorWidget::update(const std::pair<LayerPtr, Ogre::Vector3>& cast)
     {
         if (cast.first == nullptr)
         {

@@ -11,7 +11,7 @@
 
 namespace Gecko
 {
-    Layer::Layer(Map* owner, const std::string& name, const Configuration& configuration) :
+    Layer::Layer(MapPtr owner, const std::string& name, const Configuration& configuration) :
         m_owner(owner),
         m_name(name)
     {

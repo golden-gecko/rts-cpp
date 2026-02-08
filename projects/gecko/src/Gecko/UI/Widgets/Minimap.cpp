@@ -116,7 +116,7 @@ namespace Gecko
         {
             if (CameraPtr camera = map->get_camera(Settings::Camera::Minimap))
             {
-                if (LayerPtr terrain = map->get_layer("Terrain")) // TODO: Hardcoded.
+                if (LayerPtr terrain = map->get_layer(Settings::Layer::Terrain))
                 {
                     auto size_x = terrain->get_size() * terrain->get_scale().x;
                     auto size_y = terrain->get_size() * terrain->get_scale().y;
@@ -148,7 +148,7 @@ namespace Gecko
 
         if (MapPtr map = Game::getSingleton().get_active_map())
         {
-            if (LayerPtr terrain = map->get_layer("Terrain")) // TODO: Hardcoded.
+            if (LayerPtr terrain = map->get_layer(Settings::Layer::Terrain))
             {
                 if (CameraPtr camera = map->get_camera(Settings::Camera::Main))
                 {
@@ -169,7 +169,7 @@ namespace Gecko
         {
             if (CameraPtr camera = map->get_camera(Settings::Camera::Minimap))
             {
-                if (LayerPtr terrain = map->get_layer("Terrain")) // TODO: Hardcoded.
+                if (LayerPtr terrain = map->get_layer(Settings::Layer::Terrain))
                 {
                     camera->set_position(camera->get_position() + Ogre::Vector3(x * 10.0f, 0.0f, y * 10.0f)); // TODO: Hardcoded.
                 }

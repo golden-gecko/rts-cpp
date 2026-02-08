@@ -40,7 +40,7 @@ namespace Gecko
             m_distance = distance;
         }
 
-        void set_target_id(Id target_id)
+        void set_target_id(const Id& target_id)
         {
             m_target_id = target_id;
         }

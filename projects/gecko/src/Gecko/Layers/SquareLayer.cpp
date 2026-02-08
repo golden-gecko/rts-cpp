@@ -12,7 +12,7 @@
 
 namespace Gecko
 {
-    SquareLayer::SquareLayer(Map* owner, const std::string& name, const Configuration& configuration) :
+    SquareLayer::SquareLayer(MapPtr owner, const std::string& name, const Configuration& configuration) :
         base_type(owner, name, configuration)
     {
         // Get material name.
@@ -384,14 +384,23 @@ namespace Gecko
 
     void SquareLayer::init_tiles(const Configuration& configuration)
     {
-        // TODO: Check for negative size.
         // Get shards.
-        auto shards = configuration.get_int<std::uint16_t>("shards", 1);
-        auto shards_per_row = static_cast<std::uint16_t>(std::sqrt(shards));
+        std::uint16_t shards = configuration.get_int<std::uint16_t>("shards", 1);
+        std::uint16_t shards_per_row = static_cast<std::uint16_t>(std::sqrt(shards));
+
+        if (shards < 1)
+        {
+            throw Exception("'shards' must be greater than 0.");
+        }
 
         if (Utils::Math::is_power_2(shards) == false)
         {
             throw Exception("'shards' must be one of 1, 4, 16 or 64.");
+        }
+
+        if (shards_per_row < 1)
+        {
+            throw Exception("'shards_per_row' must be greater than 0.");
         }
 
         // Get heightmap size.

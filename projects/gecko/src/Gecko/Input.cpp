@@ -64,6 +64,8 @@ namespace Gecko
     {
         // L_TRACE << "Input::keyPressed(" << arg.text << ")";
 
+        Statistics::getSingleton().add("Pressed keys", 1.0f);
+
         bool result = UI::getSingleton().inject_key_press(Utils::Convert::to_rmlui_key(arg.key));
 
         // Pass only ASCII characters.
@@ -148,8 +150,6 @@ namespace Gecko
                 break;
             }
         }
-
-        Statistics::getSingleton().add("Pressed keys", 1.0f);
 
         return true;
     }
@@ -285,9 +285,7 @@ namespace Gecko
 
     void Input::init()
     {
-        L_TRACE << "Input::Input()";
-
-        auto commands_configuration = m_configuration->get_child("commands");
+        ConfigurationPtr commands_configuration = m_configuration->get_child("commands");
 
         for (auto i = commands_configuration->begin(); i != commands_configuration->end(); i++)
         {
@@ -388,7 +386,7 @@ namespace Gecko
 
     bool Input::is_mouse_button_pressed(OIS::MouseButtonID mouse_button) const
     {
-        return m_mouse->getMouseState().buttonDown(mouse_button);
+        return m_mouse ? m_mouse->getMouseState().buttonDown(mouse_button) : false;
     }
 
     void Input::set_mouse_sensitivity(const Ogre::Vector2& mouse_sensitivity)
