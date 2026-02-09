@@ -1,4 +1,4 @@
-#include "Gecko/Input.hpp"
+#include "Gecko/Input/Input.hpp"
 
 #include "Gecko/Cameras/Camera.hpp"
 #include "Gecko/Configuration.hpp"
@@ -6,7 +6,7 @@
 #include "Gecko/Containers/Selected.hpp"
 #include "Gecko/Exception.hpp"
 #include "Gecko/Games/Game.hpp"
-#include "Gecko/Key.hpp"
+#include "Gecko/Input/Key.hpp"
 #include "Gecko/Layers/Layer.hpp"
 #include "Gecko/Log.hpp"
 #include "Gecko/Managers/ConfigurationManager.hpp"
@@ -69,7 +69,7 @@ namespace Gecko
         bool result = UI::getSingleton().inject_key_press(Utils::Convert::to_rmlui_key(arg.key));
 
         // Pass only ASCII characters.
-        if (arg.text >= 32 && arg.text <= 127) // TODO: Hardcoded.
+        if (arg.text >= Settings::Input::TextMin && arg.text <= Settings::Input::TextMax)
         {
             result &= UI::getSingleton().inject_text(arg.text);
         }
@@ -196,11 +196,11 @@ namespace Gecko
             {
                 if (UI::getSingleton().is_mouse_inside(x_abs, y_abs))
                 {
-                    UI::getSingleton().get_selection_box()->set_visible(false);
+                    UI::getSingleton().get_component<SelectionBoxWidget>()->set_visible(false);
                 }
                 else if (is_mouse_button_pressed(OIS::MouseButtonID::MB_Left))
                 {
-                    auto selection_box = UI::getSingleton().get_selection_box();
+                    auto selection_box = UI::getSingleton().get_component<SelectionBoxWidget>();
 
                     selection_box->set_end(Utils::Convert::to_screen_coordinates(arg));
                     selection_box->update();
@@ -251,7 +251,7 @@ namespace Gecko
 
         if (id == OIS::MouseButtonID::MB_Left)
         {
-            UI::getSingleton().get_selection_box()->set_start(Utils::Convert::to_screen_coordinates(arg));
+            UI::getSingleton().get_component<SelectionBoxWidget>()->set_start(Utils::Convert::to_screen_coordinates(arg));
         }
 
         return true;
@@ -459,6 +459,7 @@ namespace Gecko
 
     void Input::process_create_order(const OIS::MouseEvent& arg)
     {
+        /*
         auto terrain_result = Utils::Raycast::to_layer(arg);
 
         if (terrain_result)
@@ -470,6 +471,7 @@ namespace Gecko
                 Game::getSingleton().get_active_player_id()
             );
         }
+        */
     }
 
     void Input::process_follow_order(const OIS::MouseEvent& arg)
@@ -779,14 +781,14 @@ namespace Gecko
     void Input::handle_left_mouse_button(const OIS::MouseEvent& arg)
     {
         auto& ui = UI::getSingleton();
-        auto selection_box = ui.get_selection_box();
+        auto selection_box = ui.get_component<SelectionBoxWidget>();
 
         selection_box->set_end(Utils::Convert::to_screen_coordinates(arg));
         selection_box->set_visible(false);
 
-        const auto& configuration_name = ui.get_configuration_name();
-        auto possible_order_name = ui.get_order_type();
-        const auto& skill_name = ui.get_skill_name();
+        std::string configuration_name = ""; // ui.get_configuration_name();
+        auto possible_order_name = order_type::Value::None; // ui.get_order_type();
+        std::string skill_name = ""; // ui.get_skill_name();
 
         if (configuration_name.empty() == false)
         {

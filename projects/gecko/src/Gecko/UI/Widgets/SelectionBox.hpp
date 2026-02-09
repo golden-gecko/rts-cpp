@@ -20,6 +20,10 @@ namespace Gecko
         void update();
 
     public:
+        bool is_valid() const;
+        bool is_visible() const;
+
+    public:
         const Ogre::Vector2& get_start() const
         {
             return m_start;
@@ -29,10 +33,6 @@ namespace Gecko
         {
             return m_end;
         }
-
-    public:
-        bool is_valid() const;
-        bool is_visible() const;
 
     public:
         void set_start(const Ogre::Vector2& start)
@@ -51,10 +51,10 @@ namespace Gecko
         }
 
     private:
-        Ogre::ManualObject* m_manual_object { nullptr };
-        Ogre::SceneNode* m_scene_node { nullptr };
+        Ogre::ManualObject* m_manual_object = nullptr;
+        Ogre::SceneNode*    m_scene_node    = nullptr;
 
-        Ogre::Vector2 m_start { Ogre::Vector2::ZERO };
-        Ogre::Vector2 m_end { Ogre::Vector2::ZERO };
+        Ogre::Vector2 m_start = Ogre::Vector2::ZERO;
+        Ogre::Vector2 m_end   = Ogre::Vector2::ZERO;
     };
 }

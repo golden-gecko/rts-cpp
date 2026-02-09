@@ -36,7 +36,7 @@ namespace Gecko
             return m_data_layers;
         }
 
-        const auto& get_grid_scale() const
+        const Ogre::Vector3& get_grid_scale() const
         {
             return m_grid_scale;
         }
@@ -44,12 +44,12 @@ namespace Gecko
         virtual Navigation::Coordinate get_index(float x, float z) const = 0;
         virtual Navigation::Coordinate get_index(const Ogre::Vector3& position) const = 0;
 
-        const auto& get_material_name() const
+        const std::string& get_material_name() const
         {
             return m_material_name;
         }
 
-        const auto& get_name() const
+        const std::string& get_name() const
         {
             return m_name;
         }
@@ -70,7 +70,7 @@ namespace Gecko
         virtual Ogre::Vector3 get_position(float x, float z, bool validate = true) const = 0;
         virtual Ogre::Vector3 get_position(const Ogre::Vector3& position, bool validate = true) const = 0;
 
-        const auto& get_scale() const
+        const Ogre::Vector3& get_scale() const
         {
             return m_scale;
         }

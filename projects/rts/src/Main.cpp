@@ -1,7 +1,7 @@
 #include <Gecko/Application.hpp>
 #include <Gecko/Configuration.hpp>
 #include <Gecko/Games/Game.hpp>
-#include <Gecko/Input.hpp>
+#include <Gecko/Input/Input.hpp>
 #include <Gecko/Log.hpp>
 #include <Gecko/Managers/ComponentManager.hpp>
 #include <Gecko/Managers/ConfigurationManager.hpp>

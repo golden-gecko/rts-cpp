@@ -4,7 +4,7 @@
 
 namespace Gecko::Utils::Time
 {
-    Value get()
+    Value get_current()
     {
         return std::chrono::high_resolution_clock::now();
     }
@@ -15,12 +15,12 @@ namespace Gecko::Utils::Time
     }
 
     Scope::Scope(const std::string& name) :
-        m_name(name) , m_start(get())
+        m_name(name) , m_start(get_current())
     {
     }
 
     Scope::~Scope()
     {
-        L_DEBUG << m_name << ": " << get_duration(m_start, get());
+        L_DEBUG << m_name << ": " << get_duration(m_start, get_current());
     }
 }

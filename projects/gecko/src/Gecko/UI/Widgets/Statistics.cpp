@@ -20,6 +20,7 @@ namespace Gecko
 
                 constructor.RegisterArray<Rml::Vector<Item>>();
                 constructor.Bind("items", &m_items);
+                constructor.BindEventCallback("close", &StatisticsWidget::close, this);
 
                 m_model = constructor.GetModelHandle();
             }
@@ -28,10 +29,24 @@ namespace Gecko
 
     void StatisticsWidget::init_events(Rml::ElementDocument* document)
     {
+        m_document = document;
     }
 
     void StatisticsWidget::deinit_events(Rml::ElementDocument* document)
     {
+    }
+
+    void StatisticsWidget::close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)
+    {
+        if (m_document)
+        {
+            std::string id = (arguments.size() == 1 ? arguments[0].Get<std::string>() : "");
+
+            if (Rml::Element* element = m_document->GetElementById(id))
+            {
+                element->SetClass("hidden", true);
+            }
+        }
     }
 
     void StatisticsWidget::update()

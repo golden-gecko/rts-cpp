@@ -1,4 +1,4 @@
-#include "Gecko/Key.hpp"
+#include "Gecko/Input/Key.hpp"
 
 #include "Gecko/Exception.hpp"
 #include "Gecko/Utils/Utils.hpp"

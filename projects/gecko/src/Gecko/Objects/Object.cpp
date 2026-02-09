@@ -278,11 +278,21 @@ namespace Gecko
 
     Entrance Object::get_entrance() const
     {
-        // TODO: Hardcoded.
-        auto layer = m_owner->get_layer(Settings::Layer::Terrain);
-        auto data_layer = layer->get_data_layer(Settings::Layer::Navigation);
+        LayerPtr layer = m_owner->get_layer(Settings::Layer::Terrain);
 
-        auto index = layer->get_index(get_position());
+        if (layer == nullptr)
+        {
+            throw Exception("No '" + Settings::Layer::Terrain + "' layer.");
+        }
+        
+        DataLayerPtr data_layer = layer->get_data_layer(Settings::Layer::Navigation);
+
+        if (data_layer == nullptr)
+        {
+            throw Exception("No '" + Settings::Layer::Navigation + "' data layer.");
+        }
+
+        Navigation::Coordinate index = layer->get_index(get_position());
 
         std::array<Navigation::Coordinate, 4> indices =
         {
@@ -329,18 +339,18 @@ namespace Gecko
             }
         }
 
-        const auto& scale = layer->get_scale();
-        auto entrance = Ogre::Vector3(adjacent.x * scale.x, 0.0f, adjacent.z * scale.z);
+        const Ogre::Vector3& scale = layer->get_scale();
+        Ogre::Vector3 entrance = Ogre::Vector3(adjacent.x * scale.x, 0.0f, adjacent.z * scale.z);
 
         return Entrance(layer->get_position(entrance), get_direction());
     }
 
     float Object::get_heading() const
     {
-        auto forward = Ogre::Vector3::NEGATIVE_UNIT_Z;
-        auto normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
-        auto direction = get_direction();
-        auto angle = std::acos(forward.dotProduct(direction));
+        Ogre::Vector3 forward = Ogre::Vector3::NEGATIVE_UNIT_Z;
+        Ogre::Vector3 normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
+        Ogre::Vector3 direction = get_direction();
+        float angle = std::acos(forward.dotProduct(direction));
 
         if (normal.dotProduct(forward.crossProduct(direction)) < 0.0f)
         {

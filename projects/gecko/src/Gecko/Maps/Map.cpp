@@ -220,8 +220,7 @@ namespace Gecko
             }
         }
 
-        // TODO: Move to configuration.
-        Game::getSingleton().getRenderWindow()->addViewport(get_camera(Settings::Camera::Main)->get_camera())->setBackgroundColour(Ogre::ColourValue(0.25f, 0.5f, 0.75f));
+        Game::getSingleton().getRenderWindow()->addViewport(get_camera(Settings::Camera::Main)->get_camera());
     }
 
     void Map::init_layers()

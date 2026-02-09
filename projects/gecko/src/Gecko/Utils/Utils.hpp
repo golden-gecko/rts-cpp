@@ -28,10 +28,6 @@ namespace Gecko::Utils
 
     std::string get_filename_from_date();
 
-    std::string json_to_string(const Json::Value& value, bool minify = false);
-
-    void json_to_file(const Json::Value& value, const std::string& file_name, bool minify = false);
-
     bool is_friendly(const Object& object, const Player& player);
 
     void fire_missile(Object& owner, const std::string& configuration_name, const Ogre::Vector3& current_position, const Ogre::Vector3& original_target_direction);

@@ -1,6 +1,8 @@
 #include "Gecko/Objects/Vehicle.hpp"
 
+#include "Gecko/Components/Drive.hpp"
 #include "Gecko/Components/Storage.hpp"
+#include "Gecko/Containers/Components.hpp"
 #include "Gecko/Containers/Orders.hpp"
 #include "Gecko/Containers/Resources.hpp"
 #include "Gecko/DataLayers/DataLayer.hpp"
@@ -154,16 +156,27 @@ namespace Gecko
         auto next_point = layer->get_position(front.x * layer->get_scale().x, front.z * layer->get_scale().z);
         next_point.y = 0.0f;
 
-        auto distance = next_point - position;
-        auto direction = distance.normalisedCopy();
+        Ogre::Vector3 distance = next_point - position;
+        Ogre::Vector3 direction = distance.normalisedCopy();
 
         // Set direction.
         set_direction(direction);
 
-        // TODO: Get speed from Drive component.
         // Get distance that we can travel in this frame.
-        auto next_distance = direction * 10.0f /* speed */ * time;
-        auto navigation_layer = layer->get_data_layer(Settings::Layer::Navigation);
+        float speed = 0.0f;
+
+        if (get_components()->has<Drive>())
+        {
+            std::vector<Drive*> drives = get_components()->get_by_type<Drive>();
+
+            if (drives.size())
+            {
+                speed = drives[0]->get_speed();
+            }
+        }
+
+        Ogre::Vector3 next_distance = direction * speed * time;
+        DataLayerPtr navigation_layer = layer->get_data_layer(Settings::Layer::Navigation);
 
         // If travel distance is greater than distance to next point in path,
         // move to next point in path. Otherwise, move to max distance.

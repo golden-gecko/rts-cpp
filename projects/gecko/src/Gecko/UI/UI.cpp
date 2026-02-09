@@ -7,7 +7,7 @@
 #include "Gecko/Containers/Resources.hpp"
 #include "Gecko/Containers/Selected.hpp"
 #include "Gecko/Games/Game.hpp"
-#include "Gecko/Input.hpp"
+#include "Gecko/Input/Input.hpp"
 #include "Gecko/Layers/Layer.hpp"
 #include "Gecko/Log.hpp"
 #include "Gecko/Managers/MapManager.hpp"
@@ -30,6 +30,7 @@
 #include "Gecko/UI/Widgets/Console.hpp"
 #include "Gecko/UI/Widgets/Cursor.hpp"
 #include "Gecko/UI/Widgets/Diplomacy.hpp"
+#include "Gecko/UI/Widgets/GameMenu.hpp"
 #include "Gecko/UI/Widgets/Info.hpp"
 #include "Gecko/UI/Widgets/Log.hpp"
 #include "Gecko/UI/Widgets/Minimap.hpp"
@@ -40,6 +41,7 @@
 #include "Gecko/UI/Widgets/SelectionBox.hpp"
 #include "Gecko/UI/Widgets/Skills.hpp"
 #include "Gecko/UI/Widgets/Statistics.hpp"
+#include "Gecko/UI/Widgets/Techonologies.hpp"
 #include "Gecko/Utils/Utils.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/String.hpp"
@@ -118,7 +120,7 @@ namespace Gecko
 
                 refresh_indicators(m_hovered_object_id);
 
-                m_preview->get_camera()->set_target_id(hovered_object->get_id());
+                get_component<PreviewWidget>()->get_camera()->set_target_id(hovered_object->get_id());
             }
             else if (Game::getSingleton().get_active_player() && Game::getSingleton().get_active_player()->get_selected()->size())
             {
@@ -131,7 +133,7 @@ namespace Gecko
 
                     refresh_indicators(selected_id);
 
-                    m_preview->get_camera()->set_target_id(selected_id);
+                    get_component<PreviewWidget>()->get_camera()->set_target_id(selected_id);
                 }
             }
             else
@@ -145,7 +147,7 @@ namespace Gecko
                 info["Last FPS"] = Utils::Convert::to_string(window_statistics.lastFPS, 2);
                 info["Triangles"] = window_statistics.triangleCount;
                 info["Active player ID"] = Game::getSingleton().get_active_player_id();
-                info["Cursor"] = m_cursor->get_position().to_string();
+                info["Cursor"] = get_component<CursorWidget>()->get_position().to_string();
                 info["Maps"] = MapManager::getSingleton().size();
                 info["Name"] = Game::getSingleton().get_name();
                 info["Objects"] = ObjectManager::getSingleton().size();
@@ -177,8 +179,8 @@ namespace Gecko
                 */
             }
 
-            m_players->update();
-            m_statistics->update();
+            get_component<PlayersWidget>()->update();
+            get_component<StatisticsWidget>()->update();
 
             // TODO: Optimize.
             // set_floating_descriptions();
@@ -192,7 +194,7 @@ namespace Gecko
 
             if (Game::getSingleton().get_active_player())
             {
-                m_resources->update(Game::getSingleton().get_active_player()->get_resources());
+                get_component<ResourcesWidget>()->update(Game::getSingleton().get_active_player()->get_resources());
             }
 
             // TODO: Enable.
@@ -636,7 +638,7 @@ namespace Gecko
 
     void UI::reset_configuration()
     {
-        if (get_configuration_name().empty() == false)
+        // if (get_configuration_name().empty() == false)
         {
             // set_configuration_name("");
         }
@@ -644,7 +646,7 @@ namespace Gecko
 
     void UI::reset_order()
     {
-        if (get_order_type() != order_type::Value::None)
+        // if (get_order_type() != order_type::Value::None)
         {
             // set_order_type(order_type::Value::None);
         }
@@ -652,7 +654,7 @@ namespace Gecko
 
     void UI::reset_skill()
     {
-        if (get_skill_name().empty() == false)
+        // if (get_skill_name().empty() == false)
         {
             // set_skill_name("");
         }
@@ -685,7 +687,7 @@ namespace Gecko
 
         if (selection_box_state != state.end())
         {
-            m_selection_box->set_visible(selection_box_state->second);
+            get_component<SelectionBoxWidget>()->set_visible(selection_box_state->second);
         }
 
         auto ui_layers_state = state.find("ui_layers");
@@ -923,7 +925,7 @@ namespace Gecko
         str = boost::regex_replace(str, boost::regex("\n+"), "\n");
         str = boost::regex_replace(str, boost::regex("\n  "), "\n");
 
-        m_info->set_description(str);
+        get_component<InfoWidget>()->set_description(str);
     }
 
     /*
@@ -1191,38 +1193,30 @@ namespace Gecko
 
     void UI::init_components()
     {
-        m_configurations = std::make_shared<ConfigurationsWidget>();
-        m_console = std::make_shared<ConsoleWidget>();
-        m_cursor = std::make_shared<CursorWidget>();
-        m_diplomacy = std::make_shared<DiplomacyWidget>();
-        m_info = std::make_shared<InfoWidget>();
-        m_log = std::make_shared<LogWidget>();
-        m_minimap = std::make_shared<MinimapWidget>();
-        m_orders = std::make_shared<OrdersWidget>();
-        m_players = std::make_shared<PlayersWidget>();
-        m_preview = std::make_shared<PreviewWidget>();
-        m_resources = std::make_shared<ResourcesWidget>();
-        m_selection_box = std::make_shared<SelectionBoxWidget>();
-        m_skills = std::make_shared<SkillsWidget>();
-        m_statistics = std::make_shared<StatisticsWidget>();
+        m_widgets.push_back(std::make_shared<ConfigurationsWidget>());
+        m_widgets.push_back(std::make_shared<ConsoleWidget>());
+        m_widgets.push_back(std::make_shared<CursorWidget>());
+        m_widgets.push_back(std::make_shared<DiplomacyWidget>());
+        m_widgets.push_back(std::make_shared<InfoWidget>());
+        m_widgets.push_back(std::make_shared<GameMenuWidget>());
+        m_widgets.push_back(std::make_shared<LogWidget>());
+        m_widgets.push_back(std::make_shared<MinimapWidget>());
+        m_widgets.push_back(std::make_shared<OrdersWidget>());
+        m_widgets.push_back(std::make_shared<PlayersWidget>());
+        m_widgets.push_back(std::make_shared<PreviewWidget>());
+        m_widgets.push_back(std::make_shared<ResourcesWidget>());
+        m_widgets.push_back(std::make_shared<SelectionBoxWidget>());
+        m_widgets.push_back(std::make_shared<SkillsWidget>());
+        m_widgets.push_back(std::make_shared<StatisticsWidget>());
+        m_widgets.push_back(std::make_shared<TechonologiesWidget>());
     }
 
     void UI::init_data_bindings()
     {
-        m_configurations->init_data_bindigs(m_context);
-        m_console->init_data_bindigs(m_context);
-        m_cursor->init_data_bindigs(m_context);
-        m_diplomacy->init_data_bindigs(m_context);
-        m_info->init_data_bindigs(m_context);
-        m_log->init_data_bindigs(m_context);
-        m_minimap->init_data_bindigs(m_context);
-        m_orders->init_data_bindigs(m_context);
-        m_players->init_data_bindigs(m_context);
-        m_preview->init_data_bindigs(m_context);
-        m_resources->init_data_bindigs(m_context);
-        m_selection_box->init_data_bindigs(m_context);
-        m_skills->init_data_bindigs(m_context);
-        m_statistics->init_data_bindigs(m_context);
+        for (const auto& i : m_widgets)
+        {
+            i->init_data_bindigs(m_context);
+        }
 
         /*
         if (auto handle = constructor.RegisterStruct<Data_Object>())
@@ -1300,20 +1294,10 @@ namespace Gecko
 
     void UI::init_events()
     {
-        m_configurations->init_events(m_document);
-        m_console->init_events(m_document);
-        m_cursor->init_events(m_document);
-        m_diplomacy->init_events(m_document);
-        m_info->init_events(m_document);
-        m_log->init_events(m_document);
-        m_minimap->init_events(m_document);
-        m_orders->init_events(m_document);
-        m_players->init_events(m_document);
-        m_preview->init_events(m_document);
-        m_resources->init_events(m_document);
-        m_selection_box->init_events(m_document);
-        m_skills->init_events(m_document);
-        m_statistics->init_events(m_document);
+        for (const auto& i : m_widgets)
+        {
+            i->init_events(m_document);
+        }
     }
 
     void UI::init_fonts()
@@ -1378,9 +1362,9 @@ namespace Gecko
 
     void UI::log_write(const std::string& message, const std::string& type, const Id& id)
     {
-        if (m_log)
+        if (std::shared_ptr<LogWidget> log = get_component<LogWidget>())
         {
-            m_log->write(message, type, id);
+            log->write(message, type, id);
         }
     }
 }

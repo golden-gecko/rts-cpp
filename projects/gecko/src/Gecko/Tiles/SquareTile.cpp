@@ -7,7 +7,7 @@
 #include "Gecko/QueryFlags.hpp"
 #include "Gecko/Settings.hpp"
 #include "Gecko/Utils/Convert.hpp"
-#include "Gecko/Utils/String.hpp"
+#include "Gecko/Utils/File.hpp"
 #include "Gecko/Utils/Texture.hpp"
 #include "Gecko/Utils/Utils.hpp"
 
@@ -28,8 +28,8 @@ namespace Gecko
 
     std::string SquareTile::get_mesh_name() const
     {
-        const auto& map_name = Utils::String::to_file_name(m_owner->get_owner()->get_name());
-        const auto& layer_name = Utils::String::to_file_name(m_owner->get_name());
+        std::string map_name = Utils::File::to_file_name(m_owner->get_owner()->get_name());
+        std::string layer_name = Utils::File::to_file_name(m_owner->get_name());
 
         return map_name
             + "_"

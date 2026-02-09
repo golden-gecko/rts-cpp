@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Gecko/Command.hpp"
+#include "Gecko/Input/Command.hpp"
 #include "Gecko/Interfaces/Initializable.hpp"
 #include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Orders/Order.hpp"

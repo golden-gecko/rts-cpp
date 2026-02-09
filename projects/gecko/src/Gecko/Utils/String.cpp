@@ -2,11 +2,6 @@
 
 namespace Gecko::Utils::String
 {
-    std::string to_file_name(const std::string& value)
-    {
-        return boost::algorithm::to_lower_copy(value);
-    }
-    
     std::string to_title(const std::string& value)
     {
         std::string result = value;

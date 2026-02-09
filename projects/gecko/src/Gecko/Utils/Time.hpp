@@ -6,7 +6,7 @@ namespace Gecko::Utils::Time
 {
     typedef std::chrono::steady_clock::time_point Value;
 
-    Value get();
+    Value get_current();
 
     float get_duration(const Value& start, const Value& end);
 

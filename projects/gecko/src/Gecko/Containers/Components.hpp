@@ -33,7 +33,7 @@ namespace Gecko
         template<typename Type>
         bool has() const
         {
-            for (const auto& i : m_items)
+            for (const auto i : m_items)
             {
                 if (dynamic_cast<Type*>(i) != nullptr)
                 {
@@ -51,13 +51,19 @@ namespace Gecko
 
     public:
         template<typename Type>
-        Items get_by_type() const
+        std::vector<Type*> get_by_type() const
         {
-            Items items;
+            std::vector<Type*> items;
 
-            std::copy_if(m_items.begin(), m_items.end(), items.begin(), [](Component* i) {
-                return dynamic_cast<Type*>(i) != nullptr;
-            });
+            for (const auto i : m_items)
+            {
+                auto j = dynamic_cast<Type*>(i);
+
+                if (j != nullptr)
+                {
+                    items.push_back(j);
+                }
+            }
 
             return items;
         }

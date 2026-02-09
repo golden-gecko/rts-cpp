@@ -156,6 +156,7 @@ namespace Gecko
     class ConsoleWidget;
     class CursorWidget;
     class DiplomacyWidget;
+    class GameMenuWidget;
     class InfoWidget;
     class LogWidget;
     class MinimapWidget;
@@ -166,10 +167,13 @@ namespace Gecko
     class SelectionBoxWidget;
     class SkillsWidget;
     class StatisticsWidget;
+    class TechonologiesWidget;
+    class Widget;
 
     // Pointers
     using CameraPtr = std::shared_ptr<Camera>;
     using ConfigurationPtr = std::shared_ptr<Configuration>;
+    using DataLayerPtr = std::shared_ptr<DataLayer>;
     using LayerPtr = std::shared_ptr<Layer>;
     using MapPtr = Map*;
     using ObjectPtr = Object*;

@@ -1,6 +1,6 @@
 #include "Gecko/Cameras/FreeCamera.hpp"
 
-#include "Gecko/Input.hpp"
+#include "Gecko/Input/Input.hpp"
 
 namespace Gecko
 {

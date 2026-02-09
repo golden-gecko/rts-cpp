@@ -2,7 +2,7 @@
 
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Utils/Convert.hpp"
-#include "Gecko/Input.hpp"
+#include "Gecko/Input/Input.hpp"
 #include "Gecko/Managers/MapManager.hpp"
 #include "Gecko/Maps/Map.hpp"
 

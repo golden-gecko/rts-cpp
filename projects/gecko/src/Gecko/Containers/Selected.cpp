@@ -84,19 +84,25 @@ namespace Gecko
             }
         }
 
-        if (UI::getSingleton().get_configurations())
         {
-            UI::getSingleton().get_configurations()->update(configurations);
-        }
+            auto configurations_widget = UI::getSingleton().get_component<ConfigurationsWidget>();
+            auto orders_widget = UI::getSingleton().get_component<OrdersWidget>();
+            auto skills_widget = UI::getSingleton().get_component<SkillsWidget>();
 
-        if (UI::getSingleton().get_orders())
-        {
-            UI::getSingleton().get_orders()->update(orders);
-        }
+            if (configurations_widget)
+            {
+                configurations_widget->update(configurations);
+            }
 
-        if (UI::getSingleton().get_skills())
-        {
-            UI::getSingleton().get_skills()->update(skills);
+            if (orders_widget)
+            {
+                orders_widget->update(orders);
+            }
+
+            if (skills_widget)
+            {
+                skills_widget->update(skills);
+            }
         }
     }
 

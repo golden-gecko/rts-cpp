@@ -25,39 +25,37 @@
         <!-- Diplomacy -->
         <div id="diplomacy" class="background hidden popup panel" data-model="diplomacy">
             <template src="window">
-                <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <td class="number">ID</td>
-                                <td class="text">Name</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-for="i : players">
-                                <td class="number">{{i.id}}</td>
-                                <td class="text">{{i.name}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <td class="number">ID</td>
+                            <td class="text">Name</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-for="i : players">
+                            <td class="number">{{i.id}}</td>
+                            <td class="text">{{i.name}}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <div class="buttons">
-                        <button class="button" onclick="close:diplomacy">Close</button>
-                    </div>
+                <div class="buttons">
+                    <button class="button" data-event-click="close('diplomacy')">Close</button>
                 </div>
             </template>
         </div>
 
         <!-- Game Menu -->
-        <div id="game-menu" class="panel">
+        <div id="game-menu" class="panel" data-model="game_menu">
             <template src="window">
-                <button class="button" onclick="open:diplomacy">Diplomacy</button>
-                <button class="button" onclick="open:layers">Layers</button>
-                <button class="button" onclick="menu:main-menu">Menu</button>
-                <button class="button" onclick="open:objects-admin">Objects</button>
-                <button class="button" onclick="open:orders-admin">Orders</button>
-                <button class="button" onclick="open:statistics">Statistics</button>
-                <button class="button" onclick="open:technologies">Technologies</button>
+                <button class="button" data-event-click="open('diplomacy')">Diplomacy</button>
+                <button class="button" data-event-click="open('layers')">Layers</button>
+                <button class="button">Menu</button>
+                <button class="button" data-event-click="open('objects-admin')">Objects</button>
+                <button class="button" data-event-click="open('orders-admin')">Orders</button>
+                <button class="button" data-event-click="open('statistics')">Statistics</button>
+                <button class="button" data-event-click="open('technologies')">Technologies</button>
             </template>
         </div>
 
@@ -71,10 +69,10 @@
         <!-- Load Menu -->
         <div id="load-menu" class="hidden menu panel" data-model="load_menu">
             <template src="window">
-                <button class="button" onclick="menu:none">Continue</button>
+                <button class="button">Continue</button>
                 <button class="button" data-for="i : saves">{{i}}</button>
-                <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
-                <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
+                <button class="button">Quit to menu</button>
+                <button class="button" onclick="quit()">Quit to desktop</button>
             </template>
         </div>
 
@@ -88,23 +86,23 @@
         <!-- Main Menu -->
         <div id="main-menu" class="hidden menu panel">
             <template src="window">
-                <button class="button" onclick="menu:none">Continue</button>
-                <button class="button" onclick="menu:map-menu">New game</button>
+                <button class="button">Continue</button>
+                <button class="button">New game</button>
                 <button class="button">Save</button>
-                <button class="button" onclick="menu:load-menu">Load</button>
+                <button class="button">Load</button>
                 <button class="button">Options</button>
-                <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
-                <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
+                <button class="button">Quit to menu</button>
+                <button class="button">Quit to desktop</button>
             </template>
         </div>
 
         <!-- Map Menu -->
         <div id="map-menu" class="hidden menu panel" data-model="map_menu">
             <template src="window">
-                <button class="button" onclick="menu:none">Continue</button>
-                <button class="button" data-for="i : maps">{{i}}</button>
-                <button class="button" onclick="call:quit-to-menu">Quit to menu</button>
-                <button class="button" onclick="call:quit-to-desktop">Quit to desktop</button>
+                <button class="button">Continue</button>
+                <button class="button">{{i}}</button>
+                <button class="button">Quit to menu</button>
+                <button class="button" onclick="quit()">Quit to desktop</button>
             </template>
         </div>
 
@@ -118,29 +116,27 @@
         <!-- Objects (admin) -->
         <div id="objects-admin" class="background hidden popup panel" data-model="objects_admin">
             <template src="window">
-                <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <td class="number">ID</td>
-                                <td class="text">Name</td>
-                                <td class="number">Order count</td>
-                                <td class="text">Current order</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-for="i : objects_admin">
-                                <td class="number">{{i.id}}</td>
-                                <td class="text">{{i.name}}</td>
-                                <td class="number">{{i.order_count}}</td>
-                                <td class="text">{{i.order_name}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <td class="number">ID</td>
+                            <td class="text">Name</td>
+                            <td class="number">Order count</td>
+                            <td class="text">Current order</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-for="i : objects_admin">
+                            <td class="number">{{i.id}}</td>
+                            <td class="text">{{i.name}}</td>
+                            <td class="number">{{i.order_count}}</td>
+                            <td class="text">{{i.order_name}}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <div class="buttons">
-                        <button class="button" onclick="close:objects-admin">Close</button>
-                    </div>
+                <div class="buttons">
+                    <button class="button" data-event-click="close('objects-admin')">Close</button>
                 </div>
             </template>
         </div>
@@ -158,31 +154,29 @@
         <!-- Orders (admin) -->
         <div id="orders-admin" class="background hidden popup panel" data-model="orders_admin">
             <template src="window">
-                <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <td class="number">ID</td>
-                                <td class="number">Sender</td>
-                                <td class="number">Receiver</td>
-                                <td class="text">Type</td>
-                                <td class="text">Attempts</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-for="i : orders_admin">
-                                <td class="number">{{i.id}}</td>
-                                <td class="text">{{i.name}}</td>
-                                <td class="number">{{i.sender_name}}</td>
-                                <td class="number">{{i.receiver_name}}</td>
-                                <td class="text">{{i.attempts}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <td class="number">ID</td>
+                            <td class="number">Sender</td>
+                            <td class="number">Receiver</td>
+                            <td class="text">Type</td>
+                            <td class="text">Attempts</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-for="i : orders_admin">
+                            <td class="number">{{i.id}}</td>
+                            <td class="text">{{i.name}}</td>
+                            <td class="number">{{i.sender_name}}</td>
+                            <td class="number">{{i.receiver_name}}</td>
+                            <td class="text">{{i.attempts}}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <div class="buttons">
-                        <button class="button" onclick="close:orders-admin">Close</button>
-                    </div>
+                <div class="buttons">
+                    <button class="button" data-event-click="close('orders-admin')">Close</button>
                 </div>
             </template>
         </div>
@@ -262,21 +256,19 @@
                 </table>
 
                 <div class="buttons">
-                    <button class="button" onclick="close:statistics">Close</button>
+                    <button class="button" data-event-click="close('statistics')">Close</button>
                 </div>
             </template>
         </div>
 
         <!-- Technologies -->
-        <div id="technologies" class="background hidden panel" data-model="technologies">
+        <div id="technologies" class="background hidden popup panel" data-model="technologies">
             <template src="window">
                 <div>
-                    <div data-for="i : technologies">
-                        <button type="button" class="button">{{i}}</button>
-                    </div>
+                    <button type="button" class="button" data-event-click="select(i.name)" data-for="i : technologies">{{i.name}}</button>
 
                     <div class="buttons">
-                        <button class="button" onclick="close:technologies">Close</button>
+                        <button class="button" data-event-click="close('technologies')">Close</button>
                     </div>
                 </div>
             </template>

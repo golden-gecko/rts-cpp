@@ -25,6 +25,7 @@ namespace Gecko
 		std::string function = segments[0];
 		std::string argument = segments[1];
 
+		/*
 		if (m_value == "call:quit-to-menu")
 		{
 			on_quit_to_menu();
@@ -45,6 +46,7 @@ namespace Gecko
 		{
 			on_open(argument);
 		}
+		*/
 	}
 
 	void EventListener::OnAttach(Rml::Element* element)

@@ -62,69 +62,25 @@ namespace Gecko
         void toggle_floating_description();
 
     public:
-        std::shared_ptr<ConfigurationsWidget>& get_configurations()
+        template<typename T>
+        std::shared_ptr<T> get_component()
         {
-            return m_configurations;
-        }
+            for (const auto& i : m_widgets)
+            {
+                std::shared_ptr<T> component = std::dynamic_pointer_cast<T>(i);
 
-        std::shared_ptr<CursorWidget>& get_cursor()
-        {
-            return m_cursor;
-        }
+                if (component != nullptr)
+                {
+                    return component;
+                }
+            }
 
-        std::shared_ptr<InfoWidget>& get_info()
-        {
-            return m_info;
-        }
-
-        std::shared_ptr<MinimapWidget>& get_minimap()
-        {
-            return m_minimap;
-        }
-
-        std::shared_ptr<OrdersWidget>& get_orders()
-        {
-            return m_orders;
-        }
-
-        std::shared_ptr<PreviewWidget>& get_preview()
-        {
-            return m_preview;
-        }
-
-        std::shared_ptr<SelectionBoxWidget>& get_selection_box()
-        {
-            return m_selection_box;
-        }
-
-        std::shared_ptr<SkillsWidget>& get_skills()
-        {
-            return m_skills;
-        }
-
-        std::string get_configuration_name() const
-        {
-            return ""; // m_configuration_name;
+            return nullptr;
         }
 
         Rml::ElementDocument* get_document() const
         {
             return m_document;
-        }
-
-        std::string get_order_name() const
-        {
-            return ""; // m_order_name;
-        }
-
-        auto get_order_type() const
-        {
-            return order_type::Value::None;
-        }
-
-        std::string get_skill_name() const
-        {
-            return ""; // m_skill_name;
         }
 
     public:
@@ -151,24 +107,10 @@ namespace Gecko
         std::shared_ptr<RenderInterface> m_render_interface;
         std::shared_ptr<SystemInterface> m_system_interface;
 
-        Rml::Context* m_context = nullptr;
+        Rml::Context*         m_context  = nullptr;
         Rml::ElementDocument* m_document = nullptr;
 
-        std::shared_ptr<ConfigurationsWidget> m_configurations;
-        std::shared_ptr<ConsoleWidget>        m_console;
-        std::shared_ptr<CursorWidget>         m_cursor;
-        std::shared_ptr<DiplomacyWidget>      m_diplomacy;
-        std::shared_ptr<InfoWidget>           m_info;
-        std::shared_ptr<LogWidget>            m_log;
-        std::shared_ptr<MinimapWidget>        m_minimap;
-        std::shared_ptr<OrdersWidget>         m_orders;
-        std::shared_ptr<PlayersWidget>        m_players;
-        std::shared_ptr<PreviewWidget>        m_preview;
-        std::shared_ptr<ResourcesWidget>      m_resources;
-        std::shared_ptr<SkillsWidget>         m_skills;
-        std::shared_ptr<StatisticsWidget>     m_statistics;
-
-        std::shared_ptr<SelectionBoxWidget>           m_selection_box;
+        std::vector<std::shared_ptr<Widget>>    m_widgets;
         std::vector<std::shared_ptr<Indicator>> m_indicators;
 
         void refresh_indicators(const Id& id);

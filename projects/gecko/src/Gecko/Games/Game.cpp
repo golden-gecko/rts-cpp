@@ -5,7 +5,7 @@
 #include "Gecko/Containers/Configurations.hpp"
 #include "Gecko/Containers/Selected.hpp"
 #include "Gecko/Exception.hpp"
-#include "Gecko/Input.hpp"
+#include "Gecko/Input/Input.hpp"
 #include "Gecko/Log.hpp"
 #include "Gecko/Managers/ComponentManager.hpp"
 #include "Gecko/Managers/ConfigurationManager.hpp"
@@ -84,6 +84,8 @@ namespace Gecko
         ObjectManager::getSingleton().update(time);
         OrderManager::getSingleton().update(time);
         PlayerManager::getSingleton().update(time);
+
+        // Must be updated last.
         UI::getSingleton().update(time);
     }
 
@@ -119,10 +121,10 @@ namespace Gecko
 
     void Game::run()
     {
-        // HACK: Must be called once before the main loop.
+        // Must be called once before the main loop.
         windowResized(getRenderWindow());
 
-        Gecko::Utils::Time::Value previous_time = Utils::Time::get();
+        Gecko::Utils::Time::Value previous_time = Utils::Time::get_current();
         Gecko::Utils::Time::Value current_time;
 
         float elasped_time = 0.0f;
@@ -130,7 +132,7 @@ namespace Gecko
 
         while (getRoot()->endRenderingQueued() == false)
         {
-            current_time = Utils::Time::get();
+            current_time = Utils::Time::get_current();
 
             frame_time = Utils::Time::get_duration(previous_time, current_time);
 

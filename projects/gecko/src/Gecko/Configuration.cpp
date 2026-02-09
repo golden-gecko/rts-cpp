@@ -1,9 +1,9 @@
 #include "Gecko/Configuration.hpp"
 
 #include "Gecko/Exception.hpp"
-#include "Gecko/Log.hpp"
+#include "Gecko/Settings.hpp"
 #include "Gecko/Utils/Convert.hpp"
-#include "Gecko/Utils/Utils.hpp"
+#include "Gecko/Utils/File.hpp"
 
 namespace
 {
@@ -57,7 +57,7 @@ namespace Gecko
             return true;
         }
 
-        // OPTIMIZATION: If path has one segment then skip rest.
+        // If path has one segment then skip rest.
         if (path.find('.') == std::string::npos)
         {
             return m_value.isMember(path);
@@ -85,8 +85,6 @@ namespace Gecko
 
     void Configuration::load_includes()
     {
-        L_TRACE << "Configuration::load_includes()";
-
         auto includes = get_includes(*this);
 
         if (includes.empty() == false)
@@ -95,8 +93,6 @@ namespace Gecko
 
             for (const auto& i : includes)
             {
-                L_INFO << "Parsing include " << i << ".";
-
                 Configuration include(i);
 
                 merge_json_objects(merged, include.m_value);
@@ -112,7 +108,6 @@ namespace Gecko
 
     void Configuration::merge(const ConfigurationPtr& other)
     {
-        // TODO: Make function const.
         merge_json_objects(m_value, other->m_value);
     }
 
@@ -126,7 +121,7 @@ namespace Gecko
             std::filesystem::create_directories(directory);
         }
 
-        Utils::json_to_file(m_value, cache_path, true);
+        Utils::File::json_to_file(m_value, cache_path, true);
     }
 
     std::string Configuration::to_string(const std::string& indentation) const
@@ -377,7 +372,7 @@ namespace Gecko
             return value_from_cache.value();
         }
 
-        // OPTIMIZATION: If path has one segment then skip rest.
+        // If path has one segment then skip rest.
         if (path.find('.') == std::string::npos)
         {
             if (has_member(path) == false)
@@ -481,8 +476,7 @@ namespace Gecko
             new_file_name = m_file_name;
         }
 
-        // TODO: Remove or refactor.
-        m_name = std::filesystem::path(m_file_name).filename().replace_extension("").string();
+        m_name = Utils::File::get_name_no_extension(m_file_name);
 
         std::ifstream stream(new_file_name, std::ifstream::binary);
         Json::CharReaderBuilder builder;

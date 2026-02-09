@@ -4,21 +4,21 @@
 
 namespace Gecko
 {
-    class StatisticsWidget :
+    class TechonologiesWidget :
         public Widget
     {
     public:
-        struct Item
+        struct Technology
         {
+            int         id;
             std::string name;
-            std::string value;
         };
 
 	public:
 		// From Rml::EventListener.
 		void ProcessEvent(Rml::Event& event) override;
 
-	public:
+    public:
 		// From Widget.
         void init_data_bindigs(Rml::Context* context) override;
 
@@ -27,11 +27,12 @@ namespace Gecko
 
     public:
         void close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
-        void update();
+        void select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
 
     private:
         Rml::ElementDocument* m_document = { nullptr };
 
-        Rml::Vector<Item> m_items;
+        Rml::Vector<Technology> m_technologies;
+        std::string m_selected_technology;
     };
 }

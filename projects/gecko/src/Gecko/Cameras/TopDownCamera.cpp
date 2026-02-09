@@ -1,7 +1,7 @@
 #include "Gecko/Cameras/TopDownCamera.hpp"
 
 #include "Gecko/Games/Game.hpp"
-#include "Gecko/Input.hpp"
+#include "Gecko/Input/Input.hpp"
 #include "Gecko/Layers/SquareLayer.hpp"
 #include "Gecko/Managers/MapManager.hpp"
 #include "Gecko/Maps/Map.hpp"

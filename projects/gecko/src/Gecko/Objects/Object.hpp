@@ -54,12 +54,12 @@ namespace Gecko
         }
 
     public:
-        auto get_components() const
+        const auto& get_components() const
         {
             return m_components;
         }
 
-        auto get_configurations() const
+        const auto& get_configurations() const
         {
             return m_configurations;
         }
@@ -77,7 +77,7 @@ namespace Gecko
             return m_name;
         }
 
-        auto get_orders() const
+        const auto& get_orders() const
         {
             return m_orders;
         }
@@ -94,14 +94,14 @@ namespace Gecko
 
         const Ogre::Vector3& get_position() const;
 
-        auto get_processes() const
+        const auto& get_processes() const
         {
             return m_processes;
         }
 
         virtual std::map<std::string, float> get_progress_bars() const;
 
-        auto get_resources() const
+        const auto& get_resources() const
         {
             return m_resources;
         }
@@ -125,7 +125,7 @@ namespace Gecko
 
         Ogre::Vector3 get_size() const;
 
-        auto get_skills() const
+        const auto& get_skills() const
         {
             return m_skills;
         }

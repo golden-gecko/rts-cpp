@@ -32,16 +32,18 @@ namespace Gecko
 
         namespace Game
         {
-            const float         DistanceComparisionMinValue = 0.01f;
-            const float         FrameTime                   = 1.0f / 60.0f;
-            const float         MinCollisionDistance        = 0.1f;
-            const float         MinWeaponAngle              = 1.0f;
-            const std::string   SavesPath                   = "../saves";
+            const float        DistanceComparisionMinValue = 0.01f;
+            const float        FrameTime                   = 1.0f / 60.0f;
+            const float        MinCollisionDistance        = 0.1f;
+            const float        MinWeaponAngle              = 1.0f;
+            const std::string  SavesPath                   = "../saves";
         }
 
         namespace Input
         {
             const Ogre::Vector2 MouseSensivity = Ogre::Vector2(-0.2f, -0.2f);
+            const unsigned int  TextMin        = 32;
+            const unsigned int  TextMax        = 127;
         }
 
         namespace Layer

@@ -25,7 +25,12 @@ namespace Gecko
         void init_events(Rml::ElementDocument* document) override;
         void deinit_events(Rml::ElementDocument* document) override;
 
+    public:
+        void close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
+
     private:
+        Rml::ElementDocument* m_document = { nullptr };
+
         Rml::Vector<Player> m_players;
     };
 }
