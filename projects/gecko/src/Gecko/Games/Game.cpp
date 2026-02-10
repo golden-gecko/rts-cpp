@@ -557,14 +557,6 @@ namespace Gecko
 
     void Game::set_active_player_id(const Id& id)
     {
-        UI::getSingleton().log_info(
-            "Switched active player from "
-            + Utils::Convert::to_string(m_active_player_id)
-            + " to "
-            + Utils::Convert::to_string(id)
-            + "."
-        );
-
         // Get current active player.
         auto current_active_player = PlayerManager::getSingleton().get(m_active_player_id);
 
@@ -593,12 +585,11 @@ namespace Gecko
 
     void Game::init_meshes()
     {
-        auto meshes_path = Settings::Cache::MeshesPath;
-        auto mesh_path = std::filesystem::path(meshes_path) / std::filesystem::path(Settings::UI::SelectionMesh);
+        std::filesystem::path mesh_path = std::filesystem::path(Settings::Cache::MeshesPath) / std::filesystem::path(Settings::UI::SelectionMesh);
 
         if (std::filesystem::exists(mesh_path) == false)
         {
-            auto selection = create_manual_object();
+            Ogre::ManualObject* selection = create_manual_object();
 
             selection->begin(Settings::Material::Default);
 
@@ -629,15 +620,15 @@ namespace Gecko
             selection->end();
 
             // Save mesh to cache.
-            auto mesh = selection->convertToMesh(Settings::UI::SelectionMesh);
+            Ogre::MeshPtr mesh = selection->convertToMesh(Settings::UI::SelectionMesh);
 
             if (m_configuration->get_bool("options.cache.meshes.enabled", true))
             {
                 Ogre::MeshSerializer serializer;
 
-                if (std::filesystem::exists(meshes_path) == false)
+                if (std::filesystem::exists(Settings::Cache::MeshesPath) == false)
                 {
-                    std::filesystem::create_directories(meshes_path);
+                    std::filesystem::create_directories(Settings::Cache::MeshesPath);
                 }
 
                 serializer.exportMesh(mesh.get(), mesh_path.string());

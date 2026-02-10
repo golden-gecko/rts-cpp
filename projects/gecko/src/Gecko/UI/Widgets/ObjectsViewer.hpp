@@ -4,14 +4,23 @@
 
 namespace Gecko
 {
-    class MainMenuWidget :
+    class ObjectsViewerWidget :
         public Widget
     {
+    public:
+        struct Object
+        {
+            int         id;
+            std::string name;
+            std::size_t order_count;
+            std::string current_order_name;
+        };
+
 	public:
 		// From Rml::EventListener.
 		void ProcessEvent(Rml::Event& event) override;
 
-    public:
+	public:
 		// From Widget.
         void init_data_bindigs(Rml::Context* context) override;
 
@@ -19,9 +28,12 @@ namespace Gecko
         void deinit_events(Rml::ElementDocument* document) override;
 
     public:
-        void quit(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
+        void close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
+        void update();
 
     private:
         Rml::ElementDocument* m_document = nullptr;
+
+        Rml::Vector<Object> m_objects;
     };
 }

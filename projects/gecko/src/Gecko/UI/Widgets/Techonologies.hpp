@@ -30,7 +30,7 @@ namespace Gecko
         void select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
 
     private:
-        Rml::ElementDocument* m_document = { nullptr };
+        Rml::ElementDocument* m_document = nullptr;
 
         Rml::Vector<Technology> m_technologies;
         std::string m_selected_technology;

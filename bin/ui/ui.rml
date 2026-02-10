@@ -52,8 +52,8 @@
                 <button class="button" data-event-click="open('diplomacy')">Diplomacy</button>
                 <button class="button" data-event-click="open('layers')">Layers</button>
                 <button class="button">Menu</button>
-                <button class="button" data-event-click="open('objects-admin')">Objects</button>
-                <button class="button" data-event-click="open('orders-admin')">Orders</button>
+                <button class="button" data-event-click="open('objects-viewer')">Objects</button>
+                <button class="button" data-event-click="open('orders-viewer')">Orders</button>
                 <button class="button" data-event-click="open('statistics')">Statistics</button>
                 <button class="button" data-event-click="open('technologies')">Technologies</button>
             </template>
@@ -113,8 +113,8 @@
             </template>
         </div>
 
-        <!-- Objects (admin) -->
-        <div id="objects-admin" class="background hidden popup panel" data-model="objects_admin">
+        <!-- Objects Viewer -->
+        <div id="objects-viewer" class="background hidden popup panel" data-model="objects_viewer">
             <template src="window">
                 <table>
                     <thead>
@@ -126,17 +126,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-for="i : objects_admin">
+                        <tr data-for="i : objects">
                             <td class="number">{{i.id}}</td>
                             <td class="text">{{i.name}}</td>
                             <td class="number">{{i.order_count}}</td>
-                            <td class="text">{{i.order_name}}</td>
+                            <td class="text">{{i.current_order_name}}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div class="buttons">
-                    <button class="button" data-event-click="close('objects-admin')">Close</button>
+                    <button class="button" data-event-click="close('objects-viewer')">Close</button>
                 </div>
             </template>
         </div>
@@ -151,8 +151,8 @@
             </template>
         </div>
 
-        <!-- Orders (admin) -->
-        <div id="orders-admin" class="background hidden popup panel" data-model="orders_admin">
+        <!-- Orders Viewer -->
+        <div id="orders-viewer" class="background hidden popup panel" data-model="orders_viewer">
             <template src="window">
                 <table>
                     <thead>
@@ -165,18 +165,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-for="i : orders_admin">
+                        <tr data-for="i : orders">
                             <td class="number">{{i.id}}</td>
                             <td class="text">{{i.name}}</td>
                             <td class="number">{{i.sender_name}}</td>
                             <td class="number">{{i.receiver_name}}</td>
-                            <td class="text">{{i.attempts}}</td>
+                            <td class="text">{{i.attempts}}/{{i.max_attempts}}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div class="buttons">
-                    <button class="button" data-event-click="close('orders-admin')">Close</button>
+                    <button class="button" data-event-click="close('orders-viewer')">Close</button>
                 </div>
             </template>
         </div>

@@ -124,12 +124,16 @@ namespace Gecko
 
         std::shared_ptr<EventListenerInstancer> m_event_listener_instancer;
 
-        void init_components();
         void init_data_bindings();
         void init_documents();
         void init_events();
         void init_fonts();
         void init_visibility_types();
+        void init_widgets();
+
+        void deinit_documents();
+        void deinit_events();
+        void deinit_widgets();
 
         void log_write(const std::string& message, const std::string& type, const Id& id = Id::Empty);
     };

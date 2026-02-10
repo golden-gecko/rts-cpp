@@ -30,7 +30,7 @@ namespace Gecko
         void update();
 
     private:
-        Rml::ElementDocument* m_document = { nullptr };
+        Rml::ElementDocument* m_document = nullptr;
 
         Rml::Vector<Item> m_items;
     };

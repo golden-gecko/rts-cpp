@@ -22,6 +22,6 @@ namespace Gecko
         void open(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
 
     private:
-        Rml::ElementDocument* m_document = { nullptr };
+        Rml::ElementDocument* m_document = nullptr;
     };
 }

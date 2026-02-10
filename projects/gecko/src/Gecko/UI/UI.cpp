@@ -16,7 +16,6 @@
 #include "Gecko/Managers/PlayerManager.hpp"
 #include "Gecko/Maps/Map.hpp"
 #include "Gecko/Objects/Object.hpp"
-#include "Gecko/Orders/OrderMove.hpp"
 #include "Gecko/Players/Player.hpp"
 #include "Gecko/Statistics.hpp"
 #include "Gecko/System.hpp"
@@ -34,7 +33,9 @@
 #include "Gecko/UI/Widgets/Info.hpp"
 #include "Gecko/UI/Widgets/Log.hpp"
 #include "Gecko/UI/Widgets/Minimap.hpp"
+#include "Gecko/UI/Widgets/ObjectsViewer.hpp"
 #include "Gecko/UI/Widgets/Orders.hpp"
+#include "Gecko/UI/Widgets/OrdersViewer.hpp"
 #include "Gecko/UI/Widgets/Players.hpp"
 #include "Gecko/UI/Widgets/Preview.hpp"
 #include "Gecko/UI/Widgets/Resources.hpp"
@@ -42,10 +43,10 @@
 #include "Gecko/UI/Widgets/Skills.hpp"
 #include "Gecko/UI/Widgets/Statistics.hpp"
 #include "Gecko/UI/Widgets/Techonologies.hpp"
-#include "Gecko/Utils/Utils.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/String.hpp"
 #include "Gecko/Utils/Time.hpp"
+#include "Gecko/Utils/Utils.hpp"
 
 Gecko::UI* Ogre::Singleton<Gecko::UI>::msSingleton = nullptr;
 
@@ -77,7 +78,7 @@ namespace Gecko
 
     	Rml::Factory::RegisterEventListenerInstancer(m_event_listener_instancer.get());
 
-        init_components();
+        init_widgets();
         init_data_bindings();
         init_fonts();
         init_documents();
@@ -87,21 +88,9 @@ namespace Gecko
 
     void UI::deinit()
     {
-        /*
-        m_console->deinit_events(m_document->GetElementById("console"));
-        m_minimap->deinit_events(m_document->GetElementById("minimap"));
-        m_preview->deinit_events(m_document->GetElementById("preview"));
-
-        m_console.reset();
-        m_cursor.reset();
-        m_minimap.reset();
-        m_preview.reset();
-        m_selection_box.reset();
-
-        refresh_indicators(Id::Empty);
-        */
-
-        m_context->UnloadAllDocuments();
+        deinit_events();
+        deinit_documents();
+        deinit_widgets();
 
         Rml::Shutdown();
     }
@@ -179,6 +168,8 @@ namespace Gecko
                 */
             }
 
+            get_component<ObjectsViewerWidget>()->update();
+            get_component<OrdersViewerWidget>()->update();
             get_component<PlayersWidget>()->update();
             get_component<StatisticsWidget>()->update();
 
@@ -216,11 +207,6 @@ namespace Gecko
             return;
         }
 
-        if (Ogre::Root::getSingleton().getRenderSystem()->_getViewport()->getOverlaysEnabled() == false)
-        {
-            return;
-        }
-
         Ogre::RenderSystem* render_system = Game::getSingleton().getRoot()->getRenderSystem();
 
         if (render_system == nullptr)
@@ -228,14 +214,18 @@ namespace Gecko
             return;
         }
 
-        auto render_window = Game::getSingleton().getRenderWindow();
+        if (render_system->_getViewport()->getOverlaysEnabled() == false)
+        {
+            return;
+        }
+
+        Ogre::RenderWindow* render_window = Game::getSingleton().getRenderWindow();
 
         if (render_window == nullptr)
         {
             return;
         }
 
-        // Set up the projection and view matrices.
         float z_near = -1.0f;
         float z_far = 1.0f;
 
@@ -248,22 +238,22 @@ namespace Gecko
         projection_matrix[2][2] = -2.0f / (z_far - z_near);
         projection_matrix[3][3] = 1.0000000f;
         
+        render_system->_disableTextureUnitsFrom(1);
+        render_system->_setAlphaRejectSettings(Ogre::CMPF_GREATER, 0, false);
+        render_system->_setColourBufferWriteEnabled(true, true, true, true);
+        render_system->_setCullingMode(Ogre::CULL_CLOCKWISE);
+        render_system->_setDepthBias(0, 0);
+        render_system->_setDepthBufferParams(false, false);
+        render_system->_setFog(Ogre::FOG_NONE);
         render_system->_setProjectionMatrix(projection_matrix);
+        render_system->_setSceneBlending(Ogre::SBF_SOURCE_ALPHA, Ogre::SBF_ONE_MINUS_SOURCE_ALPHA);
+        render_system->_setTextureCoordCalculation(0, Ogre::TEXCALC_NONE);
+        render_system->_setTextureCoordSet(0, 0);
+        render_system->_setTextureMatrix(0, Ogre::Matrix4::IDENTITY);
         render_system->_setViewMatrix(Ogre::Matrix4::IDENTITY);
         render_system->setLightingEnabled(false);
-        render_system->_setDepthBufferParams(false, false);
-        render_system->_setCullingMode(Ogre::CULL_CLOCKWISE);
-        render_system->_setFog(Ogre::FOG_NONE);
-        render_system->_setColourBufferWriteEnabled(true, true, true, true);
         render_system->unbindGpuProgram(Ogre::GPT_FRAGMENT_PROGRAM);
         render_system->unbindGpuProgram(Ogre::GPT_VERTEX_PROGRAM);
-        render_system->_setTextureCoordSet(0, 0);
-        render_system->_setTextureCoordCalculation(0, Ogre::TEXCALC_NONE);
-        render_system->_setTextureMatrix(0, Ogre::Matrix4::IDENTITY);
-        render_system->_setAlphaRejectSettings(Ogre::CMPF_GREATER, 0, false);
-        render_system->_disableTextureUnitsFrom(1);
-        render_system->_setSceneBlending(Ogre::SBF_SOURCE_ALPHA, Ogre::SBF_ONE_MINUS_SOURCE_ALPHA);
-        render_system->_setDepthBias(0, 0);
 
         m_context->Update();
         m_context->Render();
@@ -534,14 +524,6 @@ namespace Gecko
             }
         }
     }
-
-    void UI::engine_ui_set_skill(const ultralight::JSObject& thisObject, const ultralight::JSArgs& args)
-    {
-        if (args.size() == 1 && args[0].IsString())
-        {
-            set_skill_name(Utils::Convert::to_string(args[0]));
-        }
-    }
     */
 
     bool UI::inject_key_press(Rml::Input::KeyIdentifier key)
@@ -765,46 +747,7 @@ namespace Gecko
         }
     }
 
-    void UI::set_configurations(const std::set<std::string>& configurations)
-    {
-        // Update UI.
-        m_configurations.clear();
 
-        for (const std::string& i : configurations)
-        {
-            m_configurations.push_back(i);
-        }
-
-        if (m_configurations_model)
-        {
-            m_configurations_model.DirtyVariable("configurations");
-        }
-    }
-
-            struct Order
-        {
-            int         id;
-            std::string name;
-            std::string sender_name;
-            std::string receiver_name;
-            std::string attempts;
-        };
-
-    void UI::set_diplomacy()
-    {
-        // Update UI.
-        m_diplomacy.clear();
-
-        for (const auto& [id, player] : PlayerManager::getSingleton())
-        {
-            m_diplomacy.push_back({ id.get(), player->get_name(), player->get_color()});
-        }
-
-        if (m_diplomacy_model)
-        {
-            m_diplomacy_model.DirtyVariable("diplomacy");
-        }
-    }
 
     void UI::set_floating_descriptions()
     {
@@ -882,25 +825,6 @@ namespace Gecko
         stream << "app.layers.set(";
         stream << Utils::Convert::to_string(json_layers);
         stream << ")";
-    }
-
-    void UI::set_maps(const std::vector<std::string>& maps)
-    {
-        // Update cache.
-        // TODO: Fix.
-
-        // Update UI.
-        m_maps.clear();
-
-        for (const auto& map : maps)
-        {
-            m_maps.push_back(map);
-        }
-
-        if (m_map_menu_model)
-        {
-            m_map_menu_model.DirtyVariable("maps");
-        }
     }
     */
 
@@ -998,139 +922,6 @@ namespace Gecko
         }
     }
 
-    void UI::set_order_type(order_type::Value order_type)
-    {
-        reset();
-
-        m_order_name = order_type::to_string(order_type);
-        m_order_type = order_type;
-
-        if (m_orders_model)
-        {
-            m_orders_model.DirtyVariable("order_name");
-        }
-    }
-
-    void UI::set_orders(const std::set<std::string>& orders)
-    {
-        // Update UI.
-        m_orders.clear();
-
-        for (const std::string& i : orders)
-        {
-            m_orders.push_back(i);
-        }
-
-        if (m_orders_model)
-        {
-            m_orders_model.DirtyVariable("orders");
-        }
-    }
-
-    void UI::set_resources(const std::shared_ptr<Resources>& resources)
-    {
-        // Update cache.
-        static Resources resources_cache;
-
-        if (resources_cache == (*(resources.get())))
-        {
-            return;
-        }
-
-        resources_cache = (*(resources.get()));
-
-        // Update UI.
-        m_resources.clear();
-
-        for (const auto& resource : (*(resources.get())))
-        {
-            float ratio = resource.second.get_consumption() - resource.second.get_production();
-
-            m_resources.push_back({
-                resource.first,
-                resource.second.get_current(),
-                resource.second.get_max(),
-                ratio > 0.0f ? "green" : "red",
-                ratio
-            });
-        }
-
-        if (m_resources_model)
-        {
-            m_resources_model.DirtyVariable("resources");
-        }
-    }
-
-    void UI::set_saves(const std::vector<std::string>& saves)
-    {
-        // Update UI.
-        m_saves.clear();
-
-        for (const auto& save : saves)
-        {
-            m_saves.push_back(save);
-        }
-
-        if (m_load_menu_model)
-        {
-            m_load_menu_model.DirtyVariable("saves");
-        }
-    }
-
-    void UI::set_skill_name(const std::string& skill_name)
-    {
-        reset();
-
-        m_skill_name = skill_name;
-
-        if (m_skills_model)
-        {
-            m_skills_model.DirtyVariable("skill_name");
-        }
-    }
-
-    void UI::set_skills(const std::set<std::string>& skills)
-    {
-        // Update UI.
-        m_skills.clear();
-
-        for (const std::string& i : skills)
-        {
-            m_skills.push_back(i);
-        }
-
-        if (m_skills_model)
-        {
-            m_skills_model.DirtyVariable("skills");
-        }
-    }
-
-    void UI::set_statistics(const std::map<std::string, std::string>& statistics)
-    {
-        // Update cache.
-        static std::map<std::string, std::string> statistics_cache;
-
-        if (statistics_cache == statistics)
-        {
-            return;
-        }
-
-        statistics_cache = statistics;
-
-        // Update UI.
-        m_statistics.clear();
-
-        for (const auto& i : statistics)
-        {
-            m_statistics.push_back({ i.first, i.second });
-        }
-
-        if (m_statistics_model)
-        {
-            m_statistics_model.DirtyVariable("statistics");
-        }
-    }
-
     void UI::set_terrain_layers(const std::set<std::string>& layers)
     {
         // Update cache.
@@ -1191,92 +982,12 @@ namespace Gecko
     }
     */
 
-    void UI::init_components()
-    {
-        m_widgets.push_back(std::make_shared<ConfigurationsWidget>());
-        m_widgets.push_back(std::make_shared<ConsoleWidget>());
-        m_widgets.push_back(std::make_shared<CursorWidget>());
-        m_widgets.push_back(std::make_shared<DiplomacyWidget>());
-        m_widgets.push_back(std::make_shared<InfoWidget>());
-        m_widgets.push_back(std::make_shared<GameMenuWidget>());
-        m_widgets.push_back(std::make_shared<LogWidget>());
-        m_widgets.push_back(std::make_shared<MinimapWidget>());
-        m_widgets.push_back(std::make_shared<OrdersWidget>());
-        m_widgets.push_back(std::make_shared<PlayersWidget>());
-        m_widgets.push_back(std::make_shared<PreviewWidget>());
-        m_widgets.push_back(std::make_shared<ResourcesWidget>());
-        m_widgets.push_back(std::make_shared<SelectionBoxWidget>());
-        m_widgets.push_back(std::make_shared<SkillsWidget>());
-        m_widgets.push_back(std::make_shared<StatisticsWidget>());
-        m_widgets.push_back(std::make_shared<TechonologiesWidget>());
-    }
-
     void UI::init_data_bindings()
     {
         for (const auto& i : m_widgets)
         {
             i->init_data_bindigs(m_context);
         }
-
-        /*
-        if (auto handle = constructor.RegisterStruct<Data_Object>())
-        {
-            handle.RegisterMember("id", &Data_Object::id);
-            handle.RegisterMember("name", &Data_Object::name);
-            handle.RegisterMember("order_count", &Data_Object::order_count);
-            handle.RegisterMember("order_name", &Data_Object::order_name);
-        }
-
-        // Load menu.
-        {
-            if (auto constructor = m_context->CreateDataModel("load_menu"))
-            {
-                constructor.Bind("saves", &m_saves);
-
-                m_load_menu_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Map menu.
-        {
-            if (auto constructor = m_context->CreateDataModel("map_menu"))
-            {
-                constructor.Bind("maps", &m_maps);
-
-                m_map_menu_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Objects admin.
-        {
-            if (auto constructor = m_context->CreateDataModel("objects_admin"))
-            {
-                constructor.Bind("objects_admin", &m_objects_admin);
-
-                m_objects_admin_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Orders admin.
-        {
-            if (auto constructor = m_context->CreateDataModel("orders_admin"))
-            {
-                constructor.Bind("orders_admin", &m_orders_admin);
-
-                m_orders_admin_model = constructor.GetModelHandle();
-            }
-        }
-
-        // Technologies.
-        {
-            if (auto constructor = m_context->CreateDataModel("technologies"))
-            {
-                constructor.Bind("technologies", &m_technologies);
-
-                m_technologies_model = constructor.GetModelHandle();
-            }
-        }
-        */
     }
 
     void UI::init_documents()
@@ -1322,6 +1033,46 @@ namespace Gecko
 
         set_visibility_types(visibility_types);
         */
+    }
+
+    void UI::init_widgets()
+    {
+        m_widgets.push_back(std::make_shared<ConfigurationsWidget>());
+        m_widgets.push_back(std::make_shared<ConsoleWidget>());
+        m_widgets.push_back(std::make_shared<CursorWidget>());
+        m_widgets.push_back(std::make_shared<DiplomacyWidget>());
+        m_widgets.push_back(std::make_shared<InfoWidget>());
+        m_widgets.push_back(std::make_shared<GameMenuWidget>());
+        m_widgets.push_back(std::make_shared<LogWidget>());
+        m_widgets.push_back(std::make_shared<MinimapWidget>());
+        m_widgets.push_back(std::make_shared<ObjectsViewerWidget>());
+        m_widgets.push_back(std::make_shared<OrdersWidget>());
+        m_widgets.push_back(std::make_shared<OrdersViewerWidget>());
+        m_widgets.push_back(std::make_shared<PlayersWidget>());
+        m_widgets.push_back(std::make_shared<PreviewWidget>());
+        m_widgets.push_back(std::make_shared<ResourcesWidget>());
+        m_widgets.push_back(std::make_shared<SelectionBoxWidget>());
+        m_widgets.push_back(std::make_shared<SkillsWidget>());
+        m_widgets.push_back(std::make_shared<StatisticsWidget>());
+        m_widgets.push_back(std::make_shared<TechonologiesWidget>());
+    }
+
+    void UI::deinit_documents()
+    {
+        m_context->UnloadAllDocuments();
+    }
+
+    void UI::deinit_events()
+    {
+        for (const auto& i : m_widgets)
+        {
+            i->deinit_events(m_document);
+        }
+    }
+
+    void UI::deinit_widgets()
+    {
+        m_widgets.clear();
     }
 
     void UI::refresh_indicators(const Id& id)
