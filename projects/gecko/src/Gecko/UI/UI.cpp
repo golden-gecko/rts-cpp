@@ -43,6 +43,7 @@
 #include "Gecko/UI/Widgets/Skills.hpp"
 #include "Gecko/UI/Widgets/Statistics.hpp"
 #include "Gecko/UI/Widgets/Techonologies.hpp"
+#include "Gecko/UI/Widgets/UnitEditor.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/String.hpp"
 #include "Gecko/Utils/Time.hpp"
@@ -1055,6 +1056,7 @@ namespace Gecko
         m_widgets.push_back(std::make_shared<SkillsWidget>());
         m_widgets.push_back(std::make_shared<StatisticsWidget>());
         m_widgets.push_back(std::make_shared<TechonologiesWidget>());
+        m_widgets.push_back(std::make_shared<UnitEditorWidget>());
     }
 
     void UI::deinit_documents()

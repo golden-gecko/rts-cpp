@@ -46,9 +46,15 @@
             </template>
         </div>
 
+        <!-- Unit Editor -->
+        <div id="unit-editor" class="background hidden popup panel" data-model="unit_editor">
+            <img src="texture_unit_editor" />
+        </div>
+
         <!-- Game Menu -->
         <div id="game-menu" class="panel" data-model="game_menu">
             <template src="window">
+                <button class="button" data-event-click="open('unit-editor')">Unit Editor</button>
                 <button class="button" data-event-click="open('diplomacy')">Diplomacy</button>
                 <button class="button" data-event-click="open('layers')">Layers</button>
                 <button class="button">Menu</button>
