@@ -15,6 +15,6 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        explicit TopDownCamera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration);
+        explicit TopDownCamera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration);
     };
 }

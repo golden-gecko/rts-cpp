@@ -22,7 +22,7 @@ namespace Gecko
         using ObjectsInRange = std::vector<std::pair<Object*, float>>;
 
     public:
-        void init(const ConfigurationPtr& configuration);
+        void init(const ConfigurationPtr& configuration, const ScenePtr& scene);
         void deinit();
 
         Object* create(const std::string& name);

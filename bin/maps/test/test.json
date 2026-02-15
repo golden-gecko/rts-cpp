@@ -1,35 +1,5 @@
 {
     "active_player": "human",
-    "cameras": [
-        {
-            "look_at": {
-                "x": 100.0,
-                "y": 50.0,
-                "z": 100.0
-            },
-            "name": "Main",
-            "position": {
-                "x": 0.0,
-                "y": 100.0,
-                "z": 0.0
-            },
-            "speed": {
-                "x": 100.0,
-                "y": 100.0,
-                "z": 100.0
-            },
-            "type": "TopDown"
-        },
-        {
-            "name": "Minimap",
-            "projection_type": "orthographic",
-            "type": "Minimap"
-        },
-        {
-            "name": "Preview",
-            "type": "ObjectFollow"
-        }
-    ],
     "creatable": {
         "by_game": true
     },

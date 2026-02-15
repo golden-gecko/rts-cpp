@@ -11,16 +11,20 @@ namespace Gecko
         using base_type = Object;
 
     public:
-        static Missile* create(Missile* memory, const ConfigurationPtr& configuration);
-
-    public:
-        explicit Missile() = default;
-        explicit Missile(const Missile& other);
-
+        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
+    public:
+        // From Updatable.
         void update(float time) override;
+
+    public:
+        static Missile* create(Missile* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
+
+    public:
+        explicit Missile(const ScenePtr& scene);
+        explicit Missile(const Missile& other);
 
     public:
         void set_position(const Ogre::Vector3& position, bool validate = true) override;

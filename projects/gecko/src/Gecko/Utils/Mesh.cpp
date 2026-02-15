@@ -1,48 +1,43 @@
 #include "Gecko/Utils/Mesh.hpp"
 
-#include "Gecko/Games/Game.hpp"
 #include "Gecko/Exception.hpp"
+#include "Gecko/Scenes/Scene.hpp"
 
 namespace Gecko::Utils::Mesh
 {
-    Ogre::Entity* copy_entity(const Ogre::Entity& other)
+    Ogre::Entity* copy_entity(const ScenePtr& scene, Ogre::Entity* other)
     {
-        if (other.getMesh().isNull())
-        {
-            throw Exception("Entity '" + other.getName() + "'does not have mesh.");
-        }
+        Ogre::Entity* entity = scene->create_entity(other->getMesh()->getName());
 
-        auto entity = Game::getSingleton().create_entity(other.getMesh()->getName());
-
-        entity->setCastShadows(other.getCastShadows());
-        entity->setQueryFlags(other.getQueryFlags());
-        entity->setVisibilityFlags(other.getVisibilityFlags());
-        entity->setVisible(other.getVisible());
+        entity->setCastShadows(other->getCastShadows());
+        entity->setQueryFlags(other->getQueryFlags());
+        entity->setVisibilityFlags(other->getVisibilityFlags());
+        entity->setVisible(other->getVisible());
 
         return entity;
     }
 
-    Ogre::ManualObject* copy_manual_object(const Ogre::ManualObject& other)
+    Ogre::ManualObject* copy_manual_object(const ScenePtr& scene, Ogre::ManualObject* other)
     {
-        auto manual_object = Game::getSingleton().create_manual_object();
+        Ogre::ManualObject* manual_object = scene->create_manual_object();
 
-        manual_object->setCastShadows(other.getCastShadows());
-        manual_object->setQueryFlags(other.getQueryFlags());
-        manual_object->setVisibilityFlags(other.getVisibilityFlags());
-        manual_object->setVisible(other.getVisible());
+        manual_object->setCastShadows(other->getCastShadows());
+        manual_object->setQueryFlags(other->getQueryFlags());
+        manual_object->setVisibilityFlags(other->getVisibilityFlags());
+        manual_object->setVisible(other->getVisible());
 
         return manual_object;
     }
 
-    Ogre::SceneNode* copy_scene_node(const Ogre::SceneNode& other)
+    Ogre::SceneNode* copy_scene_node(Ogre::SceneNode* other)
     {
-        auto scene_node = other.getParentSceneNode()->createChildSceneNode();
+        Ogre::SceneNode* scene_node = other->getParentSceneNode()->createChildSceneNode();
 
         scene_node->setFixedYawAxis(true);
-        scene_node->setInheritOrientation(other.getInheritOrientation());
-        scene_node->setInheritScale(other.getInheritScale());
-        scene_node->setOrientation(other.getOrientation());
-        scene_node->setScale(other.getScale());
+        scene_node->setInheritOrientation(other->getInheritOrientation());
+        scene_node->setInheritScale(other->getInheritScale());
+        scene_node->setOrientation(other->getOrientation());
+        scene_node->setScale(other->getScale());
 
         return scene_node;
     }

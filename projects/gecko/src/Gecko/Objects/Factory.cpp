@@ -2,13 +2,23 @@
 
 namespace Gecko
 {
-    Factory* Factory::create(Factory* memory, const ConfigurationPtr& configuration)
+    Factory* Factory::create(Factory* memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
     {
-        auto map = new (memory) Factory();
+        auto map = new (memory) Factory(scene);
 
         map->deserialize(configuration);
 
         return map;
+    }
+
+    Factory::Factory(const ScenePtr& scene) :
+        base_type(scene)
+    {
+    }
+
+    Factory::Factory(const Factory& other) :
+        base_type(other)
+    {
     }
 
     /*

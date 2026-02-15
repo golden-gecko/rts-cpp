@@ -78,6 +78,8 @@ namespace Gecko
 
     void UnitEditorWidget::init_events(Rml::ElementDocument* document)
     {
+        m_document = document;
+
         Rml::Element* element = document->GetElementById("minimap");
 
         if (element)
@@ -140,6 +142,19 @@ namespace Gecko
     UnitEditorWidget::~UnitEditorWidget()
     {
         Ogre::TextureManager::getSingleton().remove(m_texture);
+    }
+
+    void UnitEditorWidget::close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)
+    {
+        if (m_document)
+        {
+            std::string id = (arguments.size() == 1 ? arguments[0].Get<std::string>() : "");
+
+            if (Rml::Element* element = m_document->GetElementById(id))
+            {
+                element->SetClass("hidden", true);
+            }
+        }
     }
 
     void UnitEditorWidget::click(float x, float y)

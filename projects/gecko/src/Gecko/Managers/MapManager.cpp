@@ -20,7 +20,7 @@ namespace Gecko
         iterate(std::bind(update, std::placeholders::_1, time));
     }
 
-    void MapManager::init(const ConfigurationPtr& configuration)
+    void MapManager::init(const ConfigurationPtr& configuration, const ScenePtr& scene)
     {
         L_TIME("MapManager::init()");
 
@@ -35,8 +35,7 @@ namespace Gecko
 
             if (type == "Map")
             {
-                auto function = static_cast<MapPtr(*)(MapPtr memory, const ConfigurationPtr&)>(&Map::create);
-                auto factory = std::bind(function, std::placeholders::_1, configuration);
+                auto factory = std::bind(Map::create, std::placeholders::_1, configuration, scene);
 
                 map_manager.register_type<Map>(name, factory);
                 map_manager.allocate(name, max_size);

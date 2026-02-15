@@ -31,8 +31,8 @@ namespace Gecko
         }
     }
 
-    ObjectFollowCamera::ObjectFollowCamera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration) :
-        base_type(root, scene_manager, name, configuration)
+    ObjectFollowCamera::ObjectFollowCamera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration) :
+        base_type(scene, name, configuration)
     {
         m_distance = configuration->get_float("distance", 0.0f);
     }

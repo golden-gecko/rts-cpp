@@ -2,15 +2,6 @@
 
 namespace Gecko
 {
-    OrderDestroy* OrderDestroy::create()
-    {
-        return new OrderDestroy();
-    }
-
-    OrderDestroy* OrderDestroy::create(OrderDestroy* memory)
-    {
-        return new (memory) OrderDestroy();
-    }
 
     OrderDestroy* OrderDestroy::create(OrderDestroy* memory, const ConfigurationPtr& configuration)
     {

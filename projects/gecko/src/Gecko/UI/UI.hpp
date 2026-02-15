@@ -103,7 +103,10 @@ namespace Gecko
 
     private:
         ConfigurationPtr m_configuration;
+    public:
+        ScenePtr         m_scene; // TODO: Make private.
 
+    private:
         std::shared_ptr<RenderInterface> m_render_interface;
         std::shared_ptr<SystemInterface> m_system_interface;
 

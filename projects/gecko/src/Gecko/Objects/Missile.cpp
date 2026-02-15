@@ -8,22 +8,6 @@
 
 namespace Gecko
 {
-    Missile* Missile::create(Missile* memory, const ConfigurationPtr& configuration)
-    {
-        auto map = new (memory) Missile();
-
-        map->deserialize(configuration);
-
-        return map;
-    }
-
-    Missile::Missile(const Missile& other) :
-        base_type(other)
-    {
-        m_damage = other.m_damage;
-        m_speed = other.m_speed;
-    }
-
     ConfigurationPtr Missile::serialize() const
     {
         auto configuration = base_type::serialize();
@@ -47,6 +31,27 @@ namespace Gecko
         base_type::update(time);
 
         set_position(get_position() + get_direction() * m_speed * time, false);
+    }
+
+    Missile* Missile::create(Missile* memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
+    {
+        auto map = new (memory) Missile(scene);
+
+        map->deserialize(configuration);
+
+        return map;
+    }
+
+    Missile::Missile(const ScenePtr& scene) :
+        base_type(scene)
+    {
+    }
+
+    Missile::Missile(const Missile& other) :
+        base_type(other)
+    {
+        m_damage = other.m_damage;
+        m_speed = other.m_speed;
     }
 
     void Missile::set_position(const Ogre::Vector3& position, bool validate)

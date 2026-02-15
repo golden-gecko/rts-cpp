@@ -9,16 +9,6 @@
 
 namespace Gecko
 {
-    OrderMove* OrderMove::create()
-    {
-        return new OrderMove();
-    }
-
-    OrderMove* OrderMove::create(OrderMove* memory)
-    {
-        return new (memory) OrderMove();
-    }
-
     OrderMove* OrderMove::create(OrderMove* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderMove();

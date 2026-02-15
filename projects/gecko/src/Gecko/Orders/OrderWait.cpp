@@ -4,16 +4,6 @@
 
 namespace Gecko
 {
-    OrderWait* OrderWait::create()
-    {
-        return new OrderWait();
-    }
-
-    OrderWait* OrderWait::create(OrderWait* memory)
-    {
-        return new (memory) OrderWait();
-    }
-
     OrderWait* OrderWait::create(OrderWait* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderWait();

@@ -12,8 +12,6 @@ namespace Gecko
         using base_type = Order;
 
     public:
-        static OrderWait* create();
-        static OrderWait* create(OrderWait* memory);
         static OrderWait* create(OrderWait* memory, const ConfigurationPtr& configuration);
 
     public:

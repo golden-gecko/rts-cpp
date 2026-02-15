@@ -198,3 +198,19 @@ td.text {
 	bottom: 5dp;
 	left: 550dp;
 }
+
+/*** Unit Editor ***/
+
+.unit-editor-preview,
+.unit-editor-component-list {
+	float: left;
+	width: 40%;
+}
+
+.unit-editor-component-list-header {
+	
+}
+
+.unit-editor-component-list-item {
+	margin-left: 20px;
+}

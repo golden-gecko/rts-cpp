@@ -539,6 +539,7 @@ namespace Gecko
 
             case Rml::Input::KeyIdentifier::KI_F5:
                 init_documents();
+                init_events();
                 return true;
 
             case Rml::Input::KeyIdentifier::KI_F8:
@@ -1040,7 +1041,7 @@ namespace Gecko
     {
         m_widgets.push_back(std::make_shared<ConfigurationsWidget>());
         m_widgets.push_back(std::make_shared<ConsoleWidget>());
-        m_widgets.push_back(std::make_shared<CursorWidget>());
+        m_widgets.push_back(std::make_shared<CursorWidget>(m_scene));
         m_widgets.push_back(std::make_shared<DiplomacyWidget>());
         m_widgets.push_back(std::make_shared<InfoWidget>());
         m_widgets.push_back(std::make_shared<GameMenuWidget>());
@@ -1052,7 +1053,7 @@ namespace Gecko
         m_widgets.push_back(std::make_shared<PlayersWidget>());
         m_widgets.push_back(std::make_shared<PreviewWidget>());
         m_widgets.push_back(std::make_shared<ResourcesWidget>());
-        m_widgets.push_back(std::make_shared<SelectionBoxWidget>());
+        m_widgets.push_back(std::make_shared<SelectionBoxWidget>(m_scene));
         m_widgets.push_back(std::make_shared<SkillsWidget>());
         m_widgets.push_back(std::make_shared<StatisticsWidget>());
         m_widgets.push_back(std::make_shared<TechonologiesWidget>());

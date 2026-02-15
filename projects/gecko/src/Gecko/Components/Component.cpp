@@ -32,7 +32,11 @@ namespace Gecko
     }
 
     Component::Component(const Component& other) :
-        base_type(other), m_owner(other.m_owner), m_name(other.m_name), m_health_timer(other.m_health_timer)
+        base_type(other),
+        m_owner(other.m_owner),
+        m_scene(other.m_scene),
+        m_name(other.m_name),
+        m_health_timer(other.m_health_timer)
     {
 
     }

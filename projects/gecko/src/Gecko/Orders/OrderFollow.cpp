@@ -4,16 +4,6 @@
 
 namespace Gecko
 {
-    OrderFollow* OrderFollow::create()
-    {
-        return new OrderFollow();
-    }
-
-    OrderFollow* OrderFollow::create(OrderFollow* memory)
-    {
-        return new (memory) OrderFollow();
-    }
-
     OrderFollow* OrderFollow::create(OrderFollow* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderFollow();

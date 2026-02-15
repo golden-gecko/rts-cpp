@@ -4,16 +4,6 @@
 
 namespace Gecko
 {
-    OrderPatrol* OrderPatrol::create()
-    {
-        return new OrderPatrol();
-    }
-
-    OrderPatrol* OrderPatrol::create(OrderPatrol* memory)
-    {
-        return new (memory) OrderPatrol();
-    }
-
     OrderPatrol* OrderPatrol::create(OrderPatrol* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderPatrol();

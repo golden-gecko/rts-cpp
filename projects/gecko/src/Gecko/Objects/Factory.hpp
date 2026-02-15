@@ -11,11 +11,11 @@ namespace Gecko
         using base_type = Object;
 
     public:
-        static Factory* create(Factory* memory, const ConfigurationPtr& configuration);
+        static Factory* create(Factory* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
-        explicit Factory() = default;
-        explicit Factory(const Factory& other) = default;
+        explicit Factory(const ScenePtr& scene);
+        explicit Factory(const Factory& other);
 
     public:
         const std::map<std::string, float>& get_usage() const

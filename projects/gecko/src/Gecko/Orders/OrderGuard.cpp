@@ -4,16 +4,6 @@
 
 namespace Gecko
 {
-    OrderGuard* OrderGuard::create()
-    {
-        return new OrderGuard();
-    }
-
-    OrderGuard* OrderGuard::create(OrderGuard* memory)
-    {
-        return new (memory) OrderGuard();
-    }
-
     OrderGuard* OrderGuard::create(OrderGuard* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderGuard();

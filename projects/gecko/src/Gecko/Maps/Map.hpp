@@ -11,13 +11,10 @@ namespace Gecko
         using base_type = Item;
 
     public:
-        static MapPtr create();
-        static MapPtr create(const ConfigurationPtr& configuration);
-        static MapPtr create(MapPtr memory);
-        static MapPtr create(MapPtr memory, const ConfigurationPtr& configuration);
+        static MapPtr create(MapPtr memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
-        explicit Map() = default;
+        explicit Map(const ScenePtr& scene);
         explicit Map(const Map& other);
 
         void init() override;
@@ -34,22 +31,7 @@ namespace Gecko
         void show_data_layer(const std::string& layer_name, const std::string& data_layer_name);
 
     public:
-        std::shared_ptr<Camera> get_camera(const std::string& name) const
-        {
-            auto camera = m_cameras.find(name);
-
-            if (camera == m_cameras.end())
-            {
-                return nullptr;
-            }
-
-            return camera->second;
-        }
-
-        const auto& get_cameras() const
-        {
-            return m_cameras;
-        }
+        CameraPtr get_camera(const std::string& name);
 
         const auto& get_name() const
         {
@@ -63,6 +45,11 @@ namespace Gecko
             return m_layers;
         }
 
+        ScenePtr get_scene()
+        {
+            return m_scene;
+        }
+
         std::shared_ptr<Season> get_season(const std::string& name) const;
 
         const auto& get_seasons() const
@@ -74,19 +61,17 @@ namespace Gecko
         void set_visible(bool visible);
 
     protected:
+        ScenePtr    m_scene;
         std::string m_name;
 
-        std::map<std::string, std::shared_ptr<Camera>> m_cameras;
-        std::map<std::string, std::shared_ptr<Layer>> m_layers;
+        std::map<std::string, std::shared_ptr<Layer>>  m_layers;
         std::map<std::string, std::shared_ptr<Season>> m_seasons;
 
-        virtual void init_cameras();
         virtual void init_layers();
         virtual void init_objects();
         virtual void init_players();
         virtual void init_seasons();
 
-        virtual void deinit_cameras();
         virtual void deinit_layers();
         virtual void deinit_objects();
         virtual void deinit_players();

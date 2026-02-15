@@ -11,8 +11,6 @@ namespace Gecko
         using base_type = Order;
 
     public:
-        static OrderRally* create();
-        static OrderRally* create(OrderRally* memory);
         static OrderRally* create(OrderRally* memory, const ConfigurationPtr& configuration);
 
     public:

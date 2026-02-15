@@ -24,17 +24,22 @@ namespace Gecko
         ~UnitEditorWidget() override;
 
     public:
+        void close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
+
+    public:
         void click(float x, float y);
         void move(float x, float y);
         void zoom_in();
         void zoom_out();
 
     private:
+        Rml::ElementDocument* m_document = nullptr;
+
         Ogre::TexturePtr     m_texture        = nullptr;
         Ogre::RenderTexture* m_render_texture = nullptr;
         Ogre::Viewport*      m_viewport       = nullptr;
 
-        std::string   m_texture_name = "texture_minimap";
+        std::string   m_texture_name = "texture_unit_editor";
         std::uint16_t m_texture_size = 256;
 
         float m_min_zoom = 1.0f;

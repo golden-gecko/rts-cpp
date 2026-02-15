@@ -19,7 +19,7 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        explicit Camera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration);
+        explicit Camera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration);
 
         ~Camera() override;
 
@@ -68,8 +68,9 @@ namespace Gecko
         }
 
     protected:
-        Ogre::SceneManager* m_scene_manager = nullptr;
-        Ogre::Camera* m_camera = nullptr;
+        Scene* m_scene = nullptr;
+
+        Ogre::Camera*    m_camera            = nullptr;
         Ogre::SceneNode* m_camera_scene_node = nullptr;
 
         Ogre::Vector3 m_speed = Ogre::Vector3::ZERO;

@@ -7,16 +7,6 @@
 
 namespace Gecko
 {
-    OrderLoad* OrderLoad::create()
-    {
-        return new OrderLoad();
-    }
-
-    OrderLoad* OrderLoad::create(OrderLoad* memory)
-    {
-        return new (memory) OrderLoad();
-    }
-
     OrderLoad* OrderLoad::create(OrderLoad* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderLoad();

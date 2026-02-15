@@ -25,6 +25,7 @@
 #include "Gecko/Orders/OrderWait.hpp"
 #include "Gecko/Players/Player.hpp"
 #include "Gecko/Rectangle.hpp"
+#include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Skills/Skill.hpp"
 #include "Gecko/UI/UI.hpp"
 #include "Gecko/Utils/Convert.hpp"
@@ -33,16 +34,17 @@
 
 namespace Gecko
 {
-    Object* Object::create(Object* memory, const ConfigurationPtr& configuration)
+    Object* Object::create(Object* memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
     {
-        auto object = new (memory) Object();
+        auto object = new (memory) Object(scene);
 
         object->deserialize(configuration);
 
         return object;
     }
 
-    Object::Object()
+    Object::Object(const ScenePtr& scene) :
+        m_scene(scene)
     {
         m_components = std::make_shared<Components>();
         m_configurations = std::make_shared<Configurations>();
@@ -56,6 +58,7 @@ namespace Gecko
     Object::Object(const Object& other) :
         base_type(other)
     {
+        m_scene = other.m_scene;
         m_name = other.m_name;
         m_player_id = other.m_player_id;
         m_alive_timer = other.m_alive_timer;
@@ -76,7 +79,7 @@ namespace Gecko
 
         if (other.m_scene_node)
         {
-            m_scene_node = Utils::Mesh::copy_scene_node(*other.m_scene_node);
+            m_scene_node = Utils::Mesh::copy_scene_node(other.m_scene_node);
         }
 
         // TODO: Does not work, because scene node has to be created from new parent.
@@ -90,11 +93,9 @@ namespace Gecko
 
     Object::~Object()
     {
-        auto game = Game::getSingletonPtr();
-
-        if (game)
+        if (m_scene)
         {
-            game->destroy_scene_node(m_scene_node);
+            m_scene->destroy_scene_node(m_scene_node);
         }
     }
 
@@ -108,6 +109,7 @@ namespace Gecko
 
         for (const auto& i : *(m_components))
         {
+            i->m_scene = m_scene; // TODO: Remove.
             i->set_owner(this);
             i->init();
         }
@@ -223,12 +225,9 @@ namespace Gecko
             m_skills->deserialize(configuration->get_child("skills"));
         }
 
-        if (m_scene_node)
-        {
-            Game::getSingleton().destroy_scene_node(m_scene_node);
-        }
-
-        m_scene_node = Game::getSingleton().create_scene_node();
+        m_scene->destroy_scene_node(m_scene_node);
+        
+        m_scene_node = m_scene->create_scene_node();
         m_scene_node->setFixedYawAxis(true);
 
         create_selection_mesh();
@@ -798,6 +797,7 @@ namespace Gecko
         selection_scale = Ogre::Vector3(2, 1, 2);
 
         m_selection = std::make_unique<Mesh>();
+        m_selection->m_scene = m_scene; // TODO: Remove.
         m_selection->deserialize(ConfigurationManager::getSingleton().get("selection"));
         m_selection->set_owner(this);
         m_selection->init();

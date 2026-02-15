@@ -11,8 +11,6 @@ namespace Gecko
         using base_type = Order;
 
     public:
-        static OrderStop* create();
-        static OrderStop* create(OrderStop* memory);
         static OrderStop* create(OrderStop* memory, const ConfigurationPtr& configuration);
 
     public:

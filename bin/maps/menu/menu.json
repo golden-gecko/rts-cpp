@@ -1,11 +1,5 @@
 {
     "active_player": "human",
-    "cameras": [
-        {
-            "name": "Main",
-            "type": "Free"
-        }
-    ],
     "creatable": {
         "by_game": true
     },

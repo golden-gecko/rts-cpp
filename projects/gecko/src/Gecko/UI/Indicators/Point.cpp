@@ -3,22 +3,22 @@
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Layers/Layer.hpp"
 #include "Gecko/Maps/Map.hpp"
+#include "Gecko/Scenes/Scene.hpp"
 
 namespace Gecko
 {
     Point::Point()
     {
-        m_entity = Game::getSingleton().create_entity("cone.mesh");
+        m_entity = Game::getSingleton().get_active_map()->get_scene()->create_entity("cone.mesh");
         m_entity->setCastShadows(false);
 
-        m_scene_node = Game::getSingleton().create_scene_node();
+        m_scene_node = Game::getSingleton().get_active_map()->get_scene()->create_scene_node();
         m_scene_node->attachObject(m_entity);
-        // m_scene_node->setScale(Ogre::Vector3::UNIT_SCALE * 0.01f);
     }
 
     Point::~Point()
     {
-        Game::getSingleton().destroy_scene_node(m_scene_node);
-        Game::getSingleton().destroy_entity(m_entity);
+        Game::getSingleton().get_active_map()->get_scene()->destroy_scene_node(m_scene_node);
+        Game::getSingleton().get_active_map()->get_scene()->destroy_entity(m_entity);
     }
 }

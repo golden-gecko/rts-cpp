@@ -12,8 +12,6 @@ namespace Gecko
         using base_type = Order;
 
     public:
-        static OrderFollow* create();
-        static OrderFollow* create(OrderFollow* memory);
         static OrderFollow* create(OrderFollow* memory, const ConfigurationPtr& configuration);
 
     public:

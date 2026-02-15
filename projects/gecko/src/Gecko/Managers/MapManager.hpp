@@ -19,7 +19,7 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        void init(const ConfigurationPtr& configuration);
+        void init(const ConfigurationPtr& configuration, const ScenePtr& scene);
         void deinit();
     };
 }

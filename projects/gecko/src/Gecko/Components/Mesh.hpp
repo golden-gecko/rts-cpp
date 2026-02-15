@@ -15,7 +15,7 @@ namespace Gecko
         void init() override;
 
     public:
-        static Mesh* create(Mesh* memory, const ConfigurationPtr& configuration);
+        static Mesh* create(Mesh* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
         explicit Mesh() = default;
@@ -70,7 +70,7 @@ namespace Gecko
         }
 
     private:
-        Ogre::Entity* m_entity = nullptr;
+        Ogre::Entity*    m_entity     = nullptr;
         Ogre::SceneNode* m_scene_node = nullptr;
 
         void load_from_file();

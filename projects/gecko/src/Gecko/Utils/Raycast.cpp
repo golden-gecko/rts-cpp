@@ -1,11 +1,11 @@
 #include "Gecko/Utils/Raycast.hpp"
 
 #include "Gecko/Cameras/Camera.hpp"
-#include "Gecko/Games/Game.hpp"
 #include "Gecko/Layers/Layer.hpp"
 #include "Gecko/Managers/MapManager.hpp"
 #include "Gecko/Maps/Map.hpp"
 #include "Gecko/QueryFlags.hpp"
+#include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Settings.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Mesh.hpp"
@@ -20,7 +20,7 @@ namespace Gecko
         return MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::Main)->get_camera()->getCameraToViewportRay(x, y);
     }
 
-    std::set<Id> from_plane(const Ogre::Vector2& start, const Ogre::Vector2& end, Ogre::uint32 query_mask)
+    std::set<Id> from_plane(const ScenePtr& scene, const Ogre::Vector2& start, const Ogre::Vector2& end, Ogre::uint32 query_mask)
     {
         float left = start.x;
         float right = end.x;
@@ -65,7 +65,7 @@ namespace Gecko
         Ogre::PlaneBoundedVolumeList volList;
         volList.push_back(vol);
 
-        static auto query = Game::getSingleton().create_plane_volume_query(volList, query_mask);
+        static auto query = scene->create_plane_volume_query(volList, query_mask);
 
         query->setVolumes(volList);
         query->setQueryMask(query_mask);
@@ -83,14 +83,15 @@ namespace Gecko
             }
         }
 
+        // TODO: Fix.
         // Game::getSingleton().get_scene_manager()->destroyQuery(query);
 
         return objects;
     }
 
-    std::optional<std::pair<Ogre::Entity*, Ogre::Vector3>> from_point(const Ogre::Ray& ray, Ogre::uint32 query_mask)
+    std::optional<std::pair<Ogre::Entity*, Ogre::Vector3>> from_point(const ScenePtr& scene, const Ogre::Ray& ray, Ogre::uint32 query_mask)
     {
-        static auto m_pray_scene_query = Game::getSingleton().create_ray_scene_query(ray);
+        static auto m_pray_scene_query = scene->create_ray_scene_query(ray);
 
         m_pray_scene_query->setRay(ray);
         m_pray_scene_query->setSortByDistance(true);
@@ -206,21 +207,21 @@ namespace Gecko
 
 namespace Gecko::Utils::Raycast
 {
-    std::optional<std::pair<Layer*, Ogre::Vector3>> to_layer(const OIS::MouseEvent& arg)
+    std::optional<std::pair<Layer*, Ogre::Vector3>> to_layer(const ScenePtr& scene, const OIS::MouseEvent& arg)
     {
-        return to_layer(create_ray(arg));
+        return to_layer(scene, create_ray(arg));
     }
 
-    std::optional<std::pair<Id, Ogre::Vector3>> to_object(const OIS::MouseEvent& arg)
+    std::optional<std::pair<Id, Ogre::Vector3>> to_object(const ScenePtr& scene, const OIS::MouseEvent& arg)
     {
-        return to_object(create_ray(arg));
+        return to_object(scene, create_ray(arg));
     }
 
-    std::optional<std::pair<Layer*, Ogre::Vector3>> to_layer(const Ogre::Ray& ray)
+    std::optional<std::pair<Layer*, Ogre::Vector3>> to_layer(const ScenePtr& scene, const Ogre::Ray& ray)
     {
-        auto result = from_point(ray, QueryFlags::QF_Layer);
+        auto result = from_point(scene, ray, QueryFlags::QF_Layer);
 
-        static auto m_pray_scene_query = Game::getSingleton().create_ray_scene_query(ray);
+        static auto m_pray_scene_query = scene->create_ray_scene_query(ray);
 
         m_pray_scene_query->setRay(ray);
         m_pray_scene_query->setSortByDistance(true);
@@ -340,9 +341,9 @@ namespace Gecko::Utils::Raycast
         }
     }
 
-    std::optional<std::pair<Id, Ogre::Vector3>> to_object(const Ogre::Ray& ray)
+    std::optional<std::pair<Id, Ogre::Vector3>> to_object(const ScenePtr& scene, const Ogre::Ray& ray)
     {
-        static auto m_pray_scene_query = Game::getSingleton().create_ray_scene_query(ray);
+        static auto m_pray_scene_query = scene->create_ray_scene_query(ray);
 
         m_pray_scene_query->setRay(ray);
         m_pray_scene_query->setSortByDistance(true);
@@ -461,8 +462,8 @@ namespace Gecko::Utils::Raycast
         }
     }
 
-    std::set<Id> to_objects(const Ogre::Vector2& start, const Ogre::Vector2& end)
+    std::set<Id> to_objects(const ScenePtr& scene, const Ogre::Vector2& start, const Ogre::Vector2& end)
     {
-        return from_plane(start, end, QueryFlags::QF_Object);
+        return from_plane(scene, start, end, QueryFlags::QF_Object);
     }
 }

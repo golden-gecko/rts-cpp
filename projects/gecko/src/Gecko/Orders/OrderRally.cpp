@@ -4,16 +4,6 @@
 
 namespace Gecko
 {
-    OrderRally* OrderRally::create()
-    {
-        return new OrderRally();
-    }
-
-    OrderRally* OrderRally::create(OrderRally* memory)
-    {
-        return new (memory) OrderRally();
-    }
-
     OrderRally* OrderRally::create(OrderRally* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderRally();

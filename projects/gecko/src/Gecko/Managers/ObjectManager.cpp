@@ -35,7 +35,7 @@ namespace Gecko
         iterate(std::bind(update, std::placeholders::_1, time));
     }
 
-    void ObjectManager::init(const ConfigurationPtr& configuration)
+    void ObjectManager::init(const ConfigurationPtr& configuration, const ScenePtr& scene)
     {
         L_TIME("ObjectManager::init()");
 
@@ -50,28 +50,28 @@ namespace Gecko
 
             if (type == "Factory")
             {
-                auto factory = std::bind(Factory::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Factory::create, std::placeholders::_1, configuration, scene);
 
                 object_manager.register_type<Factory>(name, factory);
                 object_manager.allocate(name, max_size);
             }
             else if (type == "Missile")
             {
-                auto factory = std::bind(Missile::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Missile::create, std::placeholders::_1, configuration, scene);
 
                 object_manager.register_type<Missile>(name, factory);
                 object_manager.allocate(name, max_size);
             }
             else if (type == "Object")
             {
-                auto factory = std::bind(Object::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Object::create, std::placeholders::_1, configuration, scene);
 
                 object_manager.register_type<Object>(name, factory);
                 object_manager.allocate(name, max_size);
             }
             else if (type == "Vehicle")
             {
-                auto factory = std::bind(Vehicle::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Vehicle::create, std::placeholders::_1, configuration, scene);
 
                 object_manager.register_type<Vehicle>(name, factory);
                 object_manager.allocate(name, max_size);

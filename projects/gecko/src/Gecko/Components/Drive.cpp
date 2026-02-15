@@ -4,22 +4,6 @@
 
 namespace Gecko
 {
-    Drive* Drive::create(Drive* memory, const ConfigurationPtr& configuration)
-    {
-        auto component = new (memory) Drive();
-
-        component->deserialize(configuration);
-
-        return component;
-    }
-
-    Drive::Drive(const Drive& other) :
-        base_type(other)
-    {
-        m_speed = other.m_speed;
-        m_distance_driven = other.m_distance_driven;
-    }
-
     ConfigurationPtr Drive::serialize() const
     {
         auto configuration = base_type::serialize();
@@ -36,5 +20,21 @@ namespace Gecko
 
         m_speed = configuration->get_float("speed", 0.0f);
         m_speed = configuration->get_float("distance_driven", 0.0f);
+    }
+
+    Drive* Drive::create(Drive* memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
+    {
+        auto component = new (memory) Drive();
+
+        component->deserialize(configuration);
+
+        return component;
+    }
+
+    Drive::Drive(const Drive& other) :
+        base_type(other)
+    {
+        m_speed = other.m_speed;
+        m_distance_driven = other.m_distance_driven;
     }
 }

@@ -7,16 +7,6 @@
 
 namespace Gecko
 {
-    OrderUnload* OrderUnload::create()
-    {
-        return new OrderUnload();
-    }
-
-    OrderUnload* OrderUnload::create(OrderUnload* memory)
-    {
-        return new (memory) OrderUnload();
-    }
-
     OrderUnload* OrderUnload::create(OrderUnload* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderUnload();

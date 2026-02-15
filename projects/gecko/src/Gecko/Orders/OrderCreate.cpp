@@ -4,16 +4,6 @@
 
 namespace Gecko
 {
-    OrderCreate* OrderCreate::create()
-    {
-        return new OrderCreate();
-    }
-
-    OrderCreate* OrderCreate::create(OrderCreate* memory)
-    {
-        return new (memory) OrderCreate();
-    }
-
     OrderCreate* OrderCreate::create(OrderCreate* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderCreate();

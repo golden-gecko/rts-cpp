@@ -46,11 +46,6 @@
             </template>
         </div>
 
-        <!-- Unit Editor -->
-        <div id="unit-editor" class="background hidden popup panel" data-model="unit_editor">
-            <img src="texture_unit_editor" />
-        </div>
-
         <!-- Game Menu -->
         <div id="game-menu" class="panel" data-model="game_menu">
             <template src="window">
@@ -276,6 +271,36 @@
                     <div class="buttons">
                         <button class="button" data-event-click="close('technologies')">Close</button>
                     </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Unit Editor -->
+        <div id="unit-editor" class="background hidden popup panel" data-model="unit_editor">
+            <template src="window">
+                <div>
+                    <div class="unit-editor-preview">
+                        <img src="texture_unit_editor" />
+                    </div>
+
+                    <div class="unit-editor-component-list">
+                        <p class="unit-editor-component-list-header">Drive</p>
+                        <p class="unit-editor-component-list-item">Drive 1</p>
+                        <p class="unit-editor-component-list-item">Drive 1</p>
+                        <p class="unit-editor-component-list-item">Drive 1</p>
+                        <p class="unit-editor-component-list-item">Drive 1</p>
+                        <p class="unit-editor-component-list-header">Engine</p>
+                        <p class="unit-editor-component-list-item">Engine 1</p>
+                        <p class="unit-editor-component-list-item">Engine 1</p>
+                        <p class="unit-editor-component-list-header">Weapon</p>
+                        <p class="unit-editor-component-list-item">Gun 1</p>
+                        <p class="unit-editor-component-list-item">Gun 1</p>
+                        <p class="unit-editor-component-list-item">Gun 1</p>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="button" data-event-click="close('technologies')">Close</button>
                 </div>
             </template>
         </div>

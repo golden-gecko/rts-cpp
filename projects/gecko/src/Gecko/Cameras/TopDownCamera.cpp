@@ -67,8 +67,8 @@ namespace Gecko
         }
     }
 
-    TopDownCamera::TopDownCamera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration) :
-        base_type(root, scene_manager, name, configuration)
+    TopDownCamera::TopDownCamera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration) :
+        base_type(scene, name, configuration)
     {
     }
 }

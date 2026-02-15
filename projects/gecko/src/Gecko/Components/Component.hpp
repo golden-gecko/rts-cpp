@@ -77,8 +77,11 @@ namespace Gecko
         virtual void set_visible(bool visible);
 
     protected:
-        Object* m_owner = nullptr;
+        ObjectPtr m_owner = nullptr;
+    public:
+        ScenePtr  m_scene; // TODO: Make protected.
+    protected:
         std::string m_name;
-        Timer m_health_timer;
+        Timer       m_health_timer;
     };
 }

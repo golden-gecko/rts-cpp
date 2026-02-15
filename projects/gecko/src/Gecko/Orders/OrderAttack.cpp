@@ -5,16 +5,6 @@
 
 namespace Gecko
 {
-    OrderAttack* OrderAttack::create()
-    {
-        return new OrderAttack();
-    }
-
-    OrderAttack* OrderAttack::create(OrderAttack* memory)
-    {
-        return new (memory) OrderAttack();
-    }
-
     OrderAttack* OrderAttack::create(OrderAttack* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderAttack();
