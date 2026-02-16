@@ -215,7 +215,7 @@ namespace Gecko
                 }
                 else
                 {
-                    auto object_cast = Utils::Raycast::to_object(arg);
+                    auto object_cast = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
 
                     if (object_cast)
                     {
@@ -227,7 +227,7 @@ namespace Gecko
                         UI::getSingleton().set_hovered_object_id(Id::Empty);
                         // UI::getSingleton().get_preview()->get_camera()->set_target_id(Id::Empty);
 
-                        auto layer_cast = Utils::Raycast::to_layer(arg);
+                        auto layer_cast = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
                         if (layer_cast)
                         {
@@ -414,8 +414,8 @@ namespace Gecko
     {
         if (Game::getSingleton().get_active_player()->get_selected()->size())
         {
-            auto object_result = Utils::Raycast::to_object(arg);
-            auto terrain_result = Utils::Raycast::to_layer(arg);
+            auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
+            auto terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
             for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
             {
@@ -481,7 +481,7 @@ namespace Gecko
             return;
         }
 
-        auto object_result = Utils::Raycast::to_object(arg);
+        auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
 
         for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
         {
@@ -513,8 +513,8 @@ namespace Gecko
             return;
         }
 
-        auto object_result = Utils::Raycast::to_object(arg);
-        auto terrain_result = Utils::Raycast::to_layer(arg);
+        auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
+        auto terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
         for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
         {
@@ -616,7 +616,7 @@ namespace Gecko
             return;
         }
 
-        auto layer_result = Utils::Raycast::to_layer(arg);
+        auto layer_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
         if (layer_result.has_value() == false)
         {
@@ -655,8 +655,8 @@ namespace Gecko
             return;
         }
 
-        auto object_result = Utils::Raycast::to_object(arg);
-        auto terrain_result = Utils::Raycast::to_layer(arg);
+        auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
+        auto terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
         for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
         {
@@ -705,8 +705,8 @@ namespace Gecko
         }
 
         // TODO: Check if at least one cast is correct.
-        auto object_result = Utils::Raycast::to_object(arg);
-        auto terrain_result = Utils::Raycast::to_layer(arg);
+        auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
+        auto terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
         for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
         {
@@ -755,8 +755,8 @@ namespace Gecko
         }
 
         // TODO: Check if at least one cast is correct.
-        auto object_result = Utils::Raycast::to_object(arg);
-        auto terrain_result = Utils::Raycast::to_layer(arg);
+        auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
+        auto terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
         for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
         {
@@ -792,7 +792,7 @@ namespace Gecko
 
         if (configuration_name.empty() == false)
         {
-            auto layer_cast = Utils::Raycast::to_layer(arg);
+            auto layer_cast = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
             if (layer_cast.has_value() == false)
             {
@@ -860,7 +860,7 @@ namespace Gecko
         {
             if (selection_box->is_valid())
             {
-                auto object_cast = Utils::Raycast::to_objects(selection_box->get_start(), selection_box->get_end());
+                auto object_cast = Utils::Raycast::to_objects(Game::getSingleton().get_map_scene(), selection_box->get_start(), selection_box->get_end());
                 auto player = Game::getSingleton().get_active_player();
 
                 if (player)
@@ -870,7 +870,7 @@ namespace Gecko
             }
             else
             {
-                auto object_cast = Utils::Raycast::to_object(arg);
+                auto object_cast = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
                 auto player = Game::getSingleton().get_active_player();
 
                 if (player)
@@ -906,7 +906,7 @@ namespace Gecko
             return;
         }
 
-        auto object_cast = Utils::Raycast::to_object(arg);
+        auto object_cast = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
 
         if (object_cast.has_value())
         {
@@ -928,7 +928,7 @@ namespace Gecko
         }
         else
         {
-            auto layer_cast = Utils::Raycast::to_layer(arg);
+            auto layer_cast = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
             if (layer_cast)
             {

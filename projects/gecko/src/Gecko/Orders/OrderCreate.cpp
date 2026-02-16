@@ -4,30 +4,6 @@
 
 namespace Gecko
 {
-    OrderCreate* OrderCreate::create()
-    {
-        return new OrderCreate();
-    }
-
-    OrderCreate* OrderCreate::create(OrderCreate* memory)
-    {
-        return new (memory) OrderCreate();
-    }
-
-    OrderCreate* OrderCreate::create(OrderCreate* memory, const ConfigurationPtr& configuration)
-    {
-        auto order = new (memory) OrderCreate();
-
-        order->deserialize(configuration);
-
-        return order;
-    }
-
-    OrderCreate::OrderCreate() :
-        base_type(order_type::Value::Create)
-    {
-    }
-
     void OrderCreate::init()
     {
         base_type::init();
@@ -55,5 +31,19 @@ namespace Gecko
         player_id = configuration->get_int("player_id", Id::Empty.get());
         configuration_name = configuration->get_string("configuration_name", "");
         position = configuration->get_vector3("position", Ogre::Vector3::ZERO);
+    }
+
+    OrderCreate* OrderCreate::create(OrderCreate* memory, const ConfigurationPtr& configuration)
+    {
+        auto order = new (memory) OrderCreate();
+
+        order->deserialize(configuration);
+
+        return order;
+    }
+
+    OrderCreate::OrderCreate() :
+        base_type(order_type::Value::Create)
+    {
     }
 }

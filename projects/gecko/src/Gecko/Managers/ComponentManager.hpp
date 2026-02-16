@@ -13,7 +13,7 @@ namespace Gecko
         using base_type = Manager<Component, std::string, Id>;
 
     public:
-        void init(const ConfigurationPtr& configuration);
+        void init(const ConfigurationPtr& configuration, const ScenePtr& scene);
         void deinit();
     };
 }

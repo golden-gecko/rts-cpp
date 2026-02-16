@@ -11,10 +11,12 @@ namespace Gecko
         using base_type = Component;
 
     public:
-        static Shield* create(Shield* memory, const ConfigurationPtr& configuration);
-
+        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
+        static Shield* create(Shield* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
         explicit Shield() = default;

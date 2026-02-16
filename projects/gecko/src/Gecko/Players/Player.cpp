@@ -10,25 +10,6 @@
 
 namespace Gecko
 {
-    PlayerPtr Player::create()
-    {
-        return new Player();
-    }
-
-    PlayerPtr Player::create(PlayerPtr memory)
-    {
-        return new (memory) Player();
-    }
-
-    PlayerPtr Player::create(const ConfigurationPtr& configuration)
-    {
-        auto player = new Player();
-
-        player->deserialize(configuration);
-
-        return player;
-    }
-
     PlayerPtr Player::create(PlayerPtr memory, const ConfigurationPtr& configuration)
     {
         auto player = new (memory) Player();

@@ -4,30 +4,6 @@
 
 namespace Gecko
 {
-    OrderRally* OrderRally::create()
-    {
-        return new OrderRally();
-    }
-
-    OrderRally* OrderRally::create(OrderRally* memory)
-    {
-        return new (memory) OrderRally();
-    }
-
-    OrderRally* OrderRally::create(OrderRally* memory, const ConfigurationPtr& configuration)
-    {
-        auto order = new (memory) OrderRally();
-
-        order->deserialize(configuration);
-
-        return order;
-    }
-
-    OrderRally::OrderRally() :
-        base_type(order_type::Value::Rally)
-    {
-    }
-
     void OrderRally::init()
     {
         base_type::init();
@@ -51,5 +27,19 @@ namespace Gecko
 
         m_target_id = configuration->get_int("target_id", Id::Empty.get());
         m_target_position = configuration->get_vector3("target_position", Ogre::Vector3::ZERO);
+    }
+
+    OrderRally* OrderRally::create(OrderRally* memory, const ConfigurationPtr& configuration)
+    {
+        auto order = new (memory) OrderRally();
+
+        order->deserialize(configuration);
+
+        return order;
+    }
+
+    OrderRally::OrderRally() :
+        base_type(order_type::Value::Rally)
+    {
     }
 }

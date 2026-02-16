@@ -11,19 +11,20 @@ namespace Gecko
         using base_type = Item;
 
     public:
-        static PlayerPtr create();
-        static PlayerPtr create(const ConfigurationPtr& configuration);
-        static PlayerPtr create(PlayerPtr memory);
+        // From Serializable.
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
+        // From Updatable.
+        void update(float time) override;
+
+    public:
         static PlayerPtr create(PlayerPtr memory, const ConfigurationPtr& configuration);
 
     public:
         explicit Player();
         explicit Player(const Player& other);
-
-        ConfigurationPtr serialize() const override;
-        void deserialize(const ConfigurationPtr& configuration) override;
-
-        void update(float time) override;
 
     public:
         const auto& get_color() const

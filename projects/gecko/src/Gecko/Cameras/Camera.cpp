@@ -5,53 +5,37 @@
 #include "Gecko/Input/Input.hpp"
 #include "Gecko/Managers/MapManager.hpp"
 #include "Gecko/Maps/Map.hpp"
+#include "Gecko/Scenes/Scene.hpp"
 
 namespace Gecko
 {
-    Camera::Camera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration) :
-        m_scene_manager(scene_manager)
+    Camera::Camera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration) :
+        m_scene(scene)
     {
-        auto near_clip_distance = configuration->get_float(
-            "options.near_clip_distance", Settings::Camera::NearClipDistance
-        );
-
-        m_camera = m_scene_manager->createCamera(name);
+        m_camera = m_scene->create_camera(name);
         m_camera->setAutoAspectRatio(true);
-        m_camera->setNearClipDistance(near_clip_distance);
+        m_camera->setFarClipDistance(configuration->get_float("far_clip_distance", Settings::Camera::FarClipDistance));
+        m_camera->setNearClipDistance(configuration->get_float("near_clip_distance", Settings::Camera::NearClipDistance));
+        m_camera->setPolygonMode(Utils::Convert::to_polygon_mode(configuration->get_string("polygon_mode", Settings::Camera::PolygonMode)));
+        m_camera->setProjectionType(Utils::Convert::to_projection_type(configuration->get_string("projection_type", Settings::Camera::ProjectionType)));
 
-        m_camera_scene_node = m_scene_manager->getRootSceneNode()->createChildSceneNode(name);
+        m_camera_scene_node = m_scene->create_scene_node();
         m_camera_scene_node->attachObject(m_camera);
         m_camera_scene_node->setFixedYawAxis(true);
 
         // TODO: Remove this from constructor. Does not work.
         deserialize(configuration);
-
-        m_camera->setPolygonMode(Utils::Convert::to_polygon_mode(configuration->get_string("polygon_mode", Settings::Camera::PolygonMode)));
-        m_camera->setProjectionType(Utils::Convert::to_projection_type(configuration->get_string("projection_type", Settings::Camera::ProjectionType)));
-
-        if (root->getRenderSystem()->getCapabilities()->hasCapability(Ogre::Capabilities::RSC_INFINITE_FAR_PLANE))
-        {
-            m_camera->setFarClipDistance(0.0f);
-        }
-        else
-        {
-            auto far_clip_distance = configuration->get_float(
-                "options.far_clip_distance", Settings::Camera::FarClipDistance
-            );
-
-            m_camera->setFarClipDistance(far_clip_distance);
-        }
     }
 
     Camera::~Camera()
     {
-        m_scene_manager->destroySceneNode(m_camera_scene_node);
-        m_scene_manager->destroyCamera(m_camera);
+        m_scene->destroy_scene_node(m_camera_scene_node);
+        m_scene->destroy_camera(m_camera);
     }
 
     ConfigurationPtr Camera::serialize() const
     {
-        auto configuration = std::make_shared<Configuration>();
+        ConfigurationPtr configuration = std::make_shared<Configuration>();
 
         configuration->set("direction", get_direction());
         configuration->set("position", get_position());

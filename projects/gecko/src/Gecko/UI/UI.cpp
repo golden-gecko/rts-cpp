@@ -43,6 +43,7 @@
 #include "Gecko/UI/Widgets/Skills.hpp"
 #include "Gecko/UI/Widgets/Statistics.hpp"
 #include "Gecko/UI/Widgets/Techonologies.hpp"
+#include "Gecko/UI/Widgets/UnitEditor.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/String.hpp"
 #include "Gecko/Utils/Time.hpp"
@@ -198,6 +199,18 @@ namespace Gecko
     {
     }
 
+    void UI::change_visibility(const std::string& type, bool visible)
+    {
+        /*
+        auto objects = ObjectManager::getSingleton().get_by_configuration_name(type);
+
+        for (const auto& [id, object] : objects)
+        {
+        object->set_visible(visible);
+        }
+        */
+    }
+
     void UI::render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
     {
         // L_TIME("UI::render()");
@@ -257,18 +270,6 @@ namespace Gecko
 
         m_context->Update();
         m_context->Render();
-    }
-
-    void UI::change_visibility(const std::string& type, bool visible)
-    {
-        /*
-        auto objects = ObjectManager::getSingleton().get_by_configuration_name(type);
-
-        for (const auto& [id, object] : objects)
-        {
-        object->set_visible(visible);
-        }
-        */
     }
 
     /*
@@ -538,6 +539,7 @@ namespace Gecko
 
             case Rml::Input::KeyIdentifier::KI_F5:
                 init_documents();
+                init_events();
                 return true;
 
             case Rml::Input::KeyIdentifier::KI_F8:
@@ -1039,7 +1041,7 @@ namespace Gecko
     {
         m_widgets.push_back(std::make_shared<ConfigurationsWidget>());
         m_widgets.push_back(std::make_shared<ConsoleWidget>());
-        m_widgets.push_back(std::make_shared<CursorWidget>());
+        m_widgets.push_back(std::make_shared<CursorWidget>(m_scene));
         m_widgets.push_back(std::make_shared<DiplomacyWidget>());
         m_widgets.push_back(std::make_shared<InfoWidget>());
         m_widgets.push_back(std::make_shared<GameMenuWidget>());
@@ -1051,10 +1053,11 @@ namespace Gecko
         m_widgets.push_back(std::make_shared<PlayersWidget>());
         m_widgets.push_back(std::make_shared<PreviewWidget>());
         m_widgets.push_back(std::make_shared<ResourcesWidget>());
-        m_widgets.push_back(std::make_shared<SelectionBoxWidget>());
+        m_widgets.push_back(std::make_shared<SelectionBoxWidget>(m_scene));
         m_widgets.push_back(std::make_shared<SkillsWidget>());
         m_widgets.push_back(std::make_shared<StatisticsWidget>());
         m_widgets.push_back(std::make_shared<TechonologiesWidget>());
+        m_widgets.push_back(std::make_shared<UnitEditorWidget>());
     }
 
     void UI::deinit_documents()

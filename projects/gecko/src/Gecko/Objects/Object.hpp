@@ -29,10 +29,10 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        static Object* create(Object* memory, const ConfigurationPtr& configuration);
+        static Object* create(Object* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
-        explicit Object();
+        explicit Object(const ScenePtr& scene);
         explicit Object(const Object& other);
 
         ~Object() override;
@@ -185,7 +185,8 @@ namespace Gecko
         virtual OrderStatus on_wait(Order* order, float time);
 
     private:
-        MapPtr m_owner = nullptr;
+        MapPtr   m_owner = nullptr;
+        ScenePtr m_scene;
 
         std::string m_name;
         Id m_player_id;

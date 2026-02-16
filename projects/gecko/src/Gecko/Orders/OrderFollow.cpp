@@ -4,30 +4,6 @@
 
 namespace Gecko
 {
-    OrderFollow* OrderFollow::create()
-    {
-        return new OrderFollow();
-    }
-
-    OrderFollow* OrderFollow::create(OrderFollow* memory)
-    {
-        return new (memory) OrderFollow();
-    }
-
-    OrderFollow* OrderFollow::create(OrderFollow* memory, const ConfigurationPtr& configuration)
-    {
-        auto order = new (memory) OrderFollow();
-
-        order->deserialize(configuration);
-
-        return order;
-    }
-
-    OrderFollow::OrderFollow() :
-        base_type(order_type::Value::Follow)
-    {
-    }
-
     void OrderFollow::init()
     {
         base_type::init();
@@ -52,5 +28,19 @@ namespace Gecko
 
         target_id = configuration->get_int("target_id", Id::Empty.get());
         path = configuration->get_path("path", Navigation::Path());
+    }
+
+    OrderFollow* OrderFollow::create(OrderFollow* memory, const ConfigurationPtr& configuration)
+    {
+        auto order = new (memory) OrderFollow();
+
+        order->deserialize(configuration);
+
+        return order;
+    }
+
+    OrderFollow::OrderFollow() :
+        base_type(order_type::Value::Follow)
+    {
     }
 }

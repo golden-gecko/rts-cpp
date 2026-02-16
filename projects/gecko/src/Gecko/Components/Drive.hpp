@@ -11,14 +11,16 @@ namespace Gecko
         using base_type = Mesh;
 
     public:
-        static Drive* create(Drive* memory, const ConfigurationPtr& configuration);
+        // From Serializable.
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
+        static Drive* create(Drive* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
         explicit Drive() = default;
         explicit Drive(const Drive& other);
-
-        ConfigurationPtr serialize() const override;
-        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         auto get_distance_driven() const

@@ -6,7 +6,7 @@
         "../options/input.json",
         "../options/memory.json",
         "../options/options.json",
-        "../options/scene.json",
+        "../options/scenes.json",
         "../options/ui.json"
     ],
     "name": "RTS"

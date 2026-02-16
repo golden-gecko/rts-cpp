@@ -12,18 +12,20 @@ namespace Gecko
         using base_type = Order;
 
     public:
-        static OrderUnload* create();
-        static OrderUnload* create(OrderUnload* memory);
+        // From Initializable.
+        void init() override;
+
+    public:
+        // From Serializable.
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
         static OrderUnload* create(OrderUnload* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderUnload();
         explicit OrderUnload(const OrderUnload& other) = default;
-
-        void init() override;
-
-        ConfigurationPtr serialize() const override;
-        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const override;

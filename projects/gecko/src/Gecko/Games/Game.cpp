@@ -1,5 +1,6 @@
 #include "Gecko/Games/Game.hpp"
 
+#include "Gecko/Cameras/Camera.hpp"
 #include "Gecko/Components/Component.hpp"
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Configurations.hpp"
@@ -18,6 +19,8 @@
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/Players/Player.hpp"
+#include "Gecko/Scenes/EditorScene.hpp"
+#include "Gecko/Scenes/MapScene.hpp"
 #include "Gecko/Skills/Skill.hpp"
 #include "Gecko/UI/Widgets/Cursor.hpp"
 #include "Gecko/UI/Widgets/Minimap.hpp"
@@ -58,7 +61,7 @@ namespace Gecko
     void Game::init()
     {
         init_root();
-        init_scene(m_configuration->get_child("scene"));
+        init_scenes(m_configuration->get_child("scenes"));
         init_meshes();
     }
 
@@ -71,7 +74,7 @@ namespace Gecko
         ComponentManager::getSingleton().destroy_all();
         SkillManager::getSingleton().destroy_all();
 
-        deinit_scene();
+        deinit_scenes();
         deinit_root();
     }
 
@@ -79,6 +82,9 @@ namespace Gecko
     {
         // Must be updated first.
         Input::getSingleton().update(time);
+
+        m_map_scene->update(time);
+        m_editor_scene->update(time);
 
         MapManager::getSingleton().update(time);
         ObjectManager::getSingleton().update(time);
@@ -92,6 +98,30 @@ namespace Gecko
     Game::Game(const ConfigurationPtr& configuration) :
         m_configuration(configuration)
     {
+    }
+
+    Ogre::SceneManager* Game::create_scene_manager() const
+    {
+        Ogre::SceneManager* scene_manager = getRoot()->createSceneManager();
+
+        if (scene_manager == nullptr)
+        {
+            throw Exception("Failed to create scene manager.");
+        }
+
+        Ogre::RTShader::ShaderGenerator::getSingleton().addSceneManager(scene_manager);
+        
+        return scene_manager;
+    }
+
+    void Game::destroy_scene_manager(Ogre::SceneManager* scene_manager) const
+    {
+        if (scene_manager)
+        {
+            Ogre::RTShader::ShaderGenerator::getSingleton().removeSceneManager(scene_manager);
+
+            getRoot()->destroySceneManager(scene_manager);
+        }
     }
 
     void Game::load_map(const std::string& map_name)
@@ -281,75 +311,6 @@ namespace Gecko
 
         ComponentManager::getSingleton().destroy_all();
         OrderManager::getSingleton().destroy_all();
-    }
-
-    Ogre::Entity* Game::create_entity(const std::string& name) const
-    {
-        return m_scene_manager->createEntity(name);
-    }
-
-    void Game::destroy_entity(Ogre::Entity* entity) const
-    {
-        if (entity)
-        {
-            m_scene_manager->destroyEntity(entity);
-        }
-    }
-
-    Ogre::ManualObject* Game::create_manual_object() const
-    {
-        return m_scene_manager->createManualObject();
-    }
-
-    void Game::destroy_manual_object(Ogre::ManualObject* manual_object) const
-    {
-        if (manual_object)
-        {
-            m_scene_manager->destroyManualObject(manual_object);
-        }
-    }
-
-    Ogre::PlaneBoundedVolumeListSceneQuery* Game::create_plane_volume_query(const Ogre::PlaneBoundedVolumeList& volumes, Ogre::uint32 mask) const
-    {
-        return m_scene_manager->createPlaneBoundedVolumeQuery(volumes, mask);
-    }
-
-    void Game::destroy_query(Ogre::SceneQuery* scene_query)
-    {
-        if (scene_query)
-        {
-            m_scene_manager->destroyQuery(scene_query);
-        }
-    }
-
-    Ogre::RaySceneQuery* Game::create_ray_scene_query(const Ogre::Ray& ray) const
-    {
-        auto ray_scene_query = m_scene_manager->createRayQuery(ray);
-
-        ray_scene_query->setSortByDistance(true);
-
-        return ray_scene_query;
-    }
-
-    void Game::destroy_ray_scene_query(Ogre::RaySceneQuery* ray_scene_query)
-    {
-        if (ray_scene_query)
-        {
-            m_scene_manager->destroyQuery(ray_scene_query);
-        }
-    }
-
-    Ogre::SceneNode* Game::create_scene_node() const
-    {
-        return m_scene_manager->getRootSceneNode()->createChildSceneNode();
-    }
-
-    void Game::destroy_scene_node(Ogre::SceneNode* scene_node) const
-    {
-        if (scene_node)
-        {
-            m_scene_manager->destroySceneNode(scene_node);
-        }
     }
 
     void Game::save_options(const std::string& _options)
@@ -589,7 +550,7 @@ namespace Gecko
 
         if (std::filesystem::exists(mesh_path) == false)
         {
-            Ogre::ManualObject* selection = create_manual_object();
+            Ogre::ManualObject* selection = m_map_scene->create_manual_object();
 
             selection->begin(Settings::Material::Default);
 
@@ -634,7 +595,7 @@ namespace Gecko
                 serializer.exportMesh(mesh.get(), mesh_path.string());
             }
 
-            destroy_manual_object(selection);
+            m_map_scene->destroy_manual_object(selection);
         }
     }
 
@@ -648,30 +609,16 @@ namespace Gecko
         }
     }
 
-    void Game::init_scene(const ConfigurationPtr& configuration)
+    void Game::init_scenes(const ConfigurationPtr& configuration)
     {
-        m_scene_manager = getRoot()->createSceneManager();
-        m_scene_manager->addRenderQueueListener(this);
-        m_scene_manager->setAmbientLight(configuration->get_color("ambient.color", Ogre::ColourValue::White));
-        m_scene_manager->setFog(Ogre::FogMode::FOG_EXP2,
-            configuration->get_color("fog.color", Ogre::ColourValue::White),
-            configuration->get_float("fog.density", 0.0f),
-            configuration->get_float("fog.start", 0.0f),
-            configuration->get_float("fog.end", 0.0f)
-        );
-        m_scene_manager->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);
-        m_scene_manager->setSkyBox(true, configuration->get_string("sky.name"), configuration->get_float("sky.distance", 0.0f));
+        m_map_scene = std::make_shared<Scene>(configuration->get_child("Map"));
+        m_editor_scene = std::make_shared<Scene>(configuration->get_child("Editor"));
 
-        Ogre::RTShader::ShaderGenerator::getSingleton().addSceneManager(m_scene_manager);
+        // Set render queue listener for rendering UI.
+        m_map_scene->get_scene_manager()->addRenderQueueListener(this);
 
-        m_light = m_scene_manager->createLight();
-        m_light->setDiffuseColour(configuration->get_color("directional.diffuse.color", Ogre::ColourValue::White));
-        m_light->setSpecularColour(configuration->get_color("directional.specular.color", Ogre::ColourValue::White));
-        m_light->setType(Ogre::Light::LightTypes::LT_DIRECTIONAL);
-
-        m_light_scene_node = create_scene_node();
-        m_light_scene_node->attachObject(m_light);
-        m_light_scene_node->setDirection(configuration->get_vector3("directional.direction"));
+        // Add camera to render window.
+        getRenderWindow()->addViewport(m_map_scene->get_camera(Settings::Camera::Main)->get_camera());
     }
 
     void Game::deinit_maps()
@@ -687,10 +634,11 @@ namespace Gecko
         closeApp();
     }
 
-    void Game::deinit_scene()
+    void Game::deinit_scenes()
     {
-        Ogre::RTShader::ShaderGenerator::getSingleton().removeSceneManager(m_scene_manager);
+        getRenderWindow()->removeAllViewports();
 
-        getRoot()->destroySceneManager(m_scene_manager);
+        m_map_scene.reset();
+        m_editor_scene.reset();
     }
 }

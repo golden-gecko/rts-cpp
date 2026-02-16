@@ -12,18 +12,20 @@ namespace Gecko
         using base_type = Order;
 
     public:
-        static OrderFollow* create();
-        static OrderFollow* create(OrderFollow* memory);
+        // From Initializable.
+        void init() override;
+
+    public:
+        // From Serializable.
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
         static OrderFollow* create(OrderFollow* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderFollow();
         explicit OrderFollow(const OrderFollow& other) = default;
-
-        void init() override;
-
-        ConfigurationPtr serialize() const override;
-        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         const auto& get_path() const

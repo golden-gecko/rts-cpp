@@ -1,9 +1,5 @@
 #include "Gecko/Maps/Map.hpp"
 
-#include "Gecko/Cameras/FreeCamera.hpp"
-#include "Gecko/Cameras/MinimapCamera.hpp"
-#include "Gecko/Cameras/ObjectFollowCamera.hpp"
-#include "Gecko/Cameras/TopDownCamera.hpp"
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Exception.hpp"
 #include "Gecko/Games/Game.hpp"
@@ -15,40 +11,28 @@
 #include "Gecko/Managers/PlayerManager.hpp"
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/Players/Player.hpp"
+#include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Season.hpp"
 
 namespace Gecko
 {
-    MapPtr Map::create()
+    MapPtr Map::create(MapPtr memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
     {
-        return new Map();
-    }
-
-    MapPtr Map::create(MapPtr memory)
-    {
-        return new (memory) Map();
-    }
-
-    MapPtr Map::create(const ConfigurationPtr& configuration)
-    {
-        auto map = new Map();
+        auto map = new (memory) Map(scene);
 
         map->deserialize(configuration);
 
         return map;
     }
 
-    MapPtr Map::create(MapPtr memory, const ConfigurationPtr& configuration)
+    Map::Map(const ScenePtr& scene) :
+        m_scene(scene)
     {
-        auto map = new (memory) Map();
-
-        map->deserialize(configuration);
-
-        return map;
     }
 
     Map::Map(const Map& other) :
-        base_type(other)
+        base_type(other),
+        m_scene(other.m_scene)
     {
         m_name = other.m_name;
 
@@ -67,7 +51,6 @@ namespace Gecko
     {
         base_type::init();
 
-        init_cameras();
         init_layers();
         init_seasons();
 
@@ -79,7 +62,6 @@ namespace Gecko
 
     void Map::deinit()
     {
-        deinit_cameras();
         deinit_layers();
         deinit_seasons();
 
@@ -112,11 +94,6 @@ namespace Gecko
 
     void Map::update(float time)
     {
-        for (auto& [name, camera] : m_cameras)
-        {
-            camera->update(time);
-        }
-
         for (auto& [name, layer] : m_layers)
         {
             layer->update(time);
@@ -141,6 +118,11 @@ namespace Gecko
         {
             layer->show_data_layer(data_layer_name);
         }
+    }
+
+    CameraPtr Map::get_camera(const std::string& name)
+    {
+        return m_scene->get_camera(name);
     }
 
     std::shared_ptr<Layer> Map::get_layer(const std::string& name) const
@@ -177,50 +159,6 @@ namespace Gecko
         {
             layer->set_visible(visible);
         }
-    }
-
-    void Map::init_cameras()
-    {
-        auto cameras_configuration = m_configuration->get_child("cameras");
-
-        for (auto i = cameras_configuration->begin(); i != cameras_configuration->end(); i++)
-        {
-            auto camera_configuration = std::make_shared<Configuration>(*i);
-
-            auto camera_name = camera_configuration->get_string("name");
-            auto camera_type = camera_configuration->get_string("type");
-
-            if (camera_type == "Free")
-            {
-                m_cameras.emplace(camera_name, std::make_shared<FreeCamera>(
-                    Game::getSingleton().getRoot(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
-                ));
-            }
-            else if (camera_type == "Minimap")
-            {
-                m_cameras.emplace(camera_name, std::make_shared<MinimapCamera>(
-                    Game::getSingleton().getRoot(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
-                ));
-            }
-            else if (camera_type == "ObjectFollow")
-            {
-                m_cameras.emplace(camera_name, std::make_shared<ObjectFollowCamera>(
-                    Game::getSingleton().getRoot(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
-                ));
-            }
-            else if (camera_type == "TopDown")
-            {
-                m_cameras.emplace(camera_name, std::make_shared<TopDownCamera>(
-                    Game::getSingleton().getRoot(), Game::getSingleton().get_scene_manager(), camera_name, camera_configuration
-                ));
-            }
-            else
-            {
-                throw Exception("Unknown camera type '" + camera_type + "'.");
-            }
-        }
-
-        Game::getSingleton().getRenderWindow()->addViewport(get_camera(Settings::Camera::Main)->get_camera());
     }
 
     void Map::init_layers()
@@ -341,13 +279,6 @@ namespace Gecko
                 season->init();
             }
         }
-    }
-
-    void Map::deinit_cameras()
-    {
-        Game::getSingleton().getRenderWindow()->removeAllViewports();
-
-        m_cameras.clear();
     }
 
     void Map::deinit_layers()

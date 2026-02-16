@@ -11,18 +11,24 @@ namespace Gecko
         using base_type = Mesh;
 
     public:
-        static Weapon* create(Weapon* memory, const ConfigurationPtr& configuration);
+        // From Initializable.
+        void init() override;
+
+    public:
+        // From Serializable.
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
+        // From Updatable.
+        void update(float time) override;
+
+    public:
+        static Weapon* create(Weapon* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
         explicit Weapon() = default;
         explicit Weapon(const Weapon& other);
-
-        void init() override;
-
-        ConfigurationPtr serialize() const override;
-        void deserialize(const ConfigurationPtr& configuration) override;
-
-        void update(float time) override;
 
     private:
         std::string m_missile_configuration;

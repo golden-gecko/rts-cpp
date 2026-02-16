@@ -49,17 +49,6 @@ namespace Gecko
         }
     }
 
-    Order::Order(order_type::Value type) :
-        m_type(type)
-    {
-    }
-
-    Order::Order(const Order& other) :
-        base_type(other)
-    {
-        m_type = other.m_type;
-    }
-
     void Order::init()
     {
         base_type::init();
@@ -92,5 +81,16 @@ namespace Gecko
 
     void Order::update(float time)
     {
+    }
+
+    Order::Order(order_type::Value type) :
+        m_type(type)
+    {
+    }
+
+    Order::Order(const Order& other) :
+        base_type(other)
+    {
+        m_type = other.m_type;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Gecko
 {
-    Radar* Radar::create(Radar* memory, const ConfigurationPtr& configuration)
+    Radar* Radar::create(Radar* memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
     {
         auto component = new (memory) Radar();
 

@@ -13,11 +13,11 @@ namespace Gecko
         using base_type = Object;
 
     public:
-        static Vehicle* create(Vehicle* memory, const ConfigurationPtr& configuration);
+        static Vehicle* create(Vehicle* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
-        explicit Vehicle() = default;
-        explicit Vehicle(const Vehicle& other) = default;
+        explicit Vehicle(const ScenePtr& scene);
+        explicit Vehicle(const Vehicle& other);
 
     protected:
         OrderStatus on_attack(Order* order, float time) override;

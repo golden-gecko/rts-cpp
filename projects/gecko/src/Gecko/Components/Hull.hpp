@@ -11,7 +11,7 @@ namespace Gecko
         using base_type = Mesh;
 
     public:
-        static Hull* create(Hull* memory, const ConfigurationPtr& configuration);
+        static Hull* create(Hull* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
         explicit Hull() = default;

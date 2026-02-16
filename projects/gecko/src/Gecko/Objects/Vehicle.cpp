@@ -21,13 +21,23 @@
 
 namespace Gecko
 {
-    Vehicle* Vehicle::create(Vehicle* memory, const ConfigurationPtr& configuration)
+    Vehicle* Vehicle::create(Vehicle* memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
     {
-        auto map = new (memory) Vehicle();
+        auto map = new (memory) Vehicle(scene);
 
         map->deserialize(configuration);
 
         return map;
+    }
+
+    Vehicle::Vehicle(const ScenePtr& scene) :
+        base_type(scene)
+    {
+    }
+
+    Vehicle::Vehicle(const Vehicle& other) :
+        base_type(other)
+    {
     }
 
     OrderStatus Vehicle::on_attack(Order* order, float time)

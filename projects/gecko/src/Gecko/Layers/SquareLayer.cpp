@@ -5,6 +5,8 @@
 #include "Gecko/Exception.hpp"
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Log.hpp"
+#include "Gecko/Maps/Map.hpp"
+#include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Math.hpp"
 #include "Gecko/Utils/Texture.hpp"
@@ -50,7 +52,7 @@ namespace Gecko
         deserialize_data_layers(configuration);
 
         // Create scene node.
-        m_scene_node = Game::getSingleton().create_scene_node();
+        m_scene_node = m_owner->get_scene()->create_scene_node();
 
         init_raw_data(configuration);
         init_mesh_data();
@@ -59,7 +61,7 @@ namespace Gecko
 
     SquareLayer::~SquareLayer()
     {
-        Game::getSingleton().destroy_scene_node(m_scene_node);
+        m_owner->get_scene()->destroy_scene_node(m_scene_node);
     }
 
     void SquareLayer::init()

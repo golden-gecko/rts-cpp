@@ -5,6 +5,7 @@
 #include "Gecko/Layers/Layer.hpp"
 #include "Gecko/Maps/Map.hpp"
 #include "Gecko/QueryFlags.hpp"
+#include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Settings.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/File.hpp"
@@ -20,8 +21,8 @@ namespace Gecko
 
     void SquareTile::deinit()
     {
-        Game::getSingleton().destroy_entity(m_entity);
-        Game::getSingleton().destroy_scene_node(m_scene_node);
+        m_owner->get_owner()->get_scene()->destroy_entity(m_entity);
+        m_owner->get_owner()->get_scene()->destroy_scene_node(m_scene_node);
 
         Ogre::MeshManager::getSingleton().remove(get_mesh_name());
     }
@@ -60,7 +61,7 @@ namespace Gecko
             auto start_z = m_tile_position.z * (size - 1);
             auto start_x = m_tile_position.x * (size - 1);
 
-            auto manualObject = Game::getSingleton().create_manual_object();
+            auto manualObject = m_owner->get_owner()->get_scene()->create_manual_object();
             manualObject->begin(material);
 
             for (auto z = start_z; z < start_z + size; ++z)
@@ -109,10 +110,10 @@ namespace Gecko
             }
 
             // Destroy manual object.
-            Game::getSingleton().destroy_manual_object(manualObject);
+            m_owner->get_owner()->get_scene()->destroy_manual_object(manualObject);
         }
 
-        m_entity = Game::getSingleton().create_entity(mesh_name);
+        m_entity = m_owner->get_owner()->get_scene()->create_entity(mesh_name);
         m_entity->setCastShadows(false);
         m_entity->setQueryFlags(QueryFlags::QF_Layer);
 

@@ -5,24 +5,6 @@
 
 namespace Gecko
 {
-    Weapon* Weapon::create(Weapon* memory, const ConfigurationPtr& configuration)
-    {
-        auto component = new (memory) Weapon();
-
-        component->deserialize(configuration);
-
-        return component;
-    }
-
-    Weapon::Weapon(const Weapon& other) :
-        base_type(other),
-        m_missile_configuration(other.m_missile_configuration),
-        m_missiles_fired(other.m_missiles_fired),
-        m_rotation_speed(other.m_rotation_speed),
-        m_reload_timer(other.m_reload_timer)
-    {
-    }
-
     void Weapon::init()
     {
         base_type::init();
@@ -89,5 +71,23 @@ namespace Gecko
             Utils::rotate_node_towards_position(get_scene_node(), target_position, time);
         }
         */
+    }
+
+    Weapon* Weapon::create(Weapon* memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
+    {
+        auto component = new (memory) Weapon();
+
+        component->deserialize(configuration);
+
+        return component;
+    }
+
+    Weapon::Weapon(const Weapon& other) :
+        base_type(other),
+        m_missile_configuration(other.m_missile_configuration),
+        m_missiles_fired(other.m_missiles_fired),
+        m_rotation_speed(other.m_rotation_speed),
+        m_reload_timer(other.m_reload_timer)
+    {
     }
 }

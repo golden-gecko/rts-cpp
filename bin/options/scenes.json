@@ -1,0 +1,142 @@
+{
+    "scenes": {
+        "Editor": {
+            "ambient": {
+                "color": {
+                    "b": 0.2,
+                    "g": 0.2,
+                    "r": 0.2
+                }
+            },
+            "cameras": [
+                {
+                    "distance": 10.0,
+                    "look_at": {
+                        "x": 100.0,
+                        "y": 50.0,
+                        "z": 100.0
+                    },
+                    "name": "Editor",
+                    "position": {
+                        "x": 0.0,
+                        "y": 100.0,
+                        "z": 0.0
+                    },
+                    "type": "ObjectFollow"
+                }
+            ],
+            "directional": {
+                "diffuse": {
+                    "b": 0.65,
+                    "g": 0.15,
+                    "r": 0.15
+                },
+                "direction": {
+                    "x": 0.5,
+                    "y": -1.0,
+                    "z": 0.3
+                },
+                "specular": {
+                    "b": 0.5,
+                    "g": 0.5,
+                    "r": 0.5
+                }
+            },
+            "fog": {
+                "color": {
+                    "b": 0.5,
+                    "g": 0.4,
+                    "r": 0.3
+                },
+                "density": 0.002,
+                "end": 500.0,
+                "start": 100.0
+            },
+            "sky": {
+                "distance": 10.0,
+                "name": "Examples/CloudyNoonSkyBox"
+            }
+        },
+        "Map": {
+            "ambient": {
+                "color": {
+                    "b": 0.2,
+                    "g": 0.2,
+                    "r": 0.2
+                }
+            },
+            "cameras": [
+                {
+                    "look_at": {
+                        "x": 100.0,
+                        "y": 50.0,
+                        "z": 100.0
+                    },
+                    "name": "Main",
+                    "position": {
+                        "x": 0.0,
+                        "y": 100.0,
+                        "z": 0.0
+                    },
+                    "speed": {
+                        "x": 100.0,
+                        "y": 100.0,
+                        "z": 100.0
+                    },
+                    "type": "TopDown"
+                },
+                {
+                    "name": "Minimap",
+                    "projection_type": "orthographic",
+                    "type": "Minimap"
+                },
+                {
+                    "distance": 10.0,
+                    "look_at": {
+                        "x": 100.0,
+                        "y": 50.0,
+                        "z": 100.0
+                    },
+                    "name": "Preview",
+                    "position": {
+                        "x": 0.0,
+                        "y": 100.0,
+                        "z": 0.0
+                    },
+                    "type": "ObjectFollow"
+                }
+            ],
+            "directional": {
+                "diffuse": {
+                    "b": 0.65,
+                    "g": 0.15,
+                    "r": 0.15
+                },
+                "direction": {
+                    "x": 0.5,
+                    "y": -1.0,
+                    "z": 0.3
+                },
+                "specular": {
+                    "b": 0.5,
+                    "g": 0.5,
+                    "r": 0.5
+                }
+            },
+            "fog": {
+                "color": {
+                    "b": 0.5,
+                    "g": 0.4,
+                    "r": 0.3
+                },
+                "density": 0.002,
+                "end": 500.0,
+                "start": 100.0
+            },
+            "sky": {
+                "distance": 10.0,
+                "name": "Examples/CloudyNoonSkyBox"
+            }
+        }
+    }
+}

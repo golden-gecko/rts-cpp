@@ -2,6 +2,7 @@
 
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Players/Player.hpp"
+#include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Settings.hpp"
 #include "Gecko/Utils/Convert.hpp"
 
@@ -11,7 +12,8 @@ namespace Gecko
     {
     }
 
-    SelectionBoxWidget::SelectionBoxWidget()
+    SelectionBoxWidget::SelectionBoxWidget(const ScenePtr& scene) :
+        m_scene(scene)
     {
         std::string color;
 
@@ -24,7 +26,7 @@ namespace Gecko
             color = Settings::Material::Default;
         }
 
-        m_manual_object = Game::getSingleton().create_manual_object();
+        m_manual_object = m_scene->create_manual_object();
         m_manual_object->setBoundingBox(Ogre::AxisAlignedBox::BOX_INFINITE);
         m_manual_object->setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_OVERLAY);
         m_manual_object->setUseIdentityProjection(true);
@@ -43,7 +45,7 @@ namespace Gecko
         m_manual_object->textureCoord(0.0f, 0.0f);
         m_manual_object->end();
 
-        m_scene_node = Game::getSingleton().create_scene_node();
+        m_scene_node = m_scene->create_scene_node();
         m_scene_node->attachObject(m_manual_object);
 
         set_visible(false);
@@ -51,8 +53,8 @@ namespace Gecko
 
     SelectionBoxWidget::~SelectionBoxWidget()
     {
-        Game::getSingleton().destroy_manual_object(m_manual_object);
-        Game::getSingleton().destroy_scene_node(m_scene_node);
+        m_scene->destroy_manual_object(m_manual_object);
+        m_scene->destroy_scene_node(m_scene_node);
     }
 
     void SelectionBoxWidget::update()

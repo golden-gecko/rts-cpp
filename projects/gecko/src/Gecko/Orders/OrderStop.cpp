@@ -2,16 +2,6 @@
 
 namespace Gecko
 {
-    OrderStop* OrderStop::create()
-    {
-        return new OrderStop();
-    }
-
-    OrderStop* OrderStop::create(OrderStop* memory)
-    {
-        return new (memory) OrderStop();
-    }
-
     OrderStop* OrderStop::create(OrderStop* memory, const ConfigurationPtr& configuration)
     {
         auto order = new (memory) OrderStop();

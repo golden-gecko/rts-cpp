@@ -5,6 +5,7 @@
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/QueryFlags.hpp"
+#include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Utils/Mesh.hpp"
 #include "Gecko/Utils/Utils.hpp"
 
@@ -37,7 +38,7 @@ namespace Gecko
         m_scene_node->setScale(scale);
     }
 
-    Mesh* Mesh::create(Mesh* memory, const ConfigurationPtr& m_configuration)
+    Mesh* Mesh::create(Mesh* memory, const ConfigurationPtr& m_configuration, const ScenePtr& scene)
     {
         auto component = new (memory) Mesh();
 
@@ -51,7 +52,7 @@ namespace Gecko
     {
         if (other.m_entity)
         {
-            m_entity = Utils::Mesh::copy_entity(*other.m_entity);
+            m_entity = Utils::Mesh::copy_entity(m_scene, other.m_entity);
 
             if (get_owner())
             {
@@ -62,15 +63,15 @@ namespace Gecko
         // TODO: Scene node is created at the same parent? Should be created from new owner.
         if (other.m_scene_node)
         {
-            m_scene_node = Utils::Mesh::copy_scene_node(*other.m_scene_node);
+            m_scene_node = Utils::Mesh::copy_scene_node(other.m_scene_node);
             m_scene_node->attachObject(m_entity);
         }
     }
 
     Mesh::~Mesh()
     {
-        Game::getSingleton().destroy_scene_node(m_scene_node);
-        Game::getSingleton().destroy_entity(m_entity);
+        m_scene->destroy_scene_node(m_scene_node);
+        m_scene->destroy_entity(m_entity);
     }
 
     Ogre::Vector3 Mesh::get_direction() const
@@ -95,7 +96,7 @@ namespace Gecko
 
     void Mesh::load_from_file()
     {
-        m_entity = Game::getSingleton().create_entity(m_configuration->get_string("mesh.name"));
+        m_entity = m_scene->create_entity(m_configuration->get_string("mesh.name"));
         m_entity->setQueryFlags(QueryFlags::QF_Object);
         m_entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
     }
@@ -199,7 +200,7 @@ namespace Gecko
                     throw Exception("Normals has different size than vertices.");
                 }
 
-                auto mesh = Game::getSingleton().create_manual_object();
+                auto mesh = m_scene->create_manual_object();
                 auto material_name = m_configuration->get_string("mesh.material_name", "white");
 
                 mesh->begin(material_name);
@@ -233,11 +234,11 @@ namespace Gecko
                 }
 
                 // Destroy manual object.
-                Game::getSingleton().destroy_manual_object(mesh);
+                m_scene->destroy_manual_object(mesh);
             }
         }
 
-        m_entity = Game::getSingleton().create_entity(mesh_name);
+        m_entity =m_scene->create_entity(mesh_name);
         m_entity->setQueryFlags(QueryFlags::QF_Object);
         m_entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
     }

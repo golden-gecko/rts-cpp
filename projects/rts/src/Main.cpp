@@ -58,11 +58,11 @@ int main(int argc, char* argv[])
     auto skill_manager = std::make_unique<Gecko::SkillManager>();
 
     skill_manager->init(configuration);
-    component_manager->init(configuration);
+    component_manager->init(configuration, game->get_map_scene());
     order_manager->init(configuration);
     player_manager->init(configuration);
-    object_manager->init(configuration);
-    map_manager->init(configuration);
+    object_manager->init(configuration, game->get_map_scene());
+    map_manager->init(configuration, game->get_map_scene());
 
     // Load map.
     game->load_map(map_name);
@@ -73,6 +73,7 @@ int main(int argc, char* argv[])
 
     // Initialize other system.
     technology_tree->init();
+    ui->m_scene = game->get_map_scene(); // TODO: Remove.
     ui->init();
 
     // Run game.

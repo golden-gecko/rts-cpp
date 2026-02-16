@@ -17,7 +17,7 @@ Gecko::ComponentManager* Ogre::Singleton<Gecko::ComponentManager>::msSingleton =
 
 namespace Gecko
 {
-    void ComponentManager::init(const ConfigurationPtr& configuration)
+    void ComponentManager::init(const ConfigurationPtr& configuration, const ScenePtr& scene)
     {
         L_TIME("ComponentManager::init()");
 
@@ -32,56 +32,56 @@ namespace Gecko
 
             if (type == "Armour")
             {
-                auto factory = std::bind(Armour::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Armour::create, std::placeholders::_1, configuration, scene);
 
                 component_manager.register_type<Armour>(name, factory);
                 component_manager.allocate(name, max_size);
             }
             else if (type == "Debug")
             {
-                auto factory = std::bind(Debug::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Debug::create, std::placeholders::_1, configuration, scene);
 
                 component_manager.register_type<Debug>(name, factory);
                 component_manager.allocate(name, max_size);
             }
             else if (type == "Drive")
             {
-                auto factory = std::bind(Drive::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Drive::create, std::placeholders::_1, configuration, scene);
 
                 component_manager.register_type<Drive>(name, factory);
                 component_manager.allocate(name, max_size);
             }
             else if (type == "Hull")
             {
-                auto factory = std::bind(Hull::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Hull::create, std::placeholders::_1, configuration, scene);
 
                 component_manager.register_type<Hull>(name, factory);
                 component_manager.allocate(name, max_size);
             }
             else if (type == "Radar")
             {
-                auto factory = std::bind(Radar::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Radar::create, std::placeholders::_1, configuration, scene);
 
                 component_manager.register_type<Radar>(name, factory);
                 component_manager.allocate(name, max_size);
             }
             else if (type == "Shield")
             {
-                auto factory = std::bind(Shield::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Shield::create, std::placeholders::_1, configuration, scene);
 
                 component_manager.register_type<Shield>(name, factory);
                 component_manager.allocate(name, max_size);
             }
             else if (type == "Storage")
             {
-                auto factory = std::bind(Storage::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Storage::create, std::placeholders::_1, configuration, scene);
 
                 component_manager.register_type<Storage>(name, factory);
                 component_manager.allocate(name, max_size);
             }
             else if (type == "Weapon")
             {
-                auto factory = std::bind(Weapon::create, std::placeholders::_1, configuration);
+                auto factory = std::bind(Weapon::create, std::placeholders::_1, configuration, scene);
 
                 component_manager.register_type<Weapon>(name, factory);
                 component_manager.allocate(name, max_size);

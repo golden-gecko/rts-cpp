@@ -28,7 +28,7 @@ namespace Gecko
         void ProcessEvent(Rml::Event& event) override;
 
     public:
-        explicit CursorWidget();
+        explicit CursorWidget(const ScenePtr& scene);
 
         ~CursorWidget() override;
 
@@ -51,6 +51,7 @@ namespace Gecko
         void set_visible(bool visible);
 
     private:
+        ScenePtr m_scene;
         Navigation::Coordinate m_position;
 
         bool m_visible = false;

@@ -9,6 +9,7 @@
 #include "Gecko/Objects/Missile.hpp"
 #include "Gecko/Objects/Vehicle.hpp"
 #include "Gecko/QueryFlags.hpp"
+#include "Gecko/Scenes/Scene.hpp"
 
 namespace Gecko
 {
@@ -16,20 +17,21 @@ namespace Gecko
     {
     }
 
-    CursorWidget::CursorWidget()
+    CursorWidget::CursorWidget(const ScenePtr& scene) :
+        m_scene(scene)
     {
-        m_square = Game::getSingleton().create_manual_object();
+        m_square = m_scene->create_manual_object();
         m_square->setQueryFlags(QueryFlags::QF_Cursor);
 
-        m_scene_node = Game::getSingleton().create_scene_node();
+        m_scene_node = m_scene->create_scene_node();
         m_scene_node->attachObject(m_square);
         m_scene_node->setPosition(Settings::UI::CursorOffset);
     }
 
     CursorWidget::~CursorWidget()
     {
-        Game::getSingleton().destroy_scene_node(m_scene_node);
-        Game::getSingleton().destroy_manual_object(m_square);
+        m_scene->destroy_scene_node(m_scene_node);
+        m_scene->destroy_manual_object(m_square);
     }
 
     void CursorWidget::set_mesh(const ConfigurationPtr& configuration)
@@ -49,7 +51,7 @@ namespace Gecko
 
             if (type == "Factory")
             {
-                auto object = std::make_unique<Factory>();
+                auto object = std::make_unique<Factory>(m_scene);
 
                 object->deserialize(configuration);
                 object->set_visible(true);
@@ -59,7 +61,7 @@ namespace Gecko
             }
             else if (type == "Missile")
             {
-                auto object = std::make_unique<Missile>();
+                auto object = std::make_unique<Missile>(m_scene);
 
                 object->deserialize(configuration);
                 object->set_visible(true);
@@ -69,7 +71,7 @@ namespace Gecko
             }
             else if (type == "Object")
             {
-                auto object = std::make_unique<Object>();
+                auto object = std::make_unique<Object>(m_scene);
 
                 object->deserialize(configuration);
                 object->set_visible(true);
@@ -79,7 +81,7 @@ namespace Gecko
             }
             else if (type == "Vehicle")
             {
-                auto object = std::make_unique<Vehicle>();
+                auto object = std::make_unique<Vehicle>(m_scene);
 
                 object->deserialize(configuration);
                 object->set_visible(true);

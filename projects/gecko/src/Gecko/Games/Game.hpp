@@ -36,6 +36,9 @@ namespace Gecko
         ~Game() override = default;
 
     public:
+        Ogre::SceneManager* create_scene_manager() const;
+        void destroy_scene_manager(Ogre::SceneManager* scene_manager) const;
+
         void load_map(const std::string& map_name);
         void load_save(const std::string& save_name);
         void quit();
@@ -43,21 +46,6 @@ namespace Gecko
         void save();
         void stop();
         void unload_map();
-
-        Ogre::Entity* create_entity(const std::string& name) const;
-        void destroy_entity(Ogre::Entity* entity) const;
-
-        Ogre::ManualObject* create_manual_object() const;
-        void destroy_manual_object(Ogre::ManualObject* manual_object) const;
-
-        Ogre::PlaneBoundedVolumeListSceneQuery* create_plane_volume_query(const Ogre::PlaneBoundedVolumeList& volumes, Ogre::uint32 mask) const;
-        void destroy_query(Ogre::SceneQuery* scene_query);
-
-        Ogre::RaySceneQuery* create_ray_scene_query(const Ogre::Ray& ray) const;
-        void destroy_ray_scene_query(Ogre::RaySceneQuery* ray_scene_query);
-
-        Ogre::SceneNode* create_scene_node() const;
-        void destroy_scene_node(Ogre::SceneNode* scene_node) const;
 
         void save_options(const std::string& options);
         void load_options();
@@ -76,9 +64,9 @@ namespace Gecko
             return m_configuration;
         }
 
-        auto get_frame_number() const
+        unsigned long get_frame_number() const
         {
-            return getRoot()->getNextFrameNumber() - 1;
+            return getRoot()->getNextFrameNumber();
         }
 
         std::vector<std::string> get_maps() const;
@@ -90,9 +78,9 @@ namespace Gecko
 
         std::vector<std::string> get_saves() const;
 
-        Ogre::SceneManager* get_scene_manager() const
+        const ScenePtr& get_map_scene()
         {
-            return m_scene_manager;
+            return m_map_scene;
         }
 
     public:
@@ -106,19 +94,19 @@ namespace Gecko
         Id m_active_map_id;
         Id m_active_player_id;
 
-    private:
-        Ogre::SceneManager* m_scene_manager    = nullptr;
-        Ogre::Light*        m_light            = nullptr;
-        Ogre::SceneNode*    m_light_scene_node = nullptr;
+        MapPtr    m_active_map    = nullptr;
+        PlayerPtr m_active_player = nullptr;
 
-        MapPtr m_active_map = nullptr;
+    private:
+        ScenePtr m_map_scene;
+        ScenePtr m_editor_scene;
 
         void init_meshes();
         void init_root();
-        void init_scene(const ConfigurationPtr& configuration);
+        void init_scenes(const ConfigurationPtr& configuration);
 
         void deinit_maps();
         void deinit_root();
-        void deinit_scene();
+        void deinit_scenes();
     };
 }

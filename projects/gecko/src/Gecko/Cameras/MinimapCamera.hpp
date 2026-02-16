@@ -11,6 +11,6 @@ namespace Gecko
         using base_type = Camera;
 
     public:
-        explicit MinimapCamera(Ogre::Root* root, Ogre::SceneManager* scene_manager, const std::string& name, const ConfigurationPtr& configuration);
+        explicit MinimapCamera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration);
     };
 }

@@ -12,7 +12,7 @@ namespace Gecko
 		void ProcessEvent(Rml::Event& event) override;
 
     public:
-        explicit SelectionBoxWidget();
+        explicit SelectionBoxWidget(const ScenePtr& scene);
 
         ~SelectionBoxWidget() override;
 
@@ -51,6 +51,8 @@ namespace Gecko
         }
 
     private:
+        ScenePtr m_scene;
+
         Ogre::ManualObject* m_manual_object = nullptr;
         Ogre::SceneNode*    m_scene_node    = nullptr;
 

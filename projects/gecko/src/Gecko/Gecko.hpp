@@ -151,6 +151,11 @@ namespace Gecko
     class OrderUnload;
     class OrderWait;
 
+    // Scenes
+    class EditorScene;
+    class MapScene;
+    class Scene;
+
     // Widgets
     class ConfigurationsWidget;
     class ConsoleWidget;
@@ -181,6 +186,7 @@ namespace Gecko
     using PlayerPtr = Player*;
     using ResourcePtr = std::shared_ptr<Resource>;
     using ResourcesPtr = std::shared_ptr<Resources>;
+    using ScenePtr = std::shared_ptr<Scene>;
     using SeasonPtr = std::shared_ptr<Season>;
     using TechnologyPtr = std::shared_ptr<Technology>;
 
