@@ -7,20 +7,6 @@
 
 namespace Gecko
 {
-    OrderUnload* OrderUnload::create(OrderUnload* memory, const ConfigurationPtr& configuration)
-    {
-        auto order = new (memory) OrderUnload();
-
-        order->deserialize(configuration);
-
-        return order;
-    }
-
-    OrderUnload::OrderUnload() :
-        base_type(order_type::Value::Unload)
-    {
-    }
-
     void OrderUnload::init()
     {
         base_type::init();
@@ -48,6 +34,20 @@ namespace Gecko
         m_target_id = configuration->get_int("target_id", Id::Empty.get());
         m_resource_name = configuration->get_string("resource_name", "");
         m_resource_value = configuration->get_float("resource_value", 0.0f);
+    }
+
+    OrderUnload* OrderUnload::create(OrderUnload* memory, const ConfigurationPtr& configuration)
+    {
+        auto order = new (memory) OrderUnload();
+
+        order->deserialize(configuration);
+
+        return order;
+    }
+
+    OrderUnload::OrderUnload() :
+        base_type(order_type::Value::Unload)
+    {
     }
 
     std::vector<std::shared_ptr<Indicator>> OrderUnload::generate_indicators(int order_number) const

@@ -5,20 +5,6 @@
 
 namespace Gecko
 {
-    OrderAttack* OrderAttack::create(OrderAttack* memory, const ConfigurationPtr& configuration)
-    {
-        auto order = new (memory) OrderAttack();
-
-        order->deserialize(configuration);
-
-        return order;
-    }
-
-    OrderAttack::OrderAttack() :
-        base_type(order_type::Value::Attack)
-    {
-    }
-
     void OrderAttack::init()
     {
         base_type::init();
@@ -43,5 +29,19 @@ namespace Gecko
 
         m_target_id = configuration->get_int("m_target_id", Id::Empty.get());
         m_target_position = configuration->get_vector3("m_target_position", Ogre::Vector3::ZERO);
+    }
+
+    OrderAttack* OrderAttack::create(OrderAttack* memory, const ConfigurationPtr& configuration)
+    {
+        auto order = new (memory) OrderAttack();
+
+        order->deserialize(configuration);
+
+        return order;
+    }
+
+    OrderAttack::OrderAttack() :
+        base_type(order_type::Value::Attack)
+    {
     }
 }

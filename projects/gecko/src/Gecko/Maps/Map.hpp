@@ -11,19 +11,25 @@ namespace Gecko
         using base_type = Item;
 
     public:
+        // From Initializable.
+        void init() override;
+        void deinit() override;
+
+    public:
+        // From Serializable.
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
+        // From Updatable.
+        void update(float time) override;
+
+    public:
         static MapPtr create(MapPtr memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
         explicit Map(const ScenePtr& scene);
         explicit Map(const Map& other);
-
-        void init() override;
-        void deinit() override;
-
-        ConfigurationPtr serialize() const override;
-        void deserialize(const ConfigurationPtr& configuration) override;
-
-        void update(float time) override;
 
     public:
         bool is_position_valid(const Ogre::Vector3& position) const;

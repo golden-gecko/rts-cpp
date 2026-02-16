@@ -26,10 +26,9 @@ namespace Gecko
 
         ~UI() override = default;
 
-        void render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation);
-
     public:
         void change_visibility(const std::string& type, bool visible);
+        void render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation);
 
         bool inject_key_press(Rml::Input::KeyIdentifier key);
         bool inject_key_release(Rml::Input::KeyIdentifier key);

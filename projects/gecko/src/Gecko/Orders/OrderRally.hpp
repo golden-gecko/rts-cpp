@@ -11,16 +11,20 @@ namespace Gecko
         using base_type = Order;
 
     public:
+        // From Initializable.
+        void init() override;
+
+    public:
+        // From Serializable.
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
         static OrderRally* create(OrderRally* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderRally();
         explicit OrderRally(const OrderRally& other) = default;
-
-        void init() override;
-
-        ConfigurationPtr serialize() const override;
-        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         const auto& get_target_position() const

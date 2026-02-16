@@ -199,6 +199,18 @@ namespace Gecko
     {
     }
 
+    void UI::change_visibility(const std::string& type, bool visible)
+    {
+        /*
+        auto objects = ObjectManager::getSingleton().get_by_configuration_name(type);
+
+        for (const auto& [id, object] : objects)
+        {
+        object->set_visible(visible);
+        }
+        */
+    }
+
     void UI::render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
     {
         // L_TIME("UI::render()");
@@ -258,18 +270,6 @@ namespace Gecko
 
         m_context->Update();
         m_context->Render();
-    }
-
-    void UI::change_visibility(const std::string& type, bool visible)
-    {
-        /*
-        auto objects = ObjectManager::getSingleton().get_by_configuration_name(type);
-
-        for (const auto& [id, object] : objects)
-        {
-        object->set_visible(visible);
-        }
-        */
     }
 
     /*

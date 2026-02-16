@@ -7,20 +7,6 @@
 
 namespace Gecko
 {
-    OrderLoad* OrderLoad::create(OrderLoad* memory, const ConfigurationPtr& configuration)
-    {
-        auto order = new (memory) OrderLoad();
-
-        order->deserialize(configuration);
-
-        return order;
-    }
-
-    OrderLoad::OrderLoad() :
-        base_type(order_type::Value::Load)
-    {
-    }
-
     void OrderLoad::init()
     {
         base_type::init();
@@ -48,6 +34,20 @@ namespace Gecko
         target_id = configuration->get_int("target_id", Id::Empty.get());
         resource_name = configuration->get_string("resource_name", "");
         resource_value = configuration->get_float("resource_value", 0.0f);
+    }
+
+    OrderLoad* OrderLoad::create(OrderLoad* memory, const ConfigurationPtr& configuration)
+    {
+        auto order = new (memory) OrderLoad();
+
+        order->deserialize(configuration);
+
+        return order;
+    }
+
+    OrderLoad::OrderLoad() :
+        base_type(order_type::Value::Load)
+    {
     }
 
     std::vector<std::shared_ptr<Indicator>> OrderLoad::generate_indicators(int order_number) const

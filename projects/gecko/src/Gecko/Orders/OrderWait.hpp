@@ -12,16 +12,20 @@ namespace Gecko
         using base_type = Order;
 
     public:
+        // From Initializable.
+        void init() override;
+
+    public:
+        // From Serializable.
+        ConfigurationPtr serialize() const override;
+        void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
         static OrderWait* create(OrderWait* memory, const ConfigurationPtr& configuration);
 
     public:
         explicit OrderWait();
         explicit OrderWait(const OrderWait& other) = default;
-
-        void init() override;
-
-        ConfigurationPtr serialize() const override;
-        void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
         auto& get_wait_timer()

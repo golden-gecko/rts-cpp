@@ -4,20 +4,6 @@
 
 namespace Gecko
 {
-    OrderGuard* OrderGuard::create(OrderGuard* memory, const ConfigurationPtr& configuration)
-    {
-        auto order = new (memory) OrderGuard();
-
-        order->deserialize(configuration);
-
-        return order;
-    }
-
-    OrderGuard::OrderGuard() :
-        base_type(order_type::Value::Guard)
-    {
-    }
-
     void OrderGuard::init()
     {
         base_type::init();
@@ -45,5 +31,19 @@ namespace Gecko
         target_id = configuration->get_int("target_id", Id::Empty.get());
         target_position = configuration->get_vector3("target_position", Ogre::Vector3::ZERO);
         path = configuration->get_path("path", Navigation::Path());
+    }
+
+    OrderGuard* OrderGuard::create(OrderGuard* memory, const ConfigurationPtr& configuration)
+    {
+        auto order = new (memory) OrderGuard();
+
+        order->deserialize(configuration);
+
+        return order;
+    }
+
+    OrderGuard::OrderGuard() :
+        base_type(order_type::Value::Guard)
+    {
     }
 }

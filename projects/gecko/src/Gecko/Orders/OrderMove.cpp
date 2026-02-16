@@ -9,20 +9,6 @@
 
 namespace Gecko
 {
-    OrderMove* OrderMove::create(OrderMove* memory, const ConfigurationPtr& configuration)
-    {
-        auto order = new (memory) OrderMove();
-
-        order->deserialize(configuration);
-
-        return order;
-    }
-
-    OrderMove::OrderMove() :
-        base_type(order_type::Value::Move)
-    {
-    }
-
     void OrderMove::init()
     {
         base_type::init();
@@ -47,6 +33,20 @@ namespace Gecko
 
         target_position = configuration->get_vector3("target_position", Ogre::Vector3::ZERO);
         path = configuration->get_path("path", Navigation::Path());
+    }
+
+    OrderMove* OrderMove::create(OrderMove* memory, const ConfigurationPtr& configuration)
+    {
+        auto order = new (memory) OrderMove();
+
+        order->deserialize(configuration);
+
+        return order;
+    }
+
+    OrderMove::OrderMove() :
+        base_type(order_type::Value::Move)
+    {
     }
 
     std::vector<std::shared_ptr<Indicator>> OrderMove::generate_indicators(int order_number) const
