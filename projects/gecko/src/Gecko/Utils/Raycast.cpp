@@ -12,12 +12,17 @@
 
 namespace Gecko
 {
-    Ogre::Ray create_ray(const OIS::MouseEvent& arg)
+    std::optional<Ogre::Ray> create_ray(const ScenePtr& scene, const OIS::MouseEvent& arg)
     {
         auto x = static_cast<float>(arg.state.X.abs) / static_cast<float>(arg.state.width);
         auto y = static_cast<float>(arg.state.Y.abs) / static_cast<float>(arg.state.height);
 
-        return MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::Main)->get_camera()->getCameraToViewportRay(x, y);
+        if (CameraPtr camera = scene->get_camera(Settings::Camera::Main))
+        {
+            return camera->get_camera()->getCameraToViewportRay(x, y);
+        }
+
+        return {};
     }
 
     std::set<Id> from_plane(const ScenePtr& scene, const Ogre::Vector2& start, const Ogre::Vector2& end, Ogre::uint32 query_mask)
@@ -91,12 +96,7 @@ namespace Gecko
 
     std::optional<std::pair<Ogre::Entity*, Ogre::Vector3>> from_point(const ScenePtr& scene, const Ogre::Ray& ray, Ogre::uint32 query_mask)
     {
-        static auto m_pray_scene_query = scene->create_ray_scene_query(ray);
-
-        m_pray_scene_query->setRay(ray);
-        m_pray_scene_query->setSortByDistance(true);
-        m_pray_scene_query->setQueryMask(query_mask);
-
+        auto m_pray_scene_query = scene->create_ray_scene_query(ray, query_mask);
         auto& query_result = m_pray_scene_query->execute();
 
         // execute the query, returns a vector of hits
@@ -207,26 +207,25 @@ namespace Gecko
 
 namespace Gecko::Utils::Raycast
 {
-    std::optional<std::pair<Layer*, Ogre::Vector3>> to_layer(const ScenePtr& scene, const OIS::MouseEvent& arg)
+    LayerRaycastResults to_layer(const ScenePtr& scene, const OIS::MouseEvent& arg)
     {
-        return to_layer(scene, create_ray(arg));
+        return to_layer(scene, create_ray(scene, arg));
     }
 
-    std::optional<std::pair<Id, Ogre::Vector3>> to_object(const ScenePtr& scene, const OIS::MouseEvent& arg)
+    ObjectRaycastResults to_object(const ScenePtr& scene, const OIS::MouseEvent& arg)
     {
-        return to_object(scene, create_ray(arg));
+        return to_object(scene, create_ray(scene, arg));
     }
 
-    std::optional<std::pair<Layer*, Ogre::Vector3>> to_layer(const ScenePtr& scene, const Ogre::Ray& ray)
+    LayerRaycastResults to_layer(const ScenePtr& scene, const std::optional<Ogre::Ray>& ray)
     {
-        auto result = from_point(scene, ray, QueryFlags::QF_Layer);
+        if (ray.has_value() == false)
+        {
+            return {};
+        }
 
-        static auto m_pray_scene_query = scene->create_ray_scene_query(ray);
-
-        m_pray_scene_query->setRay(ray);
-        m_pray_scene_query->setSortByDistance(true);
-        m_pray_scene_query->setQueryMask(QueryFlags::QF_Layer);
-
+        auto result = from_point(scene, ray.value(), QueryFlags::QF_Layer);
+        auto m_pray_scene_query = scene->create_ray_scene_query(ray.value(), QueryFlags::QF_Layer);
         auto& query_result = m_pray_scene_query->execute();
 
         // execute the query, returns a vector of hits
@@ -289,7 +288,7 @@ namespace Gecko::Utils::Raycast
                 for (int i = 0; i < static_cast<int>(index_count); i += 3)
                 {
                     // check for a hit against this triangle
-                    std::pair<bool, Ogre::Real> hit = Ogre::Math::intersects(ray,
+                    std::pair<bool, Ogre::Real> hit = Ogre::Math::intersects(ray.value(),
                         vertices[indices[i]],
                         vertices[indices[i + 1]],
                         vertices[indices[i + 2]], true, false);
@@ -315,11 +314,13 @@ namespace Gecko::Utils::Raycast
                 // closest_result before moving on to the next object.
                 if (new_closest_found)
                 {
-                    closest_result = ray.getPoint(closest_distance);
+                    closest_result = ray.value().getPoint(closest_distance);
                     closest_pentity = pentity;
                 }
             }
         }
+
+        scene->destroy_ray_scene_query(m_pray_scene_query);
 
         // return the result
         if (closest_distance >= 0.0f)
@@ -341,14 +342,14 @@ namespace Gecko::Utils::Raycast
         }
     }
 
-    std::optional<std::pair<Id, Ogre::Vector3>> to_object(const ScenePtr& scene, const Ogre::Ray& ray)
+    ObjectRaycastResults to_object(const ScenePtr& scene, const std::optional<Ogre::Ray>& ray)
     {
-        static auto m_pray_scene_query = scene->create_ray_scene_query(ray);
+        if (ray.has_value() == false)
+        {
+            return {};
+        }
 
-        m_pray_scene_query->setRay(ray);
-        m_pray_scene_query->setSortByDistance(true);
-        m_pray_scene_query->setQueryMask(QueryFlags::QF_Object);
-
+        auto m_pray_scene_query = scene->create_ray_scene_query(ray.value(), QueryFlags::QF_Object);
         auto& query_result = m_pray_scene_query->execute();
 
         // execute the query, returns a vector of hits
@@ -411,7 +412,7 @@ namespace Gecko::Utils::Raycast
                 for (std::size_t i = 0; i < index_count; i += 3)
                 {
                     // check for a hit against this triangle
-                    std::pair<bool, Ogre::Real> hit = Ogre::Math::intersects(ray,
+                    std::pair<bool, Ogre::Real> hit = Ogre::Math::intersects(ray.value(),
                         vertices[indices[i]],
                         vertices[indices[i + 1]],
                         vertices[indices[i + 2]], true, false);
@@ -437,11 +438,13 @@ namespace Gecko::Utils::Raycast
                 // closest_result before moving on to the next object.
                 if (new_closest_found)
                 {
-                    closest_result = ray.getPoint(closest_distance);
+                    closest_result = ray.value().getPoint(closest_distance);
                     closest_pentity = pentity;
                 }
             }
         }
+
+        scene->destroy_ray_scene_query(m_pray_scene_query);
 
         // return the result
         if (closest_distance >= 0.0f)

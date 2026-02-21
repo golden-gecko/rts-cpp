@@ -23,11 +23,6 @@ namespace Gecko
         explicit Technology() = default;
 
     public:
-        bool is_locked() const
-        {
-            return m_locked;
-        }
-
         void research()
         {
             m_in_research = true;
@@ -36,6 +31,12 @@ namespace Gecko
         void unlock()
         {
             m_locked = false;
+        }
+
+    public:
+        bool is_locked() const
+        {
+            return m_locked;
         }
 
     private:

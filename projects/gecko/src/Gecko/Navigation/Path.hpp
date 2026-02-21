@@ -7,7 +7,7 @@ namespace Gecko::Navigation
     class Path
     {
     public:
-        typedef std::deque<Coordinate> Points;
+        using Points = std::deque<Coordinate>;
 
     public:
         explicit Path() = default;
@@ -15,12 +15,15 @@ namespace Gecko::Navigation
         explicit Path(const Points& points);
 
     public:
-        auto& get_points()
+        std::string to_string() const;
+
+    public:
+        Points& get_points()
         {
             return m_points;
         }
 
-        const auto& get_points() const
+        const Points& get_points() const
         {
             return m_points;
         }
@@ -30,9 +33,6 @@ namespace Gecko::Navigation
         {
             m_points = points;
         }
-
-    public:
-        std::string to_string() const;
 
     private:
         Coordinate m_start;

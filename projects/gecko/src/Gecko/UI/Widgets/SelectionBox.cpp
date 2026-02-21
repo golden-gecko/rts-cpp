@@ -1,7 +1,6 @@
 #include "Gecko/UI/Widgets/SelectionBox.hpp"
 
 #include "Gecko/Games/Game.hpp"
-#include "Gecko/Players/Player.hpp"
 #include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Settings.hpp"
 #include "Gecko/Utils/Convert.hpp"
@@ -15,24 +14,13 @@ namespace Gecko
     SelectionBoxWidget::SelectionBoxWidget(const ScenePtr& scene) :
         m_scene(scene)
     {
-        std::string color;
-
-        if (PlayerPtr player = Game::getSingleton().get_active_player())
-        {
-            color = player->get_color();
-        }
-        else
-        {
-            color = Settings::Material::Default;
-        }
-
         m_manual_object = m_scene->create_manual_object();
         m_manual_object->setBoundingBox(Ogre::AxisAlignedBox::BOX_INFINITE);
         m_manual_object->setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_OVERLAY);
         m_manual_object->setUseIdentityProjection(true);
         m_manual_object->setUseIdentityView(true);
 
-        m_manual_object->begin("selection_" + color, Ogre::RenderOperation::OperationType::OT_LINE_STRIP);
+        m_manual_object->begin("selection_" + Settings::Material::Default, Ogre::RenderOperation::OperationType::OT_LINE_STRIP);
         m_manual_object->position(0.0f, 0.0f, 0.0f);
         m_manual_object->textureCoord(0.0f, 0.0f);
         m_manual_object->position(1.0f, 0.0f, 0.0f);
@@ -115,5 +103,15 @@ namespace Gecko
     bool SelectionBoxWidget::is_visible() const
     {
         return m_manual_object->isVisible();
+    }
+
+    void SelectionBoxWidget::set_color(const std::string& color)
+    {
+        m_manual_object->setMaterialName(0, "selection_" + color);
+    }
+
+    void SelectionBoxWidget::set_visible(bool visible)
+    {
+        m_scene_node->setVisible(visible);
     }
 }

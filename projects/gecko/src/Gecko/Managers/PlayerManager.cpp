@@ -47,4 +47,17 @@ namespace Gecko
     {
         deallocate();
     }
+
+    PlayerPtr PlayerManager::get_by_configuration_name(const std::string& name) const
+    {
+        for (const auto& [_, player] : m_items)
+        {
+            if (player->get_configuration()->get_name() == name)
+            {
+                return player;
+            }
+        }
+
+        return nullptr;
+    }
 }

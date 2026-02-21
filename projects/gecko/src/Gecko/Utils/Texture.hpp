@@ -4,12 +4,7 @@ namespace Gecko::Utils::Texture
 {
     void clear(const Ogre::TexturePtr& texture, std::uint8_t value = 0);
 
-    Ogre::TexturePtr create(
-        const std::string& name,
-        int size,
-        Ogre::PixelFormat format = Ogre::PixelFormat::PF_R8G8B8A8,
-        Ogre::TextureUsage usage = Ogre::TextureUsage::TU_DEFAULT
-    );
+    Ogre::TexturePtr create(const std::string& name, int size, Ogre::PixelFormat format = Ogre::PixelFormat::PF_R8G8B8A8, Ogre::TextureUsage usage = Ogre::TextureUsage::TU_DEFAULT);
 
     Ogre::TexturePtr get(const std::string& texture_name);
 

@@ -194,7 +194,7 @@ namespace Gecko::Utils::Convert
 
     Layer* to_layer(Ogre::Entity* entity)
     {
-        const auto& user_any = entity->getUserObjectBindings().getUserAny();
+        const Ogre::Any& user_any = entity->getUserObjectBindings().getUserAny();
 
         if (user_any.isEmpty())
         {

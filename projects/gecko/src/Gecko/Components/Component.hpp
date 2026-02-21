@@ -62,6 +62,11 @@ namespace Gecko
         }
 
     public:
+        void set_scene(const ScenePtr& scene)
+        {
+            m_scene = scene;
+        }
+
         void set_name(const std::string& name)
         {
             m_name = name;
@@ -78,9 +83,8 @@ namespace Gecko
 
     protected:
         ObjectPtr m_owner = nullptr;
-    public:
-        ScenePtr  m_scene; // TODO: Make protected.
-    protected:
+        ScenePtr  m_scene;
+
         std::string m_name;
         Timer       m_health_timer;
     };

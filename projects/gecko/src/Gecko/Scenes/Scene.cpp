@@ -103,10 +103,11 @@ namespace Gecko
         }
     }
 
-    Ogre::RaySceneQuery* Scene::create_ray_scene_query(const Ogre::Ray& ray) const
+    Ogre::RaySceneQuery* Scene::create_ray_scene_query(const Ogre::Ray& ray, Ogre::uint32 query_mask) const
     {
-        auto ray_scene_query = m_scene_manager->createRayQuery(ray);
+        Ogre::RaySceneQuery* ray_scene_query = m_scene_manager->createRayQuery(ray);
 
+        ray_scene_query->setQueryMask(query_mask);
         ray_scene_query->setSortByDistance(true);
 
         return ray_scene_query;

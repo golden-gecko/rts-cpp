@@ -2,7 +2,19 @@
 
 namespace Gecko::Utils::File
 {
-    std::string get_name_no_extension(const std::string& name)
+    std::string get_file_name_from_current_date()
+    {
+        std::time_t now = std::time(nullptr);
+        std::tm* local_now = std::localtime(&now);
+
+        std::ostringstream oss;
+
+        oss << std::put_time(local_now, "%Y_%m_%d_%H_%M_%S");
+
+        return oss.str();
+    }
+
+    std::string get_file_name_no_extension(const std::string& name)
     {
         return std::filesystem::path(name).filename().replace_extension("").string();
     }

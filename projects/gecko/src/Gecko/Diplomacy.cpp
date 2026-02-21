@@ -1,4 +1,4 @@
-#include "Gecko/Containers/Diplomacy.hpp"
+#include "Gecko/Diplomacy.hpp"
 
 #include "Gecko/Configuration.hpp"
 

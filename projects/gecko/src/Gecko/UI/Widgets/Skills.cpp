@@ -34,7 +34,12 @@ namespace Gecko
 
     void SkillsWidget::select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)
     {
-        m_selected_skill = (arguments.size() == 1 ? arguments[0].Get<std::string>() : "");
+        select(arguments.size() == 1 ? arguments[0].Get<std::string>() : "");
+    }
+
+    void SkillsWidget::select(const std::string skill)
+    {
+        m_selected_skill = skill;
 
         m_model.DirtyVariable("selected_skill");
     }

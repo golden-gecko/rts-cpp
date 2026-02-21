@@ -4,7 +4,7 @@
 
 namespace Gecko::Utils::Time
 {
-    typedef std::chrono::steady_clock::time_point Value;
+    using Value = std::chrono::steady_clock::time_point;
 
     Value get_current();
 

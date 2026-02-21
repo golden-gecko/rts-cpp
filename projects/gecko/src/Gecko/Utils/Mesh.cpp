@@ -152,4 +152,11 @@ namespace Gecko::Utils::Mesh
             }
         }
     }
+
+    void to_file(Ogre::MeshPtr mesh, const std::string& path)
+    {
+        Ogre::MeshSerializer serializer;
+
+        serializer.exportMesh(mesh.get(), path);
+    }
 }

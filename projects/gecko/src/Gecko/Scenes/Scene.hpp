@@ -29,7 +29,7 @@ namespace Gecko
         Ogre::PlaneBoundedVolumeListSceneQuery* create_plane_volume_query(const Ogre::PlaneBoundedVolumeList& volumes, Ogre::uint32 mask) const;
         void destroy_query(Ogre::SceneQuery* scene_query);
 
-        Ogre::RaySceneQuery* create_ray_scene_query(const Ogre::Ray& ray) const;
+        Ogre::RaySceneQuery* create_ray_scene_query(const Ogre::Ray& ray, Ogre::uint32 query_mask) const;
         void destroy_ray_scene_query(Ogre::RaySceneQuery* ray_scene_query);
 
         Ogre::SceneNode* create_scene_node() const;

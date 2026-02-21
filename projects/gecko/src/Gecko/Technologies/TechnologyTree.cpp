@@ -12,13 +12,13 @@ namespace Gecko
     {
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
-            auto type = configuration->get_string("type", "");
+            std::string type = configuration->get_string("type", "");
 
             if (type == "Technology")
             {
-                auto techonology = std::make_shared<Technology>();
+                TechnologyPtr techonology = std::make_shared<Technology>();
 
-                techonology->deserialize((configuration));
+                techonology->deserialize(configuration);
 
                 m_tree.emplace(name, techonology);
             }
@@ -31,27 +31,15 @@ namespace Gecko
 
     void TechnologyTree::update(float time)
     {
-        for (const auto& [name, technology] : m_tree)
+        for (const auto& [_, technology] : m_tree)
         {
             technology->update(time);
         }
     }
 
-    bool TechnologyTree::is_locked(const std::string& name) const
+    void TechnologyTree::research(const std::string& name) const
     {
-        auto technology = m_tree.find(name);
-
-        if (technology == m_tree.end())
-        {
-            return false;
-        }
-
-        return technology->second->is_locked();
-    }
-
-    void TechnologyTree::research(const std::string& name)
-    {
-        auto technology = m_tree.find(name);
+        Container::const_iterator technology = m_tree.find(name);
 
         if (technology != m_tree.end())
         {
@@ -59,13 +47,25 @@ namespace Gecko
         }
     }
 
-    void TechnologyTree::unlock(const std::string& name)
+    void TechnologyTree::unlock(const std::string& name) const
     {
-        auto technology = m_tree.find(name);
+        Container::const_iterator technology = m_tree.find(name);
 
         if (technology != m_tree.end())
         {
             technology->second->unlock();
         }
+    }
+
+    bool TechnologyTree::is_locked(const std::string& name) const
+    {
+        Container::const_iterator technology = m_tree.find(name);
+
+        if (technology == m_tree.end())
+        {
+            return false;
+        }
+
+        return technology->second->is_locked();
     }
 }

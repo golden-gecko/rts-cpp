@@ -30,7 +30,7 @@
 #include "Gecko/UI/UI.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Mesh.hpp"
-#include "Gecko/Utils/Utils.hpp"
+#include "Gecko/Utils/Node.hpp"
 
 namespace Gecko
 {
@@ -109,8 +109,8 @@ namespace Gecko
 
         for (const auto& i : *(m_components))
         {
-            i->m_scene = m_scene; // TODO: Remove.
             i->set_owner(this);
+            i->set_scene(m_scene);
             i->init();
         }
 
@@ -272,7 +272,7 @@ namespace Gecko
 
     Ogre::Vector3 Object::get_direction() const
     {
-        return Utils::get_node_direction(m_scene_node);
+        return Utils::Node::get_direction(m_scene_node);
     }
 
     Entrance Object::get_entrance() const
@@ -378,9 +378,9 @@ namespace Gecko
 
         ConfigurationPtr info_resources = std::make_shared<Configuration>();
 
-        for (Resources::Map::const_iterator i = m_resources->cbegin(); i != m_resources->cend(); i++)
+        for (const auto& [name, resouce] : *(m_resources))
         {
-            info_resources->set(i->first, Utils::Convert::to_string(i->second.get_current()) + "/" + Utils::Convert::to_string(i->second.get_max()));
+            info_resources->set(name, Utils::Convert::to_string(resouce.get_current()) + "/" + Utils::Convert::to_string(resouce.get_max()));
         }
 
         info->set("Resources", info_resources);
@@ -390,9 +390,8 @@ namespace Gecko
 
     Area Object::get_area() const
     {
-        const auto& aabb = m_scene_node->_getWorldAABB();
-        // TODO: Hardcoded.
-        const auto& layer = m_owner->get_layer(Settings::Layer::Terrain);
+        const Ogre::AxisAlignedBox& aabb = m_scene_node->_getWorldAABB();
+        LayerPtr layer = m_owner->get_layer(Settings::Layer::Terrain); // TODO: Hardcoded.
 
         return Area(); // layer->get_index(aabb.getMinimum()), layer->get_index(aabb.getMaximum()));
     }
@@ -497,7 +496,7 @@ namespace Gecko
 
     const Ogre::Vector3& Object::get_position() const
     {
-        return Utils::get_node_position(m_scene_node);
+        return Utils::Node::get_position(m_scene_node);
     }
 
     std::map<std::string, float> Object::get_progress_bars() const
@@ -797,9 +796,9 @@ namespace Gecko
         selection_scale = Ogre::Vector3(2, 1, 2);
 
         m_selection = std::make_unique<Mesh>();
-        m_selection->m_scene = m_scene; // TODO: Remove.
-        m_selection->deserialize(ConfigurationManager::getSingleton().get("selection"));
         m_selection->set_owner(this);
+        m_selection->set_scene(m_scene);
+        m_selection->deserialize(ConfigurationManager::getSingleton().get("selection"));
         m_selection->init();
         m_selection->get_entity().setCastShadows(false);
         m_selection->get_scene_node().setScale(selection_scale);

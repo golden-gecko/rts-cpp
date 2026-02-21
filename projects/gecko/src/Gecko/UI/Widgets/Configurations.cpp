@@ -34,7 +34,12 @@ namespace Gecko
 
     void ConfigurationsWidget::select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)
     {
-        m_selected_configuration = (arguments.size() == 1 ? arguments[0].Get<std::string>() : "");
+        select(arguments.size() == 1 ? arguments[0].Get<std::string>() : "");
+    }
+
+    void ConfigurationsWidget::select(const std::string configuration)
+    {
+        m_selected_configuration = configuration;
 
         m_model.DirtyVariable("selected_configuration");
     }

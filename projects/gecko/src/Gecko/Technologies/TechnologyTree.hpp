@@ -11,6 +11,9 @@ namespace Gecko
         public Updatable
     {
     public:
+        using Container = std::map<std::string, std::shared_ptr<Technology>>;
+
+    public:
         // From Initializable.
         void init() override;
         void deinit() override;
@@ -23,13 +26,13 @@ namespace Gecko
         explicit TechnologyTree() = default;
 
     public:
+        void research(const std::string& name) const;
+        void unlock(const std::string& name) const;
+
+    public:
         bool is_locked(const std::string& name) const;
 
-        void research(const std::string& name);
-
-        void unlock(const std::string& name);
-
     private:
-        std::map<std::string, std::shared_ptr<Technology>> m_tree;
+        Container m_tree;
     };
 }

@@ -227,8 +227,6 @@ namespace Gecko
 
         if (players_configuration)
         {
-            auto active_player = m_configuration->get_string("active_player");
-
             for (const auto& i : *(*(players_configuration)))
             {
                 auto player_configuration = Configuration(i);
@@ -250,11 +248,6 @@ namespace Gecko
                 }
 
                 player->init();
-
-                if (configuration == active_player)
-                {
-                    Game::getSingleton().set_active_player_id(player->get_id());
-                }
             }
         }
     }

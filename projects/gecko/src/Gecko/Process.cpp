@@ -176,7 +176,12 @@ namespace Gecko
         }
     }
 
-    Object* Process::get_deposit(const Resource& in_resource, const Id& id, const Ogre::Vector3& position, float time) const
+    bool Process::operator==(const Process& other) const
+    {
+        return m_name == other.m_name && m_in == other.m_in && m_out == other.m_out;
+    }
+
+    ObjectPtr Process::get_deposit(const Resource& in_resource, const Id& id, const Ogre::Vector3& position, float time) const
     {
         auto deposits = ObjectManager::getSingleton().get_in_range(position, in_resource.get_deposit_range());
 
@@ -196,7 +201,7 @@ namespace Gecko
         return nullptr;
     }
 
-    Object* Process::get_storage(const Resource& out_resource, const Id& id, const Ogre::Vector3& position, float time) const
+    ObjectPtr Process::get_storage(const Resource& out_resource, const Id& id, const Ogre::Vector3& position, float time) const
     {
         auto storages = ObjectManager::getSingleton().get_in_range(position, out_resource.get_storage_range());
 
@@ -214,10 +219,5 @@ namespace Gecko
         }
 
         return nullptr;
-    }
-
-    bool Process::operator==(const Process& other) const
-    {
-        return m_name == other.m_name && m_in == other.m_in && m_out == other.m_out;
     }
 }

@@ -1,5 +1,7 @@
 #include "Gecko/UI/RenderInterface.hpp"
 
+#include "Gecko/Games/Game.hpp"
+#include "Gecko/UI/UI.hpp"
 #include "Gecko/Utils/Time.hpp"
 
 namespace Gecko
@@ -237,5 +239,66 @@ namespace Gecko
         {
             m_render_system->setScissorTest(true, m_scissor_rect[0], m_scissor_rect[1], m_scissor_rect[2], m_scissor_rect[3]);
         }
+    }
+
+    void RenderInterface::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
+    {
+        // L_TIME("UI::render()");
+
+        if (queueGroupId != Ogre::RENDER_QUEUE_OVERLAY)
+        {
+            return;
+        }
+
+        Ogre::RenderSystem* render_system = Game::getSingleton().getRoot()->getRenderSystem();
+
+        if (render_system == nullptr)
+        {
+            return;
+        }
+
+        if (render_system->_getViewport()->getOverlaysEnabled() == false)
+        {
+            return;
+        }
+
+        Ogre::RenderWindow* render_window = Game::getSingleton().getRenderWindow();
+
+        if (render_window == nullptr)
+        {
+            return;
+        }
+
+        float z_near = -1.0f;
+        float z_far = 1.0f;
+
+        Ogre::Matrix4 projection_matrix = Ogre::Matrix4::ZERO;
+
+        projection_matrix[0][0] = 2.0f / (Ogre::Real)render_window->getWidth();
+        projection_matrix[0][3] = -1.0000000f;
+        projection_matrix[1][1] = -2.0f / (Ogre::Real)render_window->getHeight();
+        projection_matrix[1][3] = 1.0000000f;
+        projection_matrix[2][2] = -2.0f / (z_far - z_near);
+        projection_matrix[3][3] = 1.0000000f;
+        
+        render_system->_disableTextureUnitsFrom(1);
+        render_system->_setAlphaRejectSettings(Ogre::CMPF_GREATER, 0, false);
+        render_system->_setColourBufferWriteEnabled(true, true, true, true);
+        render_system->_setCullingMode(Ogre::CULL_CLOCKWISE);
+        render_system->_setDepthBias(0, 0);
+        render_system->_setDepthBufferParams(false, false);
+        render_system->_setFog(Ogre::FOG_NONE);
+        render_system->_setProjectionMatrix(projection_matrix);
+        render_system->_setSceneBlending(Ogre::SBF_SOURCE_ALPHA, Ogre::SBF_ONE_MINUS_SOURCE_ALPHA);
+        render_system->_setTextureCoordCalculation(0, Ogre::TEXCALC_NONE);
+        render_system->_setTextureCoordSet(0, 0);
+        render_system->_setTextureMatrix(0, Ogre::Matrix4::IDENTITY);
+        render_system->_setViewMatrix(Ogre::Matrix4::IDENTITY);
+        render_system->setLightingEnabled(false);
+        render_system->unbindGpuProgram(Ogre::GPT_FRAGMENT_PROGRAM);
+        render_system->unbindGpuProgram(Ogre::GPT_VERTEX_PROGRAM);
+
+        UI::getSingleton().get_context()->Update();
+        UI::getSingleton().get_context()->Render();
     }
 }

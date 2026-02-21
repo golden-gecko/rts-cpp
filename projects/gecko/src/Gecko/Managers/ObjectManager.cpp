@@ -6,20 +6,19 @@
 #include "Gecko/Objects/Factory.hpp"
 #include "Gecko/Objects/Missile.hpp"
 #include "Gecko/Objects/Vehicle.hpp"
-#include "Gecko/Statistics.hpp"
 #include "Gecko/Utils/Time.hpp"
 
 Gecko::ObjectManager* Ogre::Singleton<Gecko::ObjectManager>::msSingleton = nullptr;
 
 namespace Gecko
 {
-    Object* ObjectManager::create(const std::string& name)
+    ObjectPtr ObjectManager::create(const std::string& name)
     {
-        auto object = base_type::create(name);
+        ObjectPtr object = base_type::create(name);
 
         if (object)
         {
-            Statistics::getSingleton().add("Objects created", 1.0f);
+            // Statistics::getSingleton().add("Objects created", 1.0f); TODO: Restore.
         }
 
         return object;

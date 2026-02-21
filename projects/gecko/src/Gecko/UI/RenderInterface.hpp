@@ -17,7 +17,8 @@ namespace Gecko
     };
 
     class RenderInterface :
-        public Rml::RenderInterface
+        public Rml::RenderInterface,
+        public Ogre::RenderQueueListener
     {
     public:
         // From Rml::RenderInterface.
@@ -29,6 +30,10 @@ namespace Gecko
         void ReleaseTexture(Rml::TextureHandle texture) override;
         void EnableScissorRegion(bool enable) override;
         void SetScissorRegion(Rml::Rectanglei region) override;
+
+    public:
+        // From Ogre::RenderQueueListener.
+        void renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation) override;
 
     public:
         RenderInterface(unsigned int window_width, unsigned int window_height);

@@ -45,10 +45,8 @@ namespace Gecko
             m_end = end;
         }
 
-        void set_visible(bool visible)
-        {
-            m_scene_node->setVisible(visible);
-        }
+        void set_color(const std::string& color);
+        void set_visible(bool visible);
 
     private:
         ScenePtr m_scene;

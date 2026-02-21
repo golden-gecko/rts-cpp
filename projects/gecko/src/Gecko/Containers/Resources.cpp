@@ -6,9 +6,9 @@ namespace Gecko
 {
     ConfigurationPtr Resources::serialize() const
     {
-        auto configuration = std::make_shared<Configuration>();
+        ConfigurationPtr configuration = std::make_shared<Configuration>();
 
-        for (const auto& [name, resource] : m_items)
+        for (const auto& [_, resource] : m_items)
         {
             configuration->append("items", resource.serialize());
         }
@@ -24,7 +24,7 @@ namespace Gecko
 
         if (configuration->has_member("items"))
         {
-            auto child = configuration->get_child("items");
+            ConfigurationPtr child = configuration->get_child("items");
 
             for (auto i = child->begin(); i != child->end(); i++)
             {
@@ -54,7 +54,7 @@ namespace Gecko
 
     void Resources::update(float time)
     {
-        for (auto& [name, resource] : m_items)
+        for (auto& [_, resource] : m_items)
         {
             resource.update(time);
         }
@@ -62,7 +62,7 @@ namespace Gecko
 
     float Resources::add(const std::string& name, float value)
     {
-        auto resource = m_items.find(name);
+        Container::iterator resource = m_items.find(name);
 
         if (resource == m_items.end())
         {
@@ -79,7 +79,7 @@ namespace Gecko
 
     float Resources::get_current(const std::string& name) const
     {
-        auto resource = m_items.find(name);
+        Container::const_iterator resource = m_items.find(name);
 
         if (resource == m_items.end())
         {
@@ -91,7 +91,7 @@ namespace Gecko
 
     float Resources::get_storage(const std::string& name) const
     {
-        auto resource = m_items.find(name);
+        Container::const_iterator resource = m_items.find(name);
 
         if (resource == m_items.end())
         {
@@ -110,7 +110,7 @@ namespace Gecko
 
     bool Resources::has_resource(const std::string& name, float value) const
     {
-        auto resource = m_items.find(name);
+        Container::const_iterator resource = m_items.find(name);
 
         if (resource == m_items.end())
         {
@@ -127,7 +127,7 @@ namespace Gecko
 
     bool Resources::has_storage(const std::string& name, float value) const
     {
-        auto resource = m_items.find(name);
+        Container::const_iterator resource = m_items.find(name);
 
         if (resource == m_items.end())
         {
@@ -139,25 +139,25 @@ namespace Gecko
 
     void Resources::merge(const Resources& other)
     {
-        for (Map::const_iterator i = other.cbegin(); i != other.cend(); i++)
+        for (auto& [other_name, other_resource] : other.m_items)
         {
-            if (has_resource(i->first) == false)
+            if (has_resource(other_name) == false)
             {
-                m_items.emplace(i->first, Resource(i->first));
+                m_items.emplace(other_name, Resource(other_name));
             }
 
-            Resource& resource = get(i->first);
+            Resource& resource = get(other_name);
 
-            resource.set_consumption(resource.get_consumption() + i->second.get_consumption());
-            resource.set_production(resource.get_production() + i->second.get_production());
-            resource.set_current(resource.get_current() + i->second.get_current());
-            resource.set_max(resource.get_max() + i->second.get_max());
+            resource.set_consumption(resource.get_consumption() + other_resource.get_consumption());
+            resource.set_production(resource.get_production() + other_resource.get_production());
+            resource.set_current(resource.get_current() + other_resource.get_current());
+            resource.set_max(resource.get_max() + other_resource.get_max());
         }
     }
 
     float Resources::remove(const std::string& name, float value)
     {
-        auto resource = m_items.find(name);
+        Container::iterator resource = m_items.find(name);
 
         if (resource == m_items.end())
         {

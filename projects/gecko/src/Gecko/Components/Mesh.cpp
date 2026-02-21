@@ -7,7 +7,7 @@
 #include "Gecko/QueryFlags.hpp"
 #include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Utils/Mesh.hpp"
-#include "Gecko/Utils/Utils.hpp"
+#include "Gecko/Utils/Node.hpp"
 
 namespace Gecko
 {
@@ -76,7 +76,7 @@ namespace Gecko
 
     Ogre::Vector3 Mesh::get_direction() const
     {
-        return Utils::get_node_direction(m_scene_node);
+        return Utils::Node::get_direction(m_scene_node);
     }
 
     void Mesh::set_owner(Object* _owner)
@@ -223,14 +223,12 @@ namespace Gecko
                 // Save mesh to cache.
                 if (game_configuration->get_bool("options.cache.meshes.enabled", true))
                 {
-                    Ogre::MeshSerializer serializer;
-
                     if (std::filesystem::exists(meshes_path) == false)
                     {
                         std::filesystem::create_directories(meshes_path);
                     }
 
-                    serializer.exportMesh(_mesh.get(), mesh_path.string());
+                    Utils::Mesh::to_file(_mesh, mesh_path.string());
                 }
 
                 // Destroy manual object.
@@ -238,7 +236,7 @@ namespace Gecko
             }
         }
 
-        m_entity =m_scene->create_entity(mesh_name);
+        m_entity = m_scene->create_entity(mesh_name);
         m_entity->setQueryFlags(QueryFlags::QF_Object);
         m_entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
     }

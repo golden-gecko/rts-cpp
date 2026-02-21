@@ -476,7 +476,7 @@ namespace Gecko
             new_file_name = m_file_name;
         }
 
-        m_name = Utils::File::get_name_no_extension(m_file_name);
+        m_name = Utils::File::get_file_name_no_extension(m_file_name);
 
         std::ifstream stream(new_file_name, std::ifstream::binary);
         Json::CharReaderBuilder builder;

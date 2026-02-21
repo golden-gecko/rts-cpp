@@ -34,6 +34,10 @@
 // OIS
 #include <OIS.h>
 
+// PathFinder
+#include <AStar.h>
+#include <PathFinder.h>
+
 // RmlUi
 #include <RmlUi/Core.h>
 #include <RmlUi/Debugger.h>
@@ -51,14 +55,9 @@ namespace Gecko
     class Buff;
     class Camera;
     class Component;
-    class ComponentManager;
-    class Components;
     class Configuration;
-    class ConfigurationManager;
-    class Configurations;
     class Cursor;
     class DataLayer;
-    class Diplomacy;
     class Entrance;
     class EventListener;
     class EventListenerInstancer;
@@ -67,57 +66,49 @@ namespace Gecko
     class FireMissile;
     class FreeCamera;
     class Game;
-    class HexCenterPosition;
-    class HexLayer;
-    class HexTile;
     class Id;
     class Indicator;
-    class Initializable;
     class Input;
     class Item;
-    class JobManager;
-    class Layer;
-    class Layers;
     class Log;
     class Map;
-    class MapManager;
     class Mesh;
     class Minimap;
     class MinimapCamera;
     class ObjectFollowCamera;
-    class ObjectManager;
     class Path;
     class Player;
-    class PlayerManager;
     class Point;
     class PositionValidator;
     class Preview;
     class Process;
-    class Processes;
     class RenderInterface;
     class Repair;
     class Resource;
-    class Resources;
     class RoadPosition;
     class Season;
-    class Selected;
-    class Serializable;
     class Skill;
     class SkillManager;
-    class Skills;
     class SquareCenterPosition;
-    class SquareLayer;
-    class SquareTile;
     class Statistics;
     class System;
     class SystemInterface;
     class Technology;
     class TechnologyTree;
-    class Tile;
     class Timer;
     class TopDownCamera;
     class UI;
-    class Updatable;
+
+    // Containers
+    class Components;
+    class Configurations;
+    class Diplomacy;
+    class Layers;
+    class Orders;
+    class Processes;
+    class Resources;
+    class Selected;
+    class Skills;
 
     // Components
     class Armour;
@@ -128,6 +119,23 @@ namespace Gecko
     class Shield;
     class Storage;
     class Weapon;
+
+    // Interfaces
+    class Initializable;
+    class Serializable;
+    class Updatable;
+
+    // Managers
+    class ComponentManager;
+    class ConfigurationManager;
+    class JobManager;
+    class MapManager;
+    class ObjectManager;
+    class PlayerManager;
+
+    // Layers
+    class Layer;
+    class SquareLayer;
 
     // Objects
     class Missile;
@@ -146,7 +154,6 @@ namespace Gecko
     class OrderMove;
     class OrderPatrol;
     class OrderRally;
-    class Orders;
     class OrderStop;
     class OrderUnload;
     class OrderWait;
@@ -155,6 +162,10 @@ namespace Gecko
     class EditorScene;
     class MapScene;
     class Scene;
+
+    // Tiles
+    class SquareTile;
+    class Tile;
 
     // Widgets
     class ConfigurationsWidget;
@@ -191,10 +202,9 @@ namespace Gecko
     using TechnologyPtr = std::shared_ptr<Technology>;
 
     // Types
-    typedef std::vector<Ogre::uint32> Indices;
-    typedef std::vector<std::vector<Ogre::Vector3>> Normals;
-    typedef std::vector<std::vector<std::vector<Ogre::Vector2>>> TextureCoordinates;
-    typedef std::vector<std::vector<Ogre::Vector3>> Vertices;
-
-    typedef std::uint32_t Index;
+    using Index = std::uint32_t;
+    using Indices = std::vector<Ogre::uint32>;
+    using Normals = std::vector<std::vector<Ogre::Vector3>>;
+    using TextureCoordinates = std::vector<std::vector<std::vector<Ogre::Vector2>>>;
+    using Vertices = std::vector<std::vector<Ogre::Vector3>>;
 }

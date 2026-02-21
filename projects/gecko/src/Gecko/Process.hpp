@@ -16,10 +16,11 @@ namespace Gecko
     public:
         explicit Process(const std::string& name);
 
+    public:
         void update(float time, const Id& id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources);
 
     public:
-        const auto& get_name() const
+        const std::string& get_name() const
         {
             return m_name;
         }
@@ -43,7 +44,7 @@ namespace Gecko
         std::shared_ptr<Resources> m_in;
         std::shared_ptr<Resources> m_out;
 
-        Object* get_deposit(const Resource& in_resource, const Id& id, const Ogre::Vector3& position, float time) const;
-        Object* get_storage(const Resource& out_resource, const Id& id, const Ogre::Vector3& position, float time) const;
+        ObjectPtr get_deposit(const Resource& in_resource, const Id& id, const Ogre::Vector3& position, float time) const;
+        ObjectPtr get_storage(const Resource& out_resource, const Id& id, const Ogre::Vector3& position, float time) const;
     };
 }

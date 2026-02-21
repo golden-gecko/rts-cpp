@@ -1,7 +1,6 @@
 #include "Gecko/Players/Player.hpp"
 
 #include "Gecko/Configuration.hpp"
-#include "Gecko/Containers/Diplomacy.hpp"
 #include "Gecko/Containers/Processes.hpp"
 #include "Gecko/Containers/Resources.hpp"
 #include "Gecko/Containers/Selected.hpp"
@@ -21,7 +20,6 @@ namespace Gecko
 
     Player::Player()
     {
-        m_diplomacy = std::make_shared<Diplomacy>();
         m_resources = std::make_shared<Resources>();
         m_selected = std::make_shared<Selected>();
     }
@@ -31,11 +29,6 @@ namespace Gecko
     {
         m_name = other.m_name;
         m_color = other.m_color;
-
-        if (other.m_diplomacy)
-        {
-            m_diplomacy = std::make_shared<Diplomacy>(*(other.m_diplomacy.get()));
-        }
 
         if (other.m_resources)
         {
@@ -50,7 +43,7 @@ namespace Gecko
 
     ConfigurationPtr Player::serialize() const
     {
-        auto configuration = base_type::serialize();
+        ConfigurationPtr configuration = base_type::serialize();
 
         configuration->set("name", m_name);
         configuration->set("color", m_color);

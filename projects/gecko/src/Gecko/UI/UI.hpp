@@ -22,13 +22,12 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        explicit UI(const ConfigurationPtr& configuration);
+        explicit UI(const ConfigurationPtr& configuration, const ScenePtr& scene);
 
         ~UI() override = default;
 
     public:
         void change_visibility(const std::string& type, bool visible);
-        void render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation);
 
         bool inject_key_press(Rml::Input::KeyIdentifier key);
         bool inject_key_release(Rml::Input::KeyIdentifier key);
@@ -48,9 +47,9 @@ namespace Gecko
         void log_info(const std::string& text, Id id = Id::Empty);
 
         void reset();
-        void reset_configuration();
-        void reset_order();
-        void reset_skill();
+        void reset_configurations();
+        void reset_orders();
+        void reset_skills();
 
         void restore_visibility(const std::map<std::string, bool>& state);
 
@@ -77,35 +76,29 @@ namespace Gecko
             return nullptr;
         }
 
+        Rml::Context* get_context() const
+        {
+            return m_context;
+        }
+
         Rml::ElementDocument* get_document() const
         {
             return m_document;
         }
 
+        const std::shared_ptr<RenderInterface>& get_render_interface() const
+        {
+            return m_render_interface;
+        }
+
     public:
-        /*
-        void set_diplomacy();
-        void set_floating_descriptions();
-        */
         void set_hovered_object_id(const Id& hovered_object_id);
         void set_info(const ConfigurationPtr& info);
-        /*
-        void set_layers(const std::map<std::string, std::shared_ptr<Layer>>& layers);
-        void set_maps(const std::vector<std::string>& maps);
-        void set_objects_admin();
-        void set_orders_admin();
-        void set_saves(const std::vector<std::string>& saves);
-        void set_terrain_layers(const std::set<std::string>& layers);
-        void set_visible(bool visible);
-        void set_water_layers(const std::set<std::string>& layers);
-        */
 
     private:
         ConfigurationPtr m_configuration;
-    public:
-        ScenePtr         m_scene; // TODO: Make private.
+        ScenePtr         m_scene;
 
-    private:
         std::shared_ptr<RenderInterface> m_render_interface;
         std::shared_ptr<SystemInterface> m_system_interface;
 

@@ -12,87 +12,103 @@
 #include <Gecko/Managers/PlayerManager.hpp>
 #include <Gecko/Managers/SkillManager.hpp>
 #include <Gecko/NVIDIA.hpp>
+#include <Gecko/Players/Player.hpp>
+#include <Gecko/Scenes/Scene.hpp>
 #include <Gecko/Settings.hpp>
 #include <Gecko/Statistics.hpp>
 #include <Gecko/Technologies/TechnologyTree.hpp>
+#include <Gecko/UI/RenderInterface.hpp>
 #include <Gecko/UI/UI.hpp>
 #include <Gecko/Utils/Utils.hpp>
 
 int main(int argc, char* argv[])
 {
+    std::unique_ptr<Gecko::ComponentManager> component_manager;
+    std::unique_ptr<Gecko::ConfigurationManager> configuration_manager;
+    std::unique_ptr<Gecko::Game> game;
+    std::unique_ptr<Gecko::Input> input;
+    std::unique_ptr<Gecko::JobManager> job_manager;
+    std::unique_ptr<Gecko::MapManager> map_manager;
+    std::unique_ptr<Gecko::ObjectManager> object_manager;
+    std::unique_ptr<Gecko::OrderManager> order_manager;
+    std::unique_ptr<Gecko::PlayerManager> player_manager;
+    std::unique_ptr<Gecko::SkillManager> skill_manager;
+    std::unique_ptr<Gecko::Statistics> statistics;
+    std::unique_ptr<Gecko::TechnologyTree> technology_tree;
+    std::unique_ptr<Gecko::UI> ui;
+    
     // Setup log.
     Gecko::Log::setup("rts.log");
 
     // Parse command line options.
     auto options = Gecko::Application::parse_options(argc, argv, "rts", "tutorial");
-
     auto configuration_name = Gecko::Application::get_option(options, "configuration");
     auto map_name = Gecko::Application::get_option(options, "map");
 
     // Parse configuration files.
-    auto configuration_manager = std::make_unique<Gecko::ConfigurationManager>(false);
-
+    configuration_manager = std::make_unique<Gecko::ConfigurationManager>(false);
     configuration_manager->parse_configuration_files(Gecko::Settings::Configuration::Directories);
     configuration_manager->save_cache();
 
     // Get configuration.
-    auto configuration = configuration_manager->get(configuration_name);
-
-    // Create global objects.
-    auto game = std::make_unique<Gecko::Game>(configuration);
-    auto input = std::make_unique<Gecko::Input>(configuration->get_child("input"));
-    auto statistics = std::make_unique<Gecko::Statistics>();
-    auto technology_tree = std::make_unique<Gecko::TechnologyTree>();
-    auto ui = std::make_unique<Gecko::UI>(configuration->get_child("ui"));
+    auto game_configuration = configuration_manager->get(configuration_name);
+    auto map_configuration = configuration_manager->get(map_name);
 
     // Initialize game.
+    game = std::make_unique<Gecko::Game>(game_configuration);
     game->init();
 
-    // Create and initialize managers.
-    auto component_manager = std::make_unique<Gecko::ComponentManager>();
-    auto job_manager = std::make_unique<Gecko::JobManager>();
-    auto map_manager = std::make_unique<Gecko::MapManager>();
-    auto object_manager = std::make_unique<Gecko::ObjectManager>();
-    auto order_manager = std::make_unique<Gecko::OrderManager>();
-    auto player_manager = std::make_unique<Gecko::PlayerManager>();
-    auto skill_manager = std::make_unique<Gecko::SkillManager>();
+    // Initialize input system.
+    input = std::make_unique<Gecko::Input>(game_configuration->get_child("input"), Gecko::Utils::get_window_handle(game->getRenderWindow()));
+    input->init();
 
-    skill_manager->init(configuration);
-    component_manager->init(configuration, game->get_map_scene());
-    order_manager->init(configuration);
-    player_manager->init(configuration);
-    object_manager->init(configuration, game->get_map_scene());
-    map_manager->init(configuration, game->get_map_scene());
+    // Initialize managers.
+    job_manager = std::make_unique<Gecko::JobManager>();
+
+    skill_manager = std::make_unique<Gecko::SkillManager>();
+    skill_manager->init(game_configuration);
+
+    component_manager = std::make_unique<Gecko::ComponentManager>();
+    component_manager->init(game_configuration, game->get_map_scene());
+
+    order_manager = std::make_unique<Gecko::OrderManager>();
+    order_manager->init(game_configuration);
+
+    player_manager = std::make_unique<Gecko::PlayerManager>();
+    player_manager->init(game_configuration);
+
+    object_manager = std::make_unique<Gecko::ObjectManager>();
+    object_manager->init(game_configuration, game->get_map_scene());
+
+    map_manager = std::make_unique<Gecko::MapManager>();
+    map_manager->init(game_configuration, game->get_map_scene());
 
     // Load map.
     game->load_map(map_name);
 
-    // Initialize input system.
-    input->set_render_window_handle(Gecko::Utils::get_window_handle(game->getRenderWindow()));
-    input->init();
-
-    // Initialize other system.
+    // Initialize technology tree.
+    technology_tree = std::make_unique<Gecko::TechnologyTree>();
     technology_tree->init();
-    ui->m_scene = game->get_map_scene(); // TODO: Remove.
+
+    // Initialize statistics.
+    statistics = std::make_unique<Gecko::Statistics>();
+
+    // Initialize UI.
+    ui = std::make_unique<Gecko::UI>(game_configuration->get_child("ui"), game->get_map_scene());
     ui->init();
+
+    // Set render queue listener for rendering UI.
+    game->get_map_scene()->get_scene_manager()->addRenderQueueListener(ui->get_render_interface().get());
+
+    // Set active player.
+    if (Gecko::PlayerPtr player = Gecko::PlayerManager::getSingleton().get_by_configuration_name(map_configuration->get_string("active_player")))
+    {
+        game->set_active_player_id(player->get_id());
+    }
 
     // Run game.
     game->load_options();
     game->run();
-
-    // Deinit in correct order.
-    ui->deinit();
-    technology_tree->deinit();
-    input->deinit();
-
-    skill_manager->deinit();
-    component_manager->deinit();
-    order_manager->deinit();
-    player_manager->deinit();
-    object_manager->deinit();
-    map_manager->deinit();
-
-    game->deinit();
 
     return 0;
 }

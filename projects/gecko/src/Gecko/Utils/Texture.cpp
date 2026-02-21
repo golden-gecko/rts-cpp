@@ -7,14 +7,14 @@ namespace Gecko::Utils::Texture
 {
     void clear(const Ogre::TexturePtr& texture, std::uint8_t value)
     {
-        const auto& pixel_buffer = texture->getBuffer();
+        const Ogre::HardwarePixelBufferPtr& pixel_buffer = texture->getBuffer();
 
         pixel_buffer->lock(Ogre::HardwareBuffer::LockOptions::HBL_DISCARD);
 
-        const auto& pixel_box = pixel_buffer->getCurrentLock();
-        auto texture_depth = Ogre::PixelUtil::getNumElemBytes(pixel_box.format);
-        auto texture_pitch = pixel_box.rowPitch * texture_depth;
-        auto destination_buffer = static_cast<Ogre::uint8*>(pixel_box.data);
+        const Ogre::PixelBox& pixel_box = pixel_buffer->getCurrentLock();
+        Ogre::uint8 texture_depth = Ogre::PixelUtil::getNumElemBytes(pixel_box.format);
+        std::size_t texture_pitch = pixel_box.rowPitch * texture_depth;
+        Ogre::uint8* destination_buffer = static_cast<Ogre::uint8*>(pixel_box.data);
 
         std::memset(destination_buffer, value, texture_pitch * texture->getHeight());
 
@@ -70,14 +70,14 @@ namespace Gecko::Utils::Texture
 
     void update(const Ogre::TexturePtr& texture, int x, int y, Ogre::uint8 color[])
     {
-        const auto& pixel_buffer = texture->getBuffer();
+        const Ogre::HardwarePixelBufferPtr& pixel_buffer = texture->getBuffer();
 
         pixel_buffer->lock(Ogre::HardwareBuffer::LockOptions::HBL_WRITE_ONLY);
 
-        const auto& pixel_box = pixel_buffer->getCurrentLock();
-        auto texture_depth = Ogre::PixelUtil::getNumElemBytes(pixel_box.format);
-        auto texture_pitch = pixel_box.rowPitch * texture_depth;
-        auto destination_buffer = static_cast<Ogre::uint8*>(pixel_box.data);
+        const Ogre::PixelBox& pixel_box = pixel_buffer->getCurrentLock();
+        Ogre::uint8 texture_depth = Ogre::PixelUtil::getNumElemBytes(pixel_box.format);
+        std::size_t texture_pitch = pixel_box.rowPitch * texture_depth;
+        Ogre::uint8* destination_buffer = static_cast<Ogre::uint8*>(pixel_box.data);
 
         // TODO: Check image format (order of byte colors).
         destination_buffer[y * texture_pitch + (x * texture_depth)    ] = color[2]; // B
@@ -90,26 +90,24 @@ namespace Gecko::Utils::Texture
 
     Ogre::TextureUnitState* get_unit_state(const std::string& material_name, const std::string& texture_unit_state_name)
     {
-        auto material = Ogre::MaterialManager::getSingleton().getByName(material_name);
+        Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(material_name);
 
         if (material.get() == nullptr)
         {
-            throw Exception("No material: " + material_name);
+            throw Exception("Material '" + material_name + "' not found.");
         }
 
-        for (const auto& technique : material->getTechniques())
+        for (Ogre::Technique* technique : material->getTechniques())
         {
-            for (const auto& pass : technique->getPasses())
+            for (Ogre::Pass* pass : technique->getPasses())
             {
-                auto texture_unit_state = pass->getTextureUnitState(texture_unit_state_name);
-
-                if (texture_unit_state)
+                if (Ogre::TextureUnitState* texture_unit_state = pass->getTextureUnitState(texture_unit_state_name))
                 {
                     return texture_unit_state;
                 }
             }
         }
 
-        throw Exception("No texture unit state: " + texture_unit_state_name);
+        throw Exception("Texture unit state '" + texture_unit_state_name + "' not found.");
     }
 }

@@ -9,6 +9,7 @@
 #include "Gecko/Settings.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/File.hpp"
+#include "Gecko/Utils/Mesh.hpp"
 #include "Gecko/Utils/Texture.hpp"
 #include "Gecko/Utils/Utils.hpp"
 
@@ -94,19 +95,17 @@ namespace Gecko
             }
 
             manualObject->end();
-            auto mesh = manualObject->convertToMesh(get_mesh_name());
+            Ogre::MeshPtr mesh = manualObject->convertToMesh(get_mesh_name());
 
             // Save mesh to cache.
             if (game_configuration->get_bool("options.cache.meshes.enabled", true))
             {
-                Ogre::MeshSerializer serializer;
-
                 if (std::filesystem::exists(meshes_path) == false)
                 {
                     std::filesystem::create_directories(meshes_path);
                 }
 
-                serializer.exportMesh(mesh.get(), mesh_path.string());
+                Utils::Mesh::to_file(mesh, mesh_path.string());
             }
 
             // Destroy manual object.
@@ -116,9 +115,11 @@ namespace Gecko
         m_entity = m_owner->get_owner()->get_scene()->create_entity(mesh_name);
         m_entity->setCastShadows(false);
         m_entity->setQueryFlags(QueryFlags::QF_Layer);
+        m_entity->getUserObjectBindings().setUserAny(m_owner);
 
         // Create scene node.
         m_scene_node = m_owner->get_scene_node().createChildSceneNode();
         m_scene_node->attachObject(m_entity);
+        m_scene_node->getUserObjectBindings().setUserAny(m_owner);
     }
 }

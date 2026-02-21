@@ -2,7 +2,9 @@
 
 namespace Gecko::Utils::File
 {
-    std::string get_name_no_extension(const std::string& name);
+    std::string get_file_name_from_current_date();
+
+    std::string get_file_name_no_extension(const std::string& name);
 
     void json_to_file(const Json::Value& value, const std::string& file_name, bool minify = false);
 

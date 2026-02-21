@@ -3,6 +3,20 @@
     "creatable": {
         "by_game": true
     },
+    "diplomacy": {
+        "cpu_1": {
+            "cpu_2": "Enemy",
+            "human": "Enemy",
+            "world": "Ally"
+        },
+        "cpu_2": {
+            "human": "Enemy",
+            "world": "Ally"
+        },
+        "human": {
+            "world": "Ally"
+        }
+    },
     "layers": {
         "Terrain": {
             "data": [

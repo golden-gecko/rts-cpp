@@ -8,16 +8,6 @@
 
 namespace Gecko::Utils
 {
-    Ogre::Vector3 get_node_direction(Ogre::SceneNode* scene_node)
-    {
-        return scene_node->_getDerivedOrientation() * Ogre::Vector3::NEGATIVE_UNIT_Z;
-    }
-
-    const Ogre::Vector3& get_node_position(Ogre::SceneNode* scene_node)
-    {
-        return scene_node->_getDerivedPosition();
-    }
-
     Navigation::Coordinate get_index_from_position(float x, float z, const Ogre::Vector3& scale)
     {
         auto x_index = static_cast<Index>(std::floorf(x / scale.x));
@@ -71,47 +61,13 @@ namespace Gecko::Utils
         return result;
     }
 
-    std::size_t get_window_handle(Ogre::RenderWindow* render_window)
+    std::uint64_t get_window_handle(Ogre::RenderWindow* render_window)
     {
-        std::size_t render_window_handle = 0;
+        std::uint64_t render_window_handle = 0;
 
         render_window->getCustomAttribute("WINDOW", &render_window_handle);
 
         return render_window_handle;
-    }
-
-    void rotate_node_towards_position(Ogre::SceneNode* scene_node, const Ogre::Vector3& position, float time)
-    {
-        auto current_position = get_node_position(scene_node);
-        current_position.y = 0.0f;
-
-        auto current_direction = get_node_direction(scene_node);
-        current_direction.y = 0.0f;
-        current_direction.normalise();
-
-        auto target_direction = position - current_position;
-        auto target_rotation = current_direction.getRotationTo(target_direction);
-
-        auto y = target_rotation.getYaw().valueDegrees();
-        auto p = target_rotation.getPitch().valueDegrees();
-
-        if (std::fabsf(y) > 1.0f)
-        {
-            float y_speed = 10.0f;
-            float y_direction = y > 0.0f ? 1.0f : -1.0f;
-            float y_turn_value = y_direction * y_speed * time;
-
-            scene_node->yaw(Ogre::Degree(y_turn_value));
-        }
-
-        if (std::fabsf(p) > 1.0f)
-        {
-            float p_speed = 10.0f;
-            float p_direction = p > 0.0f ? 1.0f : -1.0f;
-            float p_turn_value = p_direction * p_speed * time;
-
-            scene_node->pitch(Ogre::Degree(p_turn_value));
-        }
     }
 
     bool is_close_enough(const Ogre::Vector3& position, const Ogre::Vector3& target, float distance)
@@ -124,33 +80,26 @@ namespace Gecko::Utils
         return resource >= Settings::Order::ResourceTransportMinValue;
     }
 
-    void move_resources(std::shared_ptr<Resources> source, std::shared_ptr<Resources> destination, const std::string& name, float value)
+    void move_resources(const std::shared_ptr<Resources>& source, const std::shared_ptr<Resources>& destination, const std::string& name, float value)
     {
         source->remove(name, value);
         destination->add(name, value);
     }
 
-    std::string get_filename_from_date()
-    {
-        std::time_t now = std::time(nullptr);
-        std::tm* local_now = std::localtime(&now);
-
-        std::ostringstream oss;
-
-        oss << std::put_time(local_now, "%Y_%m_%d_%H_%M_%S");
-
-        return oss.str();
-    }
-
-    bool is_friendly(const Object& object, const Player& player)
+    bool is_friendly(ObjectPtr object, PlayerPtr player)
     {
         // TODO: Use diplomacy and move to player class.
-        return object.get_player_id() == player.get_id();
+        if (object && player)
+        {
+            return object->get_player_id() == player->get_id();
+        }
+
+        return false;
     }
 
     void fire_missile(Object& owner, const std::string& configuration_name, const Ogre::Vector3& current_position, const Ogre::Vector3& original_target_direction)
     {
-        auto missile = ObjectManager::getSingleton().create(configuration_name);
+        ObjectPtr missile = ObjectManager::getSingleton().create(configuration_name);
 
         if (missile == nullptr)
         {

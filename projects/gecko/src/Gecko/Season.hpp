@@ -26,14 +26,14 @@ namespace Gecko
         void apply();
 
     public:
-        const auto& get_color() const
-        {
-            return m_color;
-        }
-
-        const auto& get_name() const
+        const std::string& get_name() const
         {
             return m_name;
+        }
+
+        const Ogre::ColourValue& get_color() const
+        {
+            return m_color;
         }
 
     private:

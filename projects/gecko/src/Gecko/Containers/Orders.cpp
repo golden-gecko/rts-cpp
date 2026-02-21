@@ -15,7 +15,7 @@ namespace Gecko
 
     ConfigurationPtr Orders::serialize() const
     {
-        auto configuration = std::make_shared<Configuration>();
+        ConfigurationPtr configuration = std::make_shared<Configuration>();
 
         for (const auto& i : m_available)
         {
@@ -53,9 +53,9 @@ namespace Gecko
         {
             for (const auto& i : *(configuration->get_child("m_queue")))
             {
-                auto order_configuration = std::make_shared<Configuration>(i);
-                auto configuration = order_configuration->get_string("configuration");
-                auto order = OrderManager::getSingleton().create(configuration);
+                ConfigurationPtr order_configuration = std::make_shared<Configuration>(i);
+                std::string configuration = order_configuration->get_string("configuration");
+                OrderPtr order = OrderManager::getSingleton().create(configuration);
 
                 if (order == nullptr)
                 {
@@ -71,7 +71,7 @@ namespace Gecko
 
     bool Orders::add_first(const Id& order_id)
     {
-        auto order = OrderManager::getSingleton().get(order_id);
+        OrderPtr order = OrderManager::getSingleton().get(order_id);
 
         if (order == nullptr)
         {
@@ -82,9 +82,18 @@ namespace Gecko
 
         if (is_available(order->get_type()) == false)
         {
-            L_WARNING << "Cannot add order " << order_type::to_string(order->get_type()) << ".";
+            L_WARNING << "Order '" << order_type::to_string(order->get_type()) << "' not supported by this object.";
 
             OrderManager::getSingleton().destroy(order_id);
+
+            return false;
+        }
+
+        auto i = std::ranges::find(m_queue, order_id);
+
+        if (i != m_queue.end())
+        {
+            L_WARNING << "Order '" << order_id << "' already in queue.";
 
             return false;
         }
@@ -96,7 +105,7 @@ namespace Gecko
 
     bool Orders::add_last(const Id& order_id)
     {
-        auto order = OrderManager::getSingleton().get(order_id);
+        OrderPtr order = OrderManager::getSingleton().get(order_id);
 
         if (order == nullptr)
         {
@@ -107,9 +116,18 @@ namespace Gecko
 
         if (is_available(order->get_type()) == false)
         {
-            L_WARNING << "Cannot add order '" << order_type::to_string(order->get_type()) << "'.";
+            L_WARNING << "Order '" << order_type::to_string(order->get_type()) << "' not supported by this object.";
 
             OrderManager::getSingleton().destroy(order_id);
+
+            return false;
+        }
+
+        auto i = std::ranges::find(m_queue, order_id);
+
+        if (i != m_queue.end())
+        {
+            L_WARNING << "Order '" << order_id << "' already in queue.";
 
             return false;
         }
@@ -143,12 +161,9 @@ namespace Gecko
 
     void Orders::remove_all_orders()
     {
-        if (OrderManager::getSingletonPtr())
+        for (const Id& order_id : m_queue)
         {
-            for (const auto& order_id : m_queue)
-            {
-                OrderManager::getSingleton().destroy(order_id);
-            }
+            OrderManager::getSingleton().destroy(order_id);
         }
 
         m_queue.clear();
@@ -156,7 +171,7 @@ namespace Gecko
 
     void Orders::move_first_to_end()
     {
-        auto& order_id = m_queue.front();
+        Id& order_id = m_queue.front();
 
         m_queue.pop_front();
         m_queue.push_back(order_id);

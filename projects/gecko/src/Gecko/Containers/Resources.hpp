@@ -11,6 +11,9 @@ namespace Gecko
         public Updatable
     {
     public:
+        using Container = std::map<std::string, Resource>;
+
+    public:
         // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
@@ -18,9 +21,6 @@ namespace Gecko
     public:
         // From Updatable.
         void update(float time) override;
-
-    public:
-        typedef std::map<std::string, Resource> Map;
 
     public:
         float add(const std::string& name, float value);
@@ -38,11 +38,9 @@ namespace Gecko
         }
 
         bool has_resource(const std::string& name) const;
-
         bool has_resource(const std::string& name, float value) const;
 
         bool has_storage(const std::string& name) const;
-
         bool has_storage(const std::string& name, float value) const;
 
         void merge(const Resources& other);
@@ -81,22 +79,22 @@ namespace Gecko
         }
 
     public:
-        auto begin()
+        Container::iterator begin()
         {
             return m_items.begin();
         }
 
-        auto end()
+        Container::iterator end()
         {
             return m_items.end();
         }
 
-        auto cbegin() const
+        Container::const_iterator cbegin() const
         {
             return m_items.cbegin();
         }
 
-        auto cend() const
+        Container::const_iterator cend() const
         {
             return m_items.cend();
         }
@@ -105,8 +103,9 @@ namespace Gecko
         bool operator==(const Resources& other) const;
 
     private:
+        Container m_items;
+
         float max_storage = 0.0f;
-        Map m_items;
 
         Resource& get(const std::string& name)
         {

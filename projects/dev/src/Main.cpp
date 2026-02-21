@@ -650,8 +650,66 @@ typedef boost::graph_traits<graph_t>::vertex_descriptor vertex_descriptor;
 typedef std::pair<int, int> Edge;
 */
 
+#include "PathFinder.h"
+#include "AStar.h"
+
+class MyNode :
+    public AStarNode
+{
+public:
+    // From AStarNode.
+    float distanceTo(AStarNode* node) const override;
+};
+
+float MyNode::distanceTo(AStarNode* node) const
+{
+    return 1.0f;
+}
+
 int main()
 {
+    PathFinder<MyNode> myFinder; // Used to find a path in a MyNode graph
+	
+	std::vector<MyNode*> path;
+	MyNode nodes[100];
+
+	for (int i = 0; i < 100; ++i)
+	{
+        nodes[i].setPosition(i, i);
+
+        if (i + 1 < 100)
+        {
+            nodes[i].addChild(&nodes[i + 1], 1.0f);
+        }
+
+		// Do your stuff here to link nodes between them as needed
+		// by using Node::addChild().
+		// This is the "setup" of your graph.
+	}
+	
+	// Let's say we want the path from the first node to the last one ...
+	myFinder.setStart(nodes[0]);
+	myFinder.setGoal(nodes[99]);
+
+	// ... and that's it !
+	bool result = myFinder.findPath<AStar>(path); // Just specify the algorithm you want to use
+	
+    if (result)
+    {
+        std::cout << "Success ! A path has been found." << std::endl;
+
+        for (const auto& node : path)
+        {
+            std::cout << node->getX() << ":" << node->getY() << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "Erk, it seems there is no way through." << std::endl;
+    }
+
+    std::cin.ignore();
+
     /*
     for (int i = 0; i < 40; i++)
     {
@@ -780,21 +838,18 @@ int main()
     std::cout << std::endl;
     */
 
-    // create(1);
-
-    // std::cout << std::is_constructible<GLRenderer, int>::value << std::endl;
-    // std::cout << std::is_constructible<GLRenderer, int, int>::value << std::endl;
-
-    // auto pGL = create("GL", 10);
-    // auto pDX = create("DX", 1024, 1024);
-
-    // create_order("attack", 2, 4, 6);
-    // create_order("move", 2, 4, 1.0f, 2.0f);
-
     /*
-    print(666);
-    print(777, 888);
-    */
+    create(1);
+
+    std::cout << std::is_constructible<GLRenderer, int>::value << std::endl;
+    std::cout << std::is_constructible<GLRenderer, int, int>::value << std::endl;
+
+    auto pGL = create("GL", 10);
+    auto pDX = create("DX", 1024, 1024);
+
+    create_order("attack", 2, 4, 6);
+    create_order("move", 2, 4, 1.0f, 2.0f);
+     */
 
     /*
     auto f = std::make_shared<Factory<Vehicle>>();

@@ -27,27 +27,22 @@ namespace Gecko
         explicit Player(const Player& other);
 
     public:
-        const auto& get_color() const
-        {
-            return m_color;
-        }
-
-        auto get_diplomacy()
-        {
-            return m_diplomacy;
-        }
-
-        const auto& get_name() const
+        const std::string& get_name() const
         {
             return m_name;
         }
 
-        auto get_resources()
+        const std::string& get_color() const
+        {
+            return m_color;
+        }
+
+        const std::shared_ptr<Resources>& get_resources() const
         {
             return m_resources;
         }
 
-        auto get_selected()
+        const std::shared_ptr<Selected>& get_selected() const
         {
             return m_selected;
         }
@@ -58,7 +53,6 @@ namespace Gecko
         std::string m_name;
         std::string m_color;
 
-        std::shared_ptr<Diplomacy> m_diplomacy;
         std::shared_ptr<Resources> m_resources;
         std::shared_ptr<Selected>  m_selected;
     };

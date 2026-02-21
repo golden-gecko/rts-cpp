@@ -16,7 +16,7 @@ namespace Gecko
     protected:
         Layer* m_owner = nullptr;
 
-        Ogre::Entity* m_entity = nullptr;
+        Ogre::Entity*    m_entity     = nullptr;
         Ogre::SceneNode* m_scene_node = nullptr;
     };
 }

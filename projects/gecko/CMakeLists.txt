@@ -62,6 +62,11 @@ target_link_libraries(${PROJECT_NAME} OgreBites)
 target_include_directories(${PROJECT_NAME} PUBLIC ${OIS_DIR}/include/ois)
 target_link_libraries(${PROJECT_NAME} debug ${OIS_DIR}/lib/OIS_d.lib optimized ${OIS_DIR}/lib/OIS.lib)
 
+# Find PathFinder
+find_package(PathFinder REQUIRED)
+target_include_directories(${PROJECT_NAME} PUBLIC ${PathFinder_DIR}/../../include/PathFinder)
+target_link_libraries(${PROJECT_NAME} PathFinder::PathFinder)
+
 # Find RmlUi
 find_package(RmlUi REQUIRED)
 target_link_libraries(${PROJECT_NAME} RmlUi::RmlUi)

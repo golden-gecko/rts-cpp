@@ -1,7 +1,6 @@
 #include "Gecko/UI/EventListener.hpp"
 
 #include "Gecko/Games/Game.hpp"
-#include "Gecko/Log.hpp"
 #include "Gecko/UI/UI.hpp"
 #include "Gecko/UI/Widgets/Configurations.hpp"
 #include "Gecko/UI/Widgets/Orders.hpp"
@@ -11,60 +10,20 @@ namespace Gecko
 {
 	void EventListener::ProcessEvent(Rml::Event& event)
 	{
-		// L_TRACE << "EventListener::ProcessEvent()";
-
-		std::vector<std::string> segments;
-
-        boost::algorithm::split(segments, m_value, boost::is_any_of(":"), boost::token_compress_on);
-
-		if (segments.size() != 2)
-		{
-			return;
-		}
-
-		std::string function = segments[0];
-		std::string argument = segments[1];
-
-		/*
-		if (m_value == "call:quit-to-menu")
-		{
-			on_quit_to_menu();
-		}
-		else if (m_value == "call:quit-to-desktop")
-		{
-			on_quit_to_desktop();
-		}
-		else if (function == "close")
-		{
-			on_close(argument);
-		}
-		else if (function == "menu")
-		{
-			on_menu(argument);
-		}
-		else if (function == "open")
-		{
-			on_open(argument);
-		}
-		*/
 	}
 
 	void EventListener::OnAttach(Rml::Element* element)
 	{
-		// L_TRACE << "EventListener::OnAttach()";
 	}
 
 	void EventListener::OnDetach(Rml::Element* element)
 	{
-		// L_TRACE << "EventListener::OnDetach()";
-
 		delete this;
 	}
 
 	EventListener::EventListener(const Rml::String& value) :
 		m_value(value)
 	{
-		// L_TRACE << "EventListener::EventListener()";
 	}
 
 	Rml::Element* EventListener::get_element(const std::string& element) const

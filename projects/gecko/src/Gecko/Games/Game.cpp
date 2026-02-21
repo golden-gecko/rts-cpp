@@ -22,9 +22,11 @@
 #include "Gecko/Scenes/EditorScene.hpp"
 #include "Gecko/Scenes/MapScene.hpp"
 #include "Gecko/Skills/Skill.hpp"
+#include "Gecko/UI/RenderInterface.hpp"
 #include "Gecko/UI/Widgets/Cursor.hpp"
 #include "Gecko/UI/Widgets/Minimap.hpp"
 #include "Gecko/UI/Widgets/Preview.hpp"
+#include "Gecko/UI/Widgets/SelectionBox.hpp"
 #include "Gecko/UI/UI.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Mesh.hpp"
@@ -34,11 +36,6 @@ Gecko::Game* Ogre::Singleton<Gecko::Game>::msSingleton = nullptr;
 
 namespace Gecko
 {
-    void Game::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
-    {
-        UI::getSingleton().render(queueGroupId, cameraName, skipThisInvocation);
-    }
-
     void Game::windowResized(Ogre::RenderWindow* rw)
     {
         OgreBites::ApplicationContext::windowResized(rw);
@@ -60,7 +57,7 @@ namespace Gecko
 
     void Game::init()
     {
-        init_root();
+        init_render();
         init_scenes(m_configuration->get_child("scenes"));
         init_meshes();
     }
@@ -75,7 +72,7 @@ namespace Gecko
         SkillManager::getSingleton().destroy_all();
 
         deinit_scenes();
-        deinit_root();
+        deinit_render();
     }
 
     void Game::update(float time)
@@ -516,32 +513,33 @@ namespace Gecko
         return saves;
     }
 
-    void Game::set_active_player_id(const Id& id)
+    void Game::set_active_player_id(const Id& active_player_id)
     {
         // Get current active player.
-        auto current_active_player = PlayerManager::getSingleton().get(m_active_player_id);
-
-        if (current_active_player)
+        if (PlayerPtr current_active_player = PlayerManager::getSingleton().get(m_active_player_id))
         {
-            current_active_player->get_selected()->apply_current_selection(false);
-            current_active_player->get_selected()->apply_ui(false);
+            const std::shared_ptr<Selected>& selected = current_active_player->get_selected();
+
+            selected->apply_current_selection(false);
+            selected->apply_ui(false);
+        }
+
+        // Get new active player.
+        if (PlayerPtr new_active_player = PlayerManager::getSingleton().get(active_player_id))
+        {
+            const std::shared_ptr<Selected>& selected = new_active_player->get_selected();
+
+            selected->apply_current_selection(true);
+            selected->apply_ui(true);
+
+            if (std::shared_ptr<SelectionBoxWidget> selecion_box = UI::getSingleton().get_component<SelectionBoxWidget>())
+            {
+                selecion_box->set_color(new_active_player->get_color());
+            }
         }
 
         // Set new active player ID.
-        m_active_player_id = id;
-
-        // Get new active player.
-        auto new_active_player = PlayerManager::getSingleton().get(id);
-
-        if (new_active_player)
-        {
-            new_active_player->get_selected()->apply_current_selection(true);
-            new_active_player->get_selected()->apply_ui(true);
-
-            // TODO: Fix.
-            // set_fog_of_war_texture(new_active_player->get_fog_of_war_texture());
-            // new_active_player->apply_fog_of_war();
-        }
+        m_active_player_id = active_player_id;
     }
 
     void Game::init_meshes()
@@ -555,19 +553,18 @@ namespace Gecko
             selection->begin(Settings::Material::Default);
 
             selection->position(-0.5f, 0.0f, -0.5f);
+            selection->position(-0.5f, 0.0f,  0.5f);
+            selection->position( 0.5f, 0.0f,  0.5f);
+            selection->position( 0.5f, 0.0f, -0.5f);
+
             selection->normal(Ogre::Vector3::UNIT_Y);
+            selection->normal(Ogre::Vector3::UNIT_Y);
+            selection->normal(Ogre::Vector3::UNIT_Y);
+            selection->normal(Ogre::Vector3::UNIT_Y);
+
             selection->textureCoord(0.0f, 0.0f);
-
-            selection->position(-0.5f, 0.0f, 0.5f);
-            selection->normal(Ogre::Vector3::UNIT_Y);
             selection->textureCoord(1.0f, 0.0f);
-
-            selection->position(0.5f, 0.0f, 0.5f);
-            selection->normal(Ogre::Vector3::UNIT_Y);
             selection->textureCoord(1.0f, 1.0f);
-
-            selection->position(0.5f, 0.0f, -0.5f);
-            selection->normal(Ogre::Vector3::UNIT_Y);
             selection->textureCoord(0.0f, 1.0f);
 
             selection->index(0);
@@ -580,26 +577,25 @@ namespace Gecko
 
             selection->end();
 
-            // Save mesh to cache.
+            // Create mesh.
             Ogre::MeshPtr mesh = selection->convertToMesh(Settings::UI::SelectionMesh);
 
+            // Save mesh to cache.
             if (m_configuration->get_bool("options.cache.meshes.enabled", true))
             {
-                Ogre::MeshSerializer serializer;
-
                 if (std::filesystem::exists(Settings::Cache::MeshesPath) == false)
                 {
                     std::filesystem::create_directories(Settings::Cache::MeshesPath);
                 }
 
-                serializer.exportMesh(mesh.get(), mesh_path.string());
+                Utils::Mesh::to_file(mesh, mesh_path.string());
             }
 
             m_map_scene->destroy_manual_object(selection);
         }
     }
 
-    void Game::init_root()
+    void Game::init_render()
     {
         initApp();
 
@@ -614,9 +610,6 @@ namespace Gecko
         m_map_scene = std::make_shared<Scene>(configuration->get_child("Map"));
         m_editor_scene = std::make_shared<Scene>(configuration->get_child("Editor"));
 
-        // Set render queue listener for rendering UI.
-        m_map_scene->get_scene_manager()->addRenderQueueListener(this);
-
         // Add camera to render window.
         getRenderWindow()->addViewport(m_map_scene->get_camera(Settings::Camera::Main)->get_camera());
     }
@@ -629,7 +622,7 @@ namespace Gecko
         }
     }
 
-    void Game::deinit_root()
+    void Game::deinit_render()
     {
         closeApp();
     }

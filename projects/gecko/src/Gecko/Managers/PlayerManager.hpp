@@ -21,5 +21,8 @@ namespace Gecko
     public:
         void init(const ConfigurationPtr& configuration);
         void deinit();
+
+    public:
+        PlayerPtr get_by_configuration_name(const std::string& name) const;
     };
 }

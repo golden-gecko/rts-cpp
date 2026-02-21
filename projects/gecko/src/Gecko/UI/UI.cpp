@@ -6,6 +6,7 @@
 #include "Gecko/Containers/Orders.hpp"
 #include "Gecko/Containers/Resources.hpp"
 #include "Gecko/Containers/Selected.hpp"
+#include "Gecko/Exception.hpp"
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Input/Input.hpp"
 #include "Gecko/Layers/Layer.hpp"
@@ -72,12 +73,17 @@ namespace Gecko
         Rml::SetRenderInterface(m_render_interface.get());
         Rml::SetSystemInterface(m_system_interface.get());
 
-        Rml::Initialise();
+        if (Rml::Initialise() == false)
+        {
+            throw Exception("Failed to initialise RmlUi.");
+        }
 
         m_context = Rml::CreateContext("main", Rml::Vector2i(render_window->getWidth(), render_window->getHeight()));
-        m_event_listener_instancer = std::make_shared<EventListenerInstancer>();
 
-    	Rml::Factory::RegisterEventListenerInstancer(m_event_listener_instancer.get());
+        if (m_context == nullptr)
+        {
+            throw Exception("Failed to create RmlUi context.");
+        }
 
         init_widgets();
         init_data_bindings();
@@ -194,8 +200,9 @@ namespace Gecko
         }
     }
 
-    UI::UI(const ConfigurationPtr& configuration) :
-        m_configuration(configuration)
+    UI::UI(const ConfigurationPtr& configuration, const ScenePtr& scene) :
+        m_configuration(configuration),
+        m_scene(scene)
     {
     }
 
@@ -209,67 +216,6 @@ namespace Gecko
         object->set_visible(visible);
         }
         */
-    }
-
-    void UI::render(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation)
-    {
-        // L_TIME("UI::render()");
-
-        if (queueGroupId != Ogre::RENDER_QUEUE_OVERLAY)
-        {
-            return;
-        }
-
-        Ogre::RenderSystem* render_system = Game::getSingleton().getRoot()->getRenderSystem();
-
-        if (render_system == nullptr)
-        {
-            return;
-        }
-
-        if (render_system->_getViewport()->getOverlaysEnabled() == false)
-        {
-            return;
-        }
-
-        Ogre::RenderWindow* render_window = Game::getSingleton().getRenderWindow();
-
-        if (render_window == nullptr)
-        {
-            return;
-        }
-
-        float z_near = -1.0f;
-        float z_far = 1.0f;
-
-        Ogre::Matrix4 projection_matrix = Ogre::Matrix4::ZERO;
-
-        projection_matrix[0][0] = 2.0f / (Ogre::Real)render_window->getWidth();
-        projection_matrix[0][3] = -1.0000000f;
-        projection_matrix[1][1] = -2.0f / (Ogre::Real)render_window->getHeight();
-        projection_matrix[1][3] = 1.0000000f;
-        projection_matrix[2][2] = -2.0f / (z_far - z_near);
-        projection_matrix[3][3] = 1.0000000f;
-        
-        render_system->_disableTextureUnitsFrom(1);
-        render_system->_setAlphaRejectSettings(Ogre::CMPF_GREATER, 0, false);
-        render_system->_setColourBufferWriteEnabled(true, true, true, true);
-        render_system->_setCullingMode(Ogre::CULL_CLOCKWISE);
-        render_system->_setDepthBias(0, 0);
-        render_system->_setDepthBufferParams(false, false);
-        render_system->_setFog(Ogre::FOG_NONE);
-        render_system->_setProjectionMatrix(projection_matrix);
-        render_system->_setSceneBlending(Ogre::SBF_SOURCE_ALPHA, Ogre::SBF_ONE_MINUS_SOURCE_ALPHA);
-        render_system->_setTextureCoordCalculation(0, Ogre::TEXCALC_NONE);
-        render_system->_setTextureCoordSet(0, 0);
-        render_system->_setTextureMatrix(0, Ogre::Matrix4::IDENTITY);
-        render_system->_setViewMatrix(Ogre::Matrix4::IDENTITY);
-        render_system->setLightingEnabled(false);
-        render_system->unbindGpuProgram(Ogre::GPT_FRAGMENT_PROGRAM);
-        render_system->unbindGpuProgram(Ogre::GPT_VERTEX_PROGRAM);
-
-        m_context->Update();
-        m_context->Render();
     }
 
     /*
@@ -615,32 +561,32 @@ namespace Gecko
 
     void UI::reset()
     {
-        reset_configuration();
-        reset_order();
-        reset_skill();
+        reset_configurations();
+        reset_orders();
+        reset_skills();
     }
 
-    void UI::reset_configuration()
+    void UI::reset_configurations()
     {
-        // if (get_configuration_name().empty() == false)
+        if (auto configurations = get_component<ConfigurationsWidget>())
         {
-            // set_configuration_name("");
+            configurations->select("");
         }
     }
 
-    void UI::reset_order()
+    void UI::reset_orders()
     {
-        // if (get_order_type() != order_type::Value::None)
+        if (auto orders = get_component<OrdersWidget>())
         {
-            // set_order_type(order_type::Value::None);
+            orders->select("");
         }
     }
 
-    void UI::reset_skill()
+    void UI::reset_skills()
     {
-        // if (get_skill_name().empty() == false)
+        if (auto skills = get_component<SkillsWidget>())
         {
-            // set_skill_name("");
+            skills->select("");
         }
     }
 

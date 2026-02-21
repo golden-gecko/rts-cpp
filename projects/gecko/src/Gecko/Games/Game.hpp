@@ -8,15 +8,10 @@ namespace Gecko
 {
     class Game :
         public Ogre::Singleton<Game>,
-        public Ogre::RenderQueueListener,
         public OgreBites::ApplicationContext,
         public Initializable,
         public Updatable
     {
-    public:
-        // From Ogre::RenderQueueListener.
-        void renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& cameraName, bool& skipThisInvocation) override;
-
     public:
         // From OgreBites::ApplicationContext.
         void windowResized(Ogre::RenderWindow* rw) override;
@@ -51,17 +46,37 @@ namespace Gecko
         void load_options();
 
     public:
-        MapPtr get_active_map() const;
-        PlayerPtr get_active_player() const;
+        const ConfigurationPtr& get_configuration() const
+        {
+            return m_configuration;
+        }
 
-        auto get_active_player_id() const
+        const std::string& get_name() const
+        {
+            return m_name;
+        }
+
+        const Id& active_map_id() const
+        {
+            return m_active_map_id;
+        }
+
+        const Id& get_active_player_id() const
         {
             return m_active_player_id;
         }
 
-        const auto& get_configuration() const
+        MapPtr get_active_map() const;
+        PlayerPtr get_active_player() const;
+
+        const ScenePtr& get_map_scene()
         {
-            return m_configuration;
+            return m_map_scene;
+        }
+
+        const ScenePtr& get_editor_scene()
+        {
+            return m_editor_scene;
         }
 
         unsigned long get_frame_number() const
@@ -70,26 +85,14 @@ namespace Gecko
         }
 
         std::vector<std::string> get_maps() const;
-
-        const auto& get_name() const
-        {
-            return m_name;
-        }
-
         std::vector<std::string> get_saves() const;
 
-        const ScenePtr& get_map_scene()
-        {
-            return m_map_scene;
-        }
-
     public:
-        void set_active_player_id(const Id& id);
+        void set_active_player_id(const Id& active_player_id);
 
     private:
         ConfigurationPtr m_configuration;
-
-        std::string m_name;
+        std::string      m_name;
 
         Id m_active_map_id;
         Id m_active_player_id;
@@ -97,16 +100,15 @@ namespace Gecko
         MapPtr    m_active_map    = nullptr;
         PlayerPtr m_active_player = nullptr;
 
-    private:
         ScenePtr m_map_scene;
         ScenePtr m_editor_scene;
 
         void init_meshes();
-        void init_root();
+        void init_render();
         void init_scenes(const ConfigurationPtr& configuration);
 
         void deinit_maps();
-        void deinit_root();
+        void deinit_render();
         void deinit_scenes();
     };
 }

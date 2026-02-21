@@ -7,4 +7,6 @@ namespace Gecko::Utils::Mesh
     Ogre::SceneNode* copy_scene_node(Ogre::SceneNode* other);
 
     void get_information(const Ogre::MeshPtr mesh, size_t& vertex_count, Ogre::Vector3*& vertices, size_t& index_count, unsigned long*& indices, const Ogre::Vector3& position, const Ogre::Quaternion& orient, const Ogre::Vector3& scale);
+
+    void to_file(Ogre::MeshPtr mesh, const std::string& path);
 }

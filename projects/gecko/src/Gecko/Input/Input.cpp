@@ -4,9 +4,16 @@
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Orders.hpp"
 #include "Gecko/Containers/Selected.hpp"
+#include "Gecko/Containers/Skills.hpp"
 #include "Gecko/Exception.hpp"
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Input/Key.hpp"
+#include "Gecko/Input/Strategies/AttackOrderStrategy.hpp"
+#include "Gecko/Input/Strategies/FollowOrderStrategy.hpp"
+#include "Gecko/Input/Strategies/GuardOrderStrategy.hpp"
+#include "Gecko/Input/Strategies/MoveOrderStrategy.hpp"
+#include "Gecko/Input/Strategies/PatrolOrderStrategy.hpp"
+#include "Gecko/Input/Strategies/RallyOrderStrategy.hpp"
 #include "Gecko/Layers/Layer.hpp"
 #include "Gecko/Log.hpp"
 #include "Gecko/Managers/ConfigurationManager.hpp"
@@ -17,10 +24,12 @@
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/Players/Player.hpp"
 #include "Gecko/Statistics.hpp"
-#include "Gecko/Containers/Skills.hpp"
 #include "Gecko/UI/Widgets/Cursor.hpp"
 #include "Gecko/UI/Widgets/Preview.hpp"
+#include "Gecko/UI/Widgets/Configurations.hpp"
+#include "Gecko/UI/Widgets/Orders.hpp"
 #include "Gecko/UI/Widgets/SelectionBox.hpp"
+#include "Gecko/UI/Widgets/Skills.hpp"
 #include "Gecko/UI/UI.hpp"
 #include "Gecko/Utils/Convert.hpp"
 #include "Gecko/Utils/Raycast.hpp"
@@ -62,9 +71,7 @@ namespace Gecko
 
     bool Input::keyPressed(const OIS::KeyEvent& arg)
     {
-        // L_TRACE << "Input::keyPressed(" << arg.text << ")";
-
-        Statistics::getSingleton().add("Pressed keys", 1.0f);
+        // Statistics::getSingleton().add("Pressed keys", 1.0f); TODO: Restore.
 
         bool result = UI::getSingleton().inject_key_press(Utils::Convert::to_rmlui_key(arg.key));
 
@@ -175,7 +182,7 @@ namespace Gecko
         int y_rel = static_cast<float>(arg.state.Y.rel);
         int z_rel = static_cast<float>(arg.state.Z.rel);
 
-        Statistics::getSingleton().add("Mouse distance", std::abs(x_rel) + std::abs(y_rel));
+        // Statistics::getSingleton().add("Mouse distance", std::abs(x_rel) + std::abs(y_rel)); TODO: Restore.
 
         /*
         L_TRACE << "Input::mouseMoved():"
@@ -259,7 +266,7 @@ namespace Gecko
 
     bool Input::mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
     {
-        Statistics::getSingleton().add("Mouse clicks", 1.0f);
+        // Statistics::getSingleton().add("Mouse clicks", 1.0f); TODO: Restore.
 
         if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
         {
@@ -278,8 +285,9 @@ namespace Gecko
         return true;
     }
 
-    Input::Input(const ConfigurationPtr& configuration) :
-        m_configuration(configuration)
+    Input::Input(const ConfigurationPtr& configuration, std::uint64_t render_window_handle) :
+        m_configuration(configuration),
+        m_render_window_handle(render_window_handle)
     {
     }
 
@@ -295,21 +303,14 @@ namespace Gecko
             }
         }
 
-        OIS::ParamList param_list;
-
-        param_list.emplace(OIS::ParamList::value_type("WINDOW", Ogre::StringConverter::toString(m_render_window_handle)));
-
-#if defined OIS_WIN32_PLATFORM
-        param_list.emplace(OIS::ParamList::value_type("w32_keyboard", "DISCL_FOREGROUND"));
-        param_list.emplace(OIS::ParamList::value_type("w32_keyboard", "DISCL_NONEXCLUSIVE"));
-        param_list.emplace(OIS::ParamList::value_type("w32_mouse", "DISCL_FOREGROUND"));
-        param_list.emplace(OIS::ParamList::value_type("w32_mouse", "DISCL_NONEXCLUSIVE"));
-#else
-        param_list.emplace(OIS::ParamList::value_type("XAutoRepeatOn", "true"));
-        param_list.emplace(OIS::ParamList::value_type("x11_keyboard_grab", "false"));
-        param_list.emplace(OIS::ParamList::value_type("x11_mouse_grab", "false"));
-        param_list.emplace(OIS::ParamList::value_type("x11_mouse_hide", "false"));
-#endif
+        OIS::ParamList param_list =
+        {
+            OIS::ParamList::value_type("WINDOW", std::to_string(m_render_window_handle)),
+            OIS::ParamList::value_type("w32_keyboard", "DISCL_FOREGROUND"),
+            OIS::ParamList::value_type("w32_keyboard", "DISCL_NONEXCLUSIVE"),
+            OIS::ParamList::value_type("w32_mouse", "DISCL_FOREGROUND"),
+            OIS::ParamList::value_type("w32_mouse", "DISCL_NONEXCLUSIVE")
+        };
 
         m_input_manager = OIS::InputManager::createInputSystem(param_list);
 
@@ -384,6 +385,11 @@ namespace Gecko
         });
     }
 
+    bool Input::is_key_pressed(OIS::KeyCode key_code) const
+    {
+        return m_keyboard ? m_keyboard->isKeyDown(key_code) : false;
+    }
+
     bool Input::is_mouse_button_pressed(OIS::MouseButtonID mouse_button) const
     {
         return m_mouse ? m_mouse->getMouseState().buttonDown(mouse_button) : false;
@@ -394,545 +400,182 @@ namespace Gecko
         m_mouse_sensitivity = mouse_sensitivity;
     }
 
-    void Input::set_render_window_handle(unsigned long render_window_handle)
-    {
-        m_render_window_handle = render_window_handle;
-    }
-
     void Input::set_window_size(int width, int height)
     {
         if (m_mouse)
         {
-            const auto& mouse_state = m_mouse->getMouseState();
+            const OIS::MouseState& mouse_state = m_mouse->getMouseState();
 
             mouse_state.width = width;
             mouse_state.height = height;
         }
     }
 
-    void Input::process_attack_order(const OIS::MouseEvent& arg)
-    {
-        if (Game::getSingleton().get_active_player()->get_selected()->size())
-        {
-            auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
-            auto terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
-
-            for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
-            {
-                auto object = ObjectManager::getSingleton().get(object_id);
-
-                if (object == nullptr)
-                {
-                    continue;
-                }
-
-                if (is_key_pressed(Command::Value::Multiple_Order) == false)
-                {
-                    object->get_orders()->remove_all_orders();
-                }
-
-                if (object_result && object_result->first.is_valid())
-                {
-                    auto order = OrderManager::getSingleton().order_attack(Id::Empty, object_id, object_result->first);
-
-                    if (order == nullptr)
-                    {
-                        throw Exception("Failed to create order.");
-                    }
-
-                    object->get_orders()->add_last(order->get_id());
-                }
-                else
-                {
-                    auto order = OrderManager::getSingleton().order_attack(Id::Empty, object_id, terrain_result->second);
-
-                    if (order == nullptr)
-                    {
-                        throw Exception("Failed to create order.");
-                    }
-
-                    object->get_orders()->add_last(order->get_id());
-                }
-            }
-        }
-    }
-
-    void Input::process_create_order(const OIS::MouseEvent& arg)
-    {
-        /*
-        auto terrain_result = Utils::Raycast::to_layer(arg);
-
-        if (terrain_result)
-        {
-            OrderManager::getSingleton().order_create(
-                Id::Empty, Id::Empty,
-                UI::getSingleton().get_configuration_name(),
-                terrain_result->second,
-                Game::getSingleton().get_active_player_id()
-            );
-        }
-        */
-    }
-
-    void Input::process_follow_order(const OIS::MouseEvent& arg)
-    {
-        if (Game::getSingleton().get_active_player()->get_selected()->size() == 0)
-        {
-            return;
-        }
-
-        auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
-
-        for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
-        {
-            auto object = ObjectManager::getSingleton().get(object_id);
-
-            if (object == nullptr)
-            {
-                continue;
-            }
-
-            if (is_key_pressed(Command::Value::Multiple_Order) == false)
-            {
-                object->get_orders()->remove_all_orders();
-            }
-
-            if (object_result && object_result->first.is_valid())
-            {
-                auto order = OrderManager::getSingleton().order_follow(Id::Empty, object_id, object_result->first);
-
-                object->get_orders()->add_last(order->get_id());
-            }
-        }
-    }
-
-    void Input::process_guard_order(const OIS::MouseEvent& arg)
-    {
-        if (Game::getSingleton().get_active_player()->get_selected()->size() == 0)
-        {
-            return;
-        }
-
-        auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
-        auto terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
-
-        for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
-        {
-            auto object = ObjectManager::getSingleton().get(object_id);
-
-            if (object == nullptr)
-            {
-                continue;
-            }
-
-            if (is_key_pressed(Command::Value::Multiple_Order) == false)
-            {
-                object->get_orders()->remove_all_orders();
-            }
-
-            if (object_result && object_result->first.is_valid())
-            {
-                auto order = OrderManager::getSingleton().order_guard(Id::Empty, object_id, object_result->first);
-
-                if (order == nullptr)
-                {
-                    throw Exception("Failed to create order.");
-                }
-
-                object->get_orders()->add_last(order->get_id());
-            }
-            else
-            {
-                auto order = OrderManager::getSingleton().order_guard(Id::Empty, object_id, terrain_result->second);
-
-                if (order == nullptr)
-                {
-                    throw Exception("Failed to create order.");
-                }
-
-                object->get_orders()->add_last(order->get_id());
-            }
-        }
-    }
-
-    void Input::process_idle_order(const OIS::MouseEvent& arg)
-    {
-        // TODO: Enable.
-        /*
-        if (id == OIS::MouseButtonID::MB_Left)
-        {
-            auto result = Utils::Raycast::cast_ray(arg, Object::QueryFlags::QF_OBJECT);
-            auto object = ObjectManager::getSingleton().get(result.first);
-
-            if (object)
-            {
-                Game::getSingleton().get_active_player()->select(object->get_id(), is_key_pressed(Command::Value::Multiple_Select));
-            }
-            else
-            {
-                Game::getSingleton().get_active_player()->select(0, is_key_pressed(Command::Value::Multiple_Select));
-            }
-        }
-        else if (id == OIS::MouseButtonID::MB_Right)
-        {
-            if (Game::getSingleton().get_active_player()->get_selected()->size())
-            {
-                for (const auto& selected_object_id : Game::getSingleton().get_active_player()->get_selected())
-                {
-                    auto selected_object = ObjectManager::getSingleton().get(selected_object_id);
-
-                    if (selected_object)
-                    {
-                        if (selected_object->get_default_order() == order_type::Value::Move)
-                        {
-                            auto result = Utils::Raycast::cast_ray(arg, Object::QueryFlags::QF_LAYER);
-
-                            if (is_key_pressed(Command::Value::Multiple_Order) == false)
-                            {
-                                OrderManager::getSingleton().stop(selected_object_id);
-                            }
-
-                            OrderManager::getSingleton().move(selected_object_id, result.second);
-                        }
-                        else if (selected_object->get_default_order() == order_type::Value::Rally)
-                        {
-                            auto result = Utils::Raycast::cast_ray(arg, Object::QueryFlags::QF_LAYER);
-
-                            OrderManager::getSingleton().rally(selected_object_id, result.second);
-                        }
-                    }
-                }
-            }
-        }
-        */
-    }
-
-    void Input::process_move_order(const OIS::MouseEvent& arg)
-    {
-        auto selected = Game::getSingleton().get_active_player()->get_selected();
-
-        if (selected->size() == 0)
-        {
-            return;
-        }
-
-        auto layer_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
-
-        if (layer_result.has_value() == false)
-        {
-            return;
-        }
-
-        for (const auto& object_id : *(selected))
-        {
-            auto object = ObjectManager::getSingleton().get(object_id);
-
-            if (object == nullptr)
-            {
-                continue;
-            }
-
-            if (is_key_pressed(Command::Value::Multiple_Order) == false)
-            {
-                object->get_orders()->remove_all_orders();
-            }
-
-            auto order = OrderManager::getSingleton().order_move(Id::Empty, object_id, layer_result->second);
-
-            if (order == nullptr)
-            {
-                throw Exception("Failed to create order.");
-            }
-
-            object->get_orders()->add_last(order->get_id());
-        }
-    }
-
-    void Input::process_patrol_order(const OIS::MouseEvent& arg)
-    {
-        if (Game::getSingleton().get_active_player()->get_selected()->size() == 0)
-        {
-            return;
-        }
-
-        auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
-        auto terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
-
-        for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
-        {
-            auto object = ObjectManager::getSingleton().get(object_id);
-
-            if (object == nullptr)
-            {
-                continue;
-            }
-
-            if (is_key_pressed(Command::Value::Multiple_Order) == false)
-            {
-                object->get_orders()->remove_all_orders();
-            }
-
-            if (object_result && object_result->first.is_valid())
-            {
-                auto order = OrderManager::getSingleton().order_patrol(Id::Empty, object_id, object_result->first);
-
-                if (order == nullptr)
-                {
-                    throw Exception("Failed to create order.");
-                }
-
-                object->get_orders()->add_last(order->get_id());
-            }
-            else
-            {
-                auto order = OrderManager::getSingleton().order_patrol(Id::Empty, object_id, terrain_result->second);
-
-                if (order == nullptr)
-                {
-                    throw Exception("Failed to create order.");
-                }
-
-                object->get_orders()->add_last(order->get_id());
-            };
-        }
-    }
-
-    void Input::process_rally_order(const OIS::MouseEvent& arg)
-    {
-        if (Game::getSingleton().get_active_player()->get_selected()->size() == 0)
-        {
-            return;
-        }
-
-        // TODO: Check if at least one cast is correct.
-        auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
-        auto terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
-
-        for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
-        {
-            auto object = ObjectManager::getSingleton().get(object_id);
-
-            if (object == nullptr)
-            {
-                continue;
-            }
-
-            if (is_key_pressed(Command::Value::Multiple_Order) == false)
-            {
-                object->get_orders()->remove_all_orders();
-            }
-
-            if (object_result && object_result->first.is_valid())
-            {
-                auto order = OrderManager::getSingleton().order_rally(Id::Empty, object_id, object_result->first);
-
-                if (order == nullptr)
-                {
-                    throw Exception("Failed to create order.");
-                }
-
-                object->get_orders()->add_last(order->get_id());
-            }
-            else
-            {
-                auto order = OrderManager::getSingleton().order_rally(Id::Empty, object_id, terrain_result->second);
-
-                if (order == nullptr)
-                {
-                    throw Exception("Failed to create order.");
-                }
-
-                object->get_orders()->add_last(order->get_id());
-            };
-        }
-    }
-
-    void Input::process_skill(const OIS::MouseEvent& arg, const std::string& skill_name)
-    {
-        if (Game::getSingleton().get_active_player()->get_selected()->size() == 0)
-        {
-            return;
-        }
-
-        // TODO: Check if at least one cast is correct.
-        auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
-        auto terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
-
-        for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
-        {
-            auto object = ObjectManager::getSingleton().get(object_id);
-
-            if (object == nullptr)
-            {
-                continue;
-            }
-
-            if (object_result && object_result->first.is_valid())
-            {
-                object->get_skills()->activate(skill_name, object_result->first);
-            }
-            else
-            {
-                object->get_skills()->activate(skill_name, terrain_result->second);
-            }
-        }
-    }
-
     void Input::handle_left_mouse_button(const OIS::MouseEvent& arg)
     {
-        auto& ui = UI::getSingleton();
-        auto selection_box = ui.get_component<SelectionBoxWidget>();
+        auto configurations = UI::getSingleton().get_component<ConfigurationsWidget>();
+        auto orders = UI::getSingleton().get_component<OrdersWidget>();
+        auto selection_box = UI::getSingleton().get_component<SelectionBoxWidget>();
+        auto skills = UI::getSingleton().get_component<SkillsWidget>();
 
-        selection_box->set_end(Utils::Convert::to_screen_coordinates(arg));
-        selection_box->set_visible(false);
+        const std::string& selected_configuration = configurations->get_selected();
+        const std::string& selected_order = orders->get_selected();
+        const std::string& selected_skill = skills->get_selected();
 
-        std::string configuration_name = ""; // ui.get_configuration_name();
-        auto possible_order_name = order_type::Value::None; // ui.get_order_type();
-        std::string skill_name = ""; // ui.get_skill_name();
-
-        if (configuration_name.empty() == false)
+        if (selected_configuration.empty() == false)
         {
-            auto layer_cast = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
-
-            if (layer_cast.has_value() == false)
-            {
-                ui.log_error("Failed to create object '" + configuration_name + "'.");
-                ui.reset();
-
-                return;
-            }
-
-            auto object = ObjectManager::getSingleton().create(configuration_name);
-
-            if (object == nullptr)
-            {
-                ui.log_error("Failed to create object '" + configuration_name + "'.");
-                ui.reset();
-
-                return;
-            }
-
-            object->set_owner(layer_cast->first->get_owner());
-            object->init();
-            object->set_player_id(Game::getSingleton().get_active_player_id());
-            object->set_position(layer_cast->first->get_position(layer_cast->second));
-
-            UI::getSingleton().log_error("Object " + configuration_name + " created.");
-
-            if (is_key_pressed(Command::Value::Multiple_Order) == false)
-            {
-                UI::getSingleton().reset();
-            }
+            handle_configuration(arg, selected_configuration);
         }
-        else if (possible_order_name != order_type::Value::None)
+        else if (selected_order.empty() == false)
         {
-            const std::map<order_type::Value, std::function<void(const OIS::MouseEvent&)>> handlers =
-            {
-                { order_type::Value::Attack, std::bind(&Input::process_attack_order, this, std::placeholders::_1) },
-                { order_type::Value::Follow, std::bind(&Input::process_follow_order, this, std::placeholders::_1) },
-                { order_type::Value::Guard, std::bind(&Input::process_guard_order, this, std::placeholders::_1) },
-                { order_type::Value::Move, std::bind(&Input::process_move_order, this, std::placeholders::_1) },
-                { order_type::Value::Patrol, std::bind(&Input::process_patrol_order, this, std::placeholders::_1) },
-                { order_type::Value::Rally, std::bind(&Input::process_rally_order, this, std::placeholders::_1) }
-            };
-
-            auto handler = handlers.find(possible_order_name);
-
-            if (handler != handlers.end())
-            {
-                handler->second(arg);
-            }
-            else
-            {
-                L_WARNING << "Could not find handler for order '" << order_type::to_string(possible_order_name) << "'.";
-            }
-
-            if (is_key_pressed(Command::Value::Multiple_Order) == false)
-            {
-                UI::getSingleton().reset();
-            }
+            handle_order(arg, selected_order);
         }
-        else if (skill_name.empty() == false)
+        else if (selected_skill.empty() == false)
         {
-            process_skill(arg, skill_name);
+            handle_skill(arg, selected_skill);
         }
         else
         {
-            if (selection_box->is_valid())
-            {
-                auto object_cast = Utils::Raycast::to_objects(Game::getSingleton().get_map_scene(), selection_box->get_start(), selection_box->get_end());
-                auto player = Game::getSingleton().get_active_player();
-
-                if (player)
-                {
-                    player->get_selected()->select(object_cast, is_key_pressed(Command::Value::Multiple_Select));
-                }
-            }
-            else
-            {
-                auto object_cast = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
-                auto player = Game::getSingleton().get_active_player();
-
-                if (player)
-                {
-                    auto selected = player->get_selected();
-
-                    if (object_cast)
-                    {
-                        selected->select(object_cast->first, is_key_pressed(Command::Value::Multiple_Select));
-                    }
-                    else
-                    {
-                        selected->select(Id::Empty, is_key_pressed(Command::Value::Multiple_Select));
-                    }
-                }
-            }
+            handle_selection(arg);
         }
     }
 
     void Input::handle_right_mouse_button(const OIS::MouseEvent& arg)
     {
-        auto player = Game::getSingleton().get_active_player();
+        PlayerPtr player = Game::getSingleton().get_active_player();
 
         if (player == nullptr)
         {
             return;
         }
 
-        auto selected = player->get_selected();
+        if (ObjectRaycastResults object_cast = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg))
+        {
+            if (ObjectPtr object = ObjectManager::getSingleton().get(object_cast->first))
+            {
+                if (Utils::is_friendly(object, player))
+                {
+                    GuardOrderStrategy strategy;
+                    strategy.execute(arg);
+                }
+                else
+                {
+                    AttackOrderStrategy strategy;
+                    strategy.execute(arg);
+                }
+            }
+        }
+        else if (LayerRaycastResults layer_cast = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg))
+        {
+            MoveOrderStrategy strategy;
+            strategy.execute(arg);
+        }
+    }
 
-        if (selected->empty())
+    void Input::handle_configuration(const OIS::MouseEvent& arg, const std::string& selected_configuration)
+    {
+        LayerRaycastResults layer_cast = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
+
+        if (layer_cast.has_value() == false)
+        {
+            UI::getSingleton().log_error("Failed to create object '" + selected_configuration + "'.");
+            UI::getSingleton().reset();
+
+            return;
+        }
+
+        ObjectPtr object = ObjectManager::getSingleton().create(selected_configuration);
+
+        if (object == nullptr)
+        {
+            UI::getSingleton().log_error("Failed to create object '" + selected_configuration + "'.");
+            UI::getSingleton().reset();
+
+            return;
+        }
+
+        object->set_owner(layer_cast->first->get_owner());
+        object->init();
+        object->set_player_id(Game::getSingleton().get_active_player_id());
+        object->set_position(layer_cast->first->get_position(layer_cast->second));
+
+        UI::getSingleton().log_error("Object " + selected_configuration + " created.");
+
+        if (is_key_pressed(Command::Value::Multiple_Order) == false)
+        {
+            UI::getSingleton().reset();
+        }
+    }
+
+    void Input::handle_order(const OIS::MouseEvent& arg, const std::string& selected_order)
+    {
+        static const std::map<order_type::Value, std::shared_ptr<OrderStrategy>> handlers =
+        {
+            { order_type::Value::Attack, std::make_shared<AttackOrderStrategy>() },
+            { order_type::Value::Follow, std::make_shared<FollowOrderStrategy>() },
+            { order_type::Value::Guard, std::make_shared<GuardOrderStrategy>() },
+            { order_type::Value::Move, std::make_shared<MoveOrderStrategy>() },
+            { order_type::Value::Patrol, std::make_shared<PatrolOrderStrategy>() },
+            { order_type::Value::Rally, std::make_shared<RallyOrderStrategy>() }
+        };
+
+        auto handler = handlers.find(order_type::from_string(selected_order));
+
+        if (handler != handlers.end())
+        {
+            handler->second->execute(arg);
+        }
+        else
+        {
+            L_WARNING << "Could not find handler for order '" << selected_order << "'.";
+        }
+
+        if (is_key_pressed(Command::Value::Multiple_Order) == false)
+        {
+            UI::getSingleton().reset();
+        }
+    }
+
+    void Input::handle_skill(const OIS::MouseEvent& arg, const std::string& selected_skill)
+    {
+        PlayerPtr player = Game::getSingleton().get_active_player();
+
+        if (player == nullptr)
         {
             return;
         }
 
-        auto object_cast = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
+        // TODO: Implement.
+    }
 
-        if (object_cast.has_value())
+    void Input::handle_selection(const OIS::MouseEvent& arg)
+    {
+        auto selection_box = UI::getSingleton().get_component<SelectionBoxWidget>();
+
+        selection_box->set_end(Utils::Convert::to_screen_coordinates(arg));
+        selection_box->set_visible(false);
+
+        if (selection_box->is_valid())
         {
-            auto object = ObjectManager::getSingleton().get(object_cast->first);
+            if (PlayerPtr player = Game::getSingleton().get_active_player())
+            {
+                std::set<Id> objects = Utils::Raycast::to_objects(Game::getSingleton().get_map_scene(), selection_box->get_start(), selection_box->get_end());
 
-            if (object == nullptr)
-            {
-                return;
-            }
-
-            if (Utils::is_friendly(*object, *player))
-            {
-                process_guard_order(arg);
-            }
-            else
-            {
-                process_attack_order(arg);
+                player->get_selected()->select(objects, is_key_pressed(Command::Value::Multiple_Select));
             }
         }
         else
         {
-            auto layer_cast = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
-
-            if (layer_cast)
+            if (PlayerPtr player = Game::getSingleton().get_active_player())
             {
-                process_move_order(arg);
+                if (ObjectRaycastResults object_cast = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg))
+                {
+                    player->get_selected()->select(object_cast->first, is_key_pressed(Command::Value::Multiple_Select));
+                }
+                else
+                {
+                    player->get_selected()->select(Id::Empty, is_key_pressed(Command::Value::Multiple_Select));
+                }
             }
         }
     }

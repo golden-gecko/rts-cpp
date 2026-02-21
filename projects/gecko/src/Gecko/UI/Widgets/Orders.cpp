@@ -34,7 +34,12 @@ namespace Gecko
 
     void OrdersWidget::select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)
     {
-        m_selected_order = (arguments.size() == 1 ? arguments[0].Get<std::string>() : "");
+        select(arguments.size() == 1 ? arguments[0].Get<std::string>() : "");
+    }
+
+    void OrdersWidget::select(const std::string order)
+    {
+        m_selected_order = order;
 
         m_model.DirtyVariable("selected_order");
     }
