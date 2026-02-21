@@ -5,6 +5,7 @@
 namespace Gecko
 {
     class Diplomacy :
+        public Ogre::Singleton<Diplomacy>,
         public Serializable
     {
     public:
@@ -23,5 +24,15 @@ namespace Gecko
         // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
+
+    public:
+        State get(ObjectPtr object_a, ObjectPtr object_b) const;
+        State get(PlayerPtr player_a, PlayerPtr player_b) const;
+
+        State get(ObjectPtr object, PlayerPtr player) const;
+        State get(PlayerPtr player, ObjectPtr object) const;
+
+    private:
+        std::map<std::string, std::map<std::string, State>> m_states;
     };
 }

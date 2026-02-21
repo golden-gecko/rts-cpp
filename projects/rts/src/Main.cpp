@@ -1,5 +1,6 @@
 #include <Gecko/Application.hpp>
 #include <Gecko/Configuration.hpp>
+#include <Gecko/Diplomacy.hpp>
 #include <Gecko/Games/Game.hpp>
 #include <Gecko/Input/Input.hpp>
 #include <Gecko/Log.hpp>
@@ -25,6 +26,7 @@ int main(int argc, char* argv[])
 {
     std::unique_ptr<Gecko::ComponentManager> component_manager;
     std::unique_ptr<Gecko::ConfigurationManager> configuration_manager;
+    std::unique_ptr<Gecko::Diplomacy> diplomacy;
     std::unique_ptr<Gecko::Game> game;
     std::unique_ptr<Gecko::Input> input;
     std::unique_ptr<Gecko::JobManager> job_manager;
@@ -85,13 +87,17 @@ int main(int argc, char* argv[])
 
     // Load map.
     game->load_map(map_name);
+    
+    // Initialize diplomacy.
+    diplomacy = std::make_unique<Gecko::Diplomacy>();
+    diplomacy->deserialize(map_configuration->get_child("diplomacy"));
+
+    // Initialize statistics.
+    statistics = std::make_unique<Gecko::Statistics>();
 
     // Initialize technology tree.
     technology_tree = std::make_unique<Gecko::TechnologyTree>();
     technology_tree->init();
-
-    // Initialize statistics.
-    statistics = std::make_unique<Gecko::Statistics>();
 
     // Initialize UI.
     ui = std::make_unique<Gecko::UI>(game_configuration->get_child("ui"), game->get_map_scene());

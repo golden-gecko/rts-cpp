@@ -23,7 +23,7 @@ namespace Gecko
         }
 
         ObjectRaycastResults object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
-        LayerRaycastResults terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
+        LayerRaycastResults layer_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
         for (const Id& object_id : *(player->get_selected()))
         {
@@ -50,9 +50,9 @@ namespace Gecko
                     L_WARNING << "Could not create order.";
                 }
             }
-            else if (terrain_result)
+            else if (layer_result)
             {
-                if (OrderPtr order = OrderManager::getSingleton().order_rally(Id::Empty, object_id, terrain_result->second))
+                if (OrderPtr order = OrderManager::getSingleton().order_rally(Id::Empty, object_id, layer_result->second))
                 {
                     object->get_orders()->add_last(order->get_id());
                 }

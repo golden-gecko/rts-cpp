@@ -229,12 +229,22 @@ namespace Gecko
         }
 
     public:
-        auto begin()
+        Json::Value::iterator begin()
         {
             return m_value.begin();
         }
 
-        auto end()
+        Json::Value::iterator end()
+        {
+            return m_value.end();
+        }
+
+        Json::Value::const_iterator begin() const
+        {
+            return m_value.begin();
+        }
+
+        Json::Value::const_iterator end() const
         {
             return m_value.end();
         }

@@ -5,6 +5,7 @@
 #include "Gecko/Containers/Orders.hpp"
 #include "Gecko/Containers/Selected.hpp"
 #include "Gecko/Containers/Skills.hpp"
+#include "Gecko/Diplomacy.hpp"
 #include "Gecko/Exception.hpp"
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Input/Key.hpp"
@@ -453,12 +454,12 @@ namespace Gecko
         {
             if (ObjectPtr object = ObjectManager::getSingleton().get(object_cast->first))
             {
-                if (Utils::is_friendly(object, player))
+                if (Diplomacy::getSingleton().get(object, player) == Diplomacy::State::Ally)
                 {
                     GuardOrderStrategy strategy;
                     strategy.execute(arg);
                 }
-                else
+                else if (Diplomacy::getSingleton().get(object, player) == Diplomacy::State::Enemy)
                 {
                     AttackOrderStrategy strategy;
                     strategy.execute(arg);

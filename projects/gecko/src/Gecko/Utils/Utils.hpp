@@ -20,7 +20,5 @@ namespace Gecko::Utils
 
     void move_resources(const std::shared_ptr<Resources>& source, const std::shared_ptr<Resources>& destination, const std::string& name, float value);
 
-    bool is_friendly(ObjectPtr object, PlayerPtr player);
-
     void fire_missile(Object& owner, const std::string& configuration_name, const Ogre::Vector3& current_position, const Ogre::Vector3& original_target_direction);
 }

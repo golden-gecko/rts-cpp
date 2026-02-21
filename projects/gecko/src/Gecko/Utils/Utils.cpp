@@ -1,7 +1,7 @@
 #include "Gecko/Utils/Utils.hpp"
 
 #include "Gecko/Containers/Resources.hpp"
-#include "Gecko/Exception.hpp"
+#include "Gecko/Log.hpp"
 #include "Gecko/Managers/ObjectManager.hpp"
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/Players/Player.hpp"
@@ -86,24 +86,13 @@ namespace Gecko::Utils
         destination->add(name, value);
     }
 
-    bool is_friendly(ObjectPtr object, PlayerPtr player)
-    {
-        // TODO: Use diplomacy and move to player class.
-        if (object && player)
-        {
-            return object->get_player_id() == player->get_id();
-        }
-
-        return false;
-    }
-
     void fire_missile(Object& owner, const std::string& configuration_name, const Ogre::Vector3& current_position, const Ogre::Vector3& original_target_direction)
     {
         ObjectPtr missile = ObjectManager::getSingleton().create(configuration_name);
 
         if (missile == nullptr)
         {
-            throw Exception("Failed to create object '" + configuration_name + "'.");
+            L_WARNING << "Failed to create object '" << configuration_name << "'.";
         }
 
         // TODO: Move object manager to map?

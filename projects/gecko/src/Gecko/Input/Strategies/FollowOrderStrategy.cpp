@@ -23,7 +23,7 @@ namespace Gecko
         }
 
         ObjectRaycastResults object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
-        LayerRaycastResults terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
+        LayerRaycastResults layer_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
         for (const Id& object_id : *(player->get_selected()))
         {

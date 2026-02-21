@@ -12,14 +12,14 @@ namespace Gecko
 /*
 void Input::process_create_order(const OIS::MouseEvent& arg)
 {
-    auto terrain_result = Utils::Raycast::to_layer(arg);
+    auto layer_result = Utils::Raycast::to_layer(arg);
 
-    if (terrain_result)
+    if (layer_result)
     {
         OrderManager::getSingleton().order_create(
             Id::Empty, Id::Empty,
             UI::getSingleton().get_configuration_name(),
-            terrain_result->second,
+            layer_result->second,
             Game::getSingleton().get_active_player_id()
         );
     }
@@ -82,7 +82,7 @@ void Input::process_skill(const OIS::MouseEvent& arg, const std::string& skill_n
     }
 
     auto object_result = Utils::Raycast::to_object(Game::getSingleton().get_map_scene(), arg);
-    auto terrain_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
+    auto layer_result = Utils::Raycast::to_layer(Game::getSingleton().get_map_scene(), arg);
 
     for (const auto& object_id : *(Game::getSingleton().get_active_player()->get_selected()))
     {
@@ -97,9 +97,9 @@ void Input::process_skill(const OIS::MouseEvent& arg, const std::string& skill_n
         {
             object->get_skills()->activate(skill_name, object_result->first);
         }
-        else if (terrain_result)
+        else if (layer_result)
         {
-            object->get_skills()->activate(skill_name, terrain_result->second);
+            object->get_skills()->activate(skill_name, layer_result->second);
         }
     }
 }
