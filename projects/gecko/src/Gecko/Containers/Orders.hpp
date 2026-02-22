@@ -84,22 +84,22 @@ namespace Gecko
         }
 
     public:
-        auto begin()
+        Available::iterator begin()
         {
             return m_available.begin();
         }
 
-        auto end()
+        Available::iterator end()
         {
             return m_available.end();
         }
 
-        auto cbegin() const
+        Available::const_iterator cbegin() const
         {
             return m_available.cbegin();
         }
 
-        auto cend() const
+        Available::const_iterator cend() const
         {
             return m_available.cend();
         }

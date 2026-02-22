@@ -35,6 +35,7 @@
 #include "Gecko/UI/Widgets/Log.hpp"
 #include "Gecko/UI/Widgets/Minimap.hpp"
 #include "Gecko/UI/Widgets/ObjectsViewer.hpp"
+#include "Gecko/UI/Widgets/OrderQueue.hpp"
 #include "Gecko/UI/Widgets/Orders.hpp"
 #include "Gecko/UI/Widgets/OrdersViewer.hpp"
 #include "Gecko/UI/Widgets/Players.hpp"
@@ -163,6 +164,7 @@ namespace Gecko
 
         get_component<DiplomacyWidget>()->update();
         get_component<ObjectsViewerWidget>()->update();
+        get_component<OrderQueueWidget>()->update();
         get_component<OrdersViewerWidget>()->update();
         get_component<PlayersWidget>()->update();
         get_component<ResourcesWidget>()->update(Game::getSingleton().get_active_player()->get_resources());
@@ -963,6 +965,7 @@ namespace Gecko
         m_widgets.push_back(std::make_shared<LogWidget>());
         m_widgets.push_back(std::make_shared<MinimapWidget>());
         m_widgets.push_back(std::make_shared<ObjectsViewerWidget>());
+        m_widgets.push_back(std::make_shared<OrderQueueWidget>());
         m_widgets.push_back(std::make_shared<OrdersWidget>());
         m_widgets.push_back(std::make_shared<OrdersViewerWidget>());
         m_widgets.push_back(std::make_shared<PlayersWidget>());

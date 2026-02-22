@@ -148,6 +148,32 @@ td.text {
 	right: 5dp;
 }
 
+/*** Order Queue ***/
+
+#order-queue {
+	left: 5dp;
+	top: 500dp;
+}
+
+#order-queue button {
+	width: 30dp;
+}
+
+#order-queue td.button {
+	text-align: center;
+}
+
+#order-queue table,
+#order-queue tr,
+#order-queue td {
+	border: 0;
+	vertical-align: middle;
+}
+
+#order-queue table {
+	width: 300dp;
+}
+
 /*** Orders ***/
 
 #orders {

@@ -1,5 +1,6 @@
 #include "Gecko/Id.hpp"
 
+#include "Gecko/Log.hpp"
 #include "Gecko/Utils/Convert.hpp"
 
 namespace Gecko
@@ -7,6 +8,20 @@ namespace Gecko
     const Id Id::Empty = Id(0);
     const Id Id::Min   = Id(1);
     const Id Id::Max   = Id(std::numeric_limits<int>::max());
+
+    Id Id::from_string(const std::string& id)
+    {
+        try
+        {
+            return Id(std::stoi(id));
+        }
+        catch (const std::invalid_argument& exception)
+        {
+            L_ERROR << "Invalid ID: " << id;
+
+            return Id::Empty;
+        }
+    }
 
     Id::Id(int value) :
         m_value(value)

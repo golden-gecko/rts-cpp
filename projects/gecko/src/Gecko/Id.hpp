@@ -10,6 +10,9 @@ namespace Gecko
         static const Id Max;
 
     public:
+        static Id from_string(const std::string& id);
+
+    public:
         explicit Id(int value = 0);
 
         bool is_valid() const;

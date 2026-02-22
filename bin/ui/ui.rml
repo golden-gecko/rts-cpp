@@ -142,6 +142,30 @@
             </template>
         </div>
 
+        <!-- Order Queue -->
+        <div id="order-queue" class="panel" data-model="order_queue">
+            <template src="window">
+                <table>
+                    <thead>
+                        <tr>
+                            <td class="text">Order</td>
+                            <td class="text">Target</td>
+                            <td class="button">Cancel</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-for="i : orders">
+                            <td class="text">{{i.name}}</td>
+                            <td class="text">{{i.target}}</td>
+                            <td class="button">
+                                <button type="button" class="button" data-event-click="cancel(i.id)">X</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+        </div>
+
         <!-- Orders -->
         <div id="orders" class="panel" data-model="orders">
             <template src="window">
