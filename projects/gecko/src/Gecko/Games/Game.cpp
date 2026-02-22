@@ -466,7 +466,14 @@ namespace Gecko
 
     void Game::pause()
     {
-        m_game_speed = 0.0f;
+        if (m_game_speed < 0.1f)
+        {
+            m_game_speed = 1.0f;
+        }
+        else
+        {
+            m_game_speed = 0.0f;
+        }
 
         UI::getSingleton().log_info("Game speed set to " + std::to_string(m_game_speed));
     }
