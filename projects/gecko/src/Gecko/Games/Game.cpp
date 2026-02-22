@@ -83,10 +83,10 @@ namespace Gecko
         m_map_scene->update(time);
         m_editor_scene->update(time);
 
-        MapManager::getSingleton().update(time);
-        ObjectManager::getSingleton().update(time);
-        OrderManager::getSingleton().update(time);
-        PlayerManager::getSingleton().update(time);
+        MapManager::getSingleton().update(time * m_game_speed);
+        ObjectManager::getSingleton().update(time * m_game_speed);
+        OrderManager::getSingleton().update(time * m_game_speed);
+        PlayerManager::getSingleton().update(time * m_game_speed);
 
         // Must be updated last.
         UI::getSingleton().update(time);
@@ -457,6 +457,27 @@ namespace Gecko
         */
     }
 
+    void Game::faster()
+    {
+        m_game_speed = std::clamp<float>(m_game_speed + 0.1f, Settings::Game::MinSpeed, Settings::Game::MaxSpeed);
+
+        UI::getSingleton().log_info("Game speed set to " + std::to_string(m_game_speed));
+    }
+
+    void Game::pause()
+    {
+        m_game_speed = 0.0f;
+
+        UI::getSingleton().log_info("Game speed set to " + std::to_string(m_game_speed));
+    }
+
+    void Game::slower()
+    {
+        m_game_speed = std::clamp<float>(m_game_speed - 0.1f, Settings::Game::MinSpeed, Settings::Game::MaxSpeed);
+
+        UI::getSingleton().log_info("Game speed set to " + std::to_string(m_game_speed));
+    }
+
     MapPtr Game::get_active_map() const
     {
         return MapManager::getSingleton().begin()->second; // TODO: Hardcoded.
@@ -532,7 +553,7 @@ namespace Gecko
             selected->apply_current_selection(true);
             selected->apply_ui(true);
 
-            if (std::shared_ptr<SelectionBoxWidget> selecion_box = UI::getSingleton().get_component<SelectionBoxWidget>())
+            if (auto selecion_box = UI::getSingleton().get_component<SelectionBoxWidget>())
             {
                 selecion_box->set_color(new_active_player->get_color());
             }

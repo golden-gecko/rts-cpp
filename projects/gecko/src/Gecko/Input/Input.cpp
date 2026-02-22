@@ -24,7 +24,6 @@
 #include "Gecko/Maps/Map.hpp"
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/Players/Player.hpp"
-#include "Gecko/Statistics.hpp"
 #include "Gecko/UI/Widgets/Cursor.hpp"
 #include "Gecko/UI/Widgets/Preview.hpp"
 #include "Gecko/UI/Widgets/Configurations.hpp"
@@ -72,8 +71,6 @@ namespace Gecko
 
     bool Input::keyPressed(const OIS::KeyEvent& arg)
     {
-        // Statistics::getSingleton().add("Pressed keys", 1.0f); TODO: Restore.
-
         bool result = UI::getSingleton().inject_key_press(Utils::Convert::to_rmlui_key(arg.key));
 
         // Pass only ASCII characters.
@@ -105,7 +102,6 @@ namespace Gecko
 
         static const std::map<Command::Value, std::function<void()>> commands =
         {
-            // TODO: Create method, because active player can change.
             { Command::Value::Assign_To_Group_0, std::bind(assign_to_group, 0) },
             { Command::Value::Assign_To_Group_1, std::bind(assign_to_group, 1) },
             { Command::Value::Assign_To_Group_2, std::bind(assign_to_group, 2) },
@@ -117,12 +113,10 @@ namespace Gecko
             { Command::Value::Assign_To_Group_8, std::bind(assign_to_group, 8) },
             { Command::Value::Assign_To_Group_9, std::bind(assign_to_group, 9) },
 
-            // TODO: Restore time control.
-            // { Command::Value::Game_Faster, std::bind(&Game::faster, Game::getSingletonPtr()) },
-            // { Command::Value::Game_Pause, std::bind(&Game::toggle_pause, Game::getSingletonPtr()) },
-            // { Command::Value::Game_Slower, std::bind(&Game::slower, Game::getSingletonPtr()) },
+            { Command::Value::Game_Faster, std::bind(&Game::faster, Game::getSingletonPtr()) },
+            { Command::Value::Game_Pause, std::bind(&Game::pause, Game::getSingletonPtr()) },
+            { Command::Value::Game_Slower, std::bind(&Game::slower, Game::getSingletonPtr()) },
 
-            // TODO: Create method, because active player can change.
             { Command::Value::Select_Group_0, std::bind(select_group, 0) },
             { Command::Value::Select_Group_1, std::bind(select_group, 1) },
             { Command::Value::Select_Group_2, std::bind(select_group, 2) },
@@ -164,8 +158,6 @@ namespace Gecko
 
     bool Input::keyReleased(const OIS::KeyEvent& arg)
     {
-        // L_TRACE << "Input::keyReleased(" << arg.text << ")";
-
         if (UI::getSingleton().inject_key_release(Utils::Convert::to_rmlui_key(arg.key)) == false)
         {
             return true;
@@ -182,14 +174,6 @@ namespace Gecko
         int x_rel = static_cast<float>(arg.state.X.rel);
         int y_rel = static_cast<float>(arg.state.Y.rel);
         int z_rel = static_cast<float>(arg.state.Z.rel);
-
-        // Statistics::getSingleton().add("Mouse distance", std::abs(x_rel) + std::abs(y_rel)); TODO: Restore.
-
-        /*
-        L_TRACE << "Input::mouseMoved():"
-                << " x: " << arg.state.X.abs << " y: " << arg.state.Y.abs << " z: " << arg.state.Z.abs
-                << " x: " << arg.state.X.rel << " y: " << arg.state.Y.rel << " z: " << arg.state.Z.rel;
-        */
 
         if (UI::getSingleton().inject_mouse_move(x_abs, y_abs, z_rel))
         {
@@ -267,8 +251,6 @@ namespace Gecko
 
     bool Input::mouseReleased(const OIS::MouseEvent& arg, OIS::MouseButtonID id)
     {
-        // Statistics::getSingleton().add("Mouse clicks", 1.0f); TODO: Restore.
-
         if (UI::getSingleton().is_mouse_inside(arg.state.X.abs, arg.state.Y.abs))
         {
             return UI::getSingleton().inject_mouse_release(Utils::Convert::to_rmlui_button(id));

@@ -60,6 +60,9 @@ int main(int argc, char* argv[])
     game = std::make_unique<Gecko::Game>(game_configuration);
     game->init();
 
+    // Initialize statistics.
+    statistics = std::make_unique<Gecko::Statistics>();
+
     // Initialize input system.
     input = std::make_unique<Gecko::Input>(game_configuration->get_child("input"), Gecko::Utils::get_window_handle(game->getRenderWindow()));
     input->init();
@@ -91,9 +94,6 @@ int main(int argc, char* argv[])
     // Initialize diplomacy.
     diplomacy = std::make_unique<Gecko::Diplomacy>();
     diplomacy->deserialize(map_configuration->get_child("diplomacy"));
-
-    // Initialize statistics.
-    statistics = std::make_unique<Gecko::Statistics>();
 
     // Initialize technology tree.
     technology_tree = std::make_unique<Gecko::TechnologyTree>();

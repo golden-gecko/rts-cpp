@@ -45,6 +45,13 @@ namespace Gecko
         void save_options(const std::string& options);
         void load_options();
 
+        void faster();
+        void pause();
+        void slower();
+
+    private:
+        float m_game_speed = 1.0f;
+
     public:
         const ConfigurationPtr& get_configuration() const
         {
