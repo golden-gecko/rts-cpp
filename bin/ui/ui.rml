@@ -28,14 +28,14 @@
                 <table>
                     <thead>
                         <tr>
-                            <td class="number">ID</td>
-                            <td class="text">Name</td>
+                            <td></td>
+                            <td class="text" data-for="i : players">{{i.name}}</td>
                         </tr>
                     </thead>
                     <tbody>
                         <tr data-for="i : players">
-                            <td class="number">{{i.id}}</td>
                             <td class="text">{{i.name}}</td>
+                            <td class="text" data-for="j : i.states">{{j}}</td>
                         </tr>
                     </tbody>
                 </table>

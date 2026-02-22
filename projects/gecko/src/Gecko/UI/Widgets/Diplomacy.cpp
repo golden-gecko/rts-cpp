@@ -1,5 +1,7 @@
 #include "Gecko/UI/Widgets/Diplomacy.hpp"
 
+#include "Gecko/Diplomacy.hpp"
+
 namespace Gecko
 {
     void DiplomacyWidget::ProcessEvent(Rml::Event& event)
@@ -12,8 +14,10 @@ namespace Gecko
         {
             if (Rml::StructHandle handle = constructor.RegisterStruct<Player>())
             {
-                handle.RegisterMember("id", &Player::id);
+                constructor.RegisterArray<Rml::Vector<Rml::String>>();
+
                 handle.RegisterMember("name", &Player::name);
+                handle.RegisterMember("states", &Player::states);
 
                 constructor.RegisterArray<Rml::Vector<Player>>();
                 constructor.Bind("players", &m_players);
@@ -44,5 +48,26 @@ namespace Gecko
                 element->SetClass("hidden", true);
             }
         }
+    }
+
+    void DiplomacyWidget::update()
+    {
+        m_players.clear();
+
+        for (const auto& player_a : Diplomacy::getSingleton().get_states())
+        {
+            Player player;
+
+            player.name = player_a.first;
+
+            for (const auto& player_b : player_a.second)
+            {
+                player.states.push_back(Diplomacy::to_name(player_b.second));
+            }
+
+            m_players.push_back(player);
+        }
+
+        m_model.DirtyVariable("players");
     }
 }

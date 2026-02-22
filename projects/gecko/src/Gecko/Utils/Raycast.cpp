@@ -2,8 +2,6 @@
 
 #include "Gecko/Cameras/Camera.hpp"
 #include "Gecko/Layers/Layer.hpp"
-#include "Gecko/Managers/MapManager.hpp"
-#include "Gecko/Maps/Map.hpp"
 #include "Gecko/QueryFlags.hpp"
 #include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Settings.hpp"
@@ -47,18 +45,18 @@ namespace Gecko
             return std::set<Id>();
         }
 
-        auto camera = MapManager::getSingleton().begin()->second->get_camera(Settings::Camera::Main)->get_camera();
+        Ogre::Camera* camera = scene->get_camera(Settings::Camera::Main)->get_camera();
 
-        auto topLeft = camera->getCameraToViewportRay(left, top);
-        auto topRight = camera->getCameraToViewportRay(right, top);
-        auto bottomLeft = camera->getCameraToViewportRay(left, bottom);
-        auto bottomRight = camera->getCameraToViewportRay(right, bottom);
+        Ogre::Ray topLeft = camera->getCameraToViewportRay(left, top);
+        Ogre::Ray topRight = camera->getCameraToViewportRay(right, top);
+        Ogre::Ray bottomLeft = camera->getCameraToViewportRay(left, bottom);
+        Ogre::Ray bottomRight = camera->getCameraToViewportRay(right, bottom);
 
-        auto frontPlane = Ogre::Plane(topLeft.getOrigin(), topRight.getOrigin(), bottomRight.getOrigin());
-        auto topPlane = Ogre::Plane(topLeft.getOrigin(),topLeft.getPoint(10), topRight.getPoint(10));
-        auto leftPlane = Ogre::Plane(topLeft.getOrigin(), bottomLeft.getPoint(10), topLeft.getPoint(10));
-        auto bottomPlane = Ogre::Plane(bottomLeft.getOrigin(), bottomRight.getPoint(10), bottomLeft.getPoint(10));
-        auto rightPlane = Ogre::Plane(topRight.getOrigin(), topRight.getPoint(10), bottomRight.getPoint(10));
+        Ogre::Plane frontPlane = Ogre::Plane(topLeft.getOrigin(), topRight.getOrigin(), bottomRight.getOrigin());
+        Ogre::Plane topPlane = Ogre::Plane(topLeft.getOrigin(),topLeft.getPoint(10), topRight.getPoint(10));
+        Ogre::Plane leftPlane = Ogre::Plane(topLeft.getOrigin(), bottomLeft.getPoint(10), topLeft.getPoint(10));
+        Ogre::Plane bottomPlane = Ogre::Plane(bottomLeft.getOrigin(), bottomRight.getPoint(10), bottomLeft.getPoint(10));
+        Ogre::Plane rightPlane = Ogre::Plane(topRight.getOrigin(), topRight.getPoint(10), bottomRight.getPoint(10));
 
         Ogre::PlaneBoundedVolume vol;
         vol.planes.push_back(frontPlane);
@@ -70,17 +68,13 @@ namespace Gecko
         Ogre::PlaneBoundedVolumeList volList;
         volList.push_back(vol);
 
-        static auto query = scene->create_plane_volume_query(volList, query_mask);
-
-        query->setVolumes(volList);
-        query->setQueryMask(query_mask);
-
-        auto& result = query->execute();
+        Ogre::PlaneBoundedVolumeListSceneQuery* query = scene->create_plane_volume_query(volList, query_mask);
+        Ogre::SceneQueryResult& result = query->execute();
         std::set<Id> objects;
 
         for (const auto& i : result.movables)
         {
-            auto object_id = Utils::Convert::to_id(*i);
+            auto object_id = Utils::Convert::to_id(i);
 
             if (object_id.is_valid())
             {
@@ -88,16 +82,15 @@ namespace Gecko
             }
         }
 
-        // TODO: Fix.
-        // Game::getSingleton().get_scene_manager()->destroyQuery(query);
+        scene->destroy_scene_query(query);
 
         return objects;
     }
 
     std::optional<std::pair<Ogre::Entity*, Ogre::Vector3>> from_point(const ScenePtr& scene, const Ogre::Ray& ray, Ogre::uint32 query_mask)
     {
-        auto m_pray_scene_query = scene->create_ray_scene_query(ray, query_mask);
-        auto& query_result = m_pray_scene_query->execute();
+        Ogre::RaySceneQuery* m_pray_scene_query = scene->create_ray_scene_query(ray, query_mask);
+        Ogre::RaySceneQueryResult& query_result = m_pray_scene_query->execute();
 
         // execute the query, returns a vector of hits
         if (query_result.size() <= 0)
@@ -128,7 +121,7 @@ namespace Gecko
             if ((query_result[qr_idx].movable != NULL) && (query_result[qr_idx].movable->getMovableType().compare("Entity") == 0))
             {
                 // get the entity to check
-                auto pentity = static_cast<Ogre::Entity*>(query_result[qr_idx].movable);
+                Ogre::Entity* pentity = static_cast<Ogre::Entity*>(query_result[qr_idx].movable);
 
                 if (pentity->isVisible() == false)
                 {
@@ -320,12 +313,12 @@ namespace Gecko::Utils::Raycast
             }
         }
 
-        scene->destroy_ray_scene_query(m_pray_scene_query);
+        scene->destroy_scene_query(m_pray_scene_query);
 
         // return the result
         if (closest_distance >= 0.0f)
         {
-            auto layer = Convert::to_layer(closest_pentity);
+            Layer* layer = Convert::to_layer(closest_pentity);
 
             if (layer)
             {
@@ -349,8 +342,8 @@ namespace Gecko::Utils::Raycast
             return {};
         }
 
-        auto m_pray_scene_query = scene->create_ray_scene_query(ray.value(), QueryFlags::QF_Object);
-        auto& query_result = m_pray_scene_query->execute();
+        Ogre::RaySceneQuery* m_pray_scene_query = scene->create_ray_scene_query(ray.value(), QueryFlags::QF_Object);
+        Ogre::RaySceneQueryResult& query_result = m_pray_scene_query->execute();
 
         // execute the query, returns a vector of hits
         if (query_result.size() <= 0)
@@ -381,7 +374,7 @@ namespace Gecko::Utils::Raycast
             if ((query_result[qr_idx].movable != NULL) && (query_result[qr_idx].movable->getMovableType().compare("Entity") == 0))
             {
                 // get the entity to check
-                auto pentity = static_cast<Ogre::Entity*>(query_result[qr_idx].movable);
+                Ogre::Entity* pentity = static_cast<Ogre::Entity*>(query_result[qr_idx].movable);
 
                 if (pentity->isVisible() == false)
                 {
@@ -444,12 +437,12 @@ namespace Gecko::Utils::Raycast
             }
         }
 
-        scene->destroy_ray_scene_query(m_pray_scene_query);
+        scene->destroy_scene_query(m_pray_scene_query);
 
         // return the result
         if (closest_distance >= 0.0f)
         {
-            auto object_id = Convert::to_id(*closest_pentity);
+            Id object_id = Convert::to_id(closest_pentity);
 
             if (object_id.is_valid())
             {

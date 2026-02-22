@@ -6,10 +6,8 @@ namespace Gecko::Utils::Convert
 {
     char to_char(OIS::KeyCode key_code, bool shift);
 
-    Id to_id(const Ogre::Entity& entity);
-    Id to_id(const Ogre::MovableObject& entity);
-
-    Layer* to_layer(Ogre::Entity* entity);
+    Id to_id(Ogre::MovableObject* entity);
+    Layer* to_layer(Ogre::MovableObject* entity);
 
     Ogre::PolygonMode to_polygon_mode(const std::string& polygon_mode);
     Ogre::ProjectionType to_projection_type(const std::string& projection_type);

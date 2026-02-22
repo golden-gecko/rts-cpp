@@ -104,100 +104,69 @@ namespace Gecko
 
     void UI::update(float time)
     {
-        if (m_refresh_time.update(time))
+        if (m_refresh_time.update(time) == false)
         {
-            m_refresh_time.reset();
+            return;
+        }
 
-            ObjectPtr hovered_object = ObjectManager::getSingleton().get(m_hovered_object_id);
+        m_refresh_time.reset();
 
-            if (hovered_object)
+        ObjectPtr hovered_object = ObjectManager::getSingleton().get(m_hovered_object_id);
+
+        if (hovered_object)
+        {
+            set_info(hovered_object->get_info());
+
+            get_component<PreviewWidget>()->get_camera()->set_target_id(hovered_object->get_id());
+        }
+        else if (Game::getSingleton().get_active_player() && Game::getSingleton().get_active_player()->get_selected()->size())
+        {
+            Id selected_id = Game::getSingleton().get_active_player()->get_first_selected();
+
+            if (ObjectPtr selected = ObjectManager::getSingleton().get(selected_id))
             {
-                set_info(hovered_object->get_info());
+                set_info(selected->get_info());
 
-                refresh_indicators(m_hovered_object_id);
-
-                get_component<PreviewWidget>()->get_camera()->set_target_id(hovered_object->get_id());
+                get_component<PreviewWidget>()->get_camera()->set_target_id(selected_id);
             }
-            else if (Game::getSingleton().get_active_player() && Game::getSingleton().get_active_player()->get_selected()->size())
-            {
-                Id selected_id = Game::getSingleton().get_active_player()->get_first_selected();
-                ObjectPtr selected = ObjectManager::getSingleton().get(selected_id);
+        }
+        else
+        {
+            System::memory_t memory = System::get_memory_usage();
+            const Ogre::RenderTarget::FrameStats& window_statistics = Game::getSingleton().getRenderWindow()->getStatistics();
 
-                if (selected)
-                {
-                    set_info(selected->get_info());
+            Json::Value info;
 
-                    refresh_indicators(selected_id);
-
-                    get_component<PreviewWidget>()->get_camera()->set_target_id(selected_id);
-                }
-            }
-            else
-            {
-                System::memory_t memory = System::get_memory_usage();
-                const Ogre::RenderTarget::FrameStats& window_statistics = Game::getSingleton().getRenderWindow()->getStatistics();
-
-                Json::Value info;
-
-                info["Average FPS"] = Utils::Convert::to_string(window_statistics.avgFPS, 2);
-                info["Last FPS"] = Utils::Convert::to_string(window_statistics.lastFPS, 2);
-                info["Triangles"] = window_statistics.triangleCount;
-                info["Active player ID"] = Game::getSingleton().get_active_player_id();
-                info["Cursor"] = get_component<CursorWidget>()->get_position().to_string();
-                info["Maps"] = MapManager::getSingleton().size();
-                info["Name"] = Game::getSingleton().get_name();
-                info["Objects"] = ObjectManager::getSingleton().size();
-                info["Orders"] = OrderManager::getSingleton().size();
-                info["Players"] = PlayerManager::getSingleton().size();
-
-                if (Game::getSingleton().get_active_player())
-                {
-                    info["Active player name"] = Game::getSingleton().get_active_player()->get_name();
-                    info["Selected"] = Game::getSingleton().get_active_player()->get_selected()->size();
-                }
-
-                info["Frame number"] = Utils::Convert::to_string(Game::getSingleton().get_frame_number());
-                info["CPU"] = Utils::Convert::to_string(System::get_cpu_usage()) + "%";
-                info["Memory"] = Utils::Convert::to_string(static_cast<float>(memory.virtual_memory) / 1024.0f / 1024.0f) + " MB";
-
-                set_info(std::make_shared<Configuration>(info));
-
-                /*
-                TODO: Enable.
-                const auto& seasons = MapManager::getSingleton().get_items().begin()->second->get_seasons();
-
-                for (const auto& i : seasons)
-                {
-                    info.emplace(i.get_name(), i.get_current().get_name());
-                }
-
-                refresh_indicators(Id::Empty);
-                */
-            }
-
-            get_component<ObjectsViewerWidget>()->update();
-            get_component<OrdersViewerWidget>()->update();
-            get_component<PlayersWidget>()->update();
-            get_component<StatisticsWidget>()->update();
-
-            // TODO: Optimize.
-            // set_floating_descriptions();
-
-            // TODO: Enable.
-            // set_diplomacy();
-            // set_layers(Game::getSingleton()->get_active_map()->get_layers());
-            // set_maps(Game::getSingleton().get_maps());
-            // set_objects_admin();
-            // set_orders_admin();
+            info["Average FPS"] = Utils::Convert::to_string(window_statistics.avgFPS, 2);
+            info["Last FPS"] = Utils::Convert::to_string(window_statistics.lastFPS, 2);
+            info["Triangles"] = window_statistics.triangleCount;
+            info["Active player ID"] = Game::getSingleton().get_active_player_id();
+            info["Cursor"] = get_component<CursorWidget>()->get_position().to_string();
+            info["Maps"] = MapManager::getSingleton().size();
+            info["Name"] = Game::getSingleton().get_name();
+            info["Objects"] = ObjectManager::getSingleton().size();
+            info["Orders"] = OrderManager::getSingleton().size();
+            info["Players"] = PlayerManager::getSingleton().size();
 
             if (Game::getSingleton().get_active_player())
             {
-                get_component<ResourcesWidget>()->update(Game::getSingleton().get_active_player()->get_resources());
+                info["Active player name"] = Game::getSingleton().get_active_player()->get_name();
+                info["Selected"] = Game::getSingleton().get_active_player()->get_selected()->size();
             }
 
-            // TODO: Enable.
-            // set_saves(Game::getSingleton().get_saves());
+            info["Frame number"] = Utils::Convert::to_string(Game::getSingleton().get_frame_number());
+            info["CPU"] = Utils::Convert::to_string(System::get_cpu_usage()) + "%";
+            info["Memory"] = Utils::Convert::to_string(static_cast<float>(memory.virtual_memory) / 1024.0f / 1024.0f) + " MB";
+
+            set_info(std::make_shared<Configuration>(info));
         }
+
+        get_component<DiplomacyWidget>()->update();
+        get_component<ObjectsViewerWidget>()->update();
+        get_component<OrdersViewerWidget>()->update();
+        get_component<PlayersWidget>()->update();
+        get_component<ResourcesWidget>()->update(Game::getSingleton().get_active_player()->get_resources());
+        get_component<StatisticsWidget>()->update();
     }
 
     UI::UI(const ConfigurationPtr& configuration, const ScenePtr& scene) :

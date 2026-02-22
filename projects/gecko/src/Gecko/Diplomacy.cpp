@@ -14,6 +14,7 @@ namespace Gecko
         static const std::map<std::string, State> types =
         {
             { "Ally" , State::Ally  },
+            { "Neutral" , State::Neutral  },
             { "Enemy", State::Enemy }
         };
 
@@ -24,7 +25,26 @@ namespace Gecko
             return type->second;
         }
 
-        return State::Enemy;
+        return State::Neutral;
+    }
+
+    std::string Diplomacy::to_name(State state)
+    {
+        static const std::map<State, std::string> types =
+        {
+            { State::Ally, "Ally" },
+            { State::Neutral, "Neutral" },
+            { State::Enemy, "Enemy" }
+        };
+
+        auto type = types.find(state);
+
+        if (type != types.end())
+        {
+            return type->second;
+        }
+
+        return "Neutral";
     }
 
     ConfigurationPtr Diplomacy::serialize() const
@@ -44,7 +64,11 @@ namespace Gecko
 
                 m_states[player_a][player_b] = from_name(j->asString());
                 m_states[player_b][player_a] = from_name(j->asString());
+
+                m_states[player_b][player_b] = State::Ally;
             }
+
+            m_states[player_a][player_a] = State::Ally;
         }
     }
 

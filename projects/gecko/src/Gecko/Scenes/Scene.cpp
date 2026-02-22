@@ -95,14 +95,6 @@ namespace Gecko
         return m_scene_manager->createPlaneBoundedVolumeQuery(volumes, mask);
     }
 
-    void Scene::destroy_query(Ogre::SceneQuery* scene_query)
-    {
-        if (scene_query)
-        {
-            m_scene_manager->destroyQuery(scene_query);
-        }
-    }
-
     Ogre::RaySceneQuery* Scene::create_ray_scene_query(const Ogre::Ray& ray, Ogre::uint32 query_mask) const
     {
         Ogre::RaySceneQuery* ray_scene_query = m_scene_manager->createRayQuery(ray);
@@ -113,11 +105,11 @@ namespace Gecko
         return ray_scene_query;
     }
 
-    void Scene::destroy_ray_scene_query(Ogre::RaySceneQuery* ray_scene_query)
+    void Scene::destroy_scene_query(Ogre::SceneQuery* scene_query)
     {
-        if (ray_scene_query)
+        if (scene_query)
         {
-            m_scene_manager->destroyQuery(ray_scene_query);
+            m_scene_manager->destroyQuery(scene_query);
         }
     }
 
@@ -138,10 +130,10 @@ namespace Gecko
     {
         for (auto i = configuration->begin(); i != configuration->end(); i++)
         {
-            auto camera_configuration = std::make_shared<Configuration>(*i);
+            ConfigurationPtr camera_configuration = std::make_shared<Configuration>(*i);
 
-            auto camera_name = camera_configuration->get_string("name");
-            auto camera_type = camera_configuration->get_string("type");
+            std::string camera_name = camera_configuration->get_string("name");
+            std::string camera_type = camera_configuration->get_string("type");
 
             if (camera_type == "Free")
             {

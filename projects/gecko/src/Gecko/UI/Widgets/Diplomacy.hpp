@@ -10,8 +10,8 @@ namespace Gecko
     public:
         struct Player
         {
-            int         id;
-            std::string name;
+            std::string              name;
+            std::vector<std::string> states;
         };
 
 	public:
@@ -27,6 +27,7 @@ namespace Gecko
 
     public:
         void close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
+        void update();
 
     private:
         Rml::ElementDocument* m_document = nullptr;

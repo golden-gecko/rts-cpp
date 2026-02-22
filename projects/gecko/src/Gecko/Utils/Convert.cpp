@@ -158,9 +158,14 @@ namespace Gecko::Utils::Convert
         }
     }
 
-    Id to_id(const Ogre::Entity& entity)
+    Id to_id(Ogre::MovableObject* movable_object)
     {
-        const auto& user_any = entity.getUserObjectBindings().getUserAny();
+        if (movable_object == nullptr)
+        {
+            return Id::Empty;
+        }
+
+        const Ogre::Any& user_any = movable_object->getUserObjectBindings().getUserAny();
 
         if (user_any.has_value() == false)
         {
@@ -175,26 +180,14 @@ namespace Gecko::Utils::Convert
         return Ogre::any_cast<Id>(user_any);
     }
 
-    Id to_id(const Ogre::MovableObject& entity)
+    Layer* to_layer(Ogre::MovableObject* movable_object)
     {
-        const auto& user_any = entity.getUserObjectBindings().getUserAny();
-
-        if (user_any.has_value() == false)
+        if (movable_object == nullptr)
         {
-            return Id::Empty;
+            return nullptr;
         }
 
-        if (user_any.type() != typeid(Id))
-        {
-            return Id::Empty;
-        }
-
-        return Ogre::any_cast<Id>(user_any);
-    }
-
-    Layer* to_layer(Ogre::Entity* entity)
-    {
-        const Ogre::Any& user_any = entity->getUserObjectBindings().getUserAny();
+        const Ogre::Any& user_any = movable_object->getUserObjectBindings().getUserAny();
 
         if (user_any.isEmpty())
         {
