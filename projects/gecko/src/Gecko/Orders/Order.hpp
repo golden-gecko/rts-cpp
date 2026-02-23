@@ -87,6 +87,11 @@ namespace Gecko
         }
 
     public:
+        virtual std::string get_target_as_string() const
+        {
+            return "None";
+        }
+
         order_type::Value get_type() const
         {
             return m_type;

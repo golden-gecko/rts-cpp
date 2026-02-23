@@ -68,7 +68,7 @@ namespace Gecko
                 {
                     if (OrderPtr order = OrderManager::getSingleton().get(order_id))
                     {
-                        m_orders.push_back({ order_id.get(), order_type::to_string(order->get_type()), "N/A" });
+                        m_orders.push_back({ order_id.get(), order_type::to_string(order->get_type()), order->get_target_as_string() });
                     }
                 }
             }

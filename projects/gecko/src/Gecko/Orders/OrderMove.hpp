@@ -30,6 +30,8 @@ namespace Gecko
     public:
         std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const override;
 
+        std::string get_target_as_string() const override;
+
     public:
         // TODO: Remove.
         auto& get_path()

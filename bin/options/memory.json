@@ -1,10 +1,10 @@
 {
     "memory": {
-        "components": 1200,
+        "components": 1000,
         "maps": 10,
-        "objects": 30,
-        "orders": 1000,
+        "objects": 10,
+        "orders": 10,
         "players": 10,
-        "skills": 1200
+        "skills": 10
     }
 }

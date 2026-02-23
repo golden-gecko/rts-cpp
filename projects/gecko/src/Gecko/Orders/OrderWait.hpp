@@ -28,6 +28,9 @@ namespace Gecko
         explicit OrderWait(const OrderWait& other) = default;
 
     public:
+        std::string get_target_as_string() const override;
+
+    public:
         auto& get_wait_timer()
         {
             return m_wait_timer;

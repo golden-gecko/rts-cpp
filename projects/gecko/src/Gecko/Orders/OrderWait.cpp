@@ -43,4 +43,14 @@ namespace Gecko
         base_type(order_type::Value::Wait)
     {
     }
+
+    std::string OrderWait::get_target_as_string() const
+    {
+        std::stringstream stream; // TODO: Move to utils.
+
+        stream << std::fixed << std::setprecision(1);
+        stream << m_wait_timer.get_current() << "/" << m_wait_timer.get_max();
+
+        return stream.str();
+    }
 }

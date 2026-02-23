@@ -66,4 +66,13 @@ namespace Gecko
 
         return {};
     }
+
+    std::string OrderMove::get_target_as_string() const
+    {
+        std::stringstream stream; // TODO: Move to utils.
+
+        stream << target_position.x << ":" << target_position.z;
+
+        return stream.str();
+    }
 }

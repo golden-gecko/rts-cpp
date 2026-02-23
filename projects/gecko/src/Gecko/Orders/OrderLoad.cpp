@@ -62,4 +62,16 @@ namespace Gecko
 
         return { indicator };
     }
+
+    std::string OrderLoad::get_target_as_string() const
+    {
+        std::stringstream stream; // TODO: Move to utils.
+
+        if (ObjectPtr object = ObjectManager::getSingleton().get(target_id))
+        {
+            stream << object->get_name() << " (" << target_id << ")";
+        }
+
+        return stream.str();
+    }
 }
