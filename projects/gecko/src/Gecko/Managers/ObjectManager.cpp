@@ -16,7 +16,7 @@ namespace Gecko
     {
         L_TIME("ObjectManager::init()");
 
-        Size max_size = m_configuration->get_int<Size>("memory.objects");
+        std::uint64_t max_size = m_configuration->get_int<std::uint64_t>("memory.objects");
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {

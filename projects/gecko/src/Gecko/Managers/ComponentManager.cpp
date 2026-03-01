@@ -21,7 +21,7 @@ namespace Gecko
     {
         L_TIME("ComponentManager::init()");
 
-        Size max_size = m_configuration->get_int<Size>("memory.components");
+        std::uint64_t max_size = m_configuration->get_int<std::uint64_t>("memory.components");
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {

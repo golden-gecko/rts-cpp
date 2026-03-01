@@ -11,12 +11,13 @@
 
 namespace Gecko
 {
-    Layer::Layer(MapPtr owner, const std::string& name, const Configuration& configuration) :
+    Layer::Layer(MapPtr owner, const std::string& name, const ConfigurationPtr& configuration) :
         m_owner(owner),
+        m_configuration(configuration),
         m_name(name)
     {
-        deserialize_position_validator(configuration);
-        deserialize_search(configuration);
+        deserialize_position_validator();
+        deserialize_search();
     }
 
     std::optional<Navigation::Path::Points> Layer::search(const Ogre::Vector3& from, const Ogre::Vector3& to) const
@@ -72,11 +73,11 @@ namespace Gecko
         return data_layer->second;
     }
 
-    void Layer::deserialize_position_validator(const Configuration& configuration)
+    void Layer::deserialize_position_validator()
     {
-        if (configuration.has_member("validators.position"))
+        if (m_configuration->has_member("validators.position"))
         {
-            auto position_validator_name = configuration.get_string("validators.position");
+            auto position_validator_name = m_configuration->get_string("validators.position");
 
             if (position_validator_name == "SquareCenter")
             {
@@ -97,11 +98,11 @@ namespace Gecko
         }
     }
 
-    void Layer::deserialize_search(const Configuration& configuration)
+    void Layer::deserialize_search()
     {
-        if (configuration.has_member("search.algorithm"))
+        if (m_configuration->has_member("search.algorithm"))
         {
-            auto search_name = configuration.get_string("search.algorithm");
+            auto search_name = m_configuration->get_string("search.algorithm");
 
             if (search_name == "AvoidOccupied")
             {

@@ -14,49 +14,43 @@
 
 namespace Gecko
 {
-    SquareLayer::SquareLayer(MapPtr owner, const std::string& name, const Configuration& configuration) :
+    SquareLayer::SquareLayer(MapPtr owner, const std::string& name, const ConfigurationPtr& configuration) :
         base_type(owner, name, configuration)
     {
         // Get material name.
-        m_material_name = configuration.get_string("material");
+        m_material_name = configuration->get_string("material");
 
         // Get scale.
-        m_scale = configuration.get_vector3("scale", Ogre::Vector3::UNIT_SCALE);
+        m_scale = configuration->get_vector3("scale", Ogre::Vector3::UNIT_SCALE);
 
         if (m_scale.x <= 0.0f || m_scale.y <= 0.0f || m_scale.z <= 0.0f)
         {
-            L_WARNING << "Scale cannot be lower then zero. Setting to 1.0:1.0:1.0.";
-
-            m_scale = Ogre::Vector3::UNIT_SCALE;
+            throw Exception("Scale cannot be lower then zero. Setting to 1.0:1.0:1.0.");
         }
 
         // Get grid scale.
-        m_grid_scale = configuration.get_vector3("grid.scale", Ogre::Vector3::UNIT_SCALE);
+        m_grid_scale = configuration->get_vector3("grid.scale", Ogre::Vector3::UNIT_SCALE);
 
         // Do not check Y, because grid is two-dimensional.
         if (m_grid_scale.x <= 0.0f || m_grid_scale.z <= 0.0f)
         {
-            L_WARNING << "Grid scale cannot be lower then zero. Setting to 1.0:1.0:1.0.";
-
-            m_grid_scale = Ogre::Vector3::UNIT_SCALE;
+            throw Exception("Grid scale cannot be lower then zero. Setting to 1.0:1.0:1.0.");
         }
 
         // Do not check Y, because grid is two-dimensional.
         if (m_grid_scale.x > m_scale.x || m_grid_scale.z > m_scale.z)
         {
-            L_WARNING << "Grid scale cannot be greater than scale. Setting to 1.0:1.0:1.0.";
-
-            m_grid_scale = Ogre::Vector3::UNIT_SCALE;
+            throw Exception("Grid scale cannot be greater than scale. Setting to 1.0:1.0:1.0.");
         }
 
-        deserialize_data_layers(configuration);
+        deserialize_data_layers();
 
         // Create scene node.
         m_scene_node = m_owner->get_scene()->create_scene_node();
 
-        init_raw_data(configuration);
+        init_raw_data();
         init_mesh_data();
-        init_tiles(configuration);
+        init_tiles();
     }
 
     SquareLayer::~SquareLayer()
@@ -346,12 +340,12 @@ namespace Gecko
         }
     }
 
-    void SquareLayer::init_raw_data(const Configuration& configuration)
+    void SquareLayer::init_raw_data()
     {
-        auto z_row = configuration.get_child("data");
+        auto z_row = m_configuration->get_child("data");
         auto z_row_size = z_row->size();
 
-        auto heightmap_size = get_heightmap_size(configuration);
+        auto heightmap_size = get_heightmap_size();
         auto data_size = z_row_size * heightmap_size;
 
         // Allocate memory.
@@ -381,10 +375,10 @@ namespace Gecko
         }
     }
 
-    void SquareLayer::init_tiles(const Configuration& configuration)
+    void SquareLayer::init_tiles()
     {
         // Get shards.
-        std::uint16_t shards = configuration.get_int<std::uint16_t>("shards", 1);
+        std::uint16_t shards = m_configuration->get_int<std::uint16_t>("shards", 1);
         std::uint16_t shards_per_row = static_cast<std::uint16_t>(std::sqrt(shards));
 
         if (shards < 1)
@@ -403,7 +397,7 @@ namespace Gecko
         }
 
         // Get heightmap size.
-        auto heightmap_size = get_heightmap_size(configuration);
+        auto heightmap_size = get_heightmap_size();
 
         if (heightmap_size % shards_per_row != 0)
         {
@@ -411,7 +405,7 @@ namespace Gecko
         }
 
         // Get tiles.
-        auto z_row = configuration.get_child("data");
+        auto z_row = m_configuration->get_child("data");
         auto z_row_size = z_row->size();
 
         // Allocate memory.
@@ -456,9 +450,9 @@ namespace Gecko
         }
     }
 
-    void SquareLayer::deserialize_data_layers(const Configuration& configuration)
+    void SquareLayer::deserialize_data_layers()
     {
-        auto data_layers_configuration = configuration.get_child_optional("data_layers");
+        auto data_layers_configuration = m_configuration->get_child_optional("data_layers");
 
         if (data_layers_configuration)
         {
@@ -471,14 +465,14 @@ namespace Gecko
         }
     }
 
-    std::size_t SquareLayer::get_heightmap_size(const Configuration& configuration) const
+    std::size_t SquareLayer::get_heightmap_size() const
     {
-        if (configuration.has_member("data") == false)
+        if (m_configuration->has_member("data") == false)
         {
             return 0;
         }
 
-        ConfigurationPtr sources = configuration.get_child("data");
+        ConfigurationPtr sources = m_configuration->get_child("data");
 
         if (sources->size() <= 0)
         {

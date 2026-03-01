@@ -18,6 +18,8 @@ namespace Gecko
 
         Timer& update(float time);
 
+        void reset();
+
     public:
         float get_current() const
         {
@@ -45,11 +47,6 @@ namespace Gecko
             m_max = max;
         }
 
-        void reset()
-        {
-            set_current(0.0f);
-        }
-
     public:
         operator bool() const
         {
@@ -60,6 +57,6 @@ namespace Gecko
 
     private:
         float m_current = 0.0f;
-        float m_max = std::numeric_limits<float>::max();
+        float m_max     = std::numeric_limits<float>::max();
     };
 }

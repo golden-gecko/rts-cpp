@@ -14,7 +14,7 @@ namespace Gecko
     {
         L_TIME("MapManager::init()");
 
-        Size max_size = m_configuration->get_int<Size>("memory.maps");
+        std::uint64_t max_size = m_configuration->get_int<std::uint64_t>("memory.maps");
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {

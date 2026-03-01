@@ -37,4 +37,9 @@ namespace Gecko
 
         return *this;
     }
+
+    void Timer::reset()
+    {
+        set_current(0.0f);
+    }
 }

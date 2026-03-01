@@ -39,7 +39,7 @@ namespace Gecko
         Ogre::Vector3 get_position(const Ogre::Vector3& position, bool validate = true) const override;
 
     public:
-        explicit SquareLayer(MapPtr owner, const std::string& name, const Configuration& configuration);
+        explicit SquareLayer(MapPtr owner, const std::string& name, const ConfigurationPtr& configuration);
 
         ~SquareLayer() override;
 
@@ -47,13 +47,13 @@ namespace Gecko
         std::vector<std::vector<SquareTile>> tiles;
 
         void init_mesh_data();
-        void init_raw_data(const Configuration& configuration);
-        void init_tiles(const Configuration& configuration);
+        void init_raw_data();
+        void init_tiles();
 
         void load_file(const std::string& heightmap, int position_x, int position_z);
 
-        void deserialize_data_layers(const Configuration& configuration);
+        void deserialize_data_layers();
 
-        std::size_t get_heightmap_size(const Configuration& configuration) const;
+        std::size_t get_heightmap_size() const;
     };
 }

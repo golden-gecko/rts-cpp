@@ -13,7 +13,7 @@ namespace Gecko
         public Updatable
     {
     public:
-        explicit Layer(MapPtr owner, const std::string& name, const Configuration& configuration);
+        explicit Layer(MapPtr owner, const std::string& name, const ConfigurationPtr& configuration);
 
     public:
         virtual bool is_index_valid(Index x, Index z) const = 0;
@@ -112,11 +112,11 @@ namespace Gecko
         }
 
     protected:
-        MapPtr m_owner = nullptr;
+        MapPtr           m_owner = nullptr;
+        std::string      m_name;
+        ConfigurationPtr m_configuration;
 
-        std::string m_name;
         std::string m_material_name;
-
         std::vector<std::vector<std::uint8_t>> m_data;
 
         Indices m_indices;
@@ -136,7 +136,7 @@ namespace Gecko
         Ogre::SceneNode* m_scene_node = nullptr;
 
     private:
-        void deserialize_position_validator(const Configuration& configuration);
-        void deserialize_search(const Configuration& configuration);
+        void deserialize_position_validator();
+        void deserialize_search();
     };
 }

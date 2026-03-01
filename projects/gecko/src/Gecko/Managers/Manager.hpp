@@ -6,11 +6,8 @@ namespace Gecko
     class CollectionBase
     {
     public:
-        using Size = std::uint64_t;
-
-    public:
-        virtual bool allocate(Size _max_size) = 0;
-        virtual BaseType* at(Size index) = 0;
+        virtual bool allocate(std::uint64_t _max_size) = 0;
+        virtual BaseType* at(std::uint64_t index) = 0;
         virtual BaseType* create() = 0;
         virtual void deallocate() = 0;
         virtual void destroy(BaseType* element) = 0;
@@ -18,8 +15,8 @@ namespace Gecko
         virtual void iterate(std::function<void(BaseType& element)> functor) = 0;
         virtual void iterate_all(std::function<void(BaseType& element)> functor) = 0;
 
-        virtual Size get_size() const = 0;
-        virtual Size get_max_size() const = 0;
+        virtual std::uint64_t get_size() const = 0;
+        virtual std::uint64_t get_max_size() const = 0;
 
         virtual bool is_allocated() const = 0;
         virtual bool is_empty() const = 0;
@@ -31,9 +28,6 @@ namespace Gecko
         public CollectionBase<BaseType>
     {
     public:
-        using Size = CollectionBase<BaseType>::Size;
-
-    public:
         explicit Collection(std::function<BaseType* (Type*)> factory) :
             m_factory(factory)
         {
@@ -43,7 +37,7 @@ namespace Gecko
         {
         }
 
-        bool allocate(Size max_size) override
+        bool allocate(std::uint64_t max_size) override
         {
             if (is_allocated())
             {
@@ -65,7 +59,7 @@ namespace Gecko
             m_elements.emplace_back(m_pointer);
 
             // Create elements by copying the first one.
-            for (Size i = 1; i < m_max_size; i++)
+            for (std::uint64_t i = 1; i < m_max_size; i++)
             {
                 new (m_pointer + i) Type(*m_pointer);
                 m_elements.emplace_back(m_pointer + i);
@@ -74,7 +68,7 @@ namespace Gecko
             return true;
         }
 
-        BaseType* at(Size index) override
+        BaseType* at(std::uint64_t index) override
         {
             if (index >= m_max_size)
             {
@@ -103,7 +97,7 @@ namespace Gecko
                 return;
             }
 
-            for (Size i = 0; i < m_max_size; i++)
+            for (std::uint64_t i = 0; i < m_max_size; i++)
             {
                 // TODO: Fix.
                 // m_memory.destroy(m_pointer + i);
@@ -121,8 +115,8 @@ namespace Gecko
 
             if (element_position != m_elements.end())
             {
-                Size index_1 = element_position - m_elements.begin();
-                Size index_2 = --m_size;
+                std::uint64_t index_1 = element_position - m_elements.begin();
+                std::uint64_t index_2 = --m_size;
 
                 std::swap(m_elements[index_1], m_elements[index_2]);
             }
@@ -135,7 +129,7 @@ namespace Gecko
 
         void iterate(std::function<void(BaseType& element)> functor) override
         {
-            for (Size i = 0; i < m_size; i++)
+            for (std::uint64_t i = 0; i < m_size; i++)
             {
                 functor(*(m_elements[i]));
             }
@@ -143,18 +137,18 @@ namespace Gecko
 
         void iterate_all(std::function<void(BaseType& element)> functor) override
         {
-            for (Size i = 0; i < m_max_size; i++)
+            for (std::uint64_t i = 0; i < m_max_size; i++)
             {
                 functor(*(m_elements[i]));
             }
         }
 
-        Size get_size() const override
+        std::uint64_t get_size() const override
         {
             return m_size;
         }
 
-        Size get_max_size() const override
+        std::uint64_t get_max_size() const override
         {
             return m_max_size;
         }
@@ -182,15 +176,14 @@ namespace Gecko
 
         std::vector<Type*> m_elements;
 
-        Size m_size = 0;
-        Size m_max_size = 0;
+        std::uint64_t m_size = 0;
+        std::uint64_t m_max_size = 0;
     };
 
     template<typename BaseType, typename TypeName, typename TypeId>
     class Manager
     {
     public:
-        using Size = CollectionBase<BaseType>::Size;
         using Collections = std::map<TypeName, std::shared_ptr<CollectionBase<BaseType>>>;
         using Items = std::map<TypeId, BaseType*>;
 
@@ -209,7 +202,7 @@ namespace Gecko
             return true;
         }
 
-        bool allocate(const TypeName& name, Size max_size)
+        bool allocate(const TypeName& name, std::uint64_t max_size)
         {
             if (is_type_registered(name) == false)
             {
@@ -219,7 +212,7 @@ namespace Gecko
             return m_collections.at(name)->allocate(max_size);
         }
 
-        BaseType* at(const TypeName& name, CollectionBase<BaseType>::Size index)
+        BaseType* at(const TypeName& name, std::uint64_t index)
         {
             if (is_type_registered(name) == false)
             {
@@ -323,7 +316,7 @@ namespace Gecko
             return element->second;
         }
 
-        Size get_size(const TypeName& name) const
+        std::uint64_t get_size(const TypeName& name) const
         {
             if (is_type_registered(name) == false)
             {
@@ -333,7 +326,7 @@ namespace Gecko
             return m_collections.at(name)->get_size();
         }
 
-        Size get_max_size(const TypeName& name) const
+        std::uint64_t get_max_size(const TypeName& name) const
         {
             if (is_type_registered(name) == false)
             {

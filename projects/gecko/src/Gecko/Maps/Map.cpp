@@ -164,19 +164,15 @@ namespace Gecko
     {
         m_layers.clear();
 
-        auto layers_configuration = m_configuration->get_child_optional("layers");
-
-        if (layers_configuration)
+        if (std::optional<ConfigurationPtr> layers_configuration = m_configuration->get_child_optional("layers"))
         {
             for (auto i = layers_configuration.value()->begin(); i != layers_configuration.value()->end(); i++)
             {
                 auto name = i.key().asString();
+                auto layer = std::make_shared<SquareLayer>(this, name, std::make_shared<Configuration>(*i));
 
-                m_layers.emplace(name, std::make_shared<SquareLayer>(this, name, Configuration(*i)));
-            }
+                m_layers.emplace(name, layer);
 
-            for (const auto& [name, layer] : m_layers)
-            {
                 layer->init();
             }
         }
@@ -222,9 +218,7 @@ namespace Gecko
 
     void Map::init_players()
     {
-        auto players_configuration = m_configuration->get_child_optional("players");
-
-        if (players_configuration)
+        if (std::optional<ConfigurationPtr> players_configuration = m_configuration->get_child_optional("players"))
         {
             for (const auto& i : *(*(players_configuration)))
             {
@@ -255,19 +249,15 @@ namespace Gecko
     {
         m_seasons.clear();
 
-        auto seasons_configuration = m_configuration->get_child_optional("seasons");
-
-        if (seasons_configuration)
+        if (std::optional<ConfigurationPtr> seasons_configuration = m_configuration->get_child_optional("seasons"))
         {
             for (auto i = seasons_configuration.value()->begin(); i != seasons_configuration.value()->end(); i++)
             {
                 auto name = i.key().asString();
+                auto season = std::make_shared<Season>(name, Configuration(*i));
 
-                m_seasons.emplace(name, std::make_shared<Season>(name, Configuration(*i)));
-            }
+                m_seasons.emplace(name, season);
 
-            for (const auto& [name, season] : m_seasons)
-            {
                 season->init();
             }
         }
@@ -275,10 +265,12 @@ namespace Gecko
 
     void Map::deinit_layers()
     {
-        for (const auto& [name, layer] : m_layers)
+        for (const auto& [_, layer] : m_layers)
         {
             layer->deinit();
         }
+
+        m_layers.clear();
     }
 
     void Map::deinit_objects()
@@ -305,9 +297,11 @@ namespace Gecko
 
     void Map::deinit_seasons()
     {
-        for (const auto& [name, season] : m_seasons)
+        for (const auto& [_, season] : m_seasons)
         {
             season->deinit();
         }
+
+        m_seasons.clear();
     }
 }
