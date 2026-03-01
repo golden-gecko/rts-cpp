@@ -127,14 +127,14 @@ namespace Gecko
                     camera->get_camera()->setOrthoWindow(size_x, size_z);
                     camera->set_position(Ogre::Vector3(size_x / 2.0f, size_y, size_z / 2.0f)); // TODO: Hardcoded.
                     camera->look_at(Ogre::Vector3(size_x / 2.0f, 0.0f, (size_z / 2.0f) - 0.01f)); // TODO: Hardcoded.
+
+                    m_render_texture = m_texture->getBuffer()->getRenderTarget();
+
+                    m_viewport = m_render_texture->addViewport(camera->get_camera());
+                    m_viewport->setOverlaysEnabled(false);
+                    m_viewport->setShadowsEnabled(false);
+                    m_viewport->setSkiesEnabled(false);
                 }
-
-                m_render_texture = m_texture->getBuffer()->getRenderTarget();
-
-                m_viewport = m_render_texture->addViewport(camera->get_camera());
-                m_viewport->setOverlaysEnabled(false);
-                m_viewport->setShadowsEnabled(false);
-                m_viewport->setSkiesEnabled(false);
             }
         }
     }

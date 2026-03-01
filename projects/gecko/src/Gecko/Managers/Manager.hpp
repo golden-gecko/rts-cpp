@@ -6,8 +6,11 @@ namespace Gecko
     class CollectionBase
     {
     public:
-        virtual bool allocate(int _max_size) = 0;
-        virtual BaseType* at(int index) = 0;
+        using Size = std::uint64_t;
+
+    public:
+        virtual bool allocate(Size _max_size) = 0;
+        virtual BaseType* at(Size index) = 0;
         virtual BaseType* create() = 0;
         virtual void deallocate() = 0;
         virtual void destroy(BaseType* element) = 0;
@@ -15,8 +18,8 @@ namespace Gecko
         virtual void iterate(std::function<void(BaseType& element)> functor) = 0;
         virtual void iterate_all(std::function<void(BaseType& element)> functor) = 0;
 
-        virtual int get_size() const = 0;
-        virtual int get_max_size() const = 0;
+        virtual Size get_size() const = 0;
+        virtual Size get_max_size() const = 0;
 
         virtual bool is_allocated() const = 0;
         virtual bool is_empty() const = 0;
@@ -28,6 +31,9 @@ namespace Gecko
         public CollectionBase<BaseType>
     {
     public:
+        using Size = CollectionBase<BaseType>::Size;
+
+    public:
         explicit Collection(std::function<BaseType* (Type*)> factory) :
             m_factory(factory)
         {
@@ -35,10 +41,9 @@ namespace Gecko
 
         ~Collection()
         {
-            deallocate(); // TODO: Probably incorrect because it is virtual.
         }
 
-        bool allocate(int max_size) override
+        bool allocate(Size max_size) override
         {
             if (is_allocated())
             {
@@ -60,7 +65,7 @@ namespace Gecko
             m_elements.emplace_back(m_pointer);
 
             // Create elements by copying the first one.
-            for (int i = 1; i < m_max_size; i++)
+            for (Size i = 1; i < m_max_size; i++)
             {
                 new (m_pointer + i) Type(*m_pointer);
                 m_elements.emplace_back(m_pointer + i);
@@ -69,7 +74,7 @@ namespace Gecko
             return true;
         }
 
-        BaseType* at(int index) override
+        BaseType* at(Size index) override
         {
             if (index >= m_max_size)
             {
@@ -98,7 +103,7 @@ namespace Gecko
                 return;
             }
 
-            for (int i = 0; i < m_max_size; i++)
+            for (Size i = 0; i < m_max_size; i++)
             {
                 // TODO: Fix.
                 // m_memory.destroy(m_pointer + i);
@@ -116,8 +121,8 @@ namespace Gecko
 
             if (element_position != m_elements.end())
             {
-                auto index_1 = element_position - m_elements.begin();
-                auto index_2 = --m_size;
+                Size index_1 = element_position - m_elements.begin();
+                Size index_2 = --m_size;
 
                 std::swap(m_elements[index_1], m_elements[index_2]);
             }
@@ -130,7 +135,7 @@ namespace Gecko
 
         void iterate(std::function<void(BaseType& element)> functor) override
         {
-            for (int i = 0; i < m_size; i++)
+            for (Size i = 0; i < m_size; i++)
             {
                 functor(*(m_elements[i]));
             }
@@ -138,18 +143,18 @@ namespace Gecko
 
         void iterate_all(std::function<void(BaseType& element)> functor) override
         {
-            for (int i = 0; i < m_max_size; i++)
+            for (Size i = 0; i < m_max_size; i++)
             {
                 functor(*(m_elements[i]));
             }
         }
 
-        int get_size() const override
+        Size get_size() const override
         {
             return m_size;
         }
 
-        int get_max_size() const override
+        Size get_max_size() const override
         {
             return m_max_size;
         }
@@ -177,16 +182,17 @@ namespace Gecko
 
         std::vector<Type*> m_elements;
 
-        int m_size = 0;
-        int m_max_size = 0;
+        Size m_size = 0;
+        Size m_max_size = 0;
     };
 
     template<typename BaseType, typename TypeName, typename TypeId>
     class Manager
     {
     public:
-        typedef std::map<TypeName, std::shared_ptr<CollectionBase<BaseType>>> Collections;
-        typedef std::map<TypeId, BaseType*> Items;
+        using Size = CollectionBase<BaseType>::Size;
+        using Collections = std::map<TypeName, std::shared_ptr<CollectionBase<BaseType>>>;
+        using Items = std::map<TypeId, BaseType*>;
 
     public:
         template<typename Type>
@@ -203,7 +209,7 @@ namespace Gecko
             return true;
         }
 
-        bool allocate(const TypeName& name, int max_size)
+        bool allocate(const TypeName& name, Size max_size)
         {
             if (is_type_registered(name) == false)
             {
@@ -213,7 +219,7 @@ namespace Gecko
             return m_collections.at(name)->allocate(max_size);
         }
 
-        BaseType* at(const TypeName& name, int index)
+        BaseType* at(const TypeName& name, CollectionBase<BaseType>::Size index)
         {
             if (is_type_registered(name) == false)
             {
@@ -317,7 +323,7 @@ namespace Gecko
             return element->second;
         }
 
-        int get_size(const TypeName& name) const
+        Size get_size(const TypeName& name) const
         {
             if (is_type_registered(name) == false)
             {
@@ -327,7 +333,7 @@ namespace Gecko
             return m_collections.at(name)->get_size();
         }
 
-        int get_max_size(const TypeName& name) const
+        Size get_max_size(const TypeName& name) const
         {
             if (is_type_registered(name) == false)
             {
@@ -349,34 +355,34 @@ namespace Gecko
             m_collections.clear();
         }
 
-        auto begin()
+        Items::iterator begin()
         {
             return m_items.begin();
         }
 
-        auto end()
+        Items::iterator end()
         {
             return m_items.end();
         }
 
-        auto cbegin() const
+        Items::const_iterator cbegin() const
         {
             return m_items.cbegin();
         }
 
-        auto cend() const
+        Items::const_iterator cend() const
         {
             return m_items.cend();
         }
 
-        auto size() const
+        Items::size_type size() const
         {
             return m_items.size();
         }
 
-    protected:
+    private:
         Collections m_collections;
-        Items m_items;
-        TypeId m_last_id;
+        Items       m_items;
+        TypeId      m_last_id;
     };
 }

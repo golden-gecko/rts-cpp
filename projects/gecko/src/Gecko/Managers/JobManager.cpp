@@ -199,7 +199,6 @@ namespace Gecko
                     order_manager->order_wait(id, id, 0.1f)
                 };
 
-                // TODO: Remove when orders are completed.
                 // Remove input and output requesters from queues.
                 m_out_queue.erase(out_request);
                 m_in_queue.erase(in_request);
@@ -232,7 +231,6 @@ namespace Gecko
                 order_manager->order_wait(id, id, 0.1f)
             };
 
-            // TODO: Remove when orders are completed.
             // Remove requester from queue.
             m_in_queue.erase(in_request);
 

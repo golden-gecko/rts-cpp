@@ -25,6 +25,9 @@
                 ]
             ],
             "data_layers": {
+                "Height": {
+                    "source": "tutorial_terrain_height.png"
+                },
                 "Navigation": {},
                 "None": {
                     "source": "tutorial_terrain_none.png"

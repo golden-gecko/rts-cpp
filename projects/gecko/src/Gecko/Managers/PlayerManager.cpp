@@ -10,54 +10,58 @@ Gecko::PlayerManager* Ogre::Singleton<Gecko::PlayerManager>::msSingleton = nullp
 
 namespace Gecko
 {
-    void PlayerManager::update(float time)
-    {
-        auto update = [](Player& player, float time)
-        {
-            player.update(time);   
-        };
-
-        iterate(std::bind(update, std::placeholders::_1, time));
-    }
-
-    void PlayerManager::init(const ConfigurationPtr& configuration)
+    void PlayerManager::init()
     {
         L_TIME("PlayerManager::init()");
 
-        auto max_size = configuration->get_int<std::size_t>("memory.players");
-        auto& player_manager = PlayerManager::getSingleton();
+        Size max_size = m_configuration->get_int<Size>("memory.players");
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            auto type = configuration->get_string("type", "");
+            std::string type = configuration->get_string("type", "");
 
-            if (type == "Player")
+            if (type == Player::Name)
             {
-                auto factory = std::bind(Player::create, std::placeholders::_1, configuration);
-
-                player_manager.register_type<Player>(name, factory);
-                player_manager.allocate(name, max_size);
+                register_type<Player>(name, std::bind(Player::create, std::placeholders::_1, configuration));
             }
+
+            allocate(name, max_size);
         }
     }
 
     void PlayerManager::deinit()
     {
-        deallocate();
+        unregister_all();
+    }
+
+    void PlayerManager::update(float time)
+    {
+        auto update = [time](Player& player)
+        {
+            player.update(time);   
+        };
+
+        iterate(std::bind(update, std::placeholders::_1));
+    }
+
+    PlayerManager::PlayerManager(const ConfigurationPtr& configuration) :
+        m_configuration(configuration)
+    {
     }
 
     PlayerPtr PlayerManager::get_by_configuration_name(const std::string& name) const
     {
-        for (const auto& [_, player] : m_items)
+        auto result = std::find_if(cbegin(), cend(), [name](const Items::value_type& player) {
+            return player.second->get_configuration()->get_name() == name;
+        });
+
+        if (result == cend())
         {
-            if (player->get_configuration()->get_name() == name)
-            {
-                return player;
-            }
+            return nullptr;
         }
 
-        return nullptr;
+        return result->second;
     }
 }

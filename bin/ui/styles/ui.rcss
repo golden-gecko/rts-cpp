@@ -63,6 +63,13 @@ td.text {
 	padding-left: 20dp;
 }
 
+/*** Layers ***/
+
+#layers {
+	left: 700dp;
+	top: 100dp;
+}
+
 /*** Menu ***/
 
 .menu {

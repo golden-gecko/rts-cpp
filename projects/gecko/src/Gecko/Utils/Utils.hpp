@@ -7,6 +7,8 @@
 
 namespace Gecko::Utils
 {
+    void fire_missile(Object& owner, const std::string& configuration_name, const Ogre::Vector3& current_position, const Ogre::Vector3& original_target_direction);
+
     Navigation::Coordinate get_index_from_position(float x, float z, const Ogre::Vector3& scale);
     Navigation::Coordinate get_index_from_position(const Ogre::Vector3& position, const Ogre::Vector3& scale);
 
@@ -20,5 +22,5 @@ namespace Gecko::Utils
 
     void move_resources(const std::shared_ptr<Resources>& source, const std::shared_ptr<Resources>& destination, const std::string& name, float value);
 
-    void fire_missile(Object& owner, const std::string& configuration_name, const Ogre::Vector3& current_position, const Ogre::Vector3& original_target_direction);
+    std::string object_id_to_string(const Id& object_id);
 }

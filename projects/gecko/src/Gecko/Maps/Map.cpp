@@ -5,7 +5,6 @@
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Layers/SquareLayer.hpp"
 #include "Gecko/Log.hpp"
-#include "Gecko/Managers/MapManager.hpp"
 #include "Gecko/Managers/ObjectManager.hpp"
 #include "Gecko/Managers/OrderManager.hpp"
 #include "Gecko/Managers/PlayerManager.hpp"
@@ -16,6 +15,8 @@
 
 namespace Gecko
 {
+    const std::string Map::Name = "Map";
+
     MapPtr Map::create(MapPtr memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
     {
         auto map = new (memory) Map(scene);
@@ -112,9 +113,7 @@ namespace Gecko
 
     void Map::show_data_layer(const std::string& layer_name, const std::string& data_layer_name)
     {
-        auto layer = get_layer(layer_name);
-
-        if (layer)
+        if (LayerPtr layer = get_layer(layer_name))
         {
             layer->show_data_layer(data_layer_name);
         }

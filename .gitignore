@@ -1,10 +1,10 @@
-.idea
-__pycache__
-bin/cache
-bin/downloads
-bin/media
-build
-cppcheck/cppcheck-cppcheck-build-dir
+.idea/
+bin/cache/
+bin/downloads/
+bin/media/
+build/
+cppcheck/cppcheck-cppcheck-build-dir/
+__pycache__/
 *.exe
 *.lib
 *.log

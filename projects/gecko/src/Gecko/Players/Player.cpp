@@ -9,6 +9,8 @@
 
 namespace Gecko
 {
+    const std::string Player::Name = "Player";
+
     PlayerPtr Player::create(PlayerPtr memory, const ConfigurationPtr& configuration)
     {
         auto player = new (memory) Player();

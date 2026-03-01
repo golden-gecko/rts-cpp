@@ -17,80 +17,63 @@ Gecko::ComponentManager* Ogre::Singleton<Gecko::ComponentManager>::msSingleton =
 
 namespace Gecko
 {
-    void ComponentManager::init(const ConfigurationPtr& configuration, const ScenePtr& scene)
+    void ComponentManager::init()
     {
         L_TIME("ComponentManager::init()");
 
-        auto max_size = configuration->get_int<std::size_t>("memory.components");
-        auto& component_manager = ComponentManager::getSingleton();
+        Size max_size = m_configuration->get_int<Size>("memory.components");
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            auto type = configuration->get_string("type", "");
+            std::string type = configuration->get_string("type", "");
 
             if (type == "Armour")
             {
-                auto factory = std::bind(Armour::create, std::placeholders::_1, configuration, scene);
-
-                component_manager.register_type<Armour>(name, factory);
-                component_manager.allocate(name, max_size);
+                register_type<Armour>(name, std::bind(Armour::create, std::placeholders::_1, configuration, m_scene));
             }
             else if (type == "Debug")
             {
-                auto factory = std::bind(Debug::create, std::placeholders::_1, configuration, scene);
-
-                component_manager.register_type<Debug>(name, factory);
-                component_manager.allocate(name, max_size);
+                register_type<Debug>(name, std::bind(Debug::create, std::placeholders::_1, configuration, m_scene));
             }
             else if (type == "Drive")
             {
-                auto factory = std::bind(Drive::create, std::placeholders::_1, configuration, scene);
-
-                component_manager.register_type<Drive>(name, factory);
-                component_manager.allocate(name, max_size);
+                register_type<Drive>(name, std::bind(Drive::create, std::placeholders::_1, configuration, m_scene));
             }
             else if (type == "Hull")
             {
-                auto factory = std::bind(Hull::create, std::placeholders::_1, configuration, scene);
-
-                component_manager.register_type<Hull>(name, factory);
-                component_manager.allocate(name, max_size);
+                register_type<Hull>(name, std::bind(Hull::create, std::placeholders::_1, configuration, m_scene));
             }
             else if (type == "Radar")
             {
-                auto factory = std::bind(Radar::create, std::placeholders::_1, configuration, scene);
-
-                component_manager.register_type<Radar>(name, factory);
-                component_manager.allocate(name, max_size);
+                register_type<Radar>(name, std::bind(Radar::create, std::placeholders::_1, configuration, m_scene));
             }
             else if (type == "Shield")
             {
-                auto factory = std::bind(Shield::create, std::placeholders::_1, configuration, scene);
-
-                component_manager.register_type<Shield>(name, factory);
-                component_manager.allocate(name, max_size);
+                register_type<Shield>(name, std::bind(Shield::create, std::placeholders::_1, configuration, m_scene));
             }
             else if (type == "Storage")
             {
-                auto factory = std::bind(Storage::create, std::placeholders::_1, configuration, scene);
-
-                component_manager.register_type<Storage>(name, factory);
-                component_manager.allocate(name, max_size);
+                register_type<Storage>(name, std::bind(Storage::create, std::placeholders::_1, configuration, m_scene));
             }
             else if (type == "Weapon")
             {
-                auto factory = std::bind(Weapon::create, std::placeholders::_1, configuration, scene);
-
-                component_manager.register_type<Weapon>(name, factory);
-                component_manager.allocate(name, max_size);
+                register_type<Weapon>(name, std::bind(Weapon::create, std::placeholders::_1, configuration, m_scene));
             }
+
+            allocate(name, max_size);
         }
     }
 
     void ComponentManager::deinit()
     {
-        deallocate();
+        unregister_all();
+    }
+
+    ComponentManager::ComponentManager(const ConfigurationPtr& configuration, const ScenePtr& scene) :
+        m_configuration(configuration),
+        m_scene(scene)
+    {
     }
 }

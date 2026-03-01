@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Gecko/Id.hpp"
+#include "Gecko/Interfaces/Initializable.hpp"
 #include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Managers/Manager.hpp"
 
@@ -15,11 +16,19 @@ namespace Gecko
         using base_type = Manager<Map, std::string, Id>;
 
     public:
+        // From Initializable.
+        void init();
+        void deinit();
+
+    public:
         // From Updatable.
         void update(float time) override;
 
     public:
-        void init(const ConfigurationPtr& configuration, const ScenePtr& scene);
-        void deinit();
+        MapManager(const ConfigurationPtr& configuration, const ScenePtr& scene);
+
+    private:
+        ConfigurationPtr m_configuration;
+        ScenePtr m_scene;
     };
 }

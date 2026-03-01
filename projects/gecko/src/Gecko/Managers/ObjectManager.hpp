@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Gecko/Id.hpp"
+#include "Gecko/Interfaces/Initializable.hpp"
 #include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Managers/Manager.hpp"
 
@@ -15,6 +16,11 @@ namespace Gecko
         using base_type = Manager<Object, std::string, Id>;
 
     public:
+        // From Initializable.
+        void init();
+        void deinit();
+
+    public:
         // From Updatable.
         void update(float time) override;
 
@@ -22,12 +28,14 @@ namespace Gecko
         using ObjectsInRange = std::vector<std::pair<Object*, float>>;
 
     public:
-        void init(const ConfigurationPtr& configuration, const ScenePtr& scene);
-        void deinit();
-
-        Object* create(const std::string& name);
+        ObjectManager(const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
+        Object* create(const std::string& name);
         ObjectsInRange get_in_range(const Ogre::Vector3& position, float range = std::numeric_limits<float>::max());
+
+    private:
+        ConfigurationPtr m_configuration;
+        ScenePtr m_scene;
     };
 }

@@ -8,5 +8,7 @@
         "max": 10.0
     },
     "name": "Storage",
-    "type": "Storage"
+    "load_time": 1.0,
+    "type": "Storage",
+    "unload_time": 1.0
 }

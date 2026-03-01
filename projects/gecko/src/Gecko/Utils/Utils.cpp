@@ -8,6 +8,22 @@
 
 namespace Gecko::Utils
 {
+    void fire_missile(Object& owner, const std::string& configuration_name, const Ogre::Vector3& current_position, const Ogre::Vector3& original_target_direction)
+    {
+        ObjectPtr missile = ObjectManager::getSingleton().create(configuration_name);
+
+        if (missile == nullptr)
+        {
+            L_WARNING << "Failed to create object '" << configuration_name << "'.";
+        }
+
+        // TODO: Move object manager to map?
+        missile->set_owner(owner.get_owner());
+        missile->init();
+        missile->set_position(current_position);
+        missile->set_direction(original_target_direction);
+    }
+
     Navigation::Coordinate get_index_from_position(float x, float z, const Ogre::Vector3& scale)
     {
         auto x_index = static_cast<Index>(std::floorf(x / scale.x));
@@ -86,19 +102,15 @@ namespace Gecko::Utils
         destination->add(name, value);
     }
 
-    void fire_missile(Object& owner, const std::string& configuration_name, const Ogre::Vector3& current_position, const Ogre::Vector3& original_target_direction)
+    std::string object_id_to_string(const Id& object_id)
     {
-        ObjectPtr missile = ObjectManager::getSingleton().create(configuration_name);
+        std::stringstream stream;
 
-        if (missile == nullptr)
+        if (ObjectPtr object = ObjectManager::getSingleton().get(object_id))
         {
-            L_WARNING << "Failed to create object '" << configuration_name << "'.";
+            stream << object->get_name() << " (" << object_id << ")";
         }
 
-        // TODO: Move object manager to map?
-        missile->set_owner(owner.get_owner());
-        missile->init();
-        missile->set_position(current_position);
-        missile->set_direction(original_target_direction);
+        return stream.str();
     }
 }

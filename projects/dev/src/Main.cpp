@@ -666,8 +666,66 @@ float MyNode::distanceTo(AStarNode* node) const
     return 1.0f;
 }
 
+class A
+{
+public:
+    A()
+    {
+    }
+
+    template <typename ...Args>
+    void set_params(Args&&... args)
+    {
+        std::cout << "A::set_params" << std::endl;
+    }
+};
+
+class B : public A
+{
+public:
+    B()
+    {
+    }
+
+    template <typename ...Args>
+    void set_params(Args&&... args)
+    {
+        std::cout << "B::set_params" << std::endl;
+    }
+};
+
+template <typename ...Args>
+A* create(const std::string& type, const int& sender_id, const int& receiver_id, Args&&... args)
+{
+    A* order;
+
+    if (type == "attack")
+    {
+        order = new A();
+    }
+    else
+    {
+        order = new B();
+    }
+
+    // auto order = base_type::create(type);
+
+    // order->init();
+    // order->set_sender_id(sender_id);
+    // order->set_receiver_id(receiver_id);
+    order->set_params(std::forward<Args>(args)...);
+
+    return order;
+}
+
 int main()
 {
+    // create("attack", 1, 2, { 3, 4 });
+    // create("move", 10, 20, { 30, 40, "a", "b" });
+
+    std::cin.ignore();
+
+    /*
     PathFinder<MyNode> myFinder; // Used to find a path in a MyNode graph
 	
 	std::vector<MyNode*> path;
@@ -709,6 +767,7 @@ int main()
     }
 
     std::cin.ignore();
+    */
 
     /*
     for (int i = 0; i < 40; i++)

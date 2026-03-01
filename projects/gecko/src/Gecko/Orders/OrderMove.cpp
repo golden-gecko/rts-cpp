@@ -6,6 +6,7 @@
 #include "Gecko/Managers/ObjectManager.hpp"
 #include "Gecko/Maps/Map.hpp"
 #include "Gecko/UI/Indicators/Path.hpp"
+#include "Gecko/Utils/Convert.hpp"
 
 namespace Gecko
 {
@@ -69,10 +70,6 @@ namespace Gecko
 
     std::string OrderMove::get_target_as_string() const
     {
-        std::stringstream stream; // TODO: Move to utils.
-
-        stream << target_position.x << ":" << target_position.z;
-
-        return stream.str();
+        return Utils::Convert::to_string(target_position, 0);
     }
 }

@@ -23,122 +23,92 @@ Gecko::OrderManager* Ogre::Singleton<Gecko::OrderManager>::msSingleton = nullptr
 
 namespace Gecko
 {
-    void OrderManager::update(float time)
-    {
-        auto update = [](Order& order, float time)
-        {
-            order.update(time);
-        };
-
-        iterate(std::bind(update, std::placeholders::_1, time));
-    }
-
-    void OrderManager::init(const ConfigurationPtr& configuration)
+    void OrderManager::init()
     {
         L_TIME("OrderManager::init()");
 
-        auto max_size = configuration->get_int<std::size_t>("memory.orders");
-        auto& order_manager = OrderManager::getSingleton();
+        Size max_size = m_configuration->get_int<Size>("memory.orders");
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            auto type = configuration->get_string("type", "");
+            std::string type = configuration->get_string("type", "");
 
             if (type == "Attack")
             {
-                auto factory = std::bind(OrderAttack::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderAttack>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderAttack>(name, std::bind(OrderAttack::create, std::placeholders::_1, configuration));
             }
             else if (type == "Create")
             {
-                auto factory = std::bind(OrderCreate::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderCreate>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderCreate>(name, std::bind(OrderCreate::create, std::placeholders::_1, configuration));
             }
             else if (type == "Destroy")
             {
-                auto factory = std::bind(OrderDestroy::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderDestroy>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderDestroy>(name, std::bind(OrderDestroy::create, std::placeholders::_1, configuration));
             }
             else if (type == "Follow")
             {
-                auto factory = std::bind(OrderFollow::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderFollow>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderFollow>(name, std::bind(OrderFollow::create, std::placeholders::_1, configuration));
             }
             else if (type == "Guard")
             {
-                auto factory = std::bind(OrderGuard::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderGuard>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderGuard>(name, std::bind(OrderGuard::create, std::placeholders::_1, configuration));
             }
             else if (type == "Load")
             {
-                auto factory = std::bind(OrderLoad::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderLoad>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderLoad>(name, std::bind(OrderLoad::create, std::placeholders::_1, configuration));
             }
             else if (type == "Move")
             {
-                auto factory = std::bind(OrderMove::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderMove>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderMove>(name, std::bind(OrderMove::create, std::placeholders::_1, configuration));
             }
             else if (type == "Patrol")
             {
-                auto factory = std::bind(OrderPatrol::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderPatrol>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderPatrol>(name, std::bind(OrderPatrol::create, std::placeholders::_1, configuration));
             }
             else if (type == "Rally")
             {
-                auto factory = std::bind(OrderRally::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderRally>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderRally>(name, std::bind(OrderRally::create, std::placeholders::_1, configuration));
             }
             else if (type == "Stop")
             {
-                auto factory = std::bind(OrderStop::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderStop>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderStop>(name, std::bind(OrderStop::create, std::placeholders::_1, configuration));
             }
             else if (type == "Unload")
             {
-                auto factory = std::bind(OrderUnload::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderUnload>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderUnload>(name, std::bind(OrderUnload::create, std::placeholders::_1, configuration));
             }
             else if (type == "Wait")
             {
-                auto factory = std::bind(OrderWait::create, std::placeholders::_1, configuration);
-
-                order_manager.register_type<OrderWait>(name, factory);
-                order_manager.allocate(name, max_size);
+                register_type<OrderWait>(name, std::bind(OrderWait::create, std::placeholders::_1, configuration));
             }
+
+            allocate(name, max_size);
         }
     }
 
     void OrderManager::deinit()
     {
-        deallocate();
+        unregister_all();
     }
 
-    Order* OrderManager::order_attack(const Id& sender_id, const Id& receiver_id, const Id& target_id)
+    void OrderManager::update(float time)
+    {
+        auto update = [time](Order& order)
+        {
+            order.update(time);
+        };
+
+        iterate(std::bind(update, std::placeholders::_1));
+    }
+
+    OrderManager::OrderManager(const ConfigurationPtr& configuration) :
+        m_configuration(configuration)
+    {
+    }
+
+    OrderPtr OrderManager::order_attack(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto order = base_type::create("attack");
 
@@ -149,18 +119,18 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_attack(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
+    OrderPtr OrderManager::order_attack(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
     {
         auto order = base_type::create("attack");
 
         order->init();
         order->set_sender_id(sender_id);
-        order->set_receiver_id(receiver_id);
+        order->set_receiver_id(receiver_id); // TODO: Missing target_position.
 
         return order;
     }
 
-    Order* OrderManager::order_create(const Id& sender_id, const Id& receiver_id, const std::string& configuration_name, const Ogre::Vector3& position, const Id& player_id)
+    OrderPtr OrderManager::order_create(const Id& sender_id, const Id& receiver_id, const std::string& configuration_name, const Ogre::Vector3& position, const Id& player_id)
     {
         auto order = base_type::create("create");
 
@@ -177,7 +147,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_destroy(const Id& sender_id, const Id& receiver_id)
+    OrderPtr OrderManager::order_destroy(const Id& sender_id, const Id& receiver_id)
     {
         auto order = base_type::create("destroy");
 
@@ -188,7 +158,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_disable(const Id& sender_id, const Id& receiver_id)
+    OrderPtr OrderManager::order_disable(const Id& sender_id, const Id& receiver_id)
     {
         auto order = base_type::create("disable");
 
@@ -199,7 +169,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_enable(const Id& sender_id, const Id& receiver_id)
+    OrderPtr OrderManager::order_enable(const Id& sender_id, const Id& receiver_id)
     {
         auto order = base_type::create("enable");
 
@@ -210,7 +180,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_follow(const Id& sender_id, const Id& receiver_id, const Id& target_id)
+    OrderPtr OrderManager::order_follow(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto order = base_type::create("follow");
 
@@ -225,7 +195,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_guard(const Id& sender_id, const Id& receiver_id, const Id& target_id)
+    OrderPtr OrderManager::order_guard(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto order = base_type::create("guard");
 
@@ -240,7 +210,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_guard(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
+    OrderPtr OrderManager::order_guard(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
     {
         auto order = base_type::create("guard");
 
@@ -255,7 +225,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_load(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value)
+    OrderPtr OrderManager::order_load(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value)
     {
         auto order = base_type::create("load");
 
@@ -272,7 +242,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_move(const Id& sender_id, const Id& receiver_id, const Id& target_id)
+    OrderPtr OrderManager::order_move(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto object = ObjectManager::getSingleton().get(target_id);
 
@@ -294,7 +264,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_move(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
+    OrderPtr OrderManager::order_move(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
     {
         auto order = base_type::create("move");
 
@@ -309,7 +279,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_patrol(const Id& sender_id, const Id& receiver_id, const Id& target_id)
+    OrderPtr OrderManager::order_patrol(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto order = base_type::create("patrol");
 
@@ -324,7 +294,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_patrol(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
+    OrderPtr OrderManager::order_patrol(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
     {
         auto order = base_type::create("patrol");
 
@@ -339,7 +309,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_rally(const Id& sender_id, const Id& receiver_id, const Id& target_id)
+    OrderPtr OrderManager::order_rally(const Id& sender_id, const Id& receiver_id, const Id& target_id)
     {
         auto order = base_type::create("rally");
 
@@ -354,7 +324,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_rally(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
+    OrderPtr OrderManager::order_rally(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position)
     {
         auto order = base_type::create("rally");
 
@@ -369,7 +339,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_stop(const Id& sender_id, const Id& receiver_id)
+    OrderPtr OrderManager::order_stop(const Id& sender_id, const Id& receiver_id)
     {
         auto order = base_type::create("stop");
 
@@ -380,7 +350,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_unload(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value)
+    OrderPtr OrderManager::order_unload(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value)
     {
         auto order = base_type::create("unload");
 
@@ -397,7 +367,7 @@ namespace Gecko
         return order;
     }
 
-    Order* OrderManager::order_wait(const Id& sender_id, const Id& receiver_id, float time)
+    OrderPtr OrderManager::order_wait(const Id& sender_id, const Id& receiver_id, float time)
     {
         auto order = base_type::create("wait");
 

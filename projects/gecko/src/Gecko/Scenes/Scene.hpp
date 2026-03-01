@@ -14,7 +14,7 @@ namespace Gecko
     public:
         explicit Scene(const ConfigurationPtr& configuration);
 
-        virtual ~Scene();
+        ~Scene() override;
 
     public:
         Ogre::Camera* create_camera(const std::string& name) const;

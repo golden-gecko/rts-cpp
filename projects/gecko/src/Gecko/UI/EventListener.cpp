@@ -38,6 +38,7 @@ namespace Gecko
 		return document->GetElementById(element);
 	}
 
+	/*
 	void EventListener::on_close(const std::string& value) const
 	{
 		Rml::Element* element = get_element(value);
@@ -93,4 +94,5 @@ namespace Gecko
 	{
 		Game::getSingleton().quit();
 	}
+	*/
 }

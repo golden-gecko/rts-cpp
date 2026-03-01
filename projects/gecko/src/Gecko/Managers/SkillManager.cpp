@@ -12,45 +12,42 @@ Gecko::SkillManager* Ogre::Singleton<Gecko::SkillManager>::msSingleton = nullptr
 
 namespace Gecko
 {
-    void SkillManager::init(const ConfigurationPtr& configuration)
+    void SkillManager::init()
     {
         L_TIME("SkillManager::init()");
 
-        auto max_size = configuration->get_int<std::size_t>("memory.skills");
-        auto& skill_manager = SkillManager::getSingleton();
+        Size max_size = m_configuration->get_int<Size>("memory.skills");
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            auto type = configuration->get_string("type", "");
+            std::string type = configuration->get_string("type", "");
 
             if (type == "Buff")
             {
-                auto factory = std::bind(Buff::create, std::placeholders::_1, configuration);
-
-                skill_manager.register_type<Buff>(name, factory);
-                skill_manager.allocate(name, max_size);
+                register_type<Buff>(name, std::bind(Buff::create, std::placeholders::_1, configuration));
             }
             else if (type == "FireMissile")
             {
-                auto factory = std::bind(FireMissile::create, std::placeholders::_1, configuration);
-
-                skill_manager.register_type<FireMissile>(name, factory);
-                skill_manager.allocate(name, max_size);
+                register_type<FireMissile>(name, std::bind(FireMissile::create, std::placeholders::_1, configuration));
             }
             else if (type == "Repair")
             {
-                auto factory = std::bind(Repair::create, std::placeholders::_1, configuration);
-
-                skill_manager.register_type<Repair>(name, factory);
-                skill_manager.allocate(name, max_size);
+                register_type<Repair>(name, std::bind(Repair::create, std::placeholders::_1, configuration));
             }
+
+            allocate(name, max_size);
         }
     }
 
     void SkillManager::deinit()
     {
-        deallocate();
+        unregister_all();
+    }
+
+    SkillManager::SkillManager(const ConfigurationPtr& configuration) :
+        m_configuration(configuration)
+    {
     }
 }

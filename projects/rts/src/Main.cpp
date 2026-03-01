@@ -43,9 +43,10 @@ int main(int argc, char* argv[])
     Gecko::Log::setup("rts.log");
 
     // Parse command line options.
-    auto options = Gecko::Application::parse_options(argc, argv, "rts", "tutorial");
-    auto configuration_name = Gecko::Application::get_option(options, "configuration");
-    auto map_name = Gecko::Application::get_option(options, "map");
+    Gecko::Application::Options options = Gecko::Application::parse_options(argc, argv, "rts", "tutorial");
+
+    std::string configuration_name = Gecko::Application::get_option(options, "configuration");
+    std::string map_name = Gecko::Application::get_option(options, "map");
 
     // Parse configuration files.
     configuration_manager = std::make_unique<Gecko::ConfigurationManager>(false);
@@ -53,8 +54,8 @@ int main(int argc, char* argv[])
     configuration_manager->save_cache();
 
     // Get configuration.
-    auto game_configuration = configuration_manager->get(configuration_name);
-    auto map_configuration = configuration_manager->get(map_name);
+    Gecko::ConfigurationPtr game_configuration = configuration_manager->get(configuration_name);
+    Gecko::ConfigurationPtr map_configuration = configuration_manager->get(map_name);
 
     // Initialize game.
     game = std::make_unique<Gecko::Game>(game_configuration);
@@ -70,23 +71,23 @@ int main(int argc, char* argv[])
     // Initialize managers.
     job_manager = std::make_unique<Gecko::JobManager>();
 
-    skill_manager = std::make_unique<Gecko::SkillManager>();
-    skill_manager->init(game_configuration);
+    skill_manager = std::make_unique<Gecko::SkillManager>(game_configuration);
+    skill_manager->init();
 
-    component_manager = std::make_unique<Gecko::ComponentManager>();
-    component_manager->init(game_configuration, game->get_map_scene());
+    component_manager = std::make_unique<Gecko::ComponentManager>(game_configuration, game->get_map_scene());
+    component_manager->init();
 
-    order_manager = std::make_unique<Gecko::OrderManager>();
-    order_manager->init(game_configuration);
+    order_manager = std::make_unique<Gecko::OrderManager>(game_configuration);
+    order_manager->init();
 
-    player_manager = std::make_unique<Gecko::PlayerManager>();
-    player_manager->init(game_configuration);
+    player_manager = std::make_unique<Gecko::PlayerManager>(game_configuration);
+    player_manager->init();
 
-    object_manager = std::make_unique<Gecko::ObjectManager>();
-    object_manager->init(game_configuration, game->get_map_scene());
+    object_manager = std::make_unique<Gecko::ObjectManager>(game_configuration, game->get_map_scene());
+    object_manager->init();
 
-    map_manager = std::make_unique<Gecko::MapManager>();
-    map_manager->init(game_configuration, game->get_map_scene());
+    map_manager = std::make_unique<Gecko::MapManager>(game_configuration, game->get_map_scene());
+    map_manager->init();
 
     // Load map.
     game->load_map(map_name);

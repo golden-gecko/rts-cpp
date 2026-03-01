@@ -133,9 +133,9 @@ namespace Gecko
 
                     for (size_t i = 0; i < model_vertices.value()->size(); i += 3)
                     {
-                        auto x = j->asFloat(); j++;
-                        auto y = j->asFloat(); j++;
-                        auto z = j->asFloat(); j++;
+                        float x = j->asFloat(); j++;
+                        float y = j->asFloat(); j++;
+                        float z = j->asFloat(); j++;
 
                         vertices.emplace_back(x, y, z);
                     }
@@ -144,9 +144,6 @@ namespace Gecko
                 // Load colors.
                 auto color = m_configuration->get_color("mesh.color", Ogre::ColourValue::White);
                 colors.resize(vertices.size(), color);
-
-                // Load texture coordinates.
-                // TODO: Implement.
 
                 // Load normals.
                 const auto model_normals = m_configuration->get_child_optional("mesh.normals");
@@ -164,9 +161,9 @@ namespace Gecko
 
                     for (size_t i = 0; i < model_normals.value()->size(); i += 3)
                     {
-                        auto x = j->asFloat(); j++;
-                        auto y = j->asFloat(); j++;
-                        auto z = j->asFloat(); j++;
+                        float x = j->asFloat(); j++;
+                        float y = j->asFloat(); j++;
+                        float z = j->asFloat(); j++;
 
                         normals.emplace_back(x, y, z);
                     }

@@ -23,12 +23,12 @@ namespace Gecko
         explicit Drive(const Drive& other);
 
     public:
-        auto get_distance_driven() const
+        float get_distance_driven() const
         {
             return m_distance_driven;
         }
 
-        auto get_speed() const
+        float get_speed() const
         {
             return m_speed;
         }

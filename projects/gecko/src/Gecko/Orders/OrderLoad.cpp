@@ -4,6 +4,7 @@
 #include "Gecko/Managers/ObjectManager.hpp"
 #include "Gecko/Objects/Object.hpp"
 #include "Gecko/UI/Indicators/Point.hpp"
+#include "Gecko/Utils/Utils.hpp"
 
 namespace Gecko
 {
@@ -65,13 +66,6 @@ namespace Gecko
 
     std::string OrderLoad::get_target_as_string() const
     {
-        std::stringstream stream; // TODO: Move to utils.
-
-        if (ObjectPtr object = ObjectManager::getSingleton().get(target_id))
-        {
-            stream << object->get_name() << " (" << target_id << ")";
-        }
-
-        return stream.str();
+        return Utils::object_id_to_string(target_id);
     }
 }

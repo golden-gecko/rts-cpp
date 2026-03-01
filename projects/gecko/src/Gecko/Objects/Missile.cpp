@@ -3,6 +3,7 @@
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Orders.hpp"
 #include "Gecko/Layers/Layer.hpp"
+#include "Gecko/Log.hpp"
 #include "Gecko/Managers/OrderManager.hpp"
 #include "Gecko/Maps/Map.hpp"
 
@@ -60,11 +61,14 @@ namespace Gecko
         {
             if (map->is_position_valid(position) == false)
             {
-                OrderPtr order = OrderManager::getSingleton().order_destroy(get_id(), get_id());
-
-                // TODO: Throw exception;
-
-                get_orders()->add_last(order->get_id());
+                if (OrderPtr order = OrderManager::getSingleton().order_destroy(get_id(), get_id()))
+                {
+                    get_orders()->add_last(order->get_id());
+                }
+                else
+                {
+                    L_WARNING << "Failed to create 'Destroy' order.";
+                }
             }
             else
             {
@@ -74,11 +78,14 @@ namespace Gecko
 
                     if (position.y <= layer_position.y)
                     {
-                        OrderPtr order = OrderManager::getSingleton().order_destroy(get_id(), get_id());
-
-                        // TODO: Throw exception;
-
-                        get_orders()->add_last(order->get_id());
+                        if (OrderPtr order = OrderManager::getSingleton().order_destroy(get_id(), get_id()))
+                        {
+                            get_orders()->add_last(order->get_id());
+                        }
+                        else
+                        {
+                            L_WARNING << "Failed to create 'Destroy' order.";
+                        }
                     }
                     else
                     {

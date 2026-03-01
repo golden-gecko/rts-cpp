@@ -14,7 +14,7 @@ namespace Gecko
         {
             std::string type = configuration->get_string("type", "");
 
-            if (type == "Technology")
+            if (type == Technology::Name)
             {
                 TechnologyPtr techonology = std::make_shared<Technology>();
 
@@ -27,6 +27,7 @@ namespace Gecko
 
     void TechnologyTree::deinit()
     {
+        m_tree.clear();
     }
 
     void TechnologyTree::update(float time)
@@ -39,7 +40,7 @@ namespace Gecko
 
     void TechnologyTree::research(const std::string& name) const
     {
-        Container::const_iterator technology = m_tree.find(name);
+        auto technology = m_tree.find(name);
 
         if (technology != m_tree.end())
         {
@@ -49,7 +50,7 @@ namespace Gecko
 
     void TechnologyTree::unlock(const std::string& name) const
     {
-        Container::const_iterator technology = m_tree.find(name);
+        auto technology = m_tree.find(name);
 
         if (technology != m_tree.end())
         {
@@ -59,7 +60,7 @@ namespace Gecko
 
     bool TechnologyTree::is_locked(const std::string& name) const
     {
-        Container::const_iterator technology = m_tree.find(name);
+        auto technology = m_tree.find(name);
 
         if (technology == m_tree.end())
         {

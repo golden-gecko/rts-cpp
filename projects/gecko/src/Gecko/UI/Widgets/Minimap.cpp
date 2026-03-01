@@ -123,7 +123,7 @@ namespace Gecko
                     auto size_z = terrain->get_size() * terrain->get_scale().z;
 
                     camera->get_camera()->setOrthoWindow(size_x, size_z);
-                    camera->set_position(Ogre::Vector3(size_x / 2.0f, size_y, size_z / 2.0f)); // TODO: Hardcoded.
+                    camera->set_position(Ogre::Vector3(size_x / 2.0f, size_y, size_z / 2.0f));
                     camera->look_at(Ogre::Vector3(size_x / 2.0f, 0.0f, (size_z / 2.0f) - 0.01f)); // TODO: Hardcoded.
                 }
 
@@ -169,10 +169,7 @@ namespace Gecko
         {
             if (CameraPtr camera = map->get_camera(Settings::Camera::Minimap))
             {
-                if (LayerPtr terrain = map->get_layer(Settings::Layer::Terrain))
-                {
-                    camera->set_position(camera->get_position() + Ogre::Vector3(x * 10.0f, 0.0f, y * 10.0f)); // TODO: Hardcoded.
-                }
+                camera->set_position(camera->get_position() + Ogre::Vector3(x * 10.0f, 0.0f, y * 10.0f)); // TODO: Hardcoded.
             }
         }
     }

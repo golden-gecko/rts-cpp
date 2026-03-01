@@ -49,7 +49,7 @@ namespace Gecko
         }
 
     private:
-        Id m_target_id;
+        Id            m_target_id;
         Ogre::Vector3 m_target_position = Ogre::Vector3::ZERO;
     };
 }

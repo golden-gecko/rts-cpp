@@ -10,41 +10,45 @@ Gecko::MapManager* Ogre::Singleton<Gecko::MapManager>::msSingleton = nullptr;
 
 namespace Gecko
 {
-    void MapManager::update(float time)
-    {
-        auto update = [](Map& map, float time)
-        {
-            map.update(time);
-        };
-
-        iterate(std::bind(update, std::placeholders::_1, time));
-    }
-
-    void MapManager::init(const ConfigurationPtr& configuration, const ScenePtr& scene)
+    void MapManager::init()
     {
         L_TIME("MapManager::init()");
 
-        auto max_size = configuration->get_int<std::size_t>("memory.maps");
-        auto& map_manager = MapManager::getSingleton();
+        Size max_size = m_configuration->get_int<Size>("memory.maps");
 
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            auto type = configuration->get_string("type", "");
+            std::string type = configuration->get_string("type", "");
 
-            if (type == "Map")
+            if (type == Map::Name)
             {
-                auto factory = std::bind(Map::create, std::placeholders::_1, configuration, scene);
-
-                map_manager.register_type<Map>(name, factory);
-                map_manager.allocate(name, max_size);
+                register_type<Map>(name, std::bind(Map::create, std::placeholders::_1, configuration, m_scene));
             }
+    
+            allocate(name, max_size);
         }
     }
 
     void MapManager::deinit()
     {
-        deallocate();
+        unregister_all();
+    }
+    
+    void MapManager::update(float time)
+    {
+        auto update = [time](Map& map)
+        {
+            map.update(time);
+        };
+
+        iterate(std::bind(update, std::placeholders::_1));
+    }
+
+    MapManager::MapManager(const ConfigurationPtr& configuration, const ScenePtr& scene) :
+        m_configuration(configuration),
+        m_scene(scene)
+    {
     }
 }

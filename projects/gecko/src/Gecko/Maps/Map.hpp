@@ -11,6 +11,9 @@ namespace Gecko
         using base_type = Item;
 
     public:
+        static const std::string Name;
+
+    public:
         // From Initializable.
         void init() override;
         void deinit() override;
@@ -45,6 +48,11 @@ namespace Gecko
         }
 
         std::shared_ptr<Layer> get_layer(const std::string& name) const;
+
+        auto& get_layers()
+        {
+            return m_layers;
+        }
 
         const auto& get_layers() const
         {

@@ -12,6 +12,60 @@ Gecko::ObjectManager* Ogre::Singleton<Gecko::ObjectManager>::msSingleton = nullp
 
 namespace Gecko
 {
+    void ObjectManager::init()
+    {
+        L_TIME("ObjectManager::init()");
+
+        Size max_size = m_configuration->get_int<Size>("memory.objects");
+
+        for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
+        {
+            L_INFO << "Loading '" << name << "' configuration.";
+
+            std::string type = configuration->get_string("type", "");
+
+            if (type == "Factory")
+            {
+                register_type<Factory>(name, std::bind(Factory::create, std::placeholders::_1, configuration, m_scene));
+            }
+            else if (type == "Missile")
+            {
+                register_type<Missile>(name, std::bind(Missile::create, std::placeholders::_1, configuration, m_scene));
+            }
+            else if (type == "Object")
+            {
+                register_type<Object>(name, std::bind(Object::create, std::placeholders::_1, configuration, m_scene));
+            }
+            else if (type == "Vehicle")
+            {
+                register_type<Vehicle>(name, std::bind(Vehicle::create, std::placeholders::_1, configuration, m_scene));
+            }
+
+            allocate(name, max_size);
+        }
+    }
+
+    void ObjectManager::deinit()
+    {
+        unregister_all();
+    }
+
+    void ObjectManager::update(float time)
+    {
+        auto update = [time](Object& object)
+        {
+            object.update(time);
+        };
+
+        iterate(std::bind(update, std::placeholders::_1));
+    }
+
+    ObjectManager::ObjectManager(const ConfigurationPtr& configuration, const ScenePtr& scene) :
+        m_configuration(configuration),
+        m_scene(scene)
+    {
+    }
+
     ObjectPtr ObjectManager::create(const std::string& name)
     {
         ObjectPtr object = base_type::create(name);
@@ -22,65 +76,6 @@ namespace Gecko
         }
 
         return object;
-    }
-
-    void ObjectManager::update(float time)
-    {
-        auto update = [](Object& object, float time)
-        {
-            object.update(time);
-        };
-
-        iterate(std::bind(update, std::placeholders::_1, time));
-    }
-
-    void ObjectManager::init(const ConfigurationPtr& configuration, const ScenePtr& scene)
-    {
-        L_TIME("ObjectManager::init()");
-
-        auto max_size = configuration->get_int<std::size_t>("memory.objects");
-        auto& object_manager = ObjectManager::getSingleton();
-
-        for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
-        {
-            L_INFO << "Loading '" << name << "' configuration.";
-
-            auto type = configuration->get_string("type", "");
-
-            if (type == "Factory")
-            {
-                auto factory = std::bind(Factory::create, std::placeholders::_1, configuration, scene);
-
-                object_manager.register_type<Factory>(name, factory);
-                object_manager.allocate(name, max_size);
-            }
-            else if (type == "Missile")
-            {
-                auto factory = std::bind(Missile::create, std::placeholders::_1, configuration, scene);
-
-                object_manager.register_type<Missile>(name, factory);
-                object_manager.allocate(name, max_size);
-            }
-            else if (type == "Object")
-            {
-                auto factory = std::bind(Object::create, std::placeholders::_1, configuration, scene);
-
-                object_manager.register_type<Object>(name, factory);
-                object_manager.allocate(name, max_size);
-            }
-            else if (type == "Vehicle")
-            {
-                auto factory = std::bind(Vehicle::create, std::placeholders::_1, configuration, scene);
-
-                object_manager.register_type<Vehicle>(name, factory);
-                object_manager.allocate(name, max_size);
-            }
-        }
-    }
-
-    void ObjectManager::deinit()
-    {
-        deallocate();
     }
 
     ObjectManager::ObjectsInRange ObjectManager::get_in_range(const Ogre::Vector3& position, float range)

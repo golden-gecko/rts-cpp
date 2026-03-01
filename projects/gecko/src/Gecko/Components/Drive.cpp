@@ -6,7 +6,7 @@ namespace Gecko
 {
     ConfigurationPtr Drive::serialize() const
     {
-        auto configuration = base_type::serialize();
+        ConfigurationPtr configuration = base_type::serialize();
 
         configuration->set("speed", m_speed);
         configuration->set("distance_driven", m_distance_driven);
@@ -19,7 +19,7 @@ namespace Gecko
         base_type::deserialize(configuration);
 
         m_speed = configuration->get_float("speed", 0.0f);
-        m_speed = configuration->get_float("distance_driven", 0.0f);
+        m_distance_driven = configuration->get_float("distance_driven", 0.0f);
     }
 
     Drive* Drive::create(Drive* memory, const ConfigurationPtr& configuration, const ScenePtr& scene)

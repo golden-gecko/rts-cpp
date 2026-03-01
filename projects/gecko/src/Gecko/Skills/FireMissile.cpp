@@ -38,7 +38,7 @@ namespace Gecko
     {
         if (m_refresh_timer)
         {
-            auto position = m_owner->get_position() + Ogre::Vector3::UNIT_Y * 2.0f; // TODO: Hardcoded.
+            auto position = m_owner->get_position() + Ogre::Vector3::UNIT_Y * 2.0f;
 
             Utils::fire_missile(*m_owner, m_missile_configuration, position, m_owner->get_direction());
 

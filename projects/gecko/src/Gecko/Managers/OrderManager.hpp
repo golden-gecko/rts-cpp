@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Gecko/Id.hpp"
+#include "Gecko/Interfaces/Initializable.hpp"
 #include "Gecko/Interfaces/Updatable.hpp"
 #include "Gecko/Managers/Manager.hpp"
+#include "Gecko/Orders/Order.hpp"
 #include "Gecko/Settings.hpp"
 
 namespace Gecko
@@ -16,44 +18,52 @@ namespace Gecko
         using base_type = Manager<Order, std::string, Id>;
 
     public:
+        // From Initializable.
+        void init();
+        void deinit();
+
+    public:
         // From Updatable.
         void update(float time) override;
 
     public:
-        void init(const ConfigurationPtr& configuration);
-        void deinit();
+        OrderManager(const ConfigurationPtr& configuration);
 
-        Order* order_attack(const Id& sender_id, const Id& receiver_id, const Id& target_id);
-        Order* order_attack(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
+    public:
+        OrderPtr order_attack(const Id& sender_id, const Id& receiver_id, const Id& target_id);
+        OrderPtr order_attack(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
 
-        Order* order_create(const Id& sender_id, const Id& receiver_id, const std::string& configuration_name, const Ogre::Vector3& position, const Id& player_id);
+        OrderPtr order_create(const Id& sender_id, const Id& receiver_id, const std::string& configuration_name, const Ogre::Vector3& position, const Id& player_id);
 
-        Order* order_destroy(const Id& sender_id, const Id& receiver_id);
+        OrderPtr order_destroy(const Id& sender_id, const Id& receiver_id);
 
-        Order* order_disable(const Id& sender_id, const Id& receiver_id);
+        OrderPtr order_disable(const Id& sender_id, const Id& receiver_id);
 
-        Order* order_enable(const Id& sender_id, const Id& receiver_id);
+        OrderPtr order_enable(const Id& sender_id, const Id& receiver_id);
 
-        Order* order_follow(const Id& sender_id, const Id& receiver_id, const Id& target_id);
+        OrderPtr order_follow(const Id& sender_id, const Id& receiver_id, const Id& target_id);
 
-        Order* order_guard(const Id& sender_id, const Id& receiver_id, const Id& target_id);
-        Order* order_guard(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
+        OrderPtr order_guard(const Id& sender_id, const Id& receiver_id, const Id& target_id);
+        OrderPtr order_guard(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
 
-        Order* order_load(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value);
+        OrderPtr order_load(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value);
 
-        Order* order_move(const Id& sender_id, const Id& receiver_id, const Id& target_id);
-        Order* order_move(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
+        OrderPtr order_move(const Id& sender_id, const Id& receiver_id, const Id& target_id);
+        OrderPtr order_move(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
 
-        Order* order_patrol(const Id& sender_id, const Id& receiver_id, const Id& target_id);
-        Order* order_patrol(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
+        OrderPtr order_patrol(const Id& sender_id, const Id& receiver_id, const Id& target_id);
+        OrderPtr order_patrol(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
 
-        Order* order_rally(const Id& sender_id, const Id& receiver_id, const Id& target_id);
-        Order* order_rally(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
+        OrderPtr order_rally(const Id& sender_id, const Id& receiver_id, const Id& target_id);
+        OrderPtr order_rally(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
 
-        Order* order_stop(const Id& sender_id, const Id& receiver_id);
+        OrderPtr order_stop(const Id& sender_id, const Id& receiver_id);
 
-        Order* order_unload(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value);
+        OrderPtr order_unload(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value);
 
-        Order* order_wait(const Id& sender_id, const Id& receiver_id, float time = Settings::Order::WaitTime);
+        OrderPtr order_wait(const Id& sender_id, const Id& receiver_id, float time = Settings::Order::WaitTime);
+
+    private:
+        ConfigurationPtr m_configuration;
     };
 }

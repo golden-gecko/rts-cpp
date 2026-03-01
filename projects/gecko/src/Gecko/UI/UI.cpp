@@ -32,6 +32,7 @@
 #include "Gecko/UI/Widgets/Diplomacy.hpp"
 #include "Gecko/UI/Widgets/GameMenu.hpp"
 #include "Gecko/UI/Widgets/Info.hpp"
+#include "Gecko/UI/Widgets/Layers.hpp"
 #include "Gecko/UI/Widgets/Log.hpp"
 #include "Gecko/UI/Widgets/Minimap.hpp"
 #include "Gecko/UI/Widgets/ObjectsViewer.hpp"
@@ -163,6 +164,7 @@ namespace Gecko
         }
 
         get_component<DiplomacyWidget>()->update();
+        get_component<LayersWidget>()->update();
         get_component<ObjectsViewerWidget>()->update();
         get_component<OrderQueueWidget>()->update();
         get_component<OrdersViewerWidget>()->update();
@@ -233,7 +235,6 @@ namespace Gecko
     {
         if (args.size() == 2 && args[0].IsString() && args[1].IsString())
         {
-            // TODO: First map.
             MapManager::getSingleton().begin()->second->show_data_layer(
                 Utils::Convert::to_string(args[0]), Utils::Convert::to_string(args[1])
             );
@@ -962,6 +963,7 @@ namespace Gecko
         m_widgets.push_back(std::make_shared<DiplomacyWidget>());
         m_widgets.push_back(std::make_shared<InfoWidget>());
         m_widgets.push_back(std::make_shared<GameMenuWidget>());
+        m_widgets.push_back(std::make_shared<LayersWidget>());
         m_widgets.push_back(std::make_shared<LogWidget>());
         m_widgets.push_back(std::make_shared<MinimapWidget>());
         m_widgets.push_back(std::make_shared<ObjectsViewerWidget>());

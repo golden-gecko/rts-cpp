@@ -234,7 +234,7 @@ namespace Gecko
 
             // Create cursor.
             m_square->clear();
-            m_square->begin("cursor_grid_red"); // TODO: Hardcoded.
+            m_square->begin("cursor_grid_" + Settings::Material::Default);
 
             m_square->position(g00);
             m_square->normal(Ogre::Vector3::UNIT_Y);

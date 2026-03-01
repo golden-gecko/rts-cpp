@@ -8,12 +8,8 @@ namespace Gecko
     Season::Season(const std::string& name, const Configuration& configuration) :
         m_name(name)
     {
-        if (configuration.get_child_optional("color"))
-        {
-            m_color = configuration.get_color("color");
-        }
-
-        m_timer.set_max(configuration.get_float("length", 10.0f));
+        m_color = configuration.get_color("color", Ogre::ColourValue::White);
+        m_timer.set_max(configuration.get_float("length", 0.0f));
     }
 
     void Season::init()
@@ -30,7 +26,5 @@ namespace Gecko
 
     void Season::apply()
     {
-        // TODO: Fix.
-        // Game::getSingleton().get_scene_manager()->setAmbientLight(color);
     }
 }

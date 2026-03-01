@@ -127,8 +127,7 @@ namespace Gecko::Navigation
 
                 auto value = navigation_layer->get_data(xx, zz);
 
-                // TODO: Check adjacent tiles if movement is possible.
-                // TODO: For example, object cannot move diagonal if adjacent tiles are blocked.
+                // TODO: Check adjacent tiles if movement is possible. For example, object cannot move diagonal if adjacent tiles are blocked.
                 if (value > 0)
                 {
                     continue;

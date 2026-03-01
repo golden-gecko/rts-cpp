@@ -26,6 +26,7 @@ namespace Gecko
 
     void Layer::show_data_layer(const std::string& data_layer_name)
     {
+        // Get data layer.
         auto data_layer = m_data_layers.find(data_layer_name);
 
         if (data_layer == m_data_layers.end())
@@ -46,9 +47,7 @@ namespace Gecko
         {
             for (const auto& pass : technique->getPasses())
             {
-                auto texture_unit_state = pass->getTextureUnitState("data");
-
-                if (texture_unit_state)
+                if (Ogre::TextureUnitState* texture_unit_state = pass->getTextureUnitState("data"))
                 {
                     texture_unit_state->setTexture(data_layer->second->get_texture());
                 }

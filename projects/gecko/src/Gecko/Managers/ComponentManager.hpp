@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Gecko/Id.hpp"
+#include "Gecko/Interfaces/Initializable.hpp"
 #include "Gecko/Managers/Manager.hpp"
 
 namespace Gecko
@@ -13,7 +14,15 @@ namespace Gecko
         using base_type = Manager<Component, std::string, Id>;
 
     public:
-        void init(const ConfigurationPtr& configuration, const ScenePtr& scene);
+        // From Initializable.
+        void init();
         void deinit();
+    
+    public:
+        ComponentManager(const ConfigurationPtr& configuration, const ScenePtr& scene);
+
+    private:
+        ConfigurationPtr m_configuration;
+        ScenePtr m_scene;
     };
 }

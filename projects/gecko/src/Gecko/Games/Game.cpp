@@ -487,7 +487,7 @@ namespace Gecko
 
     MapPtr Game::get_active_map() const
     {
-        return MapManager::getSingleton().begin()->second; // TODO: Hardcoded.
+        return m_active_map;
     }
 
     PlayerPtr Game::get_active_player() const

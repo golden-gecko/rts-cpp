@@ -241,11 +241,14 @@ namespace Gecko
     {
         if (m_alive_timer.update(time))
         {
-            auto order = OrderManager::getSingleton().order_destroy(get_id(), get_id());
-
-            // TODO: Throw exception.
-
-            get_orders()->add_last(order->get_id());
+            if (OrderPtr order = OrderManager::getSingleton().order_destroy(get_id(), get_id()))
+            {
+                get_orders()->add_last(order->get_id());
+            }
+            else
+            {
+                L_WARNING << "Failed to create 'Destroy' order.";
+            }
         }
 
         update_components(time);
@@ -390,8 +393,9 @@ namespace Gecko
 
     Area Object::get_area() const
     {
+        // TODO: Implement.
         const Ogre::AxisAlignedBox& aabb = m_scene_node->_getWorldAABB();
-        LayerPtr layer = m_owner->get_layer(Settings::Layer::Terrain); // TODO: Hardcoded.
+        LayerPtr layer = m_owner->get_layer(Settings::Layer::Terrain);
 
         return Area(); // layer->get_index(aabb.getMinimum()), layer->get_index(aabb.getMaximum()));
     }
@@ -440,7 +444,6 @@ namespace Gecko
 
         if (m_owner && m_layers->size())
         {
-            // TODO: Hardcoded.
             const auto& layer = get_owner()->get_layer(Settings::Layer::Terrain);
             auto new_position = layer->get_position(position, validate);
 
@@ -475,7 +478,6 @@ namespace Gecko
 
         if (m_owner && m_layers->size())
         {
-            // TODO: Hardcoded.
             auto layer = m_owner->get_layer(Settings::Layer::Terrain);
             auto data_layer = layer->get_data_layer(Settings::Layer::Navigation);
 

@@ -11,6 +11,9 @@ namespace Gecko
         public Updatable
     {
     public:
+        static const std::string Name;
+
+    public:
         // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
@@ -43,12 +46,12 @@ namespace Gecko
         std::string m_name;
 
         std::map<std::string, float> m_costs;
-        std::set<std::string> m_obsoletes;
-        std::set<std::string> m_unlocks;
+        std::set<std::string>        m_obsoletes;
+        std::set<std::string>        m_unlocks;
 
         Timer m_research_timer;
 
         bool m_in_research = false;
-        bool m_locked = true;
+        bool m_locked      = true;
     };
 }

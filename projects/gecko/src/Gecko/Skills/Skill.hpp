@@ -32,7 +32,7 @@ namespace Gecko
         virtual void activate(const Ogre::Vector3& position) = 0;
 
     public:
-        const auto& get_name() const
+        const std::string& get_name() const
         {
             return m_name;
         }
@@ -49,7 +49,7 @@ namespace Gecko
         }
 
     protected:
-        Object* m_owner = nullptr;
+        ObjectPtr m_owner = nullptr;
         std::string m_name;
         Timer m_refresh_timer;
         std::uint16_t m_activation_count = 0;

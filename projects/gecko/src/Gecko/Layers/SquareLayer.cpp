@@ -172,8 +172,7 @@ namespace Gecko
         auto ray_length = 1000.0f;
         auto ray = Ogre::Ray(Ogre::Vector3(x, ray_length, z), Ogre::Vector3::NEGATIVE_UNIT_Y);
 
-        // TODO: Make scale scalar instead of vector.
-        if (x_rest + z_rest < m_scale.x)
+        if (x_rest + z_rest < m_scale.x) // TODO: Make scale scalar instead of vector.
         {
             Ogre::Vector3 p[3];
 
@@ -239,20 +238,19 @@ namespace Gecko
         auto ray_length = 1000.0f;
         auto ray = Ogre::Ray(Ogre::Vector3(x, ray_length, z), Ogre::Vector3::NEGATIVE_UNIT_Y);
 
-        // TODO: Make scale scalar instead of vector.
         Ogre::Vector3 p[3];
 
-        if (x_rest + z_rest < m_scale.x)
+        if (x_rest + z_rest < m_scale.x) // TODO: Make scale scalar instead of vector.
         {
             p[0] = m_vertices[x_index    ][z_index    ];
             p[1] = m_vertices[x_index    ][z_index + 1];
             p[2] = m_vertices[x_index + 1][z_index    ];
 
-            auto hit = Ogre::Math::intersects(ray, Ogre::Plane(p[0], p[1], p[2]));
+            Ogre::RayTestResult hit = Ogre::Math::intersects(ray, Ogre::Plane(p[0], p[1], p[2]));
 
             if (hit.first)
             {
-                auto result = Ogre::Vector3(x, ray_length - hit.second, z);
+                Ogre::Vector3 result = Ogre::Vector3(x, ray_length - hit.second, z);
 
                 return validate ? validate_position(result) : result;
             }
@@ -263,11 +261,11 @@ namespace Gecko
             p[1] = m_vertices[x_index    ][z_index + 1];
             p[2] = m_vertices[x_index + 1][z_index + 1];
 
-            auto hit = Ogre::Math::intersects(ray, Ogre::Plane(p[0], p[1], p[2]));
+            Ogre::RayTestResult hit = Ogre::Math::intersects(ray, Ogre::Plane(p[0], p[1], p[2]));
 
             if (hit.first)
             {
-                auto result = Ogre::Vector3(x, ray_length - hit.second, z);
+                Ogre::Vector3 result = Ogre::Vector3(x, ray_length - hit.second, z);
 
                 return validate ? validate_position(result) : result;
             }
@@ -343,8 +341,7 @@ namespace Gecko
                     static_cast<float>(z * (m_scale.z / m_grid_scale.z))
                 );
 
-                // TODO: Compute normals.
-                m_normals[x][z] = Ogre::Vector3(0.0f, 1.0f, 0.0f);
+                m_normals[x][z] = Ogre::Vector3(0.0f, 1.0f, 0.0f); // TODO: Compute normals.
             }
         }
     }
@@ -481,22 +478,20 @@ namespace Gecko
             return 0;
         }
 
-        auto sources = configuration.get_child("data");
+        ConfigurationPtr sources = configuration.get_child("data");
 
         if (sources->size() <= 0)
         {
             return 0;
         }
 
-        // TODO: Check if element is an array.
-        auto element = sources->get_element(0);
+        ConfigurationPtr element = sources->get_element(0);
 
         if (element->size() <= 0)
         {
             return 0;
         }
 
-        // TODO: Check if element is an array.
         return Utils::Texture::load_square_image(element->get_element(0)->get_string()).getWidth();
     }
 }
