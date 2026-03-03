@@ -3,12 +3,11 @@
         "by_game": true
     },
     "health": {
-        "current": 100.0,
-        "max": 100.0
+        "current": 500.0,
+        "max": 500.0
     },
     "include": [
-        "../components/meshes/cube_centered_on_bottom.json"
+        "../components/hulls/_hull.json"
     ],
-    "name": "Hull",
-    "type": "Hull"
+    "name": "Hull"
 }

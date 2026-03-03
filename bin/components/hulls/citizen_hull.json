@@ -1,0 +1,13 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "health": {
+        "current": 500.0,
+        "max": 500.0
+    },
+    "include": [
+        "../components/hulls/_hull.json"
+    ],
+    "name": "Citizen Hull"
+}

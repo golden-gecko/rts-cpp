@@ -23,9 +23,6 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        explicit Technology() = default;
-
-    public:
         void research()
         {
             m_in_research = true;

@@ -7,8 +7,10 @@
         "current": 10.0,
         "max": 10.0
     },
-    "name": "Storage",
+    "include": [
+        "../components/storages/_storage.json"
+    ],
     "load_time": 1.0,
-    "type": "Storage",
+    "name": "Small Storage",
     "unload_time": 1.0
 }

@@ -3,7 +3,7 @@
         "by_game": true,
         "by_player": true
     },
-    "defence": 20.0,
+    "defence": 30.0,
     "health": {
         "current": 30.0,
         "max": 30.0

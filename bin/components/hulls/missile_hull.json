@@ -7,20 +7,7 @@
         "max": 1.0
     },
     "include": [
-        "../components/meshes/cube_centered.json"
+        "../components/hulls/_hull.json"
     ],
-    "mesh": {
-        "color": {
-            "b": 0.1,
-            "g": 0.8,
-            "r": 0.8
-        },
-        "scale": {
-            "x": 0.1,
-            "y": 0.1,
-            "z": 0.2
-        }
-    },
-    "name": "Missile Hull",
-    "type": "Hull"
+    "name": "Missile Hull"
 }

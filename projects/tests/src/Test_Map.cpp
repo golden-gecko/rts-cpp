@@ -2,12 +2,17 @@
 
 #include <Gecko/Configuration.hpp>
 #include <Gecko/Maps/Map.hpp>
+#include <Gecko/Scenes/Scene.hpp>
 
 #include "Fixtures.hpp"
 
 TEST(map, new_map_is_empty)
 {
-    auto map = std::make_shared<Gecko::Map>();
+    auto map_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
+    auto scene_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
+
+    auto scene = std::make_shared<Gecko::Scene>(scene_configuration);
+    auto map = std::make_shared<Gecko::Map>(scene);
 
     EXPECT_EQ(map->get_configuration().get(), nullptr);
     EXPECT_EQ(map->get_id(), Gecko::Id::Empty);
@@ -19,7 +24,10 @@ TEST(map, new_map_is_empty)
 TEST(map, map_deserialized_from_configuration_is_loaded)
 {
     auto map_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
-    auto map = std::make_shared<Gecko::Map>();
+    auto scene_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
+
+    auto scene = std::make_shared<Gecko::Scene>(scene_configuration);
+    auto map = std::make_shared<Gecko::Map>(scene);
 
     map->deserialize(map_configuration);
 
@@ -35,7 +43,10 @@ TEST(map, map_deserialized_and_initialized_from_configuration_is_loaded)
     init_game init_game;
 
     auto map_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
-    auto map = std::make_shared<Gecko::Map>();
+    auto scene_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
+
+    auto scene = std::make_shared<Gecko::Scene>(scene_configuration);
+    auto map = std::make_shared<Gecko::Map>(scene);
 
     map->deserialize(map_configuration);
     map->init();

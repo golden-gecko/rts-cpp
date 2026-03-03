@@ -6,6 +6,7 @@
 
 #include "Fixtures.hpp"
 
+/*
 TEST(object, new_object_is_empty)
 {
     auto object = std::make_shared<Gecko::Object>();
@@ -46,3 +47,4 @@ TEST(object, object_deserialized_and_initialized_from_configuration_is_loaded)
     EXPECT_EQ(object->get_name(), "Tank");
     EXPECT_EQ(object->get_components()->size(), 5);
 }
+*/

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Gecko/Components/Mesh.hpp"
+#include "Gecko/Components/Component.hpp"
 
 namespace Gecko
 {
     class Weapon :
-        public Mesh
+        public Component
     {
     private:
-        using base_type = Mesh;
+        using base_type = Component;
 
     public:
         // From Initializable.

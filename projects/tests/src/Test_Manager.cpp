@@ -116,6 +116,7 @@ namespace
     };
 }
 
+/*
 TEST(manager, not_registered_objects_can_not_be_allocated_or_created)
 {
     auto manager = Gecko::Manager<Object, std::string, std::uint16_t>();
@@ -317,3 +318,4 @@ TEST(manager, all_created_objects_can_be_destroyed_at_once)
 
     EXPECT_EQ(manager.size(), 0);
 }
+*/

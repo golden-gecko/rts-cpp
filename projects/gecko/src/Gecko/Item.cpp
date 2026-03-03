@@ -33,4 +33,8 @@ namespace Gecko
         m_configuration = configuration;
         m_id = configuration->get_int("id", Id::Empty.get());
     }
+
+    void Item::update(float time)
+    {
+    }
 }

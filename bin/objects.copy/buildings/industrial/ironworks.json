@@ -1,0 +1,65 @@
+{
+    "components": [
+        {
+            "configuration": "factory_hull",
+            "mesh": {
+                "name": "ironworks.mesh",
+                "scale": {
+                    "x": 5.0,
+                    "y": 5.0,
+                    "z": 5.0
+                }
+            }
+        }
+    ],
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "include": [
+        "../objects/buildings/_building.json"
+    ],
+    "industrial": true,
+    "max_workers": 2,
+    "name": "Ironworks",
+    "processes": {
+        "Smelting": {
+            "in": {
+                "items": {
+                    "Coal": {
+                        "consumption": 4.0
+                    },
+                    "Iron Ore": {
+                        "consumption": 2.0
+                    }
+                }
+            },
+            "out": {
+                "items": {
+                    "Iron": {
+                        "production": 1.0
+                    },
+                    "Pollution": {
+                        "production": 0.2
+                    }
+                }
+            }
+        }
+    },
+    "resources": {
+        "items": {
+            "Coal": {
+                "max": 10.0
+            },
+            "Iron": {
+                "max": 10.0
+            },
+            "Iron Ore": {
+                "max": 10.0
+            },
+            "Pollution": {
+                "max": 1000000.0
+            }
+        }
+    }
+}

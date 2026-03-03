@@ -1,7 +1,7 @@
 {
     "components": [
         {
-            "configuration": "hull",
+            "configuration": "citizen_hull",
             "mesh": {
                 "color": {
                     "b": 1.0,

@@ -1,0 +1,38 @@
+{
+    "layers": [
+        "Terrain"
+    ],
+    "mesh": {
+        "scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 2.0
+        }
+    },
+    "orders": {
+        "available": [
+            "Destroy",
+            "Follow",
+            "Guard",
+            "Load",
+            "Move",
+            "Patrol",
+            "Stop",
+            "Unload",
+            "Wait"
+        ]
+    },
+    "processes": {
+        "Driving": {
+            "out": {
+                "items": {
+                    "Pollution": {
+                        "production": 0.1
+                    }
+                }
+            }
+        }
+    },
+    "selectable": true,
+    "type": "Vehicle"
+}

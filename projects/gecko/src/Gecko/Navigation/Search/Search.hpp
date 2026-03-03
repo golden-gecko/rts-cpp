@@ -8,15 +8,6 @@ namespace Gecko::Navigation
     class Search
     {
     public:
-        enum class Type :
-            std::uint8_t
-        {
-            AvoidOccupied,
-            DirectLine,
-            FollowRoads
-        };
-
-    public:
         explicit Search(const Layer& layer);
 
         virtual ~Search() = default;
