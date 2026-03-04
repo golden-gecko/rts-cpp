@@ -243,7 +243,7 @@ namespace Gecko
         {
             if (OrderPtr order = OrderManager::getSingleton().order_destroy(get_id(), get_id()))
             {
-                get_orders()->add_last(order->get_id());
+                m_orders->add_last(order->get_id());
             }
             else
             {
@@ -257,7 +257,7 @@ namespace Gecko
         update_resources(time);
         update_skills(time);
 
-        if (get_orders()->empty() && m_job_timer.update(time))
+        if (m_orders->empty() && m_job_timer.update(time))
         {
             auto jobs = JobManager::getSingleton().get_job(get_id(), get_components(), get_resources());
 
@@ -265,7 +265,7 @@ namespace Gecko
             {
                 for (const auto& job : jobs)
                 {
-                    get_orders()->add_last(job->get_id());
+                    m_orders->add_last(job->get_id());
                 }
 
                 m_job_timer.update(time);
@@ -562,17 +562,19 @@ namespace Gecko
 
     void Object::update_orders(float time)
     {
-        if (get_orders()->empty())
+        if (m_orders->empty())
         {
             return;
         }
 
         // Get order.
-        auto order = OrderManager::getSingleton().get(get_orders()->front());
+        OrderPtr order = OrderManager::getSingleton().get(m_orders->get_curret());
 
         if (order == nullptr)
         {
-            L_WARNING << "Could not find order " << get_orders()->front() << ".";
+            L_WARNING << "Could not find order '" << m_orders->get_curret() << "'.";
+
+            m_orders->remove_current();
 
             return;
         }
@@ -580,12 +582,15 @@ namespace Gecko
         // Get handler for order.
         const std::map<order_type::Value, std::function<OrderStatus(Order*, float)>> handlers =
         {
+            { order_type::Value::Attack, std::bind(&Object::on_attack, this, std::placeholders::_1, std::placeholders::_2) },
+            { order_type::Value::Create, std::bind(&Object::on_create, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Destroy, std::bind(&Object::on_destroy, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Follow, std::bind(&Object::on_follow, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Guard, std::bind(&Object::on_guard, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Load, std::bind(&Object::on_load, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Move, std::bind(&Object::on_move, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Patrol, std::bind(&Object::on_patrol, this, std::placeholders::_1, std::placeholders::_2) },
+            { order_type::Value::Rally, std::bind(&Object::on_rally, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Stop, std::bind(&Object::on_stop, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Unload, std::bind(&Object::on_unload, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Wait, std::bind(&Object::on_wait, this, std::placeholders::_1, std::placeholders::_2) }
@@ -611,7 +616,7 @@ namespace Gecko
 
                 UI::getSingleton().log_info(stream.str(), get_id());
 
-                get_orders()->remove(order->get_id());
+                m_orders->remove(order->get_id());
 
                 break;
             }
@@ -624,8 +629,8 @@ namespace Gecko
 
                 UI::getSingleton().log_info(stream.str(), get_id());
 
-                get_orders()->remove(order->get_id());
-                get_orders()->add_last(order->get_id());
+                m_orders->remove(order->get_id());
+                m_orders->add_last(order->get_id());
 
                 break;
             }
@@ -638,7 +643,7 @@ namespace Gecko
 
                 UI::getSingleton().log_info(stream.str(), get_id());
 
-                get_orders()->remove(order->get_id());
+                m_orders->remove(order->get_id());
 
                 break;
             }
@@ -663,34 +668,12 @@ namespace Gecko
                 }
                 else
                 {
-                    get_orders()->remove(order->get_id());
+                    m_orders->remove(order->get_id());
                 }
 
                 break;
             }
         }
-    }
-
-    void Object::update_processes(float time)
-    {
-        get_processes()->update(time, get_id(), get_position(), get_resources());
-    }
-
-    void Object::update_resources(float time)
-    {
-        get_resources()->update(time);
-
-        /*
-        TODO: Fix.
-        if (resources->has_resource("Pollution"))
-        {
-            auto& terrain = ;
-            auto layer = terrain.get_layer(LayerType::Value::PollutionAir)->as<TerrainLayerPollutionAir>();
-            auto index = terrain.get_index(get_position());
-
-            layer->add(index, resources->get_resource("Pollution").extract_all());
-        }
-        */
     }
 
     void Object::update_skills(float time)
@@ -760,7 +743,7 @@ namespace Gecko
 
     OrderStatus Object::on_stop(Order* order, float time)
     {
-        get_orders()->remove_all_orders();
+        m_orders->remove_all_orders();
 
         return OrderStatus::complete;
     }

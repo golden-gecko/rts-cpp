@@ -149,7 +149,7 @@ namespace Gecko
         }
     }
 
-    void Orders::remove_current_order()
+    void Orders::remove_current()
     {
         if (m_queue.empty() == false)
         {

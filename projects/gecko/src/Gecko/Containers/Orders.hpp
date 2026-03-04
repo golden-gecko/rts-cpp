@@ -9,13 +9,13 @@ namespace Gecko
         public Serializable
     {
     public:
+        using Available = std::set<order_type::Value>;
+        using Queue = std::deque<Id>;
+
+    public:
         // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
-
-    public:
-        typedef std::set<order_type::Value> Available;
-        typedef std::deque<Id> Queue;
 
     public:
         ~Orders() override;
@@ -39,7 +39,7 @@ namespace Gecko
             return m_queue.empty();
         }
 
-        const auto& front() const
+        const Id& get_curret() const
         {
             return m_queue.front();
         }
@@ -52,7 +52,7 @@ namespace Gecko
         void move_first_to_end();
 
         void remove(const Id& order_id);
-        void remove_current_order();
+        void remove_current();
         void remove_all_orders();
 
         auto size() const

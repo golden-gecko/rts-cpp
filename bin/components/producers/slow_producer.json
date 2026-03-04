@@ -1,0 +1,15 @@
+{
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "health": {
+        "current": 10.0,
+        "max": 10.0
+    },
+    "include": [
+        "../components/producers/_producer.json"
+    ],
+    "name": "Slow Producer",
+    "produce_time": 1.0
+}

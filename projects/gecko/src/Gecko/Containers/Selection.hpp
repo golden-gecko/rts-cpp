@@ -4,17 +4,17 @@
 
 namespace Gecko
 {
-    class Selected :
+    class Selection :
         public Serializable
     {
+    public:
+        using Items = std::set<Id>;
+        using Groups = std::map<std::uint16_t, Items>;
+
     public:
         // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
-
-    public:
-        typedef std::set<Id> Items;
-        typedef std::map<std::uint16_t, Items> Groups;
 
     public:
         void apply_current_selection(bool select);
@@ -65,7 +65,7 @@ namespace Gecko
         }
 
     public:
-        bool operator==(const Selected& other) const
+        bool operator==(const Selection& other) const
         {
             return m_items == other.m_items && m_groups == other.m_groups;
         }

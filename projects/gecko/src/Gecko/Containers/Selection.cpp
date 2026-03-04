@@ -1,4 +1,4 @@
-#include "Gecko/Containers/Selected.hpp"
+#include "Gecko/Containers/Selection.hpp"
 
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Configurations.hpp"
@@ -18,7 +18,7 @@
 
 namespace Gecko
 {
-    ConfigurationPtr Selected::serialize() const
+    ConfigurationPtr Selection::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();
 
@@ -38,7 +38,7 @@ namespace Gecko
         return configuration;
     }
 
-    void Selected::deserialize(const ConfigurationPtr& configuration)
+    void Selection::deserialize(const ConfigurationPtr& configuration)
     {
         clear();
 
@@ -46,13 +46,13 @@ namespace Gecko
     }
 
 
-    void Selected::apply_current_selection(bool select)
+    void Selection::apply_current_selection(bool select)
     {
         apply_selection(m_items, select);
         apply_ui(select);
     }
 
-    void Selected::apply_ui(bool select)
+    void Selection::apply_ui(bool select)
     {
         std::set<std::string> configurations;
         std::set<std::string> orders;
@@ -106,7 +106,7 @@ namespace Gecko
         }
     }
 
-    void Selected::create_group(std::uint16_t group_number)
+    void Selection::create_group(std::uint16_t group_number)
     {
         UI::getSingleton().log_info(
             "Assigned "
@@ -118,7 +118,7 @@ namespace Gecko
         m_groups[group_number] = m_items;
     }
 
-    void Selected::select(const Id& object_id, bool add)
+    void Selection::select(const Id& object_id, bool add)
     {
         L_TRACE << "Player::select(" << object_id << ", " << add << ")";
 
@@ -130,7 +130,7 @@ namespace Gecko
         select(objects_ids, add);
     }
 
-    void Selected::select(const Items& object_ids, bool add)
+    void Selection::select(const Items& object_ids, bool add)
     {
         L_TRACE << "Player::select(" << object_ids.size() << ", " << add << ")";
 
@@ -170,10 +170,10 @@ namespace Gecko
         apply_current_selection(true);
     }
 
-    void Selected::select_group(std::uint16_t group_number)
+    void Selection::select_group(std::uint16_t group_number)
     {
         UI::getSingleton().log_info(
-            "Selected "
+            "Selection "
             + Utils::Convert::to_string(m_groups[group_number].size())
             + " objects from "
             + Utils::Convert::to_string(group_number) + " group"
@@ -184,7 +184,7 @@ namespace Gecko
         select(m_groups[group_number]);
     }
 
-    void Selected::apply_selection(const Items& object_ids, bool select)
+    void Selection::apply_selection(const Items& object_ids, bool select)
     {
         for (const auto& id : object_ids)
         {

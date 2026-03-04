@@ -8,12 +8,12 @@ namespace Gecko
         public Serializable
     {
     public:
+        using Items = std::set<std::string>;
+        
+    public:
         // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
-
-    public:
-        typedef std::set<std::string> Items;
 
     public:
         void clear()

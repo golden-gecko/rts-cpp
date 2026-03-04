@@ -9,12 +9,12 @@ namespace Gecko
         public Serializable
     {
     public:
+        using Map = std::map<std::string, Process>;
+
+    public:
         // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
-
-    public:
-        typedef std::map<std::string, Process> Map;
 
     public:
         void update(float time, const Id& id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources);

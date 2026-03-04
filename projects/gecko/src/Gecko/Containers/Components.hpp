@@ -8,12 +8,12 @@ namespace Gecko
         public Serializable
     {
     public:
+        using Items = std::vector<ComponentPtr>;
+
+    public:
         // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
-
-    public:
-        typedef std::vector<Component*> Items;
 
     public:
         explicit Components() = default;
@@ -92,6 +92,6 @@ namespace Gecko
     private:
         Items m_items;
 
-        void add_component(const std::string& configuration, const ConfigurationPtr& component_configuration = ConfigurationPtr());
+        void add_component(const std::string& configuration_name, const ConfigurationPtr& component_configuration = ConfigurationPtr());
     };
 }

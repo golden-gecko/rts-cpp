@@ -65,7 +65,7 @@ namespace Gecko
 
             if (orders->size())
             {
-                if (OrderPtr order = OrderManager::getSingleton().get(orders->front()))
+                if (OrderPtr order = OrderManager::getSingleton().get(orders->get_curret()))
                 {
                     order_name = order_type::to_string(order->get_type());
                 }

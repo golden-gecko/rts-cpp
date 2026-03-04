@@ -2,7 +2,7 @@
 
 namespace Gecko
 {
-    class Id final
+    class Id
     {
     public:
         static const Id Empty;
@@ -41,7 +41,7 @@ namespace Gecko
         operator Json::Value() const;
 
     private:
-        int m_value = 0;
+        int m_value = 0; // TODO: Change to std::uint64_t.
     };
 
     // TODO: Move outside Id.

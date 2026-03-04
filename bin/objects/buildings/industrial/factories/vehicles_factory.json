@@ -23,8 +23,6 @@
     "include": [
         "../objects/buildings/_building.json"
     ],
-    "industrial": true,
-    "max_workers": 4,
     "name": "Vehicles Factory",
     "orders": {
         "available": [

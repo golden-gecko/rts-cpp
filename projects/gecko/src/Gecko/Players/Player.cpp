@@ -3,7 +3,7 @@
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Processes.hpp"
 #include "Gecko/Containers/Resources.hpp"
-#include "Gecko/Containers/Selected.hpp"
+#include "Gecko/Containers/Selection.hpp"
 #include "Gecko/Managers/ObjectManager.hpp"
 #include "Gecko/Objects/Object.hpp"
 
@@ -23,7 +23,7 @@ namespace Gecko
     Player::Player()
     {
         m_resources = std::make_shared<Resources>();
-        m_selected = std::make_shared<Selected>();
+        m_selected = std::make_shared<Selection>();
     }
 
     Player::Player(const Player& other) :
@@ -39,7 +39,7 @@ namespace Gecko
 
         if (other.m_selected)
         {
-            m_selected = std::make_shared<Selected>(*(other.m_selected.get()));
+            m_selected = std::make_shared<Selection>(*(other.m_selected.get()));
         }
     }
 

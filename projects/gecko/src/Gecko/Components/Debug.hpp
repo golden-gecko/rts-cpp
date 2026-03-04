@@ -26,8 +26,6 @@ namespace Gecko
         explicit Debug(const Debug& other);
 
     private:
-        // TODO: This component has health and max_health set to 1.0f. Fix.
-
         Ogre::ManualObject* m_manual_object = nullptr;
         Ogre::SceneNode*    m_scene_node    = nullptr;
 

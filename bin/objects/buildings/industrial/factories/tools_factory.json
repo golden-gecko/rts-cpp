@@ -19,8 +19,6 @@
     "include": [
         "../objects/buildings/_building.json"
     ],
-    "industrial": true,
-    "max_workers": 4,
     "name": "Tools Factory",
     "processes": {
         "Producing Tools": {

@@ -38,17 +38,17 @@ namespace Gecko
         ~Object() override;
 
     public:
-        auto is_selectable() const
+        bool is_selectable() const
         {
             return m_selectable;
         }
 
-        auto is_selected() const
+        bool is_selected() const
         {
             return m_selected;
         }
 
-        auto is_visible() const
+        bool is_visible() const
         {
             return m_visible;
         }
@@ -94,17 +94,7 @@ namespace Gecko
 
         const Ogre::Vector3& get_position() const;
 
-        const auto& get_processes() const
-        {
-            return m_processes;
-        }
-
         virtual std::map<std::string, float> get_progress_bars() const;
-
-        const auto& get_resources() const
-        {
-            return m_resources;
-        }
 
         const Ogre::Vector3& get_scale() const
         {
@@ -165,8 +155,6 @@ namespace Gecko
     protected:
         virtual void update_components(float time);
         virtual void update_orders(float time);
-        virtual void update_processes(float time);
-        virtual void update_resources(float time);
         virtual void update_skills(float time);
 
         virtual OrderStatus on_attack(Order* order, float time);
@@ -196,13 +184,11 @@ namespace Gecko
         bool m_selected = false;
         bool m_visible = false;
 
-        std::shared_ptr<Components> m_components;
-        std::shared_ptr<Configurations> m_configurations;
-        std::shared_ptr<Orders> m_orders;
-        std::shared_ptr<Layers> m_layers;
-        std::shared_ptr<Processes> m_processes;
-        std::shared_ptr<Resources> m_resources;
-        std::shared_ptr<Skills> m_skills;
+        ComponentsPtr m_components;
+        ConfigurationsPtr m_configurations;
+        OrdersPtr m_orders;
+        LayersPtr m_layers;
+        SkillsPtr m_skills;
         std::shared_ptr<Mesh> m_selection;
 
         Ogre::SceneNode* m_scene_node = nullptr;

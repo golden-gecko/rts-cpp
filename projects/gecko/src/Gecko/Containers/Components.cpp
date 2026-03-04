@@ -46,8 +46,8 @@ namespace Gecko
 
         for (const auto& i : *(configuration))
         {
-            auto component_configuration = std::make_shared<Configuration>(i);
-            auto configuration = component_configuration->get_string("configuration");
+            ConfigurationPtr component_configuration = std::make_shared<Configuration>(i);
+            std::string configuration = component_configuration->get_string("configuration");
 
             add_component(configuration, component_configuration);
         }
@@ -56,18 +56,18 @@ namespace Gecko
         add_component("debug");
     }
 
-    void Components::add_component(const std::string& configuration, const ConfigurationPtr& component_configuration)
+    void Components::add_component(const std::string& configuration_name, const ConfigurationPtr& component_configuration)
     {
-        auto component = ComponentManager::getSingleton().create(configuration);
+        ComponentPtr component = ComponentManager::getSingleton().create(configuration_name);
 
         if (component == nullptr)
         {
-            throw Exception("Failed to create '" + configuration + "' component.");
+            throw Exception("Failed to create '" + configuration_name + "' component.");
         }
 
-        // TODO: Refactor.
-        auto c = ConfigurationManager::getSingleton().get(configuration);
-        auto new_configuration = std::make_shared<Configuration>(*c.get());
+        // TODO: Why?
+        ConfigurationPtr configuration = ConfigurationManager::getSingleton().get(configuration_name);
+        ConfigurationPtr new_configuration = std::make_shared<Configuration>(*configuration.get());
 
         if (component_configuration)
         {

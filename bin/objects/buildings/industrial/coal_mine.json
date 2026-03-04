@@ -10,6 +10,45 @@
                     "z": 5.0
                 }
             }
+        },
+        {
+            "configuration": "slow_producer",
+            "processes": {
+                "Coal Mining": {
+                    "in": {
+                        "items": {
+                            "Unprocessed Coal": {
+                                "consumption": 10.0,
+                                "deposit_range": 100.0,
+                                "need_deposit": true
+                            }
+                        }
+                    },
+                    "out": {
+                        "items": {
+                            "Coal": {
+                                "production": 10.0
+                            },
+                            "Pollution": {
+                                "production": 0.1
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "configuration": "small_storage",
+            "resources": {
+                "items": {
+                    "Coal": {
+                        "max": 100.0
+                    },
+                    "Pollution": {
+                        "max": 1000000.0
+                    }
+                }
+            }
         }
     ],
     "creatable": {
@@ -19,8 +58,6 @@
     "include": [
         "../objects/buildings/_building.json"
     ],
-    "industrial": true,
-    "max_workers": 2,
     "name": "Coal Mine",
     "orders": {
         "available": [
@@ -28,38 +65,5 @@
             "Stop",
             "Wait"
         ]
-    },
-    "processes": {
-        "Coal Mining": {
-            "in": {
-                "items": {
-                    "Unprocessed Coal": {
-                        "consumption": 10.0,
-                        "deposit_range": 100.0,
-                        "need_deposit": true
-                    }
-                }
-            },
-            "out": {
-                "items": {
-                    "Coal": {
-                        "production": 10.0
-                    },
-                    "Pollution": {
-                        "production": 0.1
-                    }
-                }
-            }
-        }
-    },
-    "resources": {
-        "items": {
-            "Coal": {
-                "max": 100.0
-            },
-            "Pollution": {
-                "max": 1000000.0
-            }
-        }
     }
 }

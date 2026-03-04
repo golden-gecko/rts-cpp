@@ -5,7 +5,7 @@
 #include "Gecko/Containers/Components.hpp"
 #include "Gecko/Containers/Orders.hpp"
 #include "Gecko/Containers/Resources.hpp"
-#include "Gecko/Containers/Selected.hpp"
+#include "Gecko/Containers/Selection.hpp"
 #include "Gecko/Exception.hpp"
 #include "Gecko/Games/Game.hpp"
 #include "Gecko/Input/Input.hpp"
@@ -153,7 +153,7 @@ namespace Gecko
             if (Game::getSingleton().get_active_player())
             {
                 info["Active player name"] = Game::getSingleton().get_active_player()->get_name();
-                info["Selected"] = Game::getSingleton().get_active_player()->get_selected()->size();
+                info["Selection"] = Game::getSingleton().get_active_player()->get_selected()->size();
             }
 
             info["Frame number"] = Utils::Convert::to_string(Game::getSingleton().get_frame_number());

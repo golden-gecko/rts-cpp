@@ -2,10 +2,6 @@
     "creatable": {
         "by_game": true
     },
-    "health": {
-        "current": 1.0,
-        "max": 1.0
-    },
     "mesh": {
         "name": "cone.mesh",
         "scale": {

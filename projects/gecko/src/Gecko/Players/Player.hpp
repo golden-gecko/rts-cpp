@@ -40,12 +40,12 @@ namespace Gecko
             return m_color;
         }
 
-        const std::shared_ptr<Resources>& get_resources() const
+        const ResourcesPtr& get_resources() const
         {
             return m_resources;
         }
 
-        const std::shared_ptr<Selected>& get_selected() const
+        const SelectionPtr& get_selected() const
         {
             return m_selected;
         }
@@ -56,7 +56,7 @@ namespace Gecko
         std::string m_name;
         std::string m_color;
 
-        std::shared_ptr<Resources> m_resources;
-        std::shared_ptr<Selected>  m_selected;
+        ResourcesPtr m_resources;
+        SelectionPtr m_selected;
     };
 }
