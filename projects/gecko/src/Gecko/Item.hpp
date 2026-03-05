@@ -33,6 +33,9 @@ namespace Gecko
         ~Item() override = default;
 
     public:
+        Item& operator=(const Item& other);
+
+    public:
         const ConfigurationPtr& get_configuration() const
         {
             return m_configuration;

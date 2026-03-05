@@ -1,15 +1,7 @@
 {
     "components": [
         {
-            "configuration": "hull",
-            "mesh": {
-                "name": "coal.mesh",
-                "scale": {
-                    "x": 2.0,
-                    "y": 2.0,
-                    "z": 2.0
-                }
-            }
+            "configuration": "coal_hull"
         }
     ],
     "creatable": {

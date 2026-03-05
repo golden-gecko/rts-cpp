@@ -65,115 +65,11 @@
             }
         },
         {
-            "configuration": "coal_deposit",
-            "player": "world",
-            "position": {
-                "x": 120.0,
-                "z": 128.0
-            }
-        },
-        {
-            "configuration": "coal_mine",
-            "player": "human",
-            "position": {
-                "x": 128.0,
-                "z": 120.0
-            }
-        },
-        {
             "configuration": "iron_ore_deposit",
             "player": "world",
             "position": {
                 "x": 128.0,
                 "z": 128.0
-            }
-        },
-        {
-            "configuration": "truck",
-            "player": "human",
-            "position": {
-                "x": 144.0,
-                "z": 120.0
-            }
-        },
-        {
-            "configuration": "ironworks",
-            "player": "human",
-            "position": {
-                "x": 160.0,
-                "z": 120.0
-            }
-        },
-        {
-            "configuration": "tools_factory",
-            "player": "human",
-            "position": {
-                "x": 160.0,
-                "z": 112.0
-            }
-        },
-        {
-            "configuration": "vehicles_factory",
-            "player": "human",
-            "position": {
-                "x": 160.0,
-                "z": 104.0
-            }
-        },
-        {
-            "configuration": "tank",
-            "player": "human",
-            "position": {
-                "x": 128.0,
-                "z": 160.0
-            }
-        },
-        {
-            "configuration": "tank",
-            "player": "human",
-            "position": {
-                "x": 136.0,
-                "z": 160.0
-            }
-        },
-        {
-            "configuration": "tree_01",
-            "player": "human",
-            "position": {
-                "x": 120.0,
-                "z": 152.0
-            }
-        },
-        {
-            "configuration": "tree_01",
-            "player": "human",
-            "position": {
-                "x": 128.0,
-                "z": 152.0
-            }
-        },
-        {
-            "configuration": "tree_02",
-            "player": "human",
-            "position": {
-                "x": 136.0,
-                "z": 152.0
-            }
-        },
-        {
-            "configuration": "tree_01",
-            "player": "human",
-            "position": {
-                "x": 144.0,
-                "z": 152.0
-            }
-        },
-        {
-            "configuration": "tree_02",
-            "player": "human",
-            "position": {
-                "x": 152.0,
-                "z": 152.0
             }
         }
     ],

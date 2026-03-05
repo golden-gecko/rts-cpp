@@ -30,6 +30,9 @@ namespace Gecko
         explicit Player(const Player& other);
 
     public:
+        Player& operator=(const Player&) = delete;
+
+    public:
         const std::string& get_name() const
         {
             return m_name;

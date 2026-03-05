@@ -10,11 +10,11 @@
         "../components/hulls/_hull.json"
     ],
     "mesh": {
-        "name": "mine.mesh",
+        "name": "iron_ore.mesh",
         "scale": {
-            "x": 5.0,
-            "y": 5.0,
-            "z": 5.0
+            "x": 2.0,
+            "y": 2.0,
+            "z": 2.0
         }
     },
     "name": "Mine Hull"

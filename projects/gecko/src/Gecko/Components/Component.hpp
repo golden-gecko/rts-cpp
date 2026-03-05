@@ -21,6 +21,9 @@ namespace Gecko
         explicit Component(const Component& other);
 
     public:
+        Component& operator=(const Component&) = delete;
+
+    public:
         virtual bool is_visible() const
         {
             return false;
@@ -85,7 +88,6 @@ namespace Gecko
         ObjectPtr   m_owner = nullptr;
         ScenePtr    m_scene;
         std::string m_name;
-
         Timer       m_health_timer;
     };
 }

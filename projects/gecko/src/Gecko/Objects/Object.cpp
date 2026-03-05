@@ -1,8 +1,8 @@
 #include "Gecko/Objects/Object.hpp"
 
 #include "Gecko/Components/Mesh.hpp"
-#include "Gecko/Components/Shield.hpp"
-#include "Gecko/Components/Weapon.hpp"
+#include "Gecko/Components/Producer.hpp"
+#include "Gecko/Components/Storage.hpp"
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Components.hpp"
 #include "Gecko/Containers/Configurations.hpp"
@@ -63,11 +63,10 @@ namespace Gecko
         m_player_id = other.m_player_id;
         m_alive_timer = other.m_alive_timer;
 
-        m_selectable = other.m_selectable;
         m_selected = other.m_selected;
         m_visible = other.m_visible;
 
-        m_layers = other.m_layers;
+        m_layers = std::make_shared<Layers>(*other.m_layers);
 
         m_components = std::make_shared<Components>(*other.m_components);
         m_configurations = std::make_shared<Configurations>(*other.m_configurations);
@@ -124,6 +123,7 @@ namespace Gecko
         set_visible(true);
 
         /*
+        TODO: Remove.
         if (type != Type::Value::Missile)
         {
             // map->get_terrain().set_unit_position(get_id(), get_position());
@@ -158,7 +158,6 @@ namespace Gecko
         configuration->set("name", m_name);
         configuration->set("player_id", m_player_id);
         configuration->set("alive_timer", m_alive_timer.serialize());
-        configuration->set("selectable", m_selectable);
         configuration->set("selected", m_selected);
         configuration->set("visible", m_visible);
         configuration->set("position", get_position());
@@ -186,7 +185,6 @@ namespace Gecko
             m_alive_timer.deserialize(configuration->get_child("alive_timer"));
         }
 
-        m_selectable = configuration->get_bool("selectable", false);
         m_selected = configuration->get_bool("selected", false);
         m_visible = configuration->get_bool("visible", false);
 
@@ -252,25 +250,11 @@ namespace Gecko
         }
 
         update_components(time);
+        update_jobs(time);
         update_orders(time);
         update_processes(time);
         update_resources(time);
         update_skills(time);
-
-        if (m_orders->empty() && m_job_timer.update(time))
-        {
-            auto jobs = JobManager::getSingleton().get_job(get_id(), get_components(), get_resources());
-
-            if (jobs.empty() == false)
-            {
-                for (const auto& job : jobs)
-                {
-                    m_orders->add_last(job->get_id());
-                }
-
-                m_job_timer.update(time);
-            }
-        }
     }
 
     Ogre::Vector3 Object::get_direction() const
@@ -378,6 +362,15 @@ namespace Gecko
         info->set("Player", PlayerManager::getSingleton().get(get_player_id())->get_name());
         info->set("Position", get_position());
         info->set("Heading", get_heading());
+
+        ConfigurationPtr info_components = std::make_shared<Configuration>();
+
+        for (const auto& component : *(m_components))
+        {
+            info_components->set(component->get_name(), "");
+        }
+
+        info->set("Components", info_components);
 
         ConfigurationPtr info_resources = std::make_shared<Configuration>();
 
@@ -528,16 +521,7 @@ namespace Gecko
 
     void Object::set_selected(bool selected)
     {
-        if (is_selectable() && selected)
-        {
-            m_selection->set_visible(true);
-        }
-        else
-        {
-            m_selection->set_visible(false);
-        }
-
-        m_selected = selected;
+        m_selection->set_visible(m_selected = selected);
     }
 
     void Object::set_visible(bool visible)
@@ -558,6 +542,27 @@ namespace Gecko
         {
             i->update(time);
         }
+    }
+
+    void Object::update_jobs(float time)
+    {
+        /*
+        TODO: Restore.
+        if (m_orders->empty() && m_job_timer.update(time))
+        {
+            auto jobs = JobManager::getSingleton().get_job(get_id(), get_components(), get_resources());
+
+            if (jobs.empty() == false)
+            {
+                for (const auto& job : jobs)
+                {
+                    m_orders->add_last(job->get_id());
+                }
+
+                m_job_timer.update(time);
+            }
+        }
+        */
     }
 
     void Object::update_orders(float time)
@@ -674,6 +679,28 @@ namespace Gecko
                 break;
             }
         }
+    }
+
+    void Object::update_processes(float time)
+    {
+        m_processes->update(time, get_id(), get_position(), get_resources());
+    }
+
+    void Object::update_resources(float time)
+    {
+        m_resources->update(time);
+
+        /*
+        TODO: Fix.
+        if (resources->has_resource("Pollution"))
+        {
+            auto& terrain = ;
+            auto layer = terrain.get_layer(LayerType::Value::PollutionAir)->as<TerrainLayerPollutionAir>();
+            auto index = terrain.get_index(get_position());
+
+            layer->add(index, resources->get_resource("Pollution").extract_all());
+        }
+        */
     }
 
     void Object::update_skills(float time)

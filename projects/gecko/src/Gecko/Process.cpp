@@ -1,6 +1,8 @@
 #include "Gecko/Process.hpp"
 
+#include "Gecko/Components/Storage.hpp"
 #include "Gecko/Configuration.hpp"
+#include "Gecko/Containers/Components.hpp"
 #include "Gecko/Containers/Resources.hpp"
 #include "Gecko/Log.hpp"
 #include "Gecko/Managers/JobManager.hpp"
@@ -44,7 +46,7 @@ namespace Gecko
         }
     }
 
-    void Process::update(float time, const Id& id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources)
+    void Process::update(float time, const Id& id, const Ogre::Vector3& position, const ResourcesPtr& resources)
     {
         bool in_resources_available = true;
         bool out_resources_available = true;

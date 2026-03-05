@@ -29,7 +29,7 @@ namespace Gecko
             return m_distance;
         }
 
-        Id get_target_id() const
+        const Id& get_target_id() const
         {
             return m_target_id;
         }

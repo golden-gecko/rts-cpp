@@ -63,6 +63,8 @@ namespace Gecko
 
     void Player::update(float time)
     {
+        /*
+        TODO: Restore.
         m_resources->clear();
 
         for (const auto& [_, object] : ObjectManager::getSingleton())
@@ -78,6 +80,7 @@ namespace Gecko
                 }
             }
         }
+        */
     }
 
     Id Player::get_first_selected()

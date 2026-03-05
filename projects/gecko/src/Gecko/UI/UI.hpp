@@ -43,8 +43,8 @@ namespace Gecko
             return m_visible;
         }
 
-        void log_error(const std::string& text, Id id = Id::Empty);
-        void log_info(const std::string& text, Id id = Id::Empty);
+        void log_error(const std::string& text, const Id& id = Id::Empty);
+        void log_info(const std::string& text, const Id& id = Id::Empty);
 
         void reset();
         void reset_configurations();

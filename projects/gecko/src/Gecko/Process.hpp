@@ -17,7 +17,7 @@ namespace Gecko
         explicit Process(const std::string& name);
 
     public:
-        void update(float time, const Id& id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources);
+        void update(float time, const Id& id, const Ogre::Vector3& position, const ResourcesPtr& resources);
 
     public:
         const std::string& get_name() const

@@ -4,6 +4,7 @@
 #include "Gecko/Components/Debug.hpp"
 #include "Gecko/Components/Drive.hpp"
 #include "Gecko/Components/Hull.hpp"
+#include "Gecko/Components/Producer.hpp"
 #include "Gecko/Components/Radar.hpp"
 #include "Gecko/Components/Shield.hpp"
 #include "Gecko/Components/Storage.hpp"
@@ -44,6 +45,10 @@ namespace Gecko
             else if (type == "Hull")
             {
                 register_type<Hull>(name, std::bind(Hull::create, std::placeholders::_1, configuration, m_scene));
+            }
+            else if (type == "Producer")
+            {
+                register_type<Producer>(name, std::bind(Producer::create, std::placeholders::_1, configuration, m_scene));
             }
             else if (type == "Radar")
             {

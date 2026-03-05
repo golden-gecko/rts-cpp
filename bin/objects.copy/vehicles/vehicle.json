@@ -33,6 +33,5 @@
             }
         }
     },
-    "selectable": true,
     "type": "Vehicle"
 }

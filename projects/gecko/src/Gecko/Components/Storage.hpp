@@ -16,10 +16,6 @@ namespace Gecko
         void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
-        // From Update.
-        void update(float time) override;
-
-    public:
         static Storage* create(Storage* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
@@ -38,9 +34,7 @@ namespace Gecko
         }
 
     private:
-        ResourcesPtr m_resources;
-
-        float m_load_time = 0.0f;
+        float m_load_time   = 0.0f;
         float m_unload_time = 0.0f;
     };
 }

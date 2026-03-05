@@ -521,12 +521,12 @@ namespace Gecko
         return false;
     }
 
-    void UI::log_error(const std::string& text, Id id)
+    void UI::log_error(const std::string& text, const Id& id)
     {
         log_write(text, "error", id);
     }
 
-    void UI::log_info(const std::string& text, Id id)
+    void UI::log_info(const std::string& text, const Id& id)
     {
         log_write(text, "info", id);
     }

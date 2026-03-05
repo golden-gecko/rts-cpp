@@ -71,6 +71,9 @@ namespace Gecko
         explicit Order(const Order& other);
 
     public:
+        Order& operator=(const Order&) = delete;
+
+    public:
         virtual std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const
         {
             return {};
@@ -97,12 +100,12 @@ namespace Gecko
             return m_type;
         }
 
-        Id get_sender_id() const
+        const Id& get_sender_id() const
         {
             return m_sender_id;
         }
 
-        Id get_receiver_id() const
+        const Id& get_receiver_id() const
         {
             return m_receiver_id;
         }

@@ -5,7 +5,6 @@
 
 namespace Gecko
 {
-    // TODO: Add costs.
     class Skill :
         public Item
     {
@@ -26,6 +25,9 @@ namespace Gecko
         explicit Skill(const Skill& other);
 
         ~Skill() override = default;
+
+    public:
+        Skill& operator=(const Skill&) = delete;
 
     public:
         virtual void activate(const Id& id) = 0;

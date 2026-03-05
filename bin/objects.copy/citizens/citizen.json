@@ -60,7 +60,6 @@
             }
         }
     },
-    "selectable": true,
     "speed": 10.0,
     "type": "Citizen",
     "workplace_time": 8.0

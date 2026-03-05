@@ -38,11 +38,9 @@ namespace Gecko
         ~Object() override;
 
     public:
-        bool is_selectable() const
-        {
-            return m_selectable;
-        }
+        Object& operator=(const Object&) = delete;
 
+    public:
         bool is_selected() const
         {
             return m_selected;
@@ -80,6 +78,16 @@ namespace Gecko
         const auto& get_orders() const
         {
             return m_orders;
+        }
+
+        const ProcessesPtr& get_processes() const
+        {
+            return m_processes;
+        }
+
+        const ResourcesPtr& get_resources() const
+        {
+            return m_resources;
         }
 
         MapPtr get_owner() const
@@ -154,7 +162,10 @@ namespace Gecko
 
     protected:
         virtual void update_components(float time);
+        virtual void update_jobs(float time);
         virtual void update_orders(float time);
+        virtual void update_processes(float time);
+        virtual void update_resources(float time);
         virtual void update_skills(float time);
 
         virtual OrderStatus on_attack(Order* order, float time);
@@ -180,12 +191,13 @@ namespace Gecko
         Id m_player_id;
         Timer m_alive_timer;
 
-        bool m_selectable = false;
         bool m_selected = false;
         bool m_visible = false;
 
         ComponentsPtr m_components;
         ConfigurationsPtr m_configurations;
+        ProcessesPtr m_processes;
+        ResourcesPtr m_resources;
         OrdersPtr m_orders;
         LayersPtr m_layers;
         SkillsPtr m_skills;

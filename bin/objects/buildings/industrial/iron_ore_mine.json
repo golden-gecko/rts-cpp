@@ -1,15 +1,13 @@
 {
     "components": [
         {
-            "configuration": "mine_hull",
-            "mesh": {
-                "name": "mine.mesh",
-                "scale": {
-                    "x": 5.0,
-                    "y": 5.0,
-                    "z": 5.0
-                }
-            }
+            "configuration": "mine_hull"
+        },
+        {
+            "configuration": "slow_producer"
+        },
+        {
+            "configuration": "small_storage"
         }
     ],
     "creatable": {

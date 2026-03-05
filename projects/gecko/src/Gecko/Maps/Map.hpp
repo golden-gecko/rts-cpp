@@ -35,6 +35,9 @@ namespace Gecko
         explicit Map(const Map& other);
 
     public:
+        Map& operator=(const Map&) = delete;
+
+    public:
         bool is_position_valid(const Ogre::Vector3& position) const;
 
         void show_data_layer(const std::string& layer_name, const std::string& data_layer_name);

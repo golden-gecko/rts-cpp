@@ -150,13 +150,6 @@ namespace Gecko
                 continue;
             }
 
-            if (object->is_selectable() == false)
-            {
-                L_WARNING << "Cannot select object " << object->get_id() << " " << object->get_name() << ", because it is not selectable.";
-
-                continue;
-            }
-
             if (object->get_player_id() != Game::getSingleton().get_active_player_id())
             {
                 L_WARNING << "Cannot select object from non-active player (" << object->get_player_id() << ", " << Game::getSingleton().get_active_player_id() << ").";

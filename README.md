@@ -193,3 +193,50 @@ Vertices:
  0.5,  0.5,  0.5,
  0.5, -0.5,  0.5
 ```
+
+## Code formatting
+
+### Class
+
+```cpp
+namespace Gecko
+{
+    class GameObject :
+        public Updatable
+    {
+    // From Updatable.
+    public:
+        void update(float time) override;
+
+    // Constructors, destructors.
+    public:
+        GameObject();
+
+    // Methods.
+    public:
+        void move();
+        void rotate();
+
+    // Getters.
+    public:
+        int get_damage() const;
+        int get_size() const;
+        int get_speed() const;
+
+    // Setters.
+    public:
+        void set_damage(int damage);
+        void set_size(int size);
+        void set_speed(int speed);
+
+    // Protected members.
+    protected:
+        int m_damage = 0;
+        int m_speed = 0;
+
+    // Private members.
+    private:
+        int m_size = 0;
+    };
+}
+```

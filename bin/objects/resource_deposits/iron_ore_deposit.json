@@ -1,15 +1,10 @@
 {
     "components": [
         {
-            "configuration": "hull",
-            "mesh": {
-                "name": "iron_ore.mesh",
-                "scale": {
-                    "x": 2.0,
-                    "y": 2.0,
-                    "z": 2.0
-                }
-            }
+            "configuration": "iron_ore_hull"
+        },
+        {
+            "configuration": "small_storage"
         }
     ],
     "creatable": {

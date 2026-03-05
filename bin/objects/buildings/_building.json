@@ -2,6 +2,5 @@
     "layers": [
         "Terrain"
     ],
-    "selectable": true,
     "type": "Object"
 }

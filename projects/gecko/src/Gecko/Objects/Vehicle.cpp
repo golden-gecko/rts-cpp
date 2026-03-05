@@ -61,6 +61,7 @@ namespace Gecko
 
     OrderStatus Vehicle::on_load(Order* order, float time)
     {
+        /*
         // Get order.
         auto load_order = dynamic_cast<OrderLoad*>(order);
 
@@ -112,6 +113,7 @@ namespace Gecko
         Utils::move_resources(target->get_resources(), get_resources(), resource_name, capacity_available_to_fill);
 
         L_DEBUG << "Ordered: " << resource_ordered << ", available: " << resource_available_to_load << ", capacity:" << capacity_available_to_fill;
+        */
 
         return OrderStatus::complete;
     }
@@ -223,6 +225,7 @@ namespace Gecko
 
     OrderStatus Vehicle::on_unload(Order* order, float time)
     {
+        /*
         // Get order.
         auto unload_order = dynamic_cast<OrderUnload*>(order);
 
@@ -274,6 +277,7 @@ namespace Gecko
         Utils::move_resources(get_resources(), target->get_resources(), resource_name, capacity_available_to_fill);
 
         L_DEBUG << "Ordered: " << resource_ordered << ", available: " << resource_available_to_unload << ", capacity:" << capacity_available_to_fill;
+        */
 
         return OrderStatus::complete;
     }
