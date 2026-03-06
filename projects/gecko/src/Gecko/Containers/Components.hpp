@@ -25,7 +25,7 @@ namespace Gecko
             m_items.clear();
         }
 
-        auto empty() const
+        bool empty() const
         {
             return m_items.empty();
         }
@@ -44,7 +44,7 @@ namespace Gecko
             return false;
         }
 
-        auto size() const
+        Items::size_type size() const
         {
             return m_items.size();
         }

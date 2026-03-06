@@ -30,7 +30,7 @@
             "in": {
                 "items": {
                     "Unprocessed Coal": {
-                        "consumption": 10.0,
+                        "consumption": 10,
                         "deposit_range": 100.0,
                         "need_deposit": true
                     }
@@ -39,22 +39,17 @@
             "out": {
                 "items": {
                     "Coal": {
-                        "production": 10.0
-                    },
-                    "Pollution": {
-                        "production": 0.1
+                        "production": 10
                     }
                 }
-            }
+            },
+            "time":  1.0
         }
     },
     "resources": {
         "items": {
             "Coal": {
-                "max": 100.0
-            },
-            "Pollution": {
-                "max": 1000000.0
+                "max": 100
             }
         }
     }

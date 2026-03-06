@@ -9,17 +9,16 @@ namespace Gecko
         Id requester_id;
         std::string resource_name;
         float resource_value;
-        float resource_priority;
 
-        explicit Request(const Id& requester_id, const std::string& resource_name, float resource_value, float resource_priority);
+        explicit Request(const Id& requester_id, const std::string& resource_name, float resource_value);
     };
 
     class JobManager :
         public Ogre::Singleton<JobManager>
     {
     public:
-        void add_in(const Id& requester, const std::string& resource_name, float resource_value, float resource_priority);
-        void add_out(const Id& requester, const std::string& resource_name, float resource_value, float resource_priority);
+        void add_in(const Id& requester, const std::string& resource_name, float resource_value);
+        void add_out(const Id& requester, const std::string& resource_name, float resource_value);
 
         std::vector<Order*> get_job(const Id& id, const std::shared_ptr<Components>& components, const std::shared_ptr<Resources>& resources);
 

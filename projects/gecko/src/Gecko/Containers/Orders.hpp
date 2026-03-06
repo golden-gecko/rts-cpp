@@ -55,7 +55,7 @@ namespace Gecko
         void remove_current();
         void remove_all_orders();
 
-        auto size() const
+        Queue::size_type size() const
         {
             return m_queue.size();
         }

@@ -13,7 +13,7 @@ namespace Gecko
             configuration->append("items", resource.serialize());
         }
 
-        configuration->set("max_storage", max_storage);
+        configuration->set("max_storage", m_max_storage);
 
         return configuration;
     }
@@ -28,8 +28,8 @@ namespace Gecko
 
             for (auto i = child->begin(); i != child->end(); i++)
             {
-                auto name = i.key().asString();
-                auto resource = Resource(name);
+                std::string name = i.key().asString();
+                Resource resource = Resource(name);
 
                 resource.deserialize(std::make_shared<Configuration>(*i));
 
@@ -39,15 +39,15 @@ namespace Gecko
 
         if (configuration->has_member("max_storage"))
         {
-            max_storage = configuration->get_float("max_storage");
+            m_max_storage = configuration->get_int<std::uint64_t>("max_storage");
         }
         else
         {
-            max_storage = 0.0f;
+            m_max_storage = 0;
 
             for (const auto& i : m_items)
             {
-                max_storage += i.second.get_max();
+                m_max_storage += i.second.get_max();
             }
         }
     }
@@ -60,13 +60,13 @@ namespace Gecko
         }
     }
 
-    float Resources::add(const std::string& name, float value)
+    std::uint64_t Resources::add(const std::string& name, std::uint64_t value)
     {
         Container::iterator resource = m_items.find(name);
 
         if (resource == m_items.end())
         {
-            return 0.0f;
+            return 0;
         }
 
         return resource->second.add(value);
@@ -77,38 +77,38 @@ namespace Gecko
         return m_items.find(name) != m_items.end();
     }
 
-    float Resources::get_current(const std::string& name) const
+    std::uint64_t Resources::get_current(const std::string& name) const
     {
         Container::const_iterator resource = m_items.find(name);
 
         if (resource == m_items.end())
         {
-            return 0.0f;
+            return 0;
         }
 
         return resource->second.get_current();
     }
 
-    float Resources::get_storage(const std::string& name) const
+    std::uint64_t Resources::get_storage(const std::string& name) const
     {
         Container::const_iterator resource = m_items.find(name);
 
         if (resource == m_items.end())
         {
-            return 0.0f;
+            return 0;
         }
 
-        float current = 0.0f;
+        std::uint64_t current = 0;
 
         for (const auto& i : get_items())
         {
             current += i.second.get_current();
         }
 
-        return std::max(std::min(max_storage - current, resource->second.get_storage()), 0.0f);
+        return std::max<std::uint64_t>(std::min<std::uint64_t>(m_max_storage - current, resource->second.get_storage()), 0);
     }
 
-    bool Resources::has_resource(const std::string& name, float value) const
+    bool Resources::has_resource(const std::string& name, std::uint64_t value) const
     {
         Container::const_iterator resource = m_items.find(name);
 
@@ -125,7 +125,7 @@ namespace Gecko
         return m_items.find(name) != m_items.end();
     }
 
-    bool Resources::has_storage(const std::string& name, float value) const
+    bool Resources::has_storage(const std::string& name, std::uint64_t value) const
     {
         Container::const_iterator resource = m_items.find(name);
 
@@ -155,13 +155,13 @@ namespace Gecko
         }
     }
 
-    float Resources::remove(const std::string& name, float value)
+    std::uint64_t Resources::remove(const std::string& name, std::uint64_t value)
     {
         Container::iterator resource = m_items.find(name);
 
         if (resource == m_items.end())
         {
-            return 0.0f;
+            return 0;
         }
 
         return resource->second.remove(value);
@@ -169,8 +169,12 @@ namespace Gecko
 
     bool Resources::operator==(const Resources& other) const
     {
+        return m_items == other.m_items && m_max_storage == other.m_max_storage;
+
+        /*
         static constexpr auto epsilon = std::numeric_limits<float>::epsilon();
 
-        return std::abs(max_storage - other.max_storage) < epsilon && m_items == other.m_items;
+        return std::abs(m_max_storage - other.m_max_storage) < epsilon && m_items == other.m_items;
+        */
     }
 }

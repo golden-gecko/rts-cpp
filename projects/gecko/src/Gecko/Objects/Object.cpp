@@ -24,6 +24,7 @@
 #include "Gecko/Log.hpp"
 #include "Gecko/Orders/OrderWait.hpp"
 #include "Gecko/Players/Player.hpp"
+#include "Gecko/Process.hpp"
 #include "Gecko/Rectangle.hpp"
 #include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Skills/Skill.hpp"
@@ -363,6 +364,7 @@ namespace Gecko
         info->set("Position", get_position());
         info->set("Heading", get_heading());
 
+        // Components.
         ConfigurationPtr info_components = std::make_shared<Configuration>();
 
         for (const auto& component : *(m_components))
@@ -370,8 +372,25 @@ namespace Gecko
             info_components->set(component->get_name(), "");
         }
 
-        info->set("Components", info_components);
+        if (info_components->size())
+        {
+            info->set("Components", info_components);
+        }
 
+        // Processes.
+        ConfigurationPtr info_processes = std::make_shared<Configuration>();
+
+        for (const auto& [name, process] : *(m_processes))
+        {
+            info_processes->set(name, Utils::Convert::to_string(process.get_time().get_current()) + "/" + Utils::Convert::to_string(process.get_time().get_max()));
+        }
+
+        if (info_processes->size())
+        {
+            info->set("Processes", info_processes);
+        }
+
+        // Resources.
         ConfigurationPtr info_resources = std::make_shared<Configuration>();
 
         for (const auto& [name, resouce] : *(m_resources))
@@ -379,7 +398,10 @@ namespace Gecko
             info_resources->set(name, Utils::Convert::to_string(resouce.get_current()) + "/" + Utils::Convert::to_string(resouce.get_max()));
         }
 
-        info->set("Resources", info_resources);
+        if (info_resources->size())
+        {
+            info->set("Resources", info_resources);
+        }
 
         return info;
     }

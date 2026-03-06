@@ -31,7 +31,7 @@ namespace Gecko
             return m_items.find(item) == m_items.end();
         }
 
-        auto size() const
+        Items::size_type size() const
         {
             return m_items.size();
         }

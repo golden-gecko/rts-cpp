@@ -18,6 +18,7 @@ namespace Gecko
 
         configuration->set("current", m_current);
         configuration->set("max", m_max);
+
         configuration->set("consumption", m_consumption);
         configuration->set("production", m_production);
 
@@ -27,15 +28,14 @@ namespace Gecko
         configuration->set("deposit_range", m_deposit_range);
         configuration->set("storage_range", m_storage_range);
 
-        configuration->set("priority", m_priority);
-
         return configuration;
     }
 
     void Resource::deserialize(const ConfigurationPtr& configuration)
     {
-        m_current = configuration->get_float("current", 0.0f);
-        m_max = configuration->get_float("max", 0.0f);
+        m_current = configuration->get_int<std::uint64_t>("current", 0);
+        m_max = configuration->get_int<std::uint64_t>("max", 0);
+
         m_consumption = configuration->get_float("consumption", 0.0f);
         m_production = configuration->get_float("production", 0.0f);
 
@@ -44,8 +44,6 @@ namespace Gecko
 
         m_deposit_range = configuration->get_float("deposit_range", 0.0f);
         m_storage_range = configuration->get_float("storage_range", 0.0f);
-
-        m_priority = configuration->get_float("priority", Settings::Order::ResourcePriority);
     }
 
     void Resource::update(float time)
@@ -53,7 +51,7 @@ namespace Gecko
         // TODO: Implement resource degradation and expansion (spreading).
     }
 
-    float Resource::add(float value)
+    std::uint64_t Resource::add(std::uint64_t value)
     {
         if (m_current + value > m_max)
         {
@@ -61,12 +59,12 @@ namespace Gecko
         }
 
         m_current += value;
-        m_current = std::clamp(m_current, 0.0f, m_max);
+        m_current = std::clamp<std::uint64_t>(m_current, 0, m_max);
 
         return value;
     }
 
-    float Resource::remove(float value)
+    std::uint64_t Resource::remove(std::uint64_t value)
     {
         if (value > m_current)
         {
@@ -74,7 +72,7 @@ namespace Gecko
         }
 
         m_current -= value;
-        m_current = std::clamp(m_current, 0.0f, m_max);
+        m_current = std::clamp<std::uint64_t>(m_current, 0, m_max);
 
         return value;
     }

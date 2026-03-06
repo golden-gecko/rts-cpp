@@ -61,7 +61,7 @@ namespace Gecko
 
         void save_cache() const;
 
-        auto size() const
+        Json::Value::ArrayIndex size() const
         {
             return m_value.size();
         }

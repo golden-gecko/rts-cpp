@@ -23,61 +23,56 @@ namespace Gecko
         explicit Resource(const std::string& name);
 
     public:
-        float add(float value);
-        float remove(float value);
+        std::uint64_t add(std::uint64_t value);
+        std::uint64_t remove(std::uint64_t value);
 
     public:
-        auto get_consumption() const
+        float get_consumption() const
         {
             return m_consumption;
         }
 
-        auto get_current() const
+        std::uint64_t get_current() const
         {
             return m_current;
         }
 
-        auto get_deposit_range() const
+        float get_deposit_range() const
         {
             return m_deposit_range;
         }
 
-        auto get_max() const
+        std::uint64_t get_max() const
         {
             return m_max;
         }
 
-        const auto& get_name() const
+        const std::string& get_name() const
         {
             return m_name;
         }
 
-        auto get_need_deposit() const
+        bool get_need_deposit() const
         {
             return m_need_deposit;
         }
 
-        auto get_need_storage() const
+        bool get_need_storage() const
         {
             return m_need_storage;
         }
 
-        auto get_priority() const
-        {
-            return m_priority;
-        }
-
-        auto get_production() const
+        float get_production() const
         {
             return m_production;
         }
 
-        auto get_storage() const
+        std::uint64_t get_storage() const
         {
             return m_max - m_current;
         }
 
-        auto get_storage_range() const
+        float get_storage_range() const
         {
             return m_storage_range;
         }
@@ -93,12 +88,12 @@ namespace Gecko
             m_production = production;
         }
 
-        void set_current(float current)
+        void set_current(std::uint64_t current)
         {
             m_current = current;
         }
 
-        void set_max(float max)
+        void set_max(std::uint64_t max)
         {
             m_max = max;
         }
@@ -106,19 +101,24 @@ namespace Gecko
     public:
         bool operator==(const Resource& other) const
         {
+            return m_current == other.m_current && m_max == other.m_max;
+
+            /*
             static constexpr auto epsilon = std::numeric_limits<float>::epsilon();
 
             return std::abs(m_consumption - other.m_consumption) < epsilon
                 && std::abs(m_production - other.m_production) < epsilon
                 && std::abs(m_current - other.m_current) < epsilon
                 && std::abs(m_max - other.m_max) < epsilon;
+            */
         }
 
     private:
         std::string m_name;
 
-        float m_current = 0.0f;
-        float m_max = 0.0f;
+        std::uint64_t m_current = 0;
+        std::uint64_t m_max = 0;
+
         float m_consumption = 0.0f;
         float m_production = 0.0f;
 
@@ -127,7 +127,5 @@ namespace Gecko
 
         float m_deposit_range = 0.0f;
         float m_storage_range = 0.0f;
-
-        float m_priority = Settings::Order::ResourcePriority;
     };
 }

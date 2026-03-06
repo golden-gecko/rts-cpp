@@ -13,15 +13,14 @@ Gecko::JobManager* Ogre::Singleton<Gecko::JobManager>::msSingleton = nullptr;
 
 namespace Gecko
 {
-    Request::Request(const Id& requester_id, const std::string& resource_name, float resource_value, float resource_priority) :
+    Request::Request(const Id& requester_id, const std::string& resource_name, float resource_value) :
         requester_id(requester_id),
         resource_name(resource_name),
-        resource_value(resource_value),
-        resource_priority(resource_priority)
+        resource_value(resource_value)
     {
     }
 
-    void JobManager::add_in(const Id& requester, const std::string& resource_name, float resource_value, float resource_priority)
+    void JobManager::add_in(const Id& requester, const std::string& resource_name, float resource_value)
     {
         // If requester is in the queue, update resource value.
         // Otherwise, add requester to the end of queue.
@@ -34,14 +33,7 @@ namespace Gecko
 
         if (is_queued == m_in_queue.end())
         {
-            auto i = std::ranges::find_if(m_in_queue,
-                [&](const auto& x)
-                {
-                    return x.resource_priority < resource_priority;
-                }
-            );
-
-            m_in_queue.emplace(i, Request(requester, resource_name, resource_value, resource_priority));
+            m_in_queue.emplace_back(Request(requester, resource_name, resource_value));
         }
         else
         {
@@ -49,7 +41,7 @@ namespace Gecko
         }
     }
 
-    void JobManager::add_out(const Id& requester, const std::string& resource_name, float resource_value, float resource_priority)
+    void JobManager::add_out(const Id& requester, const std::string& resource_name, float resource_value)
     {
         // If requester is in the queue, update resource value.
         // Otherwise, add requester to the end of queue.
@@ -62,14 +54,7 @@ namespace Gecko
 
         if (is_queued == m_out_queue.end())
         {
-            auto i = std::ranges::find_if(m_out_queue,
-                [&](const auto& x)
-                {
-                    return x.resource_priority < resource_priority;
-                }
-            );
-
-            m_out_queue.emplace(i, Request(requester, resource_name, resource_value, resource_priority));
+            m_out_queue.emplace_back(Request(requester, resource_name, resource_value));
         }
         else
         {

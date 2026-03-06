@@ -36,12 +36,10 @@
                 "items": {
                     "Iron": {
                         "production": 1.0
-                    },
-                    "Pollution": {
-                        "production": 0.2
                     }
                 }
-            }
+            },
+            "time":  3.0
         }
     },
     "resources": {
@@ -54,9 +52,6 @@
             },
             "Iron Ore": {
                 "max": 10.0
-            },
-            "Pollution": {
-                "max": 1000000.0
             }
         }
     }
