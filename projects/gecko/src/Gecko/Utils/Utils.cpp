@@ -91,17 +91,6 @@ namespace Gecko::Utils
         return position.distance(target) < distance;
     }
 
-    bool is_enough_to_process(float resource)
-    {
-        return resource >= Settings::Order::ResourceTransportMinValue;
-    }
-
-    void move_resources(const std::shared_ptr<Resources>& source, const std::shared_ptr<Resources>& destination, const std::string& name, float value)
-    {
-        source->remove(name, value);
-        destination->add(name, value);
-    }
-
     std::string object_id_to_string(const Id& object_id)
     {
         std::stringstream stream;

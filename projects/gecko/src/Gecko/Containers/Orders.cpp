@@ -69,6 +69,11 @@ namespace Gecko
         }
     }
 
+    void Orders::add_available(const order_type::Value& item)
+    {
+        m_available.emplace(item);
+    }
+
     bool Orders::add_first(const Id& order_id)
     {
         OrderPtr order = OrderManager::getSingleton().get(order_id);

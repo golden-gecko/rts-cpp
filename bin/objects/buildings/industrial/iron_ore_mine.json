@@ -30,7 +30,7 @@
             "in": {
                 "items": {
                     "Unprocessed Iron Ore": {
-                        "consumption": 10.0,
+                        "consumption": 10,
                         "deposit_range": 100.0,
                         "need_deposit": true
                     }
@@ -39,7 +39,7 @@
             "out": {
                 "items": {
                     "Iron Ore": {
-                        "production": 10.0
+                        "production": 10
                     }
                 }
             },
@@ -49,7 +49,7 @@
     "resources": {
         "items": {
             "Iron Ore": {
-                "max": 100.0
+                "max": 100
             }
         }
     }

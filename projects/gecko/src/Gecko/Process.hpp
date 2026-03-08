@@ -18,7 +18,7 @@ namespace Gecko
         explicit Process(const std::string& name);
 
     public:
-        void update(float time, const Id& id, const Ogre::Vector3& position, const ResourcesPtr& resources);
+        void update(float time, const Id& owner_id, const Ogre::Vector3& owner_position, const ResourcesPtr& owner_resources);
 
     public:
         const std::string& get_name() const
@@ -52,7 +52,7 @@ namespace Gecko
 
         Timer m_time;
 
-        ObjectPtr get_deposit(const Resource& in_resource, const Id& id, const Ogre::Vector3& position) const;
-        ObjectPtr get_storage(const Resource& out_resource, const Id& id, const Ogre::Vector3& position) const;
+        ObjectPtr get_deposit(const Resource& in_resource, const Ogre::Vector3& position, const Id& exclude) const;
+        ObjectPtr get_storage(const Resource& out_resource, const Ogre::Vector3& position, const Id& exclude) const;
     };
 }

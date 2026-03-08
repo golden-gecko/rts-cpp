@@ -62,7 +62,7 @@ namespace Gecko
         }
     }
 
-    std::vector<Order*> JobManager::get_job(const Id& id, const std::shared_ptr<Components>& components, const std::shared_ptr<Resources>& resources)
+    std::vector<OrderPtr> JobManager::get_job(const Id& id, const std::shared_ptr<Components>& components, const ResourcesPtr& resources)
     {
         // Priorities:
         // 1. Attack.
@@ -117,7 +117,7 @@ namespace Gecko
         );
     }
 
-    std::vector<Order*> JobManager::get_attack_job(const Id& id, const std::shared_ptr<Resources>& resources)
+    std::vector<OrderPtr> JobManager::get_attack_job(const Id& id, const ResourcesPtr& resources)
     {
         // TODO: Implement.
         /*
@@ -136,7 +136,7 @@ namespace Gecko
         return {};
     }
 
-    std::vector<Order*> JobManager::get_transport_job(const Id& id, const std::shared_ptr<Resources>& resources)
+    std::vector<OrderPtr> JobManager::get_transport_job(const Id& id, const ResourcesPtr& resources)
     {
         auto order_manager = OrderManager::getSingletonPtr();
 
@@ -160,7 +160,7 @@ namespace Gecko
                 // Check if object can carry input resource.
                 auto storage = resources->get_storage(in_request->resource_name);
 
-                if (Utils::is_enough_to_process(storage) == false)
+                if (storage <= 0)
                 {
                     continue;
                 }
@@ -173,14 +173,14 @@ namespace Gecko
                 // TODO: Maybe we could ask input requester for current storage?
                 auto jobs = {
                     // TODO: Replace with transport order.
-                    order_manager->order_wait(id, id, 0.1f),
+                    order_manager->order_wait(id, id, 0.1f), // TODO: Get from object or settings.
                     order_manager->order_move(id, id, out_request->requester_id),
                     order_manager->order_wait(id, id, 0.1f),
-                    order_manager->order_load(id, id, out_request->requester_id, in_request->resource_name, in_request->resource_value),
+                    order_manager->order_load(id, id, out_request->requester_id, in_request->resource_name, in_request->resource_value, 3.0f), // TODO: Get from component.
                     order_manager->order_wait(id, id, 0.1f),
                     order_manager->order_move(id, id, in_request->requester_id),
                     order_manager->order_wait(id, id, 0.1f),
-                    order_manager->order_unload(id, id, in_request->requester_id, in_request->resource_name, in_request->resource_value),
+                    order_manager->order_unload(id, id, in_request->requester_id, in_request->resource_name, in_request->resource_value, 3.0f), // TODO: Get from component.
                     order_manager->order_wait(id, id, 0.1f)
                 };
 
@@ -195,14 +195,14 @@ namespace Gecko
         return {};
     }
 
-    std::vector<Order*> JobManager::get_unload_job(const Id& id, const std::shared_ptr<Resources>& resources)
+    std::vector<OrderPtr> JobManager::get_unload_job(const Id& id, const ResourcesPtr& resources)
     {
         auto order_manager = OrderManager::getSingletonPtr();
 
         for (auto in_request = m_in_queue.cbegin(); in_request != m_in_queue.cend(); ++in_request)
         {
             // Check if resource is carried by object.
-            if (Utils::is_enough_to_process(resources->get_current(in_request->resource_name)) == false)
+            if (resources->get_current(in_request->resource_name) <= 0)
             {
                 continue;
             }
@@ -212,7 +212,7 @@ namespace Gecko
                 order_manager->order_wait(id, id, 0.1f),
                 order_manager->order_move(id, id, in_request->requester_id),
                 order_manager->order_wait(id, id, 0.1f),
-                order_manager->order_unload(id, id, in_request->requester_id, in_request->resource_name, in_request->resource_value),
+                order_manager->order_unload(id, id, in_request->requester_id, in_request->resource_name, in_request->resource_value, 3.0f), // TODO: Get from component.
                 order_manager->order_wait(id, id, 0.1f)
             };
 

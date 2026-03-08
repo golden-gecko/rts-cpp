@@ -17,6 +17,7 @@
 #include "Gecko/Orders/OrderStop.hpp"
 #include "Gecko/Orders/OrderUnload.hpp"
 #include "Gecko/Orders/OrderWait.hpp"
+#include "Gecko/Timer.hpp"
 #include "Gecko/Utils/Time.hpp"
 
 Gecko::OrderManager* Ogre::Singleton<Gecko::OrderManager>::msSingleton = nullptr;
@@ -116,6 +117,10 @@ namespace Gecko
         order->set_sender_id(sender_id);
         order->set_receiver_id(receiver_id);
 
+        auto order_create = dynamic_cast<OrderAttack*>(order);
+
+        order_create->set_target_id(target_id);
+
         return order;
     }
 
@@ -125,7 +130,11 @@ namespace Gecko
 
         order->init();
         order->set_sender_id(sender_id);
-        order->set_receiver_id(receiver_id); // TODO: Missing target_position.
+        order->set_receiver_id(receiver_id);
+
+        auto order_create = dynamic_cast<OrderAttack*>(order);
+
+        order_create->set_target_position(target_position);
 
         return order;
     }
@@ -225,7 +234,7 @@ namespace Gecko
         return order;
     }
 
-    OrderPtr OrderManager::order_load(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value)
+    OrderPtr OrderManager::order_load(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value, float time)
     {
         auto order = base_type::create("load");
 
@@ -238,6 +247,8 @@ namespace Gecko
         order_load->set_target_id(target_id);
         order_load->set_resource_name(resource_name);
         order_load->set_resource_value(resource_value);
+
+        order_load->get_load_timer().set_max(time);
 
         return order;
     }
@@ -350,7 +361,7 @@ namespace Gecko
         return order;
     }
 
-    OrderPtr OrderManager::order_unload(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value)
+    OrderPtr OrderManager::order_unload(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value, float time)
     {
         auto order = base_type::create("unload");
 
@@ -363,6 +374,8 @@ namespace Gecko
         order_unload->set_target_id(target_id);
         order_unload->set_resource_name(resource_name);
         order_unload->set_resource_value(resource_value);
+
+        order_unload->get_unload_timer().set_max(time);
 
         return order;
     }

@@ -2,6 +2,7 @@
 
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Resource.hpp"
+#include "Gecko/Timer.hpp"
 
 namespace Gecko
 {
@@ -47,6 +48,11 @@ namespace Gecko
             return m_resource_value;
         }
 
+        Timer& get_unload_timer()
+        {
+            return m_unload_timer;
+        }
+
     public:
         void set_target_id(Id target_id)
         {
@@ -67,5 +73,6 @@ namespace Gecko
         Id m_target_id;
         std::string m_resource_name;
         float m_resource_value = 0.0f;
+        Timer m_unload_timer;
     };
 }

@@ -78,17 +78,20 @@ namespace Gecko
         return object;
     }
 
-    ObjectManager::ObjectsInRange ObjectManager::get_in_range(const Ogre::Vector3& position, float range)
+    ObjectManager::ObjectsInRange ObjectManager::get_in_range(const Ogre::Vector3& position, float range, const std::vector<Id>& exclude)
     {
         ObjectsInRange objects_in_range;
 
         auto get_objects_in_range = [&](Object& object)
         {
-            auto distance = object.get_position().distance(position);
+            float distance = object.get_position().distance(position);
 
             if (object.get_position().distance(position) <= range)
             {
-                objects_in_range.emplace_back(std::make_pair(&object, distance));
+                if (std::find(exclude.begin(), exclude.end(), object.get_id()) == exclude.end())
+                {
+                    objects_in_range.emplace_back(std::make_pair(&object, distance));
+                }
             }
         };
 

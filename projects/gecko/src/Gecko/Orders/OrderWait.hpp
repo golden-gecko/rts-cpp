@@ -31,12 +31,12 @@ namespace Gecko
         std::string get_target_as_string() const override;
 
     public:
-        auto& get_wait_timer()
+        Timer& get_wait_timer()
         {
             return m_wait_timer;
         }
 
-        const auto& get_wait_timer() const
+        const Timer& get_wait_timer() const
         {
             return m_wait_timer;
         }

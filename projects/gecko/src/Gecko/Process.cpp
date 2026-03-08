@@ -46,69 +46,69 @@ namespace Gecko
         m_time.set_max(configuration->get_float("time", 0.0f));
     }
 
-    void Process::update(float time, const Id& id, const Ogre::Vector3& position, const ResourcesPtr& resources)
+    void Process::update(float time, const Id& owner_id, const Ogre::Vector3& owner_position, const ResourcesPtr& owner_resources)
     {
-        if (m_time.update(time))
+        bool in_resources_available = true;
+        bool out_resources_available = true;
+
+        // Check if input resources are available to remove.
+        if (m_in->empty() == false)
         {
-            m_time.reset();
-
-            bool in_resources_available = true;
-            bool out_resources_available = true;
-
-            // Check if input resources are available to remove.
-            if (m_in->empty() == false)
+            for (const auto& [in_resource_name, in_resource] : *(m_in))
             {
-                for (const auto& [in_resource_name, in_resource] : *(m_in))
+                if (in_resource.get_need_deposit())
                 {
-                    if (in_resource.get_need_deposit())
-                    {
-                        if (get_deposit(in_resource, id, position) == nullptr)
-                        {
-                            in_resources_available = false;
-
-                            break;
-                        }
-                    }
-                    else if (resources->has_resource(in_resource_name, in_resource.get_consumption()) == false)
+                    if (get_deposit(in_resource, owner_position, { owner_id }) == nullptr)
                     {
                         in_resources_available = false;
 
                         break;
                     }
                 }
-            }
-
-            // Check if output resources are available to add.
-            if (in_resources_available && m_out->empty() == false)
-            {
-                for (const auto& [out_resource_name, out_resource] : *(m_out))
+                else if (owner_resources->has_resource(in_resource_name, in_resource.get_consumption()) == false)
                 {
-                    if (out_resource.get_need_storage())
-                    {
-                        if (get_storage(out_resource, id, position) == nullptr)
-                        {
-                            in_resources_available = false;
+                    in_resources_available = false;
 
-                            break;
-                        }
-                    }
-                    else if (resources->has_storage(out_resource_name, out_resource.get_production()) == false)
+                    break;
+                }
+            }
+        }
+
+        // Check if output resources are available to add.
+        if (in_resources_available && m_out->empty() == false)
+        {
+            for (const auto& [out_resource_name, out_resource] : *(m_out))
+            {
+                if (out_resource.get_need_storage())
+                {
+                    if (get_storage(out_resource, owner_position, { owner_id }) == nullptr)
                     {
-                        out_resources_available = false;
+                        in_resources_available = false;
 
                         break;
                     }
                 }
-            }
+                else if (owner_resources->has_storage(out_resource_name, out_resource.get_production()) == false)
+                {
+                    out_resources_available = false;
 
-            if (in_resources_available && out_resources_available)
+                    break;
+                }
+            }
+        }
+
+        if (in_resources_available && out_resources_available)
+        {
+            if (m_time.update(time))
             {
+                m_time.reset();
+
                 // Remove resources.
                 for (const auto& [in_resource_name, in_resource] : *(m_in))
                 {
                     if (in_resource.get_need_deposit())
                     {
-                        auto deposit = get_deposit(in_resource, id, position);
+                        ObjectPtr deposit = get_deposit(in_resource, owner_position, { owner_id });
 
                         if (deposit)
                         {
@@ -121,7 +121,7 @@ namespace Gecko
                     }
                     else
                     {
-                        resources->remove(in_resource_name, in_resource.get_consumption());
+                        owner_resources->remove(in_resource_name, in_resource.get_consumption());
                     }
                 }
 
@@ -130,7 +130,7 @@ namespace Gecko
                 {
                     if (out_resource.get_need_storage())
                     {
-                        auto storage = get_storage(out_resource, id, position);
+                        ObjectPtr storage = get_storage(out_resource, owner_position, { owner_id });
 
                         if (storage)
                         {
@@ -141,42 +141,42 @@ namespace Gecko
                             L_ERROR << "Storage for resource " << out_resource_name << " not found.";
                         }
                     }
-                    else if (resources->has_storage(out_resource_name, out_resource.get_production()))
+                    else if (owner_resources->has_storage(out_resource_name, out_resource.get_production()))
                     {
-                        resources->add(out_resource_name, out_resource.get_production());
+                        owner_resources->add(out_resource_name, out_resource.get_production());
                     }
                 }
             }
+        }
 
-            // Notify request manager about available resources.
-            auto request_manager = JobManager::getSingletonPtr();
+        // Notify request manager about available resources.
+        auto request_manager = JobManager::getSingletonPtr();
 
-            for (const auto& [in_resource_name, in_resource] : *(m_in))
+        for (const auto& [in_resource_name, _] : *(m_in))
+        {
+            std::uint64_t storage = owner_resources->get_storage(in_resource_name);
+
+            if (storage > 0)
             {
-                auto storage = resources->get_storage(in_resource_name);
-
-                if (Utils::is_enough_to_process(storage))
-                {
-                    request_manager->add_in(id, in_resource_name, storage);
-                }
-                else
-                {
-                    request_manager->remove_in(id, in_resource_name);
-                }
+                request_manager->add_in(owner_id, in_resource_name, storage);
             }
-
-            for (const auto& [out_resource_name, out_resource] : *(m_out))
+            else
             {
-                auto current = resources->get_current(out_resource_name);
+                request_manager->remove_in(owner_id, in_resource_name);
+            }
+        }
 
-                if (Utils::is_enough_to_process(current))
-                {
-                    request_manager->add_out(id, out_resource_name, current);
-                }
-                else
-                {
-                    request_manager->remove_out(id, out_resource_name);
-                }
+        for (const auto& [out_resource_name, _] : *(m_out))
+        {
+            std::uint64_t current = owner_resources->get_current(out_resource_name);
+
+            if (current > 0)
+            {
+                request_manager->add_out(owner_id, out_resource_name, current);
+            }
+            else
+            {
+                request_manager->remove_out(owner_id, out_resource_name);
             }
         }
     }
@@ -186,17 +186,12 @@ namespace Gecko
         return m_name == other.m_name && m_in == other.m_in && m_out == other.m_out;
     }
 
-    ObjectPtr Process::get_deposit(const Resource& in_resource, const Id& id, const Ogre::Vector3& position) const
+    ObjectPtr Process::get_deposit(const Resource& in_resource, const Ogre::Vector3& position, const Id& exclude) const
     {
-        auto deposits = ObjectManager::getSingleton().get_in_range(position, in_resource.get_deposit_range());
+        auto deposits = ObjectManager::getSingleton().get_in_range(position, in_resource.get_deposit_range(), { exclude });
 
-        for (const auto& [deposit, distance] : deposits)
+        for (const auto& [deposit, _] : deposits)
         {
-            if (deposit->get_id() == id)
-            {
-                continue;
-            }
-
             if (deposit->get_resources()->has_resource(in_resource.get_name(), in_resource.get_consumption()))
             {
                 return deposit;
@@ -206,17 +201,12 @@ namespace Gecko
         return nullptr;
     }
 
-    ObjectPtr Process::get_storage(const Resource& out_resource, const Id& id, const Ogre::Vector3& position) const
+    ObjectPtr Process::get_storage(const Resource& out_resource, const Ogre::Vector3& position, const Id& exclude) const
     {
-        auto storages = ObjectManager::getSingleton().get_in_range(position, out_resource.get_storage_range());
+        auto storages = ObjectManager::getSingleton().get_in_range(position, out_resource.get_storage_range(), { exclude });
 
-        for (const auto& [storage, distance] : storages)
+        for (const auto& [storage, _] : storages)
         {
-            if (storage->get_id() == id)
-            {
-                continue;
-            }
-
             if (storage->get_resources()->has_resource(out_resource.get_name(), out_resource.get_production()))
             {
                 return storage;

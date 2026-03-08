@@ -568,23 +568,25 @@ namespace Gecko
 
     void Object::update_jobs(float time)
     {
-        /*
-        TODO: Restore.
-        if (m_orders->empty() && m_job_timer.update(time))
+        if (m_orders->empty())
         {
-            auto jobs = JobManager::getSingleton().get_job(get_id(), get_components(), get_resources());
-
-            if (jobs.empty() == false)
+            if (m_job_timer.update(time))
             {
-                for (const auto& job : jobs)
-                {
-                    m_orders->add_last(job->get_id());
-                }
+                auto jobs = JobManager::getSingleton().get_job(get_id(), get_components(), get_resources());
 
-                m_job_timer.update(time);
+                if (jobs.empty() == false)
+                {
+                    for (const auto& job : jobs)
+                    {
+                        m_orders->add_last(job->get_id());
+                    }
+                }
             }
         }
-        */
+        else
+        {
+            m_job_timer.reset();
+        }
     }
 
     void Object::update_orders(float time)
@@ -804,7 +806,7 @@ namespace Gecko
 
     OrderStatus Object::on_wait(Order* order, float time)
     {
-        auto wait_order = dynamic_cast<OrderWait*>(order);
+        OrderWait* wait_order = dynamic_cast<OrderWait*>(order);
 
         if (wait_order == nullptr)
         {
