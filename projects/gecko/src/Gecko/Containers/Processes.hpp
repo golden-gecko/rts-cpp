@@ -9,15 +9,15 @@ namespace Gecko
         public Serializable
     {
     public:
+        using Map = std::map<std::string, Process>;
+
+    public:
         // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
-        typedef std::map<std::string, Process> Map;
-
-    public:
-        void update(float time, const Id& id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources);
+        void update(float time, const Id& id, const Ogre::Vector3& position, const ResourcesPtr& resources);
 
     public:
         void clear()
@@ -25,33 +25,33 @@ namespace Gecko
             m_items.clear();
         }
 
-        auto empty() const
+        bool empty() const
         {
             return m_items.empty();
         }
 
-        auto size() const
+        Map::size_type size() const
         {
             return m_items.size();
         }
 
     public:
-        auto begin()
+        Map::iterator begin()
         {
             return m_items.begin();
         }
 
-        auto end()
+        Map::iterator end()
         {
             return m_items.end();
         }
 
-        auto cbegin() const
+        Map::const_iterator cbegin() const
         {
             return m_items.cbegin();
         }
 
-        auto cend() const
+        Map::const_iterator cend() const
         {
             return m_items.cend();
         }

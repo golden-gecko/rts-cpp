@@ -23,37 +23,16 @@
     "include": [
         "../objects/buildings/_building.json"
     ],
-    "industrial": true,
-    "max_workers": 4,
     "name": "Vehicles Factory",
     "orders": {
         "available": [
             "Create"
         ]
     },
-    "processes": {
-        "Producing Vehicles": {
-            "in": {
-                "items": {
-                    "Iron": {}
-                }
-            },
-            "out": {
-                "items": {
-                    "Pollution": {
-                        "production": 0.4
-                    }
-                }
-            }
-        }
-    },
     "resources": {
         "items": {
             "Iron": {
-                "max": 100.0
-            },
-            "Pollution": {
-                "max": 1000000.0
+                "max": 100
             }
         }
     }

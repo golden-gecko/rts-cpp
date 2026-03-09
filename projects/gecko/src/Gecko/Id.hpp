@@ -2,7 +2,7 @@
 
 namespace Gecko
 {
-    class Id final
+    class Id
     {
     public:
         static const Id Empty;
@@ -14,15 +14,10 @@ namespace Gecko
 
     public:
         explicit Id(int value = 0);
-
-        bool is_valid() const;
-
-        std::string to_string() const;
+        Id(const Id& other);
 
     public:
-        int get() const;
-
-    public:
+        Id& operator=(const Id&);
         Id& operator=(int value);
 
         bool operator==(const Id& other) const;
@@ -37,16 +32,20 @@ namespace Gecko
         Id operator++(int);
         Id operator--(int);
 
-        // TODO: Move outside Id.
         operator Json::Value() const;
 
+    public:
+        std::string to_string() const;
+
+    public:
+        int get() const;
+
+    public:
+        bool is_valid() const;
+
     private:
-        int m_value = 0;
+        int m_value = 0; // TODO: Change to std::uint64_t.
     };
 
-    // TODO: Move outside Id.
-    inline std::ostream& operator<<(std::ostream& out, const Id& id)
-    {
-        return out << id.get();
-    }
+    std::ostream& operator<<(std::ostream& out, const Id& id);
 }

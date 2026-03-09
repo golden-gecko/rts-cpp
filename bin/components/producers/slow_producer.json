@@ -7,8 +7,11 @@
         "current": 10.0,
         "max": 10.0
     },
-    "name": "Storage",
-    "load_time": 1.0,
-    "type": "Storage",
-    "unload_time": 1.0
+    "include": [
+        "../components/producers/_producer.json"
+    ],
+    "name": "Slow Producer",
+    "produce_time": {
+        "max": 1.0
+    }
 }

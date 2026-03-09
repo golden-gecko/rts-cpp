@@ -24,7 +24,7 @@ namespace Gecko
 
     public:
         explicit OrderAttack();
-        explicit OrderAttack(const OrderAttack& other) = default;
+        OrderAttack(const OrderAttack& other) = default;
 
     public:
         auto get_target_id() const

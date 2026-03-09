@@ -107,7 +107,7 @@ namespace Gecko
     class Orders;
     class Processes;
     class Resources;
-    class Selected;
+    class Selection;
     class Skills;
 
     // Components
@@ -187,18 +187,27 @@ namespace Gecko
     class Widget;
 
     // Pointers
+    using ComponentPtr = Component*;
     using CameraPtr = std::shared_ptr<Camera>;
+    using ComponentsPtr = std::shared_ptr<Components>;
     using ConfigurationPtr = std::shared_ptr<Configuration>;
+    using ConfigurationsPtr = std::shared_ptr<Configurations>;
     using DataLayerPtr = std::shared_ptr<DataLayer>;
     using LayerPtr = std::shared_ptr<Layer>;
+    using LayersPtr = std::shared_ptr<Layers>;
     using MapPtr = Map*;
     using ObjectPtr = Object*;
     using OrderPtr = Order*;
+    using OrdersPtr  = std::shared_ptr<Orders>;
     using PlayerPtr = Player*;
+    using ProcessesPtr = std::shared_ptr<Processes>;
     using ResourcePtr = std::shared_ptr<Resource>;
     using ResourcesPtr = std::shared_ptr<Resources>;
     using ScenePtr = std::shared_ptr<Scene>;
     using SeasonPtr = std::shared_ptr<Season>;
+    using SelectionPtr = std::shared_ptr<Selection>;
+    using SkillPtr = Skill*;
+    using SkillsPtr = std::shared_ptr<Skills>;
     using TechnologyPtr = std::shared_ptr<Technology>;
 
     // Types

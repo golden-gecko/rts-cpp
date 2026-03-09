@@ -15,6 +15,6 @@ namespace Gecko
 
     public:
         explicit Hull() = default;
-        explicit Hull(const Hull& other) = default;
+        Hull(const Hull& other) = default;
     };
 }

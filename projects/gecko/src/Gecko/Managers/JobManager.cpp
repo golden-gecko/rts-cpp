@@ -13,15 +13,14 @@ Gecko::JobManager* Ogre::Singleton<Gecko::JobManager>::msSingleton = nullptr;
 
 namespace Gecko
 {
-    Request::Request(const Id& requester_id, const std::string& resource_name, float resource_value, float resource_priority) :
+    Request::Request(const Id& requester_id, const std::string& resource_name, float resource_value) :
         requester_id(requester_id),
         resource_name(resource_name),
-        resource_value(resource_value),
-        resource_priority(resource_priority)
+        resource_value(resource_value)
     {
     }
 
-    void JobManager::add_in(const Id& requester, const std::string& resource_name, float resource_value, float resource_priority)
+    void JobManager::add_in(const Id& requester, const std::string& resource_name, float resource_value)
     {
         // If requester is in the queue, update resource value.
         // Otherwise, add requester to the end of queue.
@@ -34,14 +33,7 @@ namespace Gecko
 
         if (is_queued == m_in_queue.end())
         {
-            auto i = std::ranges::find_if(m_in_queue,
-                [&](const auto& x)
-                {
-                    return x.resource_priority < resource_priority;
-                }
-            );
-
-            m_in_queue.emplace(i, Request(requester, resource_name, resource_value, resource_priority));
+            m_in_queue.emplace_back(Request(requester, resource_name, resource_value));
         }
         else
         {
@@ -49,7 +41,7 @@ namespace Gecko
         }
     }
 
-    void JobManager::add_out(const Id& requester, const std::string& resource_name, float resource_value, float resource_priority)
+    void JobManager::add_out(const Id& requester, const std::string& resource_name, float resource_value)
     {
         // If requester is in the queue, update resource value.
         // Otherwise, add requester to the end of queue.
@@ -62,14 +54,7 @@ namespace Gecko
 
         if (is_queued == m_out_queue.end())
         {
-            auto i = std::ranges::find_if(m_out_queue,
-                [&](const auto& x)
-                {
-                    return x.resource_priority < resource_priority;
-                }
-            );
-
-            m_out_queue.emplace(i, Request(requester, resource_name, resource_value, resource_priority));
+            m_out_queue.emplace_back(Request(requester, resource_name, resource_value));
         }
         else
         {
@@ -77,7 +62,7 @@ namespace Gecko
         }
     }
 
-    std::vector<Order*> JobManager::get_job(const Id& id, const std::shared_ptr<Components>& components, const std::shared_ptr<Resources>& resources)
+    std::vector<OrderPtr> JobManager::get_job(const Id& id, const std::shared_ptr<Components>& components, const ResourcesPtr& resources)
     {
         // Priorities:
         // 1. Attack.
@@ -132,7 +117,7 @@ namespace Gecko
         );
     }
 
-    std::vector<Order*> JobManager::get_attack_job(const Id& id, const std::shared_ptr<Resources>& resources)
+    std::vector<OrderPtr> JobManager::get_attack_job(const Id& id, const ResourcesPtr& resources)
     {
         // TODO: Implement.
         /*
@@ -142,16 +127,14 @@ namespace Gecko
         auto object = object_manager.get_in_range();
 
         return {
-            order_manager.order_wait(id, id, 0.1f),
             order_manager.order_attack(id, id, 0.1f),
-            order_manager.order_wait(id, id, 0.1f)
         };
         */
 
         return {};
     }
 
-    std::vector<Order*> JobManager::get_transport_job(const Id& id, const std::shared_ptr<Resources>& resources)
+    std::vector<OrderPtr> JobManager::get_transport_job(const Id& id, const ResourcesPtr& resources)
     {
         auto order_manager = OrderManager::getSingletonPtr();
 
@@ -175,7 +158,7 @@ namespace Gecko
                 // Check if object can carry input resource.
                 auto storage = resources->get_storage(in_request->resource_name);
 
-                if (Utils::is_enough_to_process(storage) == false)
+                if (storage <= 0)
                 {
                     continue;
                 }
@@ -188,15 +171,10 @@ namespace Gecko
                 // TODO: Maybe we could ask input requester for current storage?
                 auto jobs = {
                     // TODO: Replace with transport order.
-                    order_manager->order_wait(id, id, 0.1f),
                     order_manager->order_move(id, id, out_request->requester_id),
-                    order_manager->order_wait(id, id, 0.1f),
-                    order_manager->order_load(id, id, out_request->requester_id, in_request->resource_name, in_request->resource_value),
-                    order_manager->order_wait(id, id, 0.1f),
+                    order_manager->order_load(id, id, out_request->requester_id, in_request->resource_name, in_request->resource_value, 3.0f), // TODO: Get from component.
                     order_manager->order_move(id, id, in_request->requester_id),
-                    order_manager->order_wait(id, id, 0.1f),
-                    order_manager->order_unload(id, id, in_request->requester_id, in_request->resource_name, in_request->resource_value),
-                    order_manager->order_wait(id, id, 0.1f)
+                    order_manager->order_unload(id, id, in_request->requester_id, in_request->resource_name, in_request->resource_value, 3.0f), // TODO: Get from component.
                 };
 
                 // Remove input and output requesters from queues.
@@ -210,25 +188,22 @@ namespace Gecko
         return {};
     }
 
-    std::vector<Order*> JobManager::get_unload_job(const Id& id, const std::shared_ptr<Resources>& resources)
+    std::vector<OrderPtr> JobManager::get_unload_job(const Id& id, const ResourcesPtr& resources)
     {
         auto order_manager = OrderManager::getSingletonPtr();
 
         for (auto in_request = m_in_queue.cbegin(); in_request != m_in_queue.cend(); ++in_request)
         {
             // Check if resource is carried by object.
-            if (Utils::is_enough_to_process(resources->get_current(in_request->resource_name)) == false)
+            if (resources->get_current(in_request->resource_name) <= 0)
             {
                 continue;
             }
 
             // Create orders.
             auto jobs = {
-                order_manager->order_wait(id, id, 0.1f),
                 order_manager->order_move(id, id, in_request->requester_id),
-                order_manager->order_wait(id, id, 0.1f),
-                order_manager->order_unload(id, id, in_request->requester_id, in_request->resource_name, in_request->resource_value),
-                order_manager->order_wait(id, id, 0.1f)
+                order_manager->order_unload(id, id, in_request->requester_id, in_request->resource_name, in_request->resource_value, 3.0f), // TODO: Get from component.
             };
 
             // Remove requester from queue.

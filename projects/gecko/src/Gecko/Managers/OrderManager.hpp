@@ -46,7 +46,7 @@ namespace Gecko
         OrderPtr order_guard(const Id& sender_id, const Id& receiver_id, const Id& target_id);
         OrderPtr order_guard(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
 
-        OrderPtr order_load(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value);
+        OrderPtr order_load(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value, float time);
 
         OrderPtr order_move(const Id& sender_id, const Id& receiver_id, const Id& target_id);
         OrderPtr order_move(const Id& sender_id, const Id& receiver_id, const Ogre::Vector3& target_position);
@@ -59,7 +59,7 @@ namespace Gecko
 
         OrderPtr order_stop(const Id& sender_id, const Id& receiver_id);
 
-        OrderPtr order_unload(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value);
+        OrderPtr order_unload(const Id& sender_id, const Id& receiver_id, const Id& target_id, const std::string& resource_name, float resource_value, float time);
 
         OrderPtr order_wait(const Id& sender_id, const Id& receiver_id, float time = Settings::Order::WaitTime);
 

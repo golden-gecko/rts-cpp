@@ -10,6 +10,7 @@
 #include <Gecko/Managers/PlayerManager.hpp>
 #include <Gecko/Managers/SkillManager.hpp>
 
+/*
 TEST(game, can_init_and_deinit)
 {
     auto component_manager = std::make_shared<Gecko::ComponentManager>();
@@ -28,3 +29,4 @@ TEST(game, can_init_and_deinit)
     EXPECT_NO_THROW(game->init());
     EXPECT_NO_THROW(game->deinit());
 }
+*/

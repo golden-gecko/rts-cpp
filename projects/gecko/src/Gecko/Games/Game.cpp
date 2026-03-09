@@ -4,7 +4,7 @@
 #include "Gecko/Components/Component.hpp"
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Configurations.hpp"
-#include "Gecko/Containers/Selected.hpp"
+#include "Gecko/Containers/Selection.hpp"
 #include "Gecko/Exception.hpp"
 #include "Gecko/Input/Input.hpp"
 #include "Gecko/Log.hpp"
@@ -546,7 +546,7 @@ namespace Gecko
         // Get current active player.
         if (PlayerPtr current_active_player = PlayerManager::getSingleton().get(m_active_player_id))
         {
-            const std::shared_ptr<Selected>& selected = current_active_player->get_selected();
+            const std::shared_ptr<Selection>& selected = current_active_player->get_selected();
 
             selected->apply_current_selection(false);
             selected->apply_ui(false);
@@ -555,7 +555,7 @@ namespace Gecko
         // Get new active player.
         if (PlayerPtr new_active_player = PlayerManager::getSingleton().get(active_player_id))
         {
-            const std::shared_ptr<Selected>& selected = new_active_player->get_selected();
+            const std::shared_ptr<Selection>& selected = new_active_player->get_selected();
 
             selected->apply_current_selection(true);
             selected->apply_ui(true);

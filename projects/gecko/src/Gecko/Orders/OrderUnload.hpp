@@ -2,6 +2,7 @@
 
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Resource.hpp"
+#include "Gecko/Timer.hpp"
 
 namespace Gecko
 {
@@ -25,7 +26,7 @@ namespace Gecko
 
     public:
         explicit OrderUnload();
-        explicit OrderUnload(const OrderUnload& other) = default;
+        OrderUnload(const OrderUnload& other) = default;
 
     public:
         std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const override;
@@ -45,6 +46,11 @@ namespace Gecko
         auto get_resource_value() const
         {
             return m_resource_value;
+        }
+
+        Timer& get_unload_timer()
+        {
+            return m_unload_timer;
         }
 
     public:
@@ -67,5 +73,6 @@ namespace Gecko
         Id m_target_id;
         std::string m_resource_name;
         float m_resource_value = 0.0f;
+        Timer m_unload_timer;
     };
 }

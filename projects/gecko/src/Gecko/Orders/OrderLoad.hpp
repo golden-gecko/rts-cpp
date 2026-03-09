@@ -2,6 +2,7 @@
 
 #include "Gecko/Orders/Order.hpp"
 #include "Gecko/Resource.hpp"
+#include "Gecko/Timer.hpp"
 
 namespace Gecko
 {
@@ -25,7 +26,7 @@ namespace Gecko
 
     public:
         explicit OrderLoad();
-        explicit OrderLoad(const OrderLoad& other) = default;
+        OrderLoad(const OrderLoad& other) = default;
 
     public:
         std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const override;
@@ -34,38 +35,44 @@ namespace Gecko
     public:
         auto get_target_id() const
         {
-            return target_id;
+            return m_target_id;
         }
 
         const auto& get_resource_name() const
         {
-            return resource_name;
+            return m_resource_name;
         }
 
         auto get_resource_value() const
         {
-            return resource_value;
+            return m_resource_value;
+        }
+
+        Timer& get_load_timer()
+        {
+            return m_load_timer;
         }
 
     public:
-        void set_target_id(const Id& new_target_id)
+        void set_target_id(const Id& target_id)
         {
-            target_id = new_target_id;
+            m_target_id = target_id;
         }
 
-        void set_resource_name(const std::string& new_resource_name)
+        void set_resource_name(const std::string& resource_name)
         {
-            resource_name = new_resource_name;
+            m_resource_name = resource_name;
         }
 
-        void set_resource_value(float new_resource_value)
+        void set_resource_value(float resource_value)
         {
-            resource_value = new_resource_value;
+            m_resource_value = resource_value;
         }
 
     private:
-        Id target_id;
-        std::string resource_name;
-        float resource_value = 0.0f;
+        Id m_target_id;
+        std::string m_resource_name;
+        float m_resource_value = 0.0f;
+        Timer m_load_timer;
     };
 }

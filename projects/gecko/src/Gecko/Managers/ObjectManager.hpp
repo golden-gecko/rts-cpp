@@ -32,7 +32,7 @@ namespace Gecko
 
     public:
         Object* create(const std::string& name);
-        ObjectsInRange get_in_range(const Ogre::Vector3& position, float range = std::numeric_limits<float>::max());
+        ObjectsInRange get_in_range(const Ogre::Vector3& position, float range = std::numeric_limits<float>::max(), const std::vector<Id>& exclude = {});
 
     private:
         ConfigurationPtr m_configuration;

@@ -57,6 +57,14 @@
     "name": "Tutorial",
     "objects": [
         {
+            "configuration": "iron_ore_deposit",
+            "player": "world",
+            "position": {
+                "x": 128.0,
+                "z": 128.0
+            }
+        },
+        {
             "configuration": "iron_ore_mine",
             "player": "human",
             "position": {
@@ -77,22 +85,6 @@
             "player": "human",
             "position": {
                 "x": 128.0,
-                "z": 120.0
-            }
-        },
-        {
-            "configuration": "iron_ore_deposit",
-            "player": "world",
-            "position": {
-                "x": 128.0,
-                "z": 128.0
-            }
-        },
-        {
-            "configuration": "truck",
-            "player": "human",
-            "position": {
-                "x": 144.0,
                 "z": 120.0
             }
         },
@@ -121,59 +113,11 @@
             }
         },
         {
-            "configuration": "tank",
-            "player": "human",
-            "position": {
-                "x": 128.0,
-                "z": 160.0
-            }
-        },
-        {
-            "configuration": "tank",
-            "player": "human",
-            "position": {
-                "x": 136.0,
-                "z": 160.0
-            }
-        },
-        {
-            "configuration": "tree_01",
-            "player": "human",
-            "position": {
-                "x": 120.0,
-                "z": 152.0
-            }
-        },
-        {
-            "configuration": "tree_01",
-            "player": "human",
-            "position": {
-                "x": 128.0,
-                "z": 152.0
-            }
-        },
-        {
-            "configuration": "tree_02",
-            "player": "human",
-            "position": {
-                "x": 136.0,
-                "z": 152.0
-            }
-        },
-        {
-            "configuration": "tree_01",
+            "configuration": "truck",
             "player": "human",
             "position": {
                 "x": 144.0,
-                "z": 152.0
-            }
-        },
-        {
-            "configuration": "tree_02",
-            "player": "human",
-            "position": {
-                "x": 152.0,
-                "z": 152.0
+                "z": 120.0
             }
         }
     ],

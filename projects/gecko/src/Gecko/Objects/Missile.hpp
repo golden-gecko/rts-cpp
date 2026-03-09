@@ -24,7 +24,7 @@ namespace Gecko
 
     public:
         explicit Missile(const ScenePtr& scene);
-        explicit Missile(const Missile& other);
+        Missile(const Missile& other);
 
     public:
         void set_position(const Ogre::Vector3& position, bool validate = true) override;

@@ -62,7 +62,7 @@ namespace Gecko
     OrderStatus Vehicle::on_load(Order* order, float time)
     {
         // Get order.
-        auto load_order = dynamic_cast<OrderLoad*>(order);
+        OrderLoad* load_order = dynamic_cast<OrderLoad*>(order);
 
         if (load_order == nullptr)
         {
@@ -72,7 +72,7 @@ namespace Gecko
         }
 
         // Check if target exists.
-        auto target = ObjectManager::getSingleton().get(load_order->get_target_id());
+        ObjectPtr target = ObjectManager::getSingleton().get(load_order->get_target_id());
 
         if (target == nullptr)
         {
@@ -98,10 +98,10 @@ namespace Gecko
             L_WARNING << "Object " << load_order->get_target_id() << " has no " << resource_ordered << " " << resource_name << ".";
         }
 
-        auto resource_available_to_load = std::min(resource_ordered, target->get_resources()->get_current(resource_name));
-        auto capacity_available_to_fill = std::min(resource_available_to_load, get_resources()->get_storage(resource_name));
+        auto resource_available_to_load = std::min<std::uint64_t>(resource_ordered, target->get_resources()->get_current(resource_name));
+        auto capacity_available_to_fill = std::min<std::uint64_t>(resource_available_to_load, get_resources()->get_storage(resource_name));
 
-        if (Utils::is_enough_to_process(capacity_available_to_fill) == false)
+        if (capacity_available_to_fill <= 0)
         {
             L_WARNING << capacity_available_to_fill << " " << resource_name << " is not enough to load.";
 
@@ -109,7 +109,13 @@ namespace Gecko
         }
 
         // Load resource.
-        Utils::move_resources(target->get_resources(), get_resources(), resource_name, capacity_available_to_fill);
+        if (!(load_order->get_load_timer().update(time)))
+        {
+            return OrderStatus::in_progress;
+        }
+
+        target->get_resources()->remove(resource_name, capacity_available_to_fill);
+        get_resources()->add(resource_name, capacity_available_to_fill);
 
         L_DEBUG << "Ordered: " << resource_ordered << ", available: " << resource_available_to_load << ", capacity:" << capacity_available_to_fill;
 
@@ -224,7 +230,7 @@ namespace Gecko
     OrderStatus Vehicle::on_unload(Order* order, float time)
     {
         // Get order.
-        auto unload_order = dynamic_cast<OrderUnload*>(order);
+        OrderUnload* unload_order = dynamic_cast<OrderUnload*>(order);
 
         if (unload_order == nullptr)
         {
@@ -234,7 +240,7 @@ namespace Gecko
         }
 
         // Check if target exists.
-        auto target = ObjectManager::getSingleton().get(unload_order->get_target_id());
+        ObjectPtr target = ObjectManager::getSingleton().get(unload_order->get_target_id());
 
         if (target == nullptr)
         {
@@ -260,10 +266,10 @@ namespace Gecko
             L_WARNING << "Object " << unload_order->get_target_id() << " has no storage for " << resource_ordered << " " << resource_name << ".";
         }
 
-        auto resource_available_to_unload = std::min(resource_ordered, get_resources()->get_current(resource_name));
-        auto capacity_available_to_fill = std::min(resource_available_to_unload, target->get_resources()->get_storage(resource_name));
+        auto resource_available_to_unload = std::min<std::uint64_t>(resource_ordered, get_resources()->get_current(resource_name));
+        auto capacity_available_to_fill = std::min<std::uint64_t>(resource_available_to_unload, target->get_resources()->get_storage(resource_name));
 
-        if (Utils::is_enough_to_process(capacity_available_to_fill) == false)
+        if (capacity_available_to_fill <= 0)
         {
             L_WARNING << capacity_available_to_fill << " " << resource_name << " is not enough to unload.";
 
@@ -271,7 +277,13 @@ namespace Gecko
         }
 
         // Unload resource.
-        Utils::move_resources(get_resources(), target->get_resources(), resource_name, capacity_available_to_fill);
+        if (!(unload_order->get_unload_timer().update(time)))
+        {
+            return OrderStatus::in_progress;
+        }
+
+        get_resources()->remove(resource_name, capacity_available_to_fill);
+        target->get_resources()->add(resource_name, capacity_available_to_fill);
 
         L_DEBUG << "Ordered: " << resource_ordered << ", available: " << resource_available_to_unload << ", capacity:" << capacity_available_to_fill;
 

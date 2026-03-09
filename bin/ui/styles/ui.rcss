@@ -107,7 +107,7 @@ td.text {
 
 #configurations {
 	bottom: 265dp;
-	left: 550dp;
+	left: 650dp;
 }
 
 /*** Console ***/
@@ -185,7 +185,7 @@ td.text {
 
 #orders {
 	bottom: 150dp;
-	left: 550dp;
+	left: 650dp;
 }
 
 /*** Players ***/
@@ -229,7 +229,7 @@ td.text {
 
 #skills {
 	bottom: 5dp;
-	left: 550dp;
+	left: 650dp;
 }
 
 /*** Unit Editor ***/

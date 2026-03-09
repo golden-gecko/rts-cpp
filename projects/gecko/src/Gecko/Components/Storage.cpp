@@ -1,6 +1,7 @@
 #include "Gecko/Components/Storage.hpp"
 
 #include "Gecko/Configuration.hpp"
+#include "Gecko/Containers/Resources.hpp"
 
 namespace Gecko
 {
@@ -8,8 +9,8 @@ namespace Gecko
     {
         ConfigurationPtr configuration = base_type::serialize();
 
-        configuration->set("load_time", m_load_time);
-        configuration->set("unload_time", m_unload_time);
+        configuration->set("load_time", m_load_time.serialize());
+        configuration->set("unload_time", m_unload_time.serialize());
 
         return configuration;
     }
@@ -18,8 +19,15 @@ namespace Gecko
     {
         base_type::deserialize(configuration);
 
-        m_load_time = configuration->get_float("load_time", 0.0f);
-        m_unload_time = configuration->get_float("unload_time", 0.0f);
+        if (configuration->has_member("load_time"))
+        {
+            m_load_time.deserialize(configuration->get_child("load_time"));
+        }
+
+        if (configuration->has_member("unload_time"))
+        {
+            m_unload_time.deserialize(configuration->get_child("unload_time"));
+        }
     }
 
     Storage* Storage::create(Storage* memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
@@ -29,5 +37,16 @@ namespace Gecko
         component->deserialize(configuration);
 
         return component;
+    }
+
+    Storage::Storage()
+    {
+    }
+
+    Storage::Storage(const Storage& other) :
+        base_type(other),
+        m_load_time(other.m_load_time),
+        m_unload_time(other.m_unload_time)
+    {
     }
 }

@@ -10,18 +10,6 @@
     "include": [
         "../components/drives/_drive.json"
     ],
-    "mesh": {
-        "color": {
-            "b": 0.5,
-            "g": 0.5,
-            "r": 0.5
-        },
-        "scale": {
-            "x": 0.5,
-            "y": 0.2,
-            "z": 1.0
-        }
-    },
     "name": "Wheeled",
     "speed": 10.0
 }

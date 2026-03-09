@@ -19,7 +19,7 @@ namespace Gecko
 
     public:
         explicit Mesh() = default;
-        explicit Mesh(const Mesh& other);
+        Mesh(const Mesh& other);
 
         ~Mesh() override;
 
@@ -58,7 +58,7 @@ namespace Gecko
         }
 
     public:
-        void set_owner(Object* _owner) override;
+        void set_owner(ObjectPtr owner) override;
 
         void set_position(const Ogre::Vector3& position) override;
 

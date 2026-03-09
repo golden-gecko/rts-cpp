@@ -1,0 +1,20 @@
+{
+    "creatable": {
+        "by_game": true,
+        "by_player": true
+    },
+    "health": {
+        "current": 10.0,
+        "max": 10.0
+    },
+    "include": [
+        "../components/storages/_storage.json"
+    ],
+    "load_time": {
+        "max": 1.0
+    },
+    "name": "Small Storage",
+    "unload_time": {
+        "max": 1.0
+    }
+}

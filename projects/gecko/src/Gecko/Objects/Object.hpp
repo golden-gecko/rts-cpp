@@ -33,22 +33,20 @@ namespace Gecko
 
     public:
         explicit Object(const ScenePtr& scene);
-        explicit Object(const Object& other);
+        Object(const Object& other);
 
         ~Object() override;
 
     public:
-        auto is_selectable() const
-        {
-            return m_selectable;
-        }
+        Object& operator=(const Object&) = delete;
 
-        auto is_selected() const
+    public:
+        bool is_selected() const
         {
             return m_selected;
         }
 
-        auto is_visible() const
+        bool is_visible() const
         {
             return m_visible;
         }
@@ -82,6 +80,16 @@ namespace Gecko
             return m_orders;
         }
 
+        const ProcessesPtr& get_processes() const
+        {
+            return m_processes;
+        }
+
+        const ResourcesPtr& get_resources() const
+        {
+            return m_resources;
+        }
+
         MapPtr get_owner() const
         {
             return m_owner;
@@ -94,17 +102,7 @@ namespace Gecko
 
         const Ogre::Vector3& get_position() const;
 
-        const auto& get_processes() const
-        {
-            return m_processes;
-        }
-
         virtual std::map<std::string, float> get_progress_bars() const;
-
-        const auto& get_resources() const
-        {
-            return m_resources;
-        }
 
         const Ogre::Vector3& get_scale() const
         {
@@ -164,6 +162,7 @@ namespace Gecko
 
     protected:
         virtual void update_components(float time);
+        virtual void update_jobs(float time);
         virtual void update_orders(float time);
         virtual void update_processes(float time);
         virtual void update_resources(float time);
@@ -192,17 +191,16 @@ namespace Gecko
         Id m_player_id;
         Timer m_alive_timer;
 
-        bool m_selectable = false;
         bool m_selected = false;
         bool m_visible = false;
 
-        std::shared_ptr<Components> m_components;
-        std::shared_ptr<Configurations> m_configurations;
-        std::shared_ptr<Orders> m_orders;
-        std::shared_ptr<Layers> m_layers;
-        std::shared_ptr<Processes> m_processes;
-        std::shared_ptr<Resources> m_resources;
-        std::shared_ptr<Skills> m_skills;
+        ComponentsPtr m_components;
+        ConfigurationsPtr m_configurations;
+        ProcessesPtr m_processes;
+        ResourcesPtr m_resources;
+        OrdersPtr m_orders;
+        LayersPtr m_layers;
+        SkillsPtr m_skills;
         std::shared_ptr<Mesh> m_selection;
 
         Ogre::SceneNode* m_scene_node = nullptr;

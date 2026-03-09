@@ -1,8 +1,8 @@
-material small_air
+material tiny_air
 {
 }
 
-material small_terrain
+material tiny_terrain
 {
     technique
     {
@@ -45,7 +45,7 @@ material small_terrain
     }
 }
 
-material small_water
+material tiny_water
 {
     technique
     {

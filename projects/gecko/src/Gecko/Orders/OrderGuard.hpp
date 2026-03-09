@@ -25,7 +25,7 @@ namespace Gecko
 
     public:
         explicit OrderGuard();
-        explicit OrderGuard(const OrderGuard& other) = default;
+        OrderGuard(const OrderGuard& other) = default;
 
     public:
         const auto& get_path() const

@@ -8,16 +8,16 @@ namespace Gecko
         public Serializable
     {
     public:
+        using Items = std::vector<ComponentPtr>;
+
+    public:
         // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
-        typedef std::vector<Component*> Items;
-
-    public:
         explicit Components() = default;
-        explicit Components(const Components& other);
+        Components(const Components& other);
 
     public:
         void clear()
@@ -25,7 +25,7 @@ namespace Gecko
             m_items.clear();
         }
 
-        auto empty() const
+        bool empty() const
         {
             return m_items.empty();
         }
@@ -44,7 +44,7 @@ namespace Gecko
             return false;
         }
 
-        auto size() const
+        Items::size_type size() const
         {
             return m_items.size();
         }
@@ -92,6 +92,6 @@ namespace Gecko
     private:
         Items m_items;
 
-        void add_component(const std::string& configuration, const ConfigurationPtr& component_configuration = ConfigurationPtr());
+        void add_component(const std::string& configuration_name, const ConfigurationPtr& overriden_configuration = ConfigurationPtr());
     };
 }

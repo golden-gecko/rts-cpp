@@ -2,6 +2,7 @@
 
 #include "Gecko/Id.hpp"
 #include "Gecko/Interfaces/Serializable.hpp"
+#include "Gecko/Timer.hpp"
 
 namespace Gecko
 {
@@ -17,7 +18,7 @@ namespace Gecko
         explicit Process(const std::string& name);
 
     public:
-        void update(float time, const Id& id, const Ogre::Vector3& position, std::shared_ptr<Resources> resources);
+        void update(float time, const Id& owner_id, const Ogre::Vector3& owner_position, const ResourcesPtr& owner_resources);
 
     public:
         const std::string& get_name() const
@@ -25,14 +26,19 @@ namespace Gecko
             return m_name;
         }
 
-        const std::shared_ptr<Resources>& get_in() const
+        const ResourcesPtr& get_in() const
         {
             return m_in;
         }
 
-        const std::shared_ptr<Resources>& get_out() const
+        const ResourcesPtr& get_out() const
         {
             return m_out;
+        }
+
+        const Timer& get_time() const
+        {
+            return m_time;
         }
 
     public:
@@ -41,10 +47,12 @@ namespace Gecko
     private:
         std::string m_name;
 
-        std::shared_ptr<Resources> m_in;
-        std::shared_ptr<Resources> m_out;
+        ResourcesPtr m_in;
+        ResourcesPtr m_out;
 
-        ObjectPtr get_deposit(const Resource& in_resource, const Id& id, const Ogre::Vector3& position, float time) const;
-        ObjectPtr get_storage(const Resource& out_resource, const Id& id, const Ogre::Vector3& position, float time) const;
+        Timer m_time;
+
+        ObjectPtr get_deposit(const Resource& in_resource, const Ogre::Vector3& position, const Id& exclude) const;
+        ObjectPtr get_storage(const Resource& out_resource, const Ogre::Vector3& position, const Id& exclude) const;
     };
 }

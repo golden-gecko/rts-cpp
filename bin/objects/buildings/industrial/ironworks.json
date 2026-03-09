@@ -19,46 +19,41 @@
     "include": [
         "../objects/buildings/_building.json"
     ],
-    "industrial": true,
-    "max_workers": 2,
     "name": "Ironworks",
     "processes": {
         "Smelting": {
             "in": {
                 "items": {
                     "Coal": {
-                        "consumption": 4.0
+                        "consumption": 4
                     },
                     "Iron Ore": {
-                        "consumption": 2.0
+                        "consumption": 2
                     }
                 }
             },
             "out": {
                 "items": {
                     "Iron": {
-                        "production": 1.0
-                    },
-                    "Pollution": {
-                        "production": 0.2
+                        "production": 1
                     }
                 }
+            },
+            "time": {
+                "max": 3.0
             }
         }
     },
     "resources": {
         "items": {
             "Coal": {
-                "max": 10.0
+                "max": 10
             },
             "Iron": {
-                "max": 10.0
+                "max": 10
             },
             "Iron Ore": {
-                "max": 10.0
-            },
-            "Pollution": {
-                "max": 1000000.0
+                "max": 10
             }
         }
     }

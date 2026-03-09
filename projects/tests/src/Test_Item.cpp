@@ -3,21 +3,9 @@
 #include <Gecko/Configuration.hpp>
 #include <Gecko/Item.hpp>
 
-namespace
-{
-    class Character :
-        public Gecko::Item
-    {
-    public:
-        void update(float time) override
-        {
-        }
-    };
-}
-
 TEST(item, new_item_is_empty)
 {
-    auto item = std::make_shared<Character>();
+    auto item = std::make_shared<Gecko::Item>();
 
     EXPECT_EQ(item->get_configuration().get(), nullptr);
     EXPECT_EQ(item->get_id().is_valid(), false);
@@ -26,7 +14,7 @@ TEST(item, new_item_is_empty)
 TEST(item, deserialized_item_is_not_initialized)
 {
     auto configuration = std::make_shared<Gecko::Configuration>("../objects/missiles/bullet.json");
-    auto item = std::make_shared<Character>();
+    auto item = std::make_shared<Gecko::Item>();
 
     item->deserialize(configuration);
 
@@ -37,7 +25,7 @@ TEST(item, deserialized_item_is_not_initialized)
 TEST(item, item_initialization)
 {
     auto configuration = std::make_shared<Gecko::Configuration>("../objects/vehicles/military/tank.json");
-    auto item = std::make_shared<Character>();
+    auto item = std::make_shared<Gecko::Item>();
 
     item->deserialize(configuration);
     item->init();
@@ -48,7 +36,7 @@ TEST(item, item_initialization)
 TEST(item, item_is_deserialized_after_deinitialization)
 {
     auto configuration = std::make_shared<Gecko::Configuration>("../objects/plants/tree_01.json");
-    auto item = std::make_shared<Character>();
+    auto item = std::make_shared<Gecko::Item>();
 
     item->deserialize(configuration);
     item->init();

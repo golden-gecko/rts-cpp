@@ -10,11 +10,11 @@ namespace Gecko
     public:
         struct Resource
         {
-            std::string name;
-            float       current;
-            float       max;
-            std::string direction;
-            float       ratio;
+            std::string   name;
+            std::uint64_t current;
+            std::uint64_t max;
+            std::string   direction;
+            float         ratio;
         };
 
 	public:

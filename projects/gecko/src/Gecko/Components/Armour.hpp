@@ -20,7 +20,7 @@ namespace Gecko
 
     public:
         explicit Armour() = default;
-        explicit Armour(const Armour& other);
+        Armour(const Armour& other);
 
     private:
         float m_defence = 0.0f;

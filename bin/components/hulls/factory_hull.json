@@ -3,12 +3,11 @@
         "by_game": true
     },
     "health": {
-        "current": 100.0,
-        "max": 100.0
+        "current": 200.0,
+        "max": 200.0
     },
     "include": [
-        "../components/meshes/cube_centered_on_bottom.json"
+        "../components/hulls/_hull.json"
     ],
-    "name": "Factory Hull",
-    "type": "Hull"
+    "name": "Factory Hull"
 }

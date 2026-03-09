@@ -10,6 +10,14 @@ namespace Gecko
     {
     }
 
+    Item& Item::operator=(const Item& other)
+    {
+        m_configuration = other.m_configuration;
+        m_id = other.m_id;
+
+        return *this;
+    }
+
     void Item::init()
     {
     }
@@ -20,7 +28,7 @@ namespace Gecko
 
     ConfigurationPtr Item::serialize() const
     {
-        auto configuration = std::make_shared<Configuration>();
+        ConfigurationPtr configuration = std::make_shared<Configuration>();
 
         configuration->set("configuration", m_configuration->get_name());
         configuration->set("id", m_id.get());
@@ -32,5 +40,9 @@ namespace Gecko
     {
         m_configuration = configuration;
         m_id = configuration->get_int("id", Id::Empty.get());
+    }
+
+    void Item::update(float time)
+    {
     }
 }

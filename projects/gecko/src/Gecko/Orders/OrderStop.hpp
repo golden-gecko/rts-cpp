@@ -15,6 +15,6 @@ namespace Gecko
 
     public:
         explicit OrderStop();
-        explicit OrderStop(const OrderStop& other) = default;
+        OrderStop(const OrderStop& other) = default;
     };
 }

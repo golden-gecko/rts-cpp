@@ -79,13 +79,13 @@ namespace Gecko
         return Utils::Node::get_direction(m_scene_node);
     }
 
-    void Mesh::set_owner(Object* _owner)
+    void Mesh::set_owner(ObjectPtr owner)
     {
-        base_type::set_owner(_owner);
+        base_type::set_owner(owner);
 
         if (m_entity)
         {
-            m_entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
+            m_entity->getUserObjectBindings().setUserAny(Ogre::Any(owner->get_id()));
         }
     }
 

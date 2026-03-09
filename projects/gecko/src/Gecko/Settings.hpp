@@ -65,8 +65,6 @@ namespace Gecko
         {
             const std::uint16_t MaxAttemptsToComplete      = 3;
             const float         ResourceLoadingMinDistance = 20.0f;
-            const float         ResourcePriority           = 1.0f;
-            const float         ResourceTransportMinValue  = 1.0f;
             const float         WaitTime                   = 3.0f;
         }
 

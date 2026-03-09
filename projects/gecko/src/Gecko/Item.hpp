@@ -23,18 +23,25 @@ namespace Gecko
         void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
+        // From Updatable.
+        void update(float time) override;
+
+    public:
         explicit Item() = default;
-        explicit Item(const Item& other);
+        Item(const Item& other);
 
         ~Item() override = default;
 
     public:
-        const auto& get_configuration() const
+        Item& operator=(const Item& other);
+
+    public:
+        const ConfigurationPtr& get_configuration() const
         {
             return m_configuration;
         }
 
-        const auto& get_id() const
+        const Id& get_id() const
         {
             return m_id;
         }

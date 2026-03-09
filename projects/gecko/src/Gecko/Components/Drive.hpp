@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Gecko/Components/Mesh.hpp"
+#include "Gecko/Components/Component.hpp"
 
 namespace Gecko
 {
     class Drive :
-        public Mesh
+        public Component
     {
     private:
-        using base_type = Mesh;
+        using base_type = Component;
 
     public:
         // From Serializable.
@@ -20,7 +20,7 @@ namespace Gecko
 
     public:
         explicit Drive() = default;
-        explicit Drive(const Drive& other);
+        Drive(const Drive& other);
 
     public:
         float get_distance_driven() const

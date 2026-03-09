@@ -25,7 +25,7 @@ namespace Gecko
 
     public:
         explicit OrderMove();
-        explicit OrderMove(const OrderMove& other) = default;
+        OrderMove(const OrderMove& other) = default;
 
     public:
         std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const override;

@@ -1,6 +1,6 @@
 {
     "memory": {
-        "components": 1000,
+        "components": 200,
         "maps": 10,
         "objects": 10,
         "orders": 10,

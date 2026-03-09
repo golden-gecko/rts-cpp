@@ -28,24 +28,21 @@ namespace Gecko
     {
     }
 
-    bool Id::is_valid() const
+    Id::Id(const Id& other) :
+        m_value(other.m_value)
     {
-        return Min.m_value <= m_value && m_value <= Max.m_value;
-    }
-
-    std::string Id::to_string() const
-    {
-        return Utils::Convert::to_string(m_value);
-    }
-
-    int Id::get() const
-    {
-        return m_value;
     }
 
     Id& Id::operator=(int value)
     {
         m_value = value;
+
+        return *this;
+    }
+
+    Id& Id::operator=(const Id& other)
+    {
+        m_value = other.m_value;
 
         return *this;
     }
@@ -110,5 +107,25 @@ namespace Gecko
     Id::operator Json::Value() const
     {
         return m_value;
+    }
+
+    std::string Id::to_string() const
+    {
+        return Utils::Convert::to_string(m_value);
+    }
+
+    int Id::get() const
+    {
+        return m_value;
+    }
+
+    bool Id::is_valid() const
+    {
+        return Min.m_value <= m_value && m_value <= Max.m_value;
+    }
+
+    std::ostream& operator<<(std::ostream& out, const Id& id)
+    {
+        return out << id.get();
     }
 }

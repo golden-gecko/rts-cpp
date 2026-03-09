@@ -46,8 +46,8 @@ namespace Gecko
 
         for (const auto& i : *(configuration))
         {
-            auto component_configuration = std::make_shared<Configuration>(i);
-            auto configuration = component_configuration->get_string("configuration");
+            ConfigurationPtr component_configuration = std::make_shared<Configuration>(i);
+            std::string configuration = component_configuration->get_string("configuration");
 
             add_component(configuration, component_configuration);
         }
@@ -56,25 +56,24 @@ namespace Gecko
         add_component("debug");
     }
 
-    void Components::add_component(const std::string& configuration, const ConfigurationPtr& component_configuration)
+    void Components::add_component(const std::string& configuration_name, const ConfigurationPtr& overriden_configuration)
     {
-        auto component = ComponentManager::getSingleton().create(configuration);
+        ComponentPtr component = ComponentManager::getSingleton().create(configuration_name);
 
         if (component == nullptr)
         {
-            throw Exception("Failed to create '" + configuration + "' component.");
+            throw Exception("Failed to create '" + configuration_name + "' component.");
         }
 
-        // TODO: Refactor.
-        auto c = ConfigurationManager::getSingleton().get(configuration);
-        auto new_configuration = std::make_shared<Configuration>(*c.get());
+        ConfigurationPtr configuration = ConfigurationManager::getSingleton().get(configuration_name);
+        ConfigurationPtr merged_configuration = std::make_shared<Configuration>(*configuration.get());
 
-        if (component_configuration)
+        if (overriden_configuration)
         {
-            new_configuration->merge(component_configuration);
+            merged_configuration->merge(overriden_configuration);
         }
 
-        component->set_configuration(new_configuration);
+        component->set_configuration(merged_configuration);
 
         m_items.emplace_back(component);
     }

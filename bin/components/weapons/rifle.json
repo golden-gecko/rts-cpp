@@ -10,18 +10,6 @@
     "include": [
         "../components/weapons/_weapon.json"
     ],
-    "mesh": {
-        "color": {
-            "b": 0.5,
-            "g": 0.5,
-            "r": 0.5
-        },
-        "scale": {
-            "x": 0.1,
-            "y": 0.1,
-            "z": 0.5
-        }
-    },
     "missile": {
         "configuration": "bullet"
     },

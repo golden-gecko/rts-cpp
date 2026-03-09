@@ -8,15 +8,16 @@ namespace Gecko
 {
     class ComponentManager :
         public Ogre::Singleton<ComponentManager>,
-        public Manager<Component, std::string, Id>
+        public Manager<Component, std::string, Id>,
+        public Initializable
     {
     private:
         using base_type = Manager<Component, std::string, Id>;
 
     public:
         // From Initializable.
-        void init();
-        void deinit();
+        void init() override;
+        void deinit() override;
     
     public:
         ComponentManager(const ConfigurationPtr& configuration, const ScenePtr& scene);

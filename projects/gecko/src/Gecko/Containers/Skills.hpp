@@ -4,21 +4,20 @@
 
 namespace Gecko
 {
-    // TODO: Refactor to serialize from map instead of array, to allow overriding.
     class Skills :
         public Serializable
     {
+    public:
+        using Items = std::vector<SkillPtr>;
+
     public:
         // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
-        typedef std::vector<Skill*> Items;
-
-    public:
         explicit Skills() = default;
-        explicit Skills(const Skills& other);
+        Skills(const Skills& other);
 
     public:
         void activate(const std::string& name, const Id& id);
@@ -29,7 +28,7 @@ namespace Gecko
             m_items.clear();
         }
 
-        auto empty() const
+        bool empty() const
         {
             return m_items.empty();
         }

@@ -1,7 +1,10 @@
 {
     "components": [
         {
-            "configuration": "wheeled",
+            "configuration": "wheeled"
+        },
+        {
+            "configuration": "hull",
             "mesh": {
                 "name": "truck.mesh",
                 "scale": {
@@ -12,7 +15,7 @@
             }
         },
         {
-            "configuration": "storage"
+            "configuration": "small_storage"
         }
     ],
     "creatable": {

@@ -17,12 +17,11 @@ namespace Gecko
         void deserialize(const ConfigurationPtr& configuration) override;
 
     public:
-        // From Updatable.
-        void update(float time) override;
+        explicit Component() = default;
+        Component(const Component& other);
 
     public:
-        explicit Component() = default;
-        explicit Component(const Component& other);
+        Component& operator=(const Component&) = delete;
 
     public:
         virtual bool is_visible() const
@@ -36,17 +35,17 @@ namespace Gecko
             return Ogre::Vector3::ZERO;
         }
 
-        auto get_health() const
+        float get_health() const
         {
             return m_health_timer.get_current();
         }
 
-        auto get_max_health() const
+        float get_max_health() const
         {
             return m_health_timer.get_max();
         }
 
-        const auto& get_name() const
+        const std::string& get_name() const
         {
             return m_name;
         }
@@ -56,12 +55,17 @@ namespace Gecko
             return Ogre::Vector3::ZERO;
         }
 
-        auto get_owner() const
+        ObjectPtr get_owner() const
         {
             return m_owner;
         }
 
     public:
+        virtual void set_owner(ObjectPtr owner)
+        {
+            m_owner = owner;
+        }
+
         void set_scene(const ScenePtr& scene)
         {
             m_scene = scene;
@@ -72,19 +76,17 @@ namespace Gecko
             m_name = name;
         }
 
-        virtual void set_owner(Object* owner)
+        virtual void set_position(const Ogre::Vector3& position)
         {
-            m_owner = owner;
         }
 
-        virtual void set_position(const Ogre::Vector3& position);
-
-        virtual void set_visible(bool visible);
+        virtual void set_visible(bool visible)
+        {
+        }
 
     protected:
-        ObjectPtr m_owner = nullptr;
-        ScenePtr  m_scene;
-
+        ObjectPtr   m_owner = nullptr;
+        ScenePtr    m_scene;
         std::string m_name;
         Timer       m_health_timer;
     };

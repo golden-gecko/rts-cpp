@@ -15,6 +15,6 @@ namespace Gecko
 
     public:
         explicit OrderDestroy();
-        explicit OrderDestroy(const OrderDestroy& other) = default;
+        OrderDestroy(const OrderDestroy& other) = default;
     };
 }

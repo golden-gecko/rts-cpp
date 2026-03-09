@@ -1,6 +1,3 @@
 {
-    "include": [
-        "../components/meshes/cube_centered_on_bottom.json"
-    ],
     "type": "Drive"
 }

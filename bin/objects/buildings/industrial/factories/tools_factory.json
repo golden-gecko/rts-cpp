@@ -19,40 +19,35 @@
     "include": [
         "../objects/buildings/_building.json"
     ],
-    "industrial": true,
-    "max_workers": 4,
     "name": "Tools Factory",
     "processes": {
         "Producing Tools": {
             "in": {
                 "items": {
                     "Iron": {
-                        "consumption": 2.0
+                        "consumption": 2
                     }
                 }
             },
             "out": {
                 "items": {
-                    "Pollution": {
-                        "production": 0.4
-                    },
                     "Tools": {
-                        "production": 1.0
+                        "production": 1
                     }
                 }
+            },
+            "time": {
+                "max": 5.0
             }
         }
     },
     "resources": {
         "items": {
             "Iron": {
-                "max": 10.0
-            },
-            "Pollution": {
-                "max": 1000000.0
+                "max": 10
             },
             "Tools": {
-                "max": 10.0
+                "max": 10
             }
         }
     }

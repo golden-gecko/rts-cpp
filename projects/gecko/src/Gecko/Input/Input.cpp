@@ -3,7 +3,7 @@
 #include "Gecko/Cameras/Camera.hpp"
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Orders.hpp"
-#include "Gecko/Containers/Selected.hpp"
+#include "Gecko/Containers/Selection.hpp"
 #include "Gecko/Containers/Skills.hpp"
 #include "Gecko/Diplomacy.hpp"
 #include "Gecko/Exception.hpp"

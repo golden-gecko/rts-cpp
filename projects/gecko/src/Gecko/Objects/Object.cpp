@@ -1,8 +1,8 @@
 #include "Gecko/Objects/Object.hpp"
 
 #include "Gecko/Components/Mesh.hpp"
-#include "Gecko/Components/Shield.hpp"
-#include "Gecko/Components/Weapon.hpp"
+#include "Gecko/Components/Producer.hpp"
+#include "Gecko/Components/Storage.hpp"
 #include "Gecko/Configuration.hpp"
 #include "Gecko/Containers/Components.hpp"
 #include "Gecko/Containers/Configurations.hpp"
@@ -24,6 +24,7 @@
 #include "Gecko/Log.hpp"
 #include "Gecko/Orders/OrderWait.hpp"
 #include "Gecko/Players/Player.hpp"
+#include "Gecko/Process.hpp"
 #include "Gecko/Rectangle.hpp"
 #include "Gecko/Scenes/Scene.hpp"
 #include "Gecko/Skills/Skill.hpp"
@@ -63,11 +64,10 @@ namespace Gecko
         m_player_id = other.m_player_id;
         m_alive_timer = other.m_alive_timer;
 
-        m_selectable = other.m_selectable;
         m_selected = other.m_selected;
         m_visible = other.m_visible;
 
-        m_layers = other.m_layers;
+        m_layers = std::make_shared<Layers>(*other.m_layers);
 
         m_components = std::make_shared<Components>(*other.m_components);
         m_configurations = std::make_shared<Configurations>(*other.m_configurations);
@@ -124,6 +124,7 @@ namespace Gecko
         set_visible(true);
 
         /*
+        TODO: Remove.
         if (type != Type::Value::Missile)
         {
             // map->get_terrain().set_unit_position(get_id(), get_position());
@@ -158,7 +159,6 @@ namespace Gecko
         configuration->set("name", m_name);
         configuration->set("player_id", m_player_id);
         configuration->set("alive_timer", m_alive_timer.serialize());
-        configuration->set("selectable", m_selectable);
         configuration->set("selected", m_selected);
         configuration->set("visible", m_visible);
         configuration->set("position", get_position());
@@ -186,7 +186,6 @@ namespace Gecko
             m_alive_timer.deserialize(configuration->get_child("alive_timer"));
         }
 
-        m_selectable = configuration->get_bool("selectable", false);
         m_selected = configuration->get_bool("selected", false);
         m_visible = configuration->get_bool("visible", false);
 
@@ -243,7 +242,7 @@ namespace Gecko
         {
             if (OrderPtr order = OrderManager::getSingleton().order_destroy(get_id(), get_id()))
             {
-                get_orders()->add_last(order->get_id());
+                m_orders->add_last(order->get_id());
             }
             else
             {
@@ -252,25 +251,11 @@ namespace Gecko
         }
 
         update_components(time);
+        update_jobs(time);
         update_orders(time);
         update_processes(time);
         update_resources(time);
         update_skills(time);
-
-        if (get_orders()->empty() && m_job_timer.update(time))
-        {
-            auto jobs = JobManager::getSingleton().get_job(get_id(), get_components(), get_resources());
-
-            if (jobs.empty() == false)
-            {
-                for (const auto& job : jobs)
-                {
-                    get_orders()->add_last(job->get_id());
-                }
-
-                m_job_timer.update(time);
-            }
-        }
     }
 
     Ogre::Vector3 Object::get_direction() const
@@ -379,6 +364,33 @@ namespace Gecko
         info->set("Position", get_position());
         info->set("Heading", get_heading());
 
+        // Components.
+        ConfigurationPtr info_components = std::make_shared<Configuration>();
+
+        for (const auto& component : *(m_components))
+        {
+            info_components->set(component->get_name(), "");
+        }
+
+        if (info_components->size())
+        {
+            info->set("Components", info_components);
+        }
+
+        // Processes.
+        ConfigurationPtr info_processes = std::make_shared<Configuration>();
+
+        for (const auto& [name, process] : *(m_processes))
+        {
+            info_processes->set(name, Utils::Convert::to_string(process.get_time().get_current()) + "/" + Utils::Convert::to_string(process.get_time().get_max()));
+        }
+
+        if (info_processes->size())
+        {
+            info->set("Processes", info_processes);
+        }
+
+        // Resources.
         ConfigurationPtr info_resources = std::make_shared<Configuration>();
 
         for (const auto& [name, resouce] : *(m_resources))
@@ -386,7 +398,10 @@ namespace Gecko
             info_resources->set(name, Utils::Convert::to_string(resouce.get_current()) + "/" + Utils::Convert::to_string(resouce.get_max()));
         }
 
-        info->set("Resources", info_resources);
+        if (info_resources->size())
+        {
+            info->set("Resources", info_resources);
+        }
 
         return info;
     }
@@ -528,16 +543,7 @@ namespace Gecko
 
     void Object::set_selected(bool selected)
     {
-        if (is_selectable() && selected)
-        {
-            m_selection->set_visible(true);
-        }
-        else
-        {
-            m_selection->set_visible(false);
-        }
-
-        m_selected = selected;
+        m_selection->set_visible(m_selected = selected);
     }
 
     void Object::set_visible(bool visible)
@@ -560,19 +566,44 @@ namespace Gecko
         }
     }
 
+    void Object::update_jobs(float time)
+    {
+        if (m_orders->empty())
+        {
+            if (m_job_timer.update(time))
+            {
+                auto jobs = JobManager::getSingleton().get_job(get_id(), get_components(), get_resources());
+
+                if (jobs.empty() == false)
+                {
+                    for (const auto& job : jobs)
+                    {
+                        m_orders->add_last(job->get_id());
+                    }
+                }
+            }
+        }
+        else
+        {
+            m_job_timer.reset();
+        }
+    }
+
     void Object::update_orders(float time)
     {
-        if (get_orders()->empty())
+        if (m_orders->empty())
         {
             return;
         }
 
         // Get order.
-        auto order = OrderManager::getSingleton().get(get_orders()->front());
+        OrderPtr order = OrderManager::getSingleton().get(m_orders->get_curret());
 
         if (order == nullptr)
         {
-            L_WARNING << "Could not find order " << get_orders()->front() << ".";
+            L_WARNING << "Could not find order '" << m_orders->get_curret() << "'.";
+
+            m_orders->remove_current();
 
             return;
         }
@@ -580,12 +611,15 @@ namespace Gecko
         // Get handler for order.
         const std::map<order_type::Value, std::function<OrderStatus(Order*, float)>> handlers =
         {
+            { order_type::Value::Attack, std::bind(&Object::on_attack, this, std::placeholders::_1, std::placeholders::_2) },
+            { order_type::Value::Create, std::bind(&Object::on_create, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Destroy, std::bind(&Object::on_destroy, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Follow, std::bind(&Object::on_follow, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Guard, std::bind(&Object::on_guard, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Load, std::bind(&Object::on_load, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Move, std::bind(&Object::on_move, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Patrol, std::bind(&Object::on_patrol, this, std::placeholders::_1, std::placeholders::_2) },
+            { order_type::Value::Rally, std::bind(&Object::on_rally, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Stop, std::bind(&Object::on_stop, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Unload, std::bind(&Object::on_unload, this, std::placeholders::_1, std::placeholders::_2) },
             { order_type::Value::Wait, std::bind(&Object::on_wait, this, std::placeholders::_1, std::placeholders::_2) }
@@ -611,7 +645,7 @@ namespace Gecko
 
                 UI::getSingleton().log_info(stream.str(), get_id());
 
-                get_orders()->remove(order->get_id());
+                m_orders->remove(order->get_id());
 
                 break;
             }
@@ -624,8 +658,8 @@ namespace Gecko
 
                 UI::getSingleton().log_info(stream.str(), get_id());
 
-                get_orders()->remove(order->get_id());
-                get_orders()->add_last(order->get_id());
+                m_orders->remove(order->get_id());
+                m_orders->add_last(order->get_id());
 
                 break;
             }
@@ -638,7 +672,7 @@ namespace Gecko
 
                 UI::getSingleton().log_info(stream.str(), get_id());
 
-                get_orders()->remove(order->get_id());
+                m_orders->remove(order->get_id());
 
                 break;
             }
@@ -663,7 +697,7 @@ namespace Gecko
                 }
                 else
                 {
-                    get_orders()->remove(order->get_id());
+                    m_orders->remove(order->get_id());
                 }
 
                 break;
@@ -673,12 +707,12 @@ namespace Gecko
 
     void Object::update_processes(float time)
     {
-        get_processes()->update(time, get_id(), get_position(), get_resources());
+        m_processes->update(time, get_id(), get_position(), get_resources());
     }
 
     void Object::update_resources(float time)
     {
-        get_resources()->update(time);
+        m_resources->update(time);
 
         /*
         TODO: Fix.
@@ -760,7 +794,7 @@ namespace Gecko
 
     OrderStatus Object::on_stop(Order* order, float time)
     {
-        get_orders()->remove_all_orders();
+        m_orders->remove_all_orders();
 
         return OrderStatus::complete;
     }
@@ -772,7 +806,7 @@ namespace Gecko
 
     OrderStatus Object::on_wait(Order* order, float time)
     {
-        auto wait_order = dynamic_cast<OrderWait*>(order);
+        OrderWait* wait_order = dynamic_cast<OrderWait*>(order);
 
         if (wait_order == nullptr)
         {

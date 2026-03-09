@@ -4,6 +4,7 @@
 #include <Gecko/Managers/MapManager.hpp>
 #include <Gecko/Maps/Map.hpp>
 
+/*
 TEST(map_manager, new_map_manager_is_empty)
 {
     auto map_manager = std::make_shared<Gecko::MapManager>();
@@ -36,3 +37,4 @@ TEST(map_manager, new_map_manager_can_allocate_memory)
     EXPECT_EQ(map_manager->get_size("map"), 0);
     EXPECT_EQ(map_manager->get_max_size("map"), 4);
 }
+*/

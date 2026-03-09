@@ -17,7 +17,7 @@ namespace Gecko
 
     public:
         explicit Vehicle(const ScenePtr& scene);
-        explicit Vehicle(const Vehicle& other);
+        Vehicle(const Vehicle& other);
 
     protected:
         OrderStatus on_attack(Order* order, float time) override;

@@ -19,7 +19,7 @@ namespace Gecko
 
     MapPtr Map::create(MapPtr memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
     {
-        auto map = new (memory) Map(scene);
+        MapPtr map = new (memory) Map(scene);
 
         map->deserialize(configuration);
 
@@ -254,7 +254,7 @@ namespace Gecko
             for (auto i = seasons_configuration.value()->begin(); i != seasons_configuration.value()->end(); i++)
             {
                 auto name = i.key().asString();
-                auto season = std::make_shared<Season>(name, Configuration(*i));
+                auto season = std::make_shared<Season>(name, std::make_shared<Configuration>(*i));
 
                 m_seasons.emplace(name, season);
 

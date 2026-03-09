@@ -21,9 +21,9 @@ namespace Gecko
     {
         auto configuration = base_type::serialize();
 
-        configuration->set("target_id", target_id);
-        configuration->set("resource_name", resource_name);
-        configuration->set("resource_value", resource_value);
+        configuration->set("target_id", m_target_id);
+        configuration->set("resource_name", m_resource_name);
+        configuration->set("resource_value", m_resource_value);
 
         return configuration;
     }
@@ -32,9 +32,9 @@ namespace Gecko
     {
         base_type::deserialize(configuration);
 
-        target_id = configuration->get_int("target_id", Id::Empty.get());
-        resource_name = configuration->get_string("resource_name", "");
-        resource_value = configuration->get_float("resource_value", 0.0f);
+        m_target_id = configuration->get_int("target_id", Id::Empty.get());
+        m_resource_name = configuration->get_string("resource_name", "");
+        m_resource_value = configuration->get_float("resource_value", 0.0f);
     }
 
     OrderLoad* OrderLoad::create(OrderLoad* memory, const ConfigurationPtr& configuration)
@@ -66,6 +66,6 @@ namespace Gecko
 
     std::string OrderLoad::get_target_as_string() const
     {
-        return Utils::object_id_to_string(target_id);
+        return Utils::object_id_to_string(m_target_id) + " " + m_load_timer.get_progress_as_string();
     }
 }

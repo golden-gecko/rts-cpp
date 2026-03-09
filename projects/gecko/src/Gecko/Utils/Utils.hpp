@@ -18,9 +18,5 @@ namespace Gecko::Utils
 
     bool is_close_enough(const Ogre::Vector3& position, const Ogre::Vector3& target, float distance = Settings::Game::DistanceComparisionMinValue);
 
-    bool is_enough_to_process(float resource);
-
-    void move_resources(const std::shared_ptr<Resources>& source, const std::shared_ptr<Resources>& destination, const std::string& name, float value);
-
     std::string object_id_to_string(const Id& object_id);
 }

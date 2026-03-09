@@ -1,0 +1,21 @@
+{
+    "creatable": {
+        "by_game": true
+    },
+    "health": {
+        "current": 100.0,
+        "max": 100.0
+    },
+    "include": [
+        "../components/hulls/_hull.json"
+    ],
+    "mesh": {
+        "name": "coal.mesh",
+        "scale": {
+            "x": 2.0,
+            "y": 2.0,
+            "z": 2.0
+        }
+    },
+    "name": "Mine Hull"
+}
