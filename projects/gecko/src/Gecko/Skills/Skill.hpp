@@ -22,7 +22,7 @@ namespace Gecko
 
     public:
         explicit Skill() = default;
-        explicit Skill(const Skill& other);
+        Skill(const Skill& other);
 
         ~Skill() override = default;
 

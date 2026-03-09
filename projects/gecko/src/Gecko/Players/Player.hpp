@@ -27,7 +27,7 @@ namespace Gecko
 
     public:
         explicit Player();
-        explicit Player(const Player& other);
+        Player(const Player& other);
 
     public:
         Player& operator=(const Player&) = delete;

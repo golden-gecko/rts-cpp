@@ -25,7 +25,7 @@ namespace Gecko
 
     public:
         explicit OrderFollow();
-        explicit OrderFollow(const OrderFollow& other) = default;
+        OrderFollow(const OrderFollow& other) = default;
 
     public:
         const auto& get_path() const

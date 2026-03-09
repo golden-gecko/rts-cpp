@@ -28,7 +28,7 @@ namespace Gecko
 
     public:
         explicit Weapon() = default;
-        explicit Weapon(const Weapon& other);
+        Weapon(const Weapon& other);
 
     private:
         std::string m_missile_configuration;

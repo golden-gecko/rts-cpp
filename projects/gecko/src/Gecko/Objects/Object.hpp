@@ -33,7 +33,7 @@ namespace Gecko
 
     public:
         explicit Object(const ScenePtr& scene);
-        explicit Object(const Object& other);
+        Object(const Object& other);
 
         ~Object() override;
 

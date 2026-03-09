@@ -24,7 +24,7 @@ namespace Gecko
 
     public:
         explicit OrderCreate();
-        explicit OrderCreate(const OrderCreate& other) = default;
+        OrderCreate(const OrderCreate& other) = default;
 
     public:
         auto get_player_id() const

@@ -24,7 +24,7 @@ namespace Gecko
 
     public:
         explicit OrderRally();
-        explicit OrderRally(const OrderRally& other) = default;
+        OrderRally(const OrderRally& other) = default;
 
     public:
         const auto& get_target_position() const

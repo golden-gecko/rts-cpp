@@ -21,15 +21,15 @@ namespace Gecko
 
     public:
         explicit Producer();
-        explicit Producer(const Producer& other);
+        Producer(const Producer& other);
 
     public:
-        float get_produce_time() const
+        Timer& get_produce_time()
         {
             return m_produce_time;
         }
 
     private:
-        float m_produce_time = 0.0f;
+        Timer m_produce_time;
     };
 }

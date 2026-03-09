@@ -20,7 +20,7 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        explicit Season(const std::string& name, const Configuration& configuration);
+        explicit Season(const std::string& name, const ConfigurationPtr& configuration);
 
     public:
         void apply();

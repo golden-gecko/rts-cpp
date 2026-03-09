@@ -19,7 +19,7 @@ namespace Gecko
 
     public:
         explicit Mesh() = default;
-        explicit Mesh(const Mesh& other);
+        Mesh(const Mesh& other);
 
         ~Mesh() override;
 

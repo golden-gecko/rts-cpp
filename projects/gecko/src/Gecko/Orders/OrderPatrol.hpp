@@ -25,7 +25,7 @@ namespace Gecko
 
     public:
         explicit OrderPatrol();
-        explicit OrderPatrol(const OrderPatrol& other) = default;
+        OrderPatrol(const OrderPatrol& other) = default;
 
     public:
         const auto& get_path() const

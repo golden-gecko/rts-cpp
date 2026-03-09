@@ -18,7 +18,7 @@ namespace Gecko
 
     public:
         explicit Component() = default;
-        explicit Component(const Component& other);
+        Component(const Component& other);
 
     public:
         Component& operator=(const Component&) = delete;

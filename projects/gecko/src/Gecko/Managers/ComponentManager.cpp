@@ -10,6 +10,7 @@
 #include "Gecko/Components/Storage.hpp"
 #include "Gecko/Components/Weapon.hpp"
 #include "Gecko/Configuration.hpp"
+#include "Gecko/Exception.hpp"
 #include "Gecko/Log.hpp"
 #include "Gecko/Managers/ConfigurationManager.hpp"
 #include "Gecko/Utils/Time.hpp"

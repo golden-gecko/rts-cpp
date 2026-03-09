@@ -32,7 +32,7 @@ namespace Gecko
 
     public:
         explicit Map(const ScenePtr& scene);
-        explicit Map(const Map& other);
+        Map(const Map& other);
 
     public:
         Map& operator=(const Map&) = delete;

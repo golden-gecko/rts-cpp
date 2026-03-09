@@ -26,7 +26,7 @@ namespace Gecko
 
     public:
         explicit OrderLoad();
-        explicit OrderLoad(const OrderLoad& other) = default;
+        OrderLoad(const OrderLoad& other) = default;
 
     public:
         std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const override;

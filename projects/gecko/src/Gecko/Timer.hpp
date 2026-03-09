@@ -14,7 +14,15 @@ namespace Gecko
 
     public:
         explicit Timer(float max = std::numeric_limits<float>::max());
-        explicit Timer(const Timer& other);
+        Timer(const Timer& other);
+
+    public:
+        bool finished() const
+        {
+            static constexpr auto epsilon = std::numeric_limits<float>::epsilon();
+
+            return std::abs(m_max - m_current) < epsilon;
+        }
 
         Timer& update(float time);
 
@@ -33,7 +41,22 @@ namespace Gecko
 
         float get_progress() const
         {
-            return get_current() / get_max();
+            if (m_max == 0.0f)
+            {
+                return 0.0f;
+            }
+
+            return m_current / m_max;
+        }
+
+        std::string get_progress_as_string(std::uint8_t precision = 1) const
+        {
+            std::stringstream stream;
+
+            stream << std::fixed << std::setprecision(precision);
+            stream << get_current() << "/" << get_max();
+
+            return stream.str();
         }
 
     public:
@@ -50,9 +73,7 @@ namespace Gecko
     public:
         operator bool() const
         {
-            static constexpr auto epsilon = std::numeric_limits<float>::epsilon();
-
-            return std::abs(m_max - m_current) < epsilon;
+            return finished();
         }
 
     private:

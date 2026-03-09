@@ -229,6 +229,10 @@ namespace Gecko
         void set_size(int size);
         void set_speed(int speed);
 
+    // Operators.
+    public:
+        operator bool() const;
+
     // Protected members.
     protected:
         int m_damage = 0;

@@ -127,9 +127,7 @@ namespace Gecko
         auto object = object_manager.get_in_range();
 
         return {
-            order_manager.order_wait(id, id, 0.1f),
             order_manager.order_attack(id, id, 0.1f),
-            order_manager.order_wait(id, id, 0.1f)
         };
         */
 
@@ -173,15 +171,10 @@ namespace Gecko
                 // TODO: Maybe we could ask input requester for current storage?
                 auto jobs = {
                     // TODO: Replace with transport order.
-                    order_manager->order_wait(id, id, 0.1f), // TODO: Get from object or settings.
                     order_manager->order_move(id, id, out_request->requester_id),
-                    order_manager->order_wait(id, id, 0.1f),
                     order_manager->order_load(id, id, out_request->requester_id, in_request->resource_name, in_request->resource_value, 3.0f), // TODO: Get from component.
-                    order_manager->order_wait(id, id, 0.1f),
                     order_manager->order_move(id, id, in_request->requester_id),
-                    order_manager->order_wait(id, id, 0.1f),
                     order_manager->order_unload(id, id, in_request->requester_id, in_request->resource_name, in_request->resource_value, 3.0f), // TODO: Get from component.
-                    order_manager->order_wait(id, id, 0.1f)
                 };
 
                 // Remove input and output requesters from queues.
@@ -209,11 +202,8 @@ namespace Gecko
 
             // Create orders.
             auto jobs = {
-                order_manager->order_wait(id, id, 0.1f),
                 order_manager->order_move(id, id, in_request->requester_id),
-                order_manager->order_wait(id, id, 0.1f),
                 order_manager->order_unload(id, id, in_request->requester_id, in_request->resource_name, in_request->resource_value, 3.0f), // TODO: Get from component.
-                order_manager->order_wait(id, id, 0.1f)
             };
 
             // Remove requester from queue.

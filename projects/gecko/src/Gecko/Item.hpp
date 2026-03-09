@@ -28,7 +28,7 @@ namespace Gecko
 
     public:
         explicit Item() = default;
-        explicit Item(const Item& other);
+        Item(const Item& other);
 
         ~Item() override = default;
 

@@ -17,7 +17,7 @@ namespace Gecko
 
     public:
         explicit Skills() = default;
-        explicit Skills(const Skills& other);
+        Skills(const Skills& other);
 
     public:
         void activate(const std::string& name, const Id& id);

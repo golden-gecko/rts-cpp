@@ -25,7 +25,7 @@ namespace Gecko
 
     public:
         explicit OrderWait();
-        explicit OrderWait(const OrderWait& other) = default;
+        OrderWait(const OrderWait& other) = default;
 
     public:
         std::string get_target_as_string() const override;

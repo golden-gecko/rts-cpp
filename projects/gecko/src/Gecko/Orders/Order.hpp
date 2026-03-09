@@ -68,7 +68,7 @@ namespace Gecko
     public:
         explicit Order() = default;
         explicit Order(order_type::Value type);
-        explicit Order(const Order& other);
+        Order(const Order& other);
 
     public:
         Order& operator=(const Order&) = delete;

@@ -17,7 +17,7 @@ namespace Gecko
 
     public:
         explicit Components() = default;
-        explicit Components(const Components& other);
+        Components(const Components& other);
 
     public:
         void clear()
@@ -92,6 +92,6 @@ namespace Gecko
     private:
         Items m_items;
 
-        void add_component(const std::string& configuration_name, const ConfigurationPtr& component_configuration = ConfigurationPtr());
+        void add_component(const std::string& configuration_name, const ConfigurationPtr& overriden_configuration = ConfigurationPtr());
     };
 }

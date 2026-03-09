@@ -20,21 +20,21 @@ namespace Gecko
 
     public:
         explicit Storage();
-        explicit Storage(const Storage& other);
+        Storage(const Storage& other);
 
     public:
-        float get_load_time() const
+        Timer& get_load_time()
         {
             return m_load_time;
         }
 
-        float get_unload_time() const
+        Timer& get_unload_time()
         {
             return m_unload_time;
         }
 
     private:
-        float m_load_time   = 0.0f;
-        float m_unload_time = 0.0f;
+        Timer m_load_time;
+        Timer m_unload_time;
     };
 }

@@ -56,7 +56,7 @@ namespace Gecko
         add_component("debug");
     }
 
-    void Components::add_component(const std::string& configuration_name, const ConfigurationPtr& component_configuration)
+    void Components::add_component(const std::string& configuration_name, const ConfigurationPtr& overriden_configuration)
     {
         ComponentPtr component = ComponentManager::getSingleton().create(configuration_name);
 
@@ -65,16 +65,15 @@ namespace Gecko
             throw Exception("Failed to create '" + configuration_name + "' component.");
         }
 
-        // TODO: Why?
         ConfigurationPtr configuration = ConfigurationManager::getSingleton().get(configuration_name);
-        ConfigurationPtr new_configuration = std::make_shared<Configuration>(*configuration.get());
+        ConfigurationPtr merged_configuration = std::make_shared<Configuration>(*configuration.get());
 
-        if (component_configuration)
+        if (overriden_configuration)
         {
-            new_configuration->merge(component_configuration);
+            merged_configuration->merge(overriden_configuration);
         }
 
-        component->set_configuration(new_configuration);
+        component->set_configuration(merged_configuration);
 
         m_items.emplace_back(component);
     }

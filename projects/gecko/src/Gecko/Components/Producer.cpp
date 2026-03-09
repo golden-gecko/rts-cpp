@@ -10,7 +10,7 @@ namespace Gecko
     {
         ConfigurationPtr configuration = base_type::serialize();
 
-        configuration->set("produce_time", m_produce_time);
+        configuration->set("produce_time", m_produce_time.serialize());
 
         return configuration;
     }
@@ -19,7 +19,10 @@ namespace Gecko
     {
         base_type::deserialize(configuration);
 
-        m_produce_time = configuration->get_float("produce_time", 0.0f);
+        if (configuration->has_member("produce_time"))
+        {
+            m_produce_time.deserialize(configuration->get_child("produce_time"));
+        }
     }
 
     Producer* Producer::create(Producer* memory, const ConfigurationPtr& configuration, const ScenePtr& scene)

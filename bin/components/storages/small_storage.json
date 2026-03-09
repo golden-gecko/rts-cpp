@@ -10,7 +10,11 @@
     "include": [
         "../components/storages/_storage.json"
     ],
-    "load_time": 1.0,
+    "load_time": {
+        "max": 1.0
+    },
     "name": "Small Storage",
-    "unload_time": 1.0
+    "unload_time": {
+        "max": 1.0
+    }
 }

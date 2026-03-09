@@ -23,7 +23,7 @@ namespace Gecko
 
     public:
         explicit Debug() = default;
-        explicit Debug(const Debug& other);
+        Debug(const Debug& other);
 
     private:
         Ogre::ManualObject* m_manual_object = nullptr;

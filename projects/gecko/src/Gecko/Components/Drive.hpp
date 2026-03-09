@@ -20,7 +20,7 @@ namespace Gecko
 
     public:
         explicit Drive() = default;
-        explicit Drive(const Drive& other);
+        Drive(const Drive& other);
 
     public:
         float get_distance_driven() const

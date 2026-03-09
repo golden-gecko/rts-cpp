@@ -15,6 +15,6 @@ namespace Gecko
 
     public:
         explicit Radar() = default;
-        explicit Radar(const Radar& other) = default;
+        Radar(const Radar& other) = default;
     };
 }

@@ -26,7 +26,7 @@ namespace Gecko
 
     public:
         explicit OrderUnload();
-        explicit OrderUnload(const OrderUnload& other) = default;
+        OrderUnload(const OrderUnload& other) = default;
 
     public:
         std::vector<std::shared_ptr<Indicator>> generate_indicators(int order_number) const override;

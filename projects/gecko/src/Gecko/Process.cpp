@@ -43,7 +43,10 @@ namespace Gecko
             m_out->deserialize(configuration->get_child("out"));
         }
 
-        m_time.set_max(configuration->get_float("time", 0.0f));
+        if (configuration->has_member("time"))
+        {
+            m_time.deserialize(configuration->get_child("time"));
+        }
     }
 
     void Process::update(float time, const Id& owner_id, const Ogre::Vector3& owner_position, const ResourcesPtr& owner_resources)

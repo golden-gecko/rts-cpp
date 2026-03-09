@@ -66,6 +66,6 @@ namespace Gecko
 
     std::string OrderLoad::get_target_as_string() const
     {
-        return Utils::object_id_to_string(m_target_id);
+        return Utils::object_id_to_string(m_target_id) + " " + m_load_timer.get_progress_as_string();
     }
 }

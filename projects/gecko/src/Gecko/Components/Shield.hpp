@@ -20,7 +20,7 @@ namespace Gecko
 
     public:
         explicit Shield() = default;
-        explicit Shield(const Shield& other);
+        Shield(const Shield& other);
 
     private:
         float m_defence = 0.0f;

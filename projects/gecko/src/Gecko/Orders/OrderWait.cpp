@@ -46,11 +46,6 @@ namespace Gecko
 
     std::string OrderWait::get_target_as_string() const
     {
-        std::stringstream stream; // TODO: Move to Timer class.
-
-        stream << std::fixed << std::setprecision(1);
-        stream << m_wait_timer.get_current() << "/" << m_wait_timer.get_max();
-
-        return stream.str();
+        return m_wait_timer.get_progress_as_string();
     }
 }
