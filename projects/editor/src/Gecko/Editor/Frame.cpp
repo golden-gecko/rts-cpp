@@ -1,5 +1,7 @@
 #include "Gecko/Editor/Frame.hpp"
 
+#include <filesystem>
+
 #include <wx/aboutdlg.h>
 #include <wx/artprov.h>
 #include <wx/log.h>
@@ -10,8 +12,6 @@
 MyFrame::MyFrame() :
     wxFrame(nullptr, wxID_ANY, "Gecko Editor", wxDefaultPosition, wxSize(1200, 900))
 {
-    m_isFlat = false;
-
     /*
     wxMenu* fileMenu = new wxMenu;
     fileMenu->Append(wxID_EXIT);
@@ -98,46 +98,42 @@ void MyFrame::InitImageList()
     }
 }
 
+wxTreeListItem add_item(wxTreeListCtrl* tree, wxTreeListItem parent, const std::string& name, const std::string& path)
+{
+    wxTreeListItem item = tree->AppendItem(parent, name);
+
+    tree->SetItemText(item, Col_Files, path);
+
+    return item;
+}
+
+void parse_directory(wxTreeListCtrl* tree, wxTreeListItem parent, const std::string& path)
+{
+    for (auto i = std::filesystem::directory_iterator(path); i != std::filesystem::directory_iterator(); i++)
+    {
+        std::string path = i->path().generic_string();
+        std::string name = i->path().stem().generic_string();
+
+        wxTreeListItem item = add_item(tree, parent, name, path);
+
+        if (std::filesystem::is_directory(i->path()))
+        {
+            parse_directory(tree, item, path);
+        }
+    }
+}
+
 wxTreeListCtrl* MyFrame::CreateTreeListCtrl(long style)
 {
-    wxTreeListCtrl* const tree = new wxTreeListCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style);
-    tree->SetImageList(m_imageList);
+    wxTreeListCtrl* tree = new wxTreeListCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style);
 
-    tree->AppendColumn("Component", wxCOL_WIDTH_AUTOSIZE, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE);
-    tree->AppendColumn("# Files", tree->WidthFor("1,000,000"), wxALIGN_RIGHT, wxCOL_RESIZABLE | wxCOL_SORTABLE);
-    tree->AppendColumn("Size", tree->WidthFor("1,000,000 KiB"), wxALIGN_RIGHT, wxCOL_RESIZABLE | wxCOL_SORTABLE);
-
-    // Define a shortcut to save on typing here.
-    #define ADD_ITEM(item, parent, files, size) \
-        wxTreeListItem item = tree->AppendItem(m_isFlat ? root : parent, #item, Icon_FolderClosed, Icon_FolderOpened); \
-        tree->SetItemText(item, Col_Files, files); \
-        tree->SetItemText(item, Col_Size, size)
+    tree->AppendColumn("Name", wxCOL_WIDTH_AUTOSIZE, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE);
+    tree->AppendColumn("Path", wxCOL_WIDTH_AUTOSIZE, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE);
 
     wxTreeListItem root = tree->GetRootItem();
-    ADD_ITEM(Code, root, "", "");
-        ADD_ITEM(wxMSW, Code, "313", "3.94 MiB");
-        ADD_ITEM(wxGTK, Code, "180", "1.66 MiB");
+    wxTreeListItem item = add_item(tree, root, "..", "..");
 
-        ADD_ITEM(wxOSX, Code, "265", "2.36 MiB");
-            ADD_ITEM(Core, wxOSX, "31", "347 KiB");
-            ADD_ITEM(Carbon, wxOSX, "91", "1.34 MiB");
-            ADD_ITEM(Cocoa, wxOSX, "46", "512 KiB");
-
-    ADD_ITEM(Documentation, root, "", "");
-        ADD_ITEM(HTML, Documentation, "many", "");
-        ADD_ITEM(CHM, Documentation, "1", "");
-
-    ADD_ITEM(Samples, root, "", "");
-        ADD_ITEM(minimal, Samples, "1", "7 KiB");
-        ADD_ITEM(widgets, Samples, "28", "419 KiB");
-
-    #undef ADD_ITEM
-
-    // Remember this one for subsequent tests.
-    m_itemHTMLDocs = HTML;
-
-    // Set a custom comparator to compare strings containing numbers correctly.
-    tree->SetItemComparator(&m_comparator);
+    parse_directory(tree, item, "..");
 
     return tree;
 }
@@ -163,13 +159,6 @@ void MyFrame::OnMultiSelect(wxCommandEvent& event)
         style &= ~wxTL_MULTIPLE;
 
     RecreateTreeListCtrl(style);
-}
-
-void MyFrame::OnFlatList(wxCommandEvent& event)
-{
-    m_isFlat = event.IsChecked();
-
-    RecreateTreeListCtrl(m_treelist->GetWindowStyle());
 }
 
 void MyFrame::OnCheckboxes(wxCommandEvent& event)
@@ -232,37 +221,6 @@ void MyFrame::OnDumpSelection(wxCommandEvent& WXUNUSED(event))
     {
         wxLogMessage("Selection: %s", DumpItem(m_treelist->GetSelection()));
     }
-}
-
-void MyFrame::OnCheckHTMLDocs(wxCommandEvent& event)
-{
-    wxCheckBoxState state;
-
-    switch ( event.GetId() )
-    {
-        case Id_Uncheck_HTMLDocs:
-            state = wxCHK_UNCHECKED;
-            break;
-
-        case Id_Check_HTMLDocs:
-            state = wxCHK_CHECKED;
-            break;
-
-        case Id_Indet_HTMLDocs:
-            state = wxCHK_UNDETERMINED;
-            break;
-
-        default:
-            wxFAIL_MSG( "Unknown check state" );
-            return;
-    }
-
-    m_treelist->CheckItem(m_itemHTMLDocs, state);
-}
-
-void MyFrame::OnSelectHTMLDocs(wxCommandEvent& event)
-{
-    m_treelist->Select(m_itemHTMLDocs);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& event)

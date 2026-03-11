@@ -32,73 +32,12 @@ enum
     Id_Select_HTMLDocs
 };
 
-class MyComparator :
-    public wxTreeListItemComparator
+enum
 {
-public:
-    virtual int Compare(wxTreeListCtrl* treelist,unsigned column, wxTreeListItem item1, wxTreeListItem item2) override
-    {
-        wxString text1 = treelist->GetItemText(item1, column),
-                 text2 = treelist->GetItemText(item2, column);
-
-        switch ( column )
-        {
-            case Col_Component:
-                // Simple alphabetical comparison is fine for those.
-                return text1.CmpNoCase(text2);
-
-            case Col_Files:
-                // Compare strings as numbers.
-                return GetNumFilesFromText(text1) - GetNumFilesFromText(text2);
-
-            case Col_Size:
-                // Compare strings as numbers but also take care of "KiB" and
-                // "MiB" suffixes.
-                return GetSizeFromText(text1) - GetSizeFromText(text2);
-        }
-
-        wxFAIL_MSG( "Sorting on unknown column?" );
-
-        return 0;
-    }
-
-private:
-    // Return the number of files handling special value "many". Notice that
-    // the returned value is signed to allow using it in subtraction above.
-    int GetNumFilesFromText(const wxString& text) const
-    {
-        unsigned long n;
-        if ( !text.ToULong(&n) )
-        {
-            if ( text == "many" )
-                n = 9999;
-            else
-                n = 0;
-        }
-
-        return n;
-    }
-
-    // Return the size in KiB from a string with either KiB or MiB suffix.
-    int GetSizeFromText(const wxString& text) const
-    {
-        wxString size;
-        unsigned factor = 1;
-        if ( text.EndsWith(" MiB", &size) )
-            factor = 1024;
-        else if ( !text.EndsWith(" KiB", &size) )
-            return 0;
-
-        unsigned long n = 0;
-        size.ToULong(&n);
-
-        return n*factor;
-    }
+    Icon_File,
+    Icon_FolderClosed,
+    Icon_FolderOpened
 };
-
-// ----------------------------------------------------------------------------
-// Main window class
-// ----------------------------------------------------------------------------
 
 class MyFrame :
     public wxFrame
@@ -130,13 +69,6 @@ private:
     void OnItemContextMenu(wxTreeListEvent& event);
 
 
-    enum
-    {
-        Icon_File,
-        Icon_FolderClosed,
-        Icon_FolderOpened
-    };
-
     // Create the image list, called once only. Should add images to it in the
     // same order as they appear in the enum above.
     void InitImageList();
@@ -153,18 +85,11 @@ private:
     // Another helper: just translate wxCheckBoxState to user-readable text.
     static const char* CheckedStateString(wxCheckBoxState state);
 
-
     wxImageList* m_imageList;
 
     wxTreeListCtrl* m_treelist;
 
-    MyComparator m_comparator;
-
-    wxTreeListItem m_itemHTMLDocs;
-
     wxLog* m_oldLogTarget;
-
-    bool m_isFlat;
 
     wxDECLARE_EVENT_TABLE();
 };
