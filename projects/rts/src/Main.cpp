@@ -1,3 +1,5 @@
+#include <Gecko/Gecko.hpp>
+
 #include <Gecko/Application.hpp>
 #include <Gecko/Configuration.hpp>
 #include <Gecko/Diplomacy.hpp>
