@@ -2,10 +2,6 @@
 
 namespace Gecko
 {
-    void LogWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     void LogWidget::init_data_bindigs(Rml::Context* context)
     {
         if (Rml::DataModelConstructor constructor = context->CreateDataModel("log"))
@@ -21,14 +17,6 @@ namespace Gecko
                 m_model = constructor.GetModelHandle();
             }
         }
-    }
-
-    void LogWidget::init_events(Rml::ElementDocument* document)
-    {
-    }
-
-    void LogWidget::deinit_events(Rml::ElementDocument* document)
-    {
     }
 
     void LogWidget::write(const std::string& message, const std::string& type, const Id& id)

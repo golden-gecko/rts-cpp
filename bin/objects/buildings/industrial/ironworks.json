@@ -19,6 +19,18 @@
     "include": [
         "../objects/buildings/_building.json"
     ],
+    "levels": {
+        "Level 1": {
+            "items": {
+                "Iron Ore": 40
+            }
+        },
+        "Level 2": {
+            "items": {
+                "Iron Ore": 80
+            }
+        }
+    },
     "name": "Ironworks",
     "processes": {
         "Smelting": {

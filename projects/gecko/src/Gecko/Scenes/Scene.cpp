@@ -137,19 +137,19 @@ namespace Gecko
 
             if (camera_type == "Free")
             {
-                m_cameras.emplace(camera_name, std::make_shared<FreeCamera>(this, camera_name, camera_configuration));
+                m_cameras.emplace(camera_name, std::make_shared<FreeCamera>(camera_name, camera_configuration, this));
             }
             else if (camera_type == "Minimap")
             {
-                m_cameras.emplace(camera_name, std::make_shared<MinimapCamera>(this, camera_name, camera_configuration));
+                m_cameras.emplace(camera_name, std::make_shared<MinimapCamera>(camera_name, camera_configuration, this));
             }
             else if (camera_type == "ObjectFollow")
             {
-                m_cameras.emplace(camera_name, std::make_shared<ObjectFollowCamera>(this, camera_name, camera_configuration));
+                m_cameras.emplace(camera_name, std::make_shared<ObjectFollowCamera>(camera_name, camera_configuration, this));
             }
             else if (camera_type == "TopDown")
             {
-                m_cameras.emplace(camera_name, std::make_shared<TopDownCamera>(this, camera_name, camera_configuration));
+                m_cameras.emplace(camera_name, std::make_shared<TopDownCamera>(camera_name, camera_configuration, this));
             }
             else
             {

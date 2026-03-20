@@ -15,8 +15,6 @@
 
 namespace Gecko
 {
-    const std::string Map::Name = "Map";
-
     MapPtr Map::create(MapPtr memory, const ConfigurationPtr& configuration, const ScenePtr& scene)
     {
         MapPtr map = new (memory) Map(scene);

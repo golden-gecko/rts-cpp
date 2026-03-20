@@ -7,17 +7,19 @@ namespace Gecko
     class MinimapWidget :
         public Widget
     {
+    private:
+        using base_type = Widget;
+
+	// From Rml::EventListener.
 	public:
-		// From Rml::EventListener.
 		void ProcessEvent(Rml::Event& event) override;
 
+    // From Widget.
     public:
-        // From Widget.
-        void init_data_bindigs(Rml::Context* context) override;
-
         void init_events(Rml::ElementDocument* document) override;
         void deinit_events(Rml::ElementDocument* document) override;
 
+    // MinimapWidget.
     public:
         explicit MinimapWidget();
 

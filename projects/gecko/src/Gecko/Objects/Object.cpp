@@ -354,56 +354,39 @@ namespace Gecko
         return angle;
     }
 
-    ConfigurationPtr Object::get_info() const
+    std::string Object::get_info() const
     {
-        ConfigurationPtr info = std::make_shared<Configuration>();
+        std::stringstream stream;
 
-        info->set("ID", get_id());
-        info->set("Name", get_name());
-        info->set("Player", PlayerManager::getSingleton().get(get_player_id())->get_name());
-        info->set("Position", get_position());
-        info->set("Heading", get_heading());
+        stream << std::fixed << std::setprecision(1);
 
-        // Components.
-        ConfigurationPtr info_components = std::make_shared<Configuration>();
+        stream << "ID: " << get_id() << "\n";
+        stream << "Name: " << get_name() << "\n";
+        stream << "Player: " << PlayerManager::getSingleton().get(get_player_id())->get_name() << "\n";
+        stream << "Position: " << get_position() << "\n";
+        stream << "Heading: " << get_heading() << "\n";
+        stream << "Components:" << "\n";
 
         for (const auto& component : *(m_components))
         {
-            info_components->set(component->get_name(), "");
+            stream << "  " << component->get_name() << "\n";
         }
 
-        if (info_components->size())
-        {
-            info->set("Components", info_components);
-        }
-
-        // Processes.
-        ConfigurationPtr info_processes = std::make_shared<Configuration>();
+        stream << "Processes:" << "\n";
 
         for (const auto& [name, process] : *(m_processes))
         {
-            info_processes->set(name, Utils::Convert::to_string(process.get_time().get_current()) + "/" + Utils::Convert::to_string(process.get_time().get_max()));
+            stream << "  " << name << " " << Utils::Convert::to_string(process.get_time().get_current()) + "/" + Utils::Convert::to_string(process.get_time().get_max()) << "\n";
         }
 
-        if (info_processes->size())
-        {
-            info->set("Processes", info_processes);
-        }
-
-        // Resources.
-        ConfigurationPtr info_resources = std::make_shared<Configuration>();
+        stream << "Resouces:" << "\n";
 
         for (const auto& [name, resouce] : *(m_resources))
         {
-            info_resources->set(name, Utils::Convert::to_string(resouce.get_current()) + "/" + Utils::Convert::to_string(resouce.get_max()));
+            stream << "  " << name << " " << Utils::Convert::to_string(resouce.get_current()) + "/" + Utils::Convert::to_string(resouce.get_max()) << "\n";
         }
 
-        if (info_resources->size())
-        {
-            info->set("Resources", info_resources);
-        }
-
-        return info;
+        return stream.str();
     }
 
     Area Object::get_area() const
@@ -707,7 +690,7 @@ namespace Gecko
 
     void Object::update_processes(float time)
     {
-        m_processes->update(time, get_id(), get_position(), get_resources());
+        m_processes->update(time, get_id(), get_position(), m_resources);
     }
 
     void Object::update_resources(float time)

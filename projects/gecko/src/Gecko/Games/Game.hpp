@@ -12,19 +12,20 @@ namespace Gecko
         public Initializable,
         public Updatable
     {
+    // From OgreBites::ApplicationContext.
     public:
-        // From OgreBites::ApplicationContext.
         void windowResized(Ogre::RenderWindow* rw) override;
 
+    // From Initializable.
     public:
-        // From Initializable.
         void init() override;
         void deinit() override;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // Game.
     public:
         explicit Game(const ConfigurationPtr& configuration);
 

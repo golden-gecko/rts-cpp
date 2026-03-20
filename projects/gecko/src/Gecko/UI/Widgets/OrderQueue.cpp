@@ -12,10 +12,6 @@
 
 namespace Gecko
 {
-    void OrderQueueWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     void OrderQueueWidget::init_data_bindigs(Rml::Context* context)
     {
         if (Rml::DataModelConstructor constructor = context->CreateDataModel("order_queue"))
@@ -33,14 +29,6 @@ namespace Gecko
                 m_model = constructor.GetModelHandle();
             }
         }
-    }
-
-    void OrderQueueWidget::init_events(Rml::ElementDocument* document)
-    {
-    }
-
-    void OrderQueueWidget::deinit_events(Rml::ElementDocument* document)
-    {
     }
 
     void OrderQueueWidget::cancel(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)

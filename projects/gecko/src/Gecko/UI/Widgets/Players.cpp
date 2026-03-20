@@ -5,10 +5,6 @@
 
 namespace Gecko
 {
-    void PlayersWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     void PlayersWidget::init_data_bindigs(Rml::Context* context)
     {
         if (Rml::DataModelConstructor constructor = context->CreateDataModel("players"))
@@ -25,14 +21,6 @@ namespace Gecko
                 m_model = constructor.GetModelHandle();
             }
         }
-    }
-
-    void PlayersWidget::init_events(Rml::ElementDocument* document)
-    {
-    }
-
-    void PlayersWidget::deinit_events(Rml::ElementDocument* document)
-    {
     }
 
     void PlayersWidget::update()

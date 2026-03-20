@@ -48,6 +48,10 @@
 
 #pragma warning(pop)
 
+// Macros.
+#define TO_STRING(x) #x
+
+// Classes.
 namespace Gecko
 {
     class Application;

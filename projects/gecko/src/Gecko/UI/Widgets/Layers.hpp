@@ -8,29 +8,20 @@ namespace Gecko
     class LayersWidget :
         public Widget
     {
+	// From Widget.
     public:
-        struct Layer
-        {
-            std::string name;
-        };
-
-	public:
-		// From Rml::EventListener.
-		void ProcessEvent(Rml::Event& event) override;
-
-    public:
-		// From Widget.
         void init_data_bindigs(Rml::Context* context) override;
 
-        void init_events(Rml::ElementDocument* document) override;
-        void deinit_events(Rml::ElementDocument* document) override;
-
+    // LayersWidget.
     public:
         void select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
         void update();
 
     private:
-        Rml::ElementDocument* m_document = nullptr;
+        struct Layer
+        {
+            std::string name;
+        };
 
         Rml::Vector<Layer> m_layers;
     };

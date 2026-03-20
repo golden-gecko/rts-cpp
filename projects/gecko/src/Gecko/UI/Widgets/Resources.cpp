@@ -4,10 +4,6 @@
 
 namespace Gecko
 {
-    void ResourcesWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     void ResourcesWidget::init_data_bindigs(Rml::Context* context)
     {
         if (Rml::DataModelConstructor constructor = context->CreateDataModel("resources"))
@@ -28,15 +24,7 @@ namespace Gecko
         }
     }
 
-    void ResourcesWidget::init_events(Rml::ElementDocument* document)
-    {
-    }
-
-    void ResourcesWidget::deinit_events(Rml::ElementDocument* document)
-    {
-    }
-
-    void ResourcesWidget::update(const std::shared_ptr<Resources>& resources)
+    void ResourcesWidget::update(const ResourcesPtr& resources)
     {
         m_resources.clear();
 

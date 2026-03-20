@@ -24,14 +24,11 @@ namespace Gecko
         };
 
     public:
-		// From Rml::EventListener.
-        void ProcessEvent(Rml::Event& event) override;
-
-    public:
         explicit CursorWidget(const ScenePtr& scene);
 
         ~CursorWidget() override;
 
+    public:
         void update(const std::pair<LayerPtr, Ogre::Vector3>& cast);
 
     public:

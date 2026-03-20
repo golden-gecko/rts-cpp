@@ -10,10 +10,11 @@ namespace Gecko
     private:
         using base_type = PositionValidator;
 
+    // From PositionValidator.
     public:
-        // From PositionValidator.
         Ogre::Vector3 validate(const Ogre::Vector3& position, const Ogre::Vector3& direction = Ogre::Vector3::ZERO) const override;
 
+    // RoadPosition.
     public:
         explicit RoadPosition(const Layer& layer);
     };

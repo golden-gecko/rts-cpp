@@ -11,9 +11,6 @@ namespace Gecko
         using base_type = Item;
 
     public:
-        static const std::string Name;
-
-    public:
         // From Initializable.
         void init() override;
         void deinit() override;

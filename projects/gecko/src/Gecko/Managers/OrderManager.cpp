@@ -34,58 +34,59 @@ namespace Gecko
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            std::string type = configuration->get_string("type", "");
+            if (std::optional<std::string> type = configuration->get_string_optional("type"))
+            {
+                if (type == "Attack")
+                {
+                    register_type<OrderAttack>(name, std::bind(OrderAttack::create, std::placeholders::_1, configuration));
+                }
+                else if (type == "Create")
+                {
+                    register_type<OrderCreate>(name, std::bind(OrderCreate::create, std::placeholders::_1, configuration));
+                }
+                else if (type == "Destroy")
+                {
+                    register_type<OrderDestroy>(name, std::bind(OrderDestroy::create, std::placeholders::_1, configuration));
+                }
+                else if (type == "Follow")
+                {
+                    register_type<OrderFollow>(name, std::bind(OrderFollow::create, std::placeholders::_1, configuration));
+                }
+                else if (type == "Guard")
+                {
+                    register_type<OrderGuard>(name, std::bind(OrderGuard::create, std::placeholders::_1, configuration));
+                }
+                else if (type == "Load")
+                {
+                    register_type<OrderLoad>(name, std::bind(OrderLoad::create, std::placeholders::_1, configuration));
+                }
+                else if (type == "Move")
+                {
+                    register_type<OrderMove>(name, std::bind(OrderMove::create, std::placeholders::_1, configuration));
+                }
+                else if (type == "Patrol")
+                {
+                    register_type<OrderPatrol>(name, std::bind(OrderPatrol::create, std::placeholders::_1, configuration));
+                }
+                else if (type == "Rally")
+                {
+                    register_type<OrderRally>(name, std::bind(OrderRally::create, std::placeholders::_1, configuration));
+                }
+                else if (type == "Stop")
+                {
+                    register_type<OrderStop>(name, std::bind(OrderStop::create, std::placeholders::_1, configuration));
+                }
+                else if (type == "Unload")
+                {
+                    register_type<OrderUnload>(name, std::bind(OrderUnload::create, std::placeholders::_1, configuration));
+                }
+                else if (type == "Wait")
+                {
+                    register_type<OrderWait>(name, std::bind(OrderWait::create, std::placeholders::_1, configuration));
+                }
 
-            if (type == "Attack")
-            {
-                register_type<OrderAttack>(name, std::bind(OrderAttack::create, std::placeholders::_1, configuration));
+                allocate(name, max_size);
             }
-            else if (type == "Create")
-            {
-                register_type<OrderCreate>(name, std::bind(OrderCreate::create, std::placeholders::_1, configuration));
-            }
-            else if (type == "Destroy")
-            {
-                register_type<OrderDestroy>(name, std::bind(OrderDestroy::create, std::placeholders::_1, configuration));
-            }
-            else if (type == "Follow")
-            {
-                register_type<OrderFollow>(name, std::bind(OrderFollow::create, std::placeholders::_1, configuration));
-            }
-            else if (type == "Guard")
-            {
-                register_type<OrderGuard>(name, std::bind(OrderGuard::create, std::placeholders::_1, configuration));
-            }
-            else if (type == "Load")
-            {
-                register_type<OrderLoad>(name, std::bind(OrderLoad::create, std::placeholders::_1, configuration));
-            }
-            else if (type == "Move")
-            {
-                register_type<OrderMove>(name, std::bind(OrderMove::create, std::placeholders::_1, configuration));
-            }
-            else if (type == "Patrol")
-            {
-                register_type<OrderPatrol>(name, std::bind(OrderPatrol::create, std::placeholders::_1, configuration));
-            }
-            else if (type == "Rally")
-            {
-                register_type<OrderRally>(name, std::bind(OrderRally::create, std::placeholders::_1, configuration));
-            }
-            else if (type == "Stop")
-            {
-                register_type<OrderStop>(name, std::bind(OrderStop::create, std::placeholders::_1, configuration));
-            }
-            else if (type == "Unload")
-            {
-                register_type<OrderUnload>(name, std::bind(OrderUnload::create, std::placeholders::_1, configuration));
-            }
-            else if (type == "Wait")
-            {
-                register_type<OrderWait>(name, std::bind(OrderWait::create, std::placeholders::_1, configuration));
-            }
-
-            allocate(name, max_size);
         }
     }
 

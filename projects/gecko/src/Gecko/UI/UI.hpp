@@ -51,14 +51,6 @@ namespace Gecko
         void reset_orders();
         void reset_skills();
 
-        void restore_visibility(const std::map<std::string, bool>& state);
-
-        void show_layers(bool visible);
-
-        void show_menu();
-
-        void toggle_floating_description();
-
     public:
         template<typename T>
         std::shared_ptr<T> get_component()
@@ -91,9 +83,7 @@ namespace Gecko
             return m_render_interface;
         }
 
-    public:
         void set_hovered_object_id(const Id& hovered_object_id);
-        void set_info(const ConfigurationPtr& info);
 
     private:
         ConfigurationPtr m_configuration;
@@ -123,7 +113,6 @@ namespace Gecko
         void init_documents();
         void init_events();
         void init_fonts();
-        void init_visibility_types();
         void init_widgets();
 
         void deinit_documents();

@@ -142,6 +142,8 @@ namespace Gecko
         std::string get_string(const std::string& path) const;
         std::string get_string(const std::string& path, const std::string& default_value) const;
 
+        std::optional<std::string> get_string_optional(const std::string& path) const;
+
         template<typename Type = std::vector<std::string>>
         Type get_string_array(const std::string& path) const
         {

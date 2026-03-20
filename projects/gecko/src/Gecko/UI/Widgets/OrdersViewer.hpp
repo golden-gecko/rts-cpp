@@ -7,7 +7,16 @@ namespace Gecko
     class OrdersViewerWidget :
         public Widget
     {
+	// From Widget.
+	public:
+        void init_data_bindigs(Rml::Context* context) override;
+
+    // OrdersViewerWidget.
     public:
+        void close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
+        void update();
+
+    private:
         struct Order
         {
             int           id;
@@ -17,24 +26,6 @@ namespace Gecko
             std::uint16_t attempts;
             std::uint16_t max_attempts;
         };
-
-	public:
-		// From Rml::EventListener.
-		void ProcessEvent(Rml::Event& event) override;
-
-	public:
-		// From Widget.
-        void init_data_bindigs(Rml::Context* context) override;
-
-        void init_events(Rml::ElementDocument* document) override;
-        void deinit_events(Rml::ElementDocument* document) override;
-
-    public:
-        void close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
-        void update();
-
-    private:
-        Rml::ElementDocument* m_document = nullptr;
 
         Rml::Vector<Order> m_orders;
     };

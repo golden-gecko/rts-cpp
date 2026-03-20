@@ -22,22 +22,23 @@ namespace Gecko
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            std::string type = configuration->get_string("type", "");
+            if (std::optional<std::string> type = configuration->get_string_optional("type"))
+            {
+                if (type == TO_STRING(Buff))
+                {
+                    register_type<Buff>(name, std::bind(Buff::create, std::placeholders::_1, configuration));
+                }
+                else if (type == TO_STRING(FireMissile))
+                {
+                    register_type<FireMissile>(name, std::bind(FireMissile::create, std::placeholders::_1, configuration));
+                }
+                else if (type == TO_STRING(Repair))
+                {
+                    register_type<Repair>(name, std::bind(Repair::create, std::placeholders::_1, configuration));
+                }
 
-            if (type == "Buff")
-            {
-                register_type<Buff>(name, std::bind(Buff::create, std::placeholders::_1, configuration));
+                allocate(name, max_size);
             }
-            else if (type == "FireMissile")
-            {
-                register_type<FireMissile>(name, std::bind(FireMissile::create, std::placeholders::_1, configuration));
-            }
-            else if (type == "Repair")
-            {
-                register_type<Repair>(name, std::bind(Repair::create, std::placeholders::_1, configuration));
-            }
-
-            allocate(name, max_size);
         }
     }
 

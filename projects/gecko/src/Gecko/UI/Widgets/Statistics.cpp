@@ -5,10 +5,6 @@
 
 namespace Gecko
 {
-    void StatisticsWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     void StatisticsWidget::init_data_bindigs(Rml::Context* context)
     {
         if (Rml::DataModelConstructor constructor = context->CreateDataModel("statistics"))
@@ -25,15 +21,6 @@ namespace Gecko
                 m_model = constructor.GetModelHandle();
             }
         }
-    }
-
-    void StatisticsWidget::init_events(Rml::ElementDocument* document)
-    {
-        m_document = document;
-    }
-
-    void StatisticsWidget::deinit_events(Rml::ElementDocument* document)
-    {
     }
 
     void StatisticsWidget::close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)

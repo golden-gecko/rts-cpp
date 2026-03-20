@@ -9,17 +9,18 @@ namespace Gecko
         public Serializable,
         public Updatable
     {
+    // From Serializable.
     public:
-        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // Camera.
     public:
-        explicit Camera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration);
+        explicit Camera(const std::string& name, const ConfigurationPtr& configuration, Scene* scene);
 
         ~Camera() override;
 
@@ -68,7 +69,9 @@ namespace Gecko
         }
 
     protected:
-        Scene* m_scene = nullptr;
+        std::string      m_name;
+        ConfigurationPtr m_configuration;
+        ScenePtr         m_scene = nullptr;
 
         Ogre::Camera*    m_camera            = nullptr;
         Ogre::SceneNode* m_camera_scene_node = nullptr;

@@ -4,10 +4,6 @@
 
 namespace Gecko
 {
-    void DiplomacyWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     void DiplomacyWidget::init_data_bindigs(Rml::Context* context)
     {
         if (Rml::DataModelConstructor constructor = context->CreateDataModel("diplomacy"))
@@ -26,15 +22,6 @@ namespace Gecko
                 m_model = constructor.GetModelHandle();
             }
         }
-    }
-
-    void DiplomacyWidget::init_events(Rml::ElementDocument* document)
-    {
-        m_document = document;
-    }
-
-    void DiplomacyWidget::deinit_events(Rml::ElementDocument* document)
-    {
     }
 
     void DiplomacyWidget::close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)

@@ -221,9 +221,9 @@ namespace Gecko
         for (const auto& i : *(get_child(path)))
         {
             points.push_back(Navigation::Coordinate(
-                Configuration(i).get_int<std::uint32_t>("x"),
-                Configuration(i).get_int<std::uint32_t>("y"),
-                Configuration(i).get_int<std::uint32_t>("z")
+                Configuration(i).get_int<decltype(Navigation::Coordinate::x)>("x"),
+                Configuration(i).get_int<decltype(Navigation::Coordinate::y)>("y"),
+                Configuration(i).get_int<decltype(Navigation::Coordinate::z)>("z")
             ));
         }
 
@@ -258,6 +258,16 @@ namespace Gecko
         }
 
         return default_value;
+    }
+
+    std::optional<std::string> Configuration::get_string_optional(const std::string& path) const
+    {
+        if (has_member(path))
+        {
+            return get_string(path);
+        }
+
+        return {};
     }
 
     Ogre::Vector2 Configuration::get_vector2(const std::string& path) const

@@ -10,11 +10,12 @@ namespace Gecko
     private:
         using base_type = Camera;
 
+    // From Camera.
     public:
-        // From Camera.
         void update(float time) override;
 
+    // TopDownCamera.
     public:
-        explicit TopDownCamera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration);
+        explicit TopDownCamera(const std::string& name, const ConfigurationPtr& configuration, Scene* scene);
     };
 }

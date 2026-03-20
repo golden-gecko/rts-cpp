@@ -13,10 +13,6 @@
 
 namespace Gecko
 {
-    void CursorWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     CursorWidget::CursorWidget(const ScenePtr& scene) :
         m_scene(scene)
     {

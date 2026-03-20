@@ -4,8 +4,6 @@
 
 namespace Gecko
 {
-    const std::string Technology::Name = "Technology";
-
     ConfigurationPtr Technology::serialize() const
     {
         auto configuration = std::make_shared<Configuration>();

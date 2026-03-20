@@ -2,10 +2,6 @@
 
 namespace Gecko
 {
-    void SkillsWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     void SkillsWidget::init_data_bindigs(Rml::Context* context)
     {
         if (Rml::DataModelConstructor constructor = context->CreateDataModel("skills"))
@@ -22,14 +18,6 @@ namespace Gecko
                 m_model = constructor.GetModelHandle();
             }
         }
-    }
-
-    void SkillsWidget::init_events(Rml::ElementDocument* document)
-    {
-    }
-
-    void SkillsWidget::deinit_events(Rml::ElementDocument* document)
-    {
     }
 
     void SkillsWidget::select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)

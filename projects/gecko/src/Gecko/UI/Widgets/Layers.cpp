@@ -7,10 +7,6 @@
 
 namespace Gecko
 {
-    void LayersWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     void LayersWidget::init_data_bindigs(Rml::Context* context)
     {
         if (Rml::DataModelConstructor constructor = context->CreateDataModel("layers"))
@@ -26,15 +22,6 @@ namespace Gecko
                 m_model = constructor.GetModelHandle();
             }
         }
-    }
-
-    void LayersWidget::init_events(Rml::ElementDocument* document)
-    {
-        m_document = document;
-    }
-
-    void LayersWidget::deinit_events(Rml::ElementDocument* document)
-    {
     }
 
     void LayersWidget::select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)

@@ -7,10 +7,6 @@
 
 namespace Gecko
 {
-    void SelectionBoxWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     SelectionBoxWidget::SelectionBoxWidget(const ScenePtr& scene) :
         m_scene(scene)
     {

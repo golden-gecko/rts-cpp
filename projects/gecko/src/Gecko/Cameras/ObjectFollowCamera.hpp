@@ -11,27 +11,33 @@ namespace Gecko
     private:
         using base_type = Camera;
 
+    // From Serializable.
     public:
-        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
+    // From Camera.
     public:
-        // From Camera.
         void update(float time) override;
 
+    // ObjectFollowCamera.
     public:
-        explicit ObjectFollowCamera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration);
+        explicit ObjectFollowCamera(const std::string& name, const ConfigurationPtr& configuration, Scene* scene);
 
     public:
+        const Id& get_target_id() const
+        {
+            return m_target_id;
+        }
+
         float get_distance() const
         {
             return m_distance;
         }
 
-        const Id& get_target_id() const
+        float get_zoom_step() const
         {
-            return m_target_id;
+            return m_zoom_step;
         }
 
     public:
@@ -47,6 +53,8 @@ namespace Gecko
 
     private:
         Id m_target_id;
-        float m_distance = 0.0f;
+
+        float m_distance  = 0.0f;
+        float m_zoom_step = 0.0f;
     };
 }

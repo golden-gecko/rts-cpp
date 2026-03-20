@@ -68,7 +68,7 @@ namespace Gecko
 
         float get_heading() const;
 
-        ConfigurationPtr get_info() const;
+        std::string get_info() const;
 
         const auto& get_name() const
         {

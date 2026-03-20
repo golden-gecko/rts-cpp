@@ -10,18 +10,16 @@ namespace Gecko
         public Serializable,
         public Updatable
     {
+    // From Serializable.
     public:
-        static const std::string Name;
-
-    public:
-        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // Technology.
     public:
         void research()
         {

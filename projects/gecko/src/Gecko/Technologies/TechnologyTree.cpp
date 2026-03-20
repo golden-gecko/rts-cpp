@@ -12,15 +12,16 @@ namespace Gecko
     {
         for (const auto& [name, configuration] : ConfigurationManager::getSingleton())
         {
-            std::string type = configuration->get_string("type", "");
-
-            if (type == Technology::Name)
+            if (std::optional<std::string> type = configuration->get_string_optional("type"))
             {
-                TechnologyPtr techonology = std::make_shared<Technology>();
+                if (type == TO_STRING(Technology))
+                {
+                    TechnologyPtr techonology = std::make_shared<Technology>();
 
-                techonology->deserialize(configuration);
+                    techonology->deserialize(configuration);
 
-                m_tree.emplace(name, techonology);
+                    m_tree.emplace(name, techonology);
+                }
             }
         }
     }

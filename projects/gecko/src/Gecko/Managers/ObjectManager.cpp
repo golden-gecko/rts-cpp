@@ -22,26 +22,27 @@ namespace Gecko
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            std::string type = configuration->get_string("type", "");
+            if (std::optional<std::string> type = configuration->get_string_optional("type"))
+            {
+                if (type == "Factory")
+                {
+                    register_type<Factory>(name, std::bind(Factory::create, std::placeholders::_1, configuration, m_scene));
+                }
+                else if (type == "Missile")
+                {
+                    register_type<Missile>(name, std::bind(Missile::create, std::placeholders::_1, configuration, m_scene));
+                }
+                else if (type == "Object")
+                {
+                    register_type<Object>(name, std::bind(Object::create, std::placeholders::_1, configuration, m_scene));
+                }
+                else if (type == "Vehicle")
+                {
+                    register_type<Vehicle>(name, std::bind(Vehicle::create, std::placeholders::_1, configuration, m_scene));
+                }
 
-            if (type == "Factory")
-            {
-                register_type<Factory>(name, std::bind(Factory::create, std::placeholders::_1, configuration, m_scene));
+                allocate(name, max_size);
             }
-            else if (type == "Missile")
-            {
-                register_type<Missile>(name, std::bind(Missile::create, std::placeholders::_1, configuration, m_scene));
-            }
-            else if (type == "Object")
-            {
-                register_type<Object>(name, std::bind(Object::create, std::placeholders::_1, configuration, m_scene));
-            }
-            else if (type == "Vehicle")
-            {
-                register_type<Vehicle>(name, std::bind(Vehicle::create, std::placeholders::_1, configuration, m_scene));
-            }
-
-            allocate(name, max_size);
         }
     }
 
@@ -76,6 +77,21 @@ namespace Gecko
         }
 
         return object;
+    }
+
+    std::vector<ObjectPtr> ObjectManager::get_by_player(const Id& player_id) const
+    {
+        std::vector<ObjectPtr> objects;
+
+        for (const auto& [_, object] : getSingleton())
+        {
+            if (object->get_player_id() == player_id)
+            {
+                objects.push_back(object);
+            }
+        }
+
+        return objects;
     }
 
     ObjectManager::ObjectsInRange ObjectManager::get_in_range(const Ogre::Vector3& position, float range, const std::vector<Id>& exclude)

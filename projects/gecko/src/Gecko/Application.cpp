@@ -2,12 +2,14 @@
 
 namespace Gecko
 {
-    Application::Options Application::parse_options(int argc, char* argv[], const std::string& default_configuration, const std::string& default_map)
+    Application::Options Application::parse_options(int argc, char* argv[], const std::map<std::string, std::string>& defaults)
     {
         boost::program_options::options_description options;
 
-        options.add_options()("configuration", boost::program_options::value<std::string>()->default_value(default_configuration));
-        options.add_options()("map", boost::program_options::value<std::string>()->default_value(default_map));
+        for (const auto& [key, value] : defaults)
+        {
+            options.add_options()(key.c_str(), boost::program_options::value<std::string>()->default_value(value));
+        }
 
         Options vm;
 

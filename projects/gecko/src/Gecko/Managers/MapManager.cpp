@@ -20,14 +20,15 @@ namespace Gecko
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            std::string type = configuration->get_string("type", "");
-
-            if (type == Map::Name)
+            if (std::optional<std::string> type = configuration->get_string_optional("type"))
             {
-                register_type<Map>(name, std::bind(Map::create, std::placeholders::_1, configuration, m_scene));
+                if (type == TO_STRING(Map))
+                {
+                    register_type<Map>(name, std::bind(Map::create, std::placeholders::_1, configuration, m_scene));
+                }
+
+                allocate(name, max_size);
             }
-    
-            allocate(name, max_size);
         }
     }
 

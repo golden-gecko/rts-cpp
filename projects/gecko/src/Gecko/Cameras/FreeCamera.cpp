@@ -38,8 +38,8 @@ namespace Gecko
         move(direction * m_speed * time);
     }
 
-    FreeCamera::FreeCamera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration) :
-        base_type(scene, name, configuration)
+    FreeCamera::FreeCamera(const std::string& name, const ConfigurationPtr& configuration, Scene* scene) :
+        base_type(name, configuration, scene)
     {
     }
 }

@@ -8,6 +8,10 @@ namespace Gecko
     class Collection :
         public CollectionBase<BaseType>
     {
+    private:
+        using Allocator = std::allocator<Type>;
+        using Traits = std::allocator_traits<Allocator>;
+
     public:
         explicit Collection(std::function<BaseType* (Type*)> factory) :
             m_factory(factory)
@@ -27,19 +31,14 @@ namespace Gecko
                 return false;
             }
 
+            // Allocate memory.
             m_max_size = max_size;
+            m_pointer = Traits::allocate(m_allocator, m_max_size);
 
-            m_pointer = m_memory.allocate(m_max_size);
-            m_elements.reserve(m_max_size);
-
-            // Create first element.
-            m_factory(m_pointer);
-            m_elements.emplace_back(m_pointer);
-
-            // Create elements by copying the first one.
-            for (std::uint64_t i = 1; i < m_max_size; i++)
+            // Create elements.
+            for (std::uint64_t i = 0; i < m_max_size; i++)
             {
-                new (m_pointer + i) Type(*m_pointer);
+                m_factory(m_pointer + i);
                 m_elements.emplace_back(m_pointer + i);
             }
 
@@ -77,13 +76,11 @@ namespace Gecko
 
             for (std::uint64_t i = 0; i < m_max_size; i++)
             {
-                // TODO: Fix.
-                // m_memory.destroy(m_pointer + i);
+                Traits::destroy(m_allocator, m_pointer + i);
             }
 
-            m_memory.deallocate(m_pointer, m_max_size);
+            Traits::deallocate(m_allocator, m_pointer, m_max_size);
             m_pointer = nullptr;
-
             m_max_size = 0;
         }
 
@@ -102,6 +99,7 @@ namespace Gecko
 
         void destroy_all() override
         {
+            m_elements.clear();
             m_size = 0;
         }
 
@@ -150,7 +148,7 @@ namespace Gecko
 
     private:
         std::function<BaseType* (Type*)> m_factory;
-        std::allocator<Type> m_memory;
+        Allocator                        m_allocator;
 
         Type* m_pointer = nullptr;
 

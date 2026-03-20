@@ -7,10 +7,7 @@ namespace Gecko
     class SelectionBoxWidget :
         public Widget
     {
-    public:
-		// From Rml::EventListener.
-		void ProcessEvent(Rml::Event& event) override;
-
+    // SelectionBoxWidget.
     public:
         explicit SelectionBoxWidget(const ScenePtr& scene);
 

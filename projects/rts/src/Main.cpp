@@ -45,7 +45,13 @@ int main(int argc, char* argv[])
     Gecko::Log::setup("rts.log");
 
     // Parse command line options.
-    Gecko::Application::Options options = Gecko::Application::parse_options(argc, argv, "rts", "tutorial");
+    std::map<std::string, std::string> defaults =
+    {
+        { "configuration", "rts" },
+        { "map", "tutorial" },
+    };
+
+    Gecko::Application::Options options = Gecko::Application::parse_options(argc, argv, defaults);
 
     std::string configuration_name = Gecko::Application::get_option(options, "configuration");
     std::string map_name = Gecko::Application::get_option(options, "map");
@@ -93,7 +99,7 @@ int main(int argc, char* argv[])
 
     // Load map.
     game->load_map(map_name);
-    
+
     // Initialize diplomacy.
     diplomacy = std::make_unique<Gecko::Diplomacy>();
     diplomacy->deserialize(map_configuration->get_child("diplomacy"));

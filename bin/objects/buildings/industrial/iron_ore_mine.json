@@ -17,6 +17,18 @@
     "include": [
         "../objects/buildings/_building.json"
     ],
+    "levels": {
+        "Level 1": {
+            "items": {
+                "Iron Ore": 30
+            }
+        },
+        "Level 2": {
+            "items": {
+                "Iron Ore": 60
+            }
+        }
+    },
     "name": "Iron Ore Mine",
     "orders": {
         "available": [

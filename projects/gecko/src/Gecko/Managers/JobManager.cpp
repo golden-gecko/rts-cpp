@@ -168,9 +168,7 @@ namespace Gecko
                 // - load resources, take only that much as input requester can store,
                 // - move to input requester,
                 // - unload resources.
-                // TODO: Maybe we could ask input requester for current storage?
                 auto jobs = {
-                    // TODO: Replace with transport order.
                     order_manager->order_move(id, id, out_request->requester_id),
                     order_manager->order_load(id, id, out_request->requester_id, in_request->resource_name, in_request->resource_value, 3.0f), // TODO: Get from component.
                     order_manager->order_move(id, id, in_request->requester_id),

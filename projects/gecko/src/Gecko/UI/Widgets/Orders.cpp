@@ -2,10 +2,6 @@
 
 namespace Gecko
 {
-    void OrdersWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     void OrdersWidget::init_data_bindigs(Rml::Context* context)
     {
         if (Rml::DataModelConstructor constructor = context->CreateDataModel("orders"))
@@ -22,14 +18,6 @@ namespace Gecko
                 m_model = constructor.GetModelHandle();
             }
         }
-    }
-
-    void OrdersWidget::init_events(Rml::ElementDocument* document)
-    {
-    }
-
-    void OrdersWidget::deinit_events(Rml::ElementDocument* document)
-    {
     }
 
     void OrdersWidget::select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)

@@ -3,24 +3,23 @@
 #include <Gecko/Configuration.hpp>
 #include <Gecko/Managers/ObjectManager.hpp>
 #include <Gecko/Objects/Vehicle.hpp>
+#include <Gecko/Scenes/Scene.hpp>
 
 #include "Fixtures.hpp"
 
-/*
 TEST(object_manager, new_object_manager_is_empty)
 {
     auto configuration = std::make_shared<Gecko::Configuration>();
-    auto object_manager = std::make_shared<Gecko::ObjectManager>();
+    auto object_manager = std::make_shared<Gecko::ObjectManager>(std::make_shared<Gecko::Configuration>(), std::make_shared<Gecko::Scene>(std::make_shared<Gecko::Configuration>()));
 
     EXPECT_EQ(object_manager->is_type_registered("truck"), false);
 }
 
 TEST(object_manager, new_object_manager_can_register_types)
 {
-    auto object_manager = std::make_shared<Gecko::ObjectManager>();
+    auto object_manager = std::make_shared<Gecko::ObjectManager>(std::make_shared<Gecko::Configuration>(), std::make_shared<Gecko::Scene>(std::make_shared<Gecko::Configuration>()));
     auto object_configuration = std::make_shared<Gecko::Configuration>("../objects/vehicles/civilian/truck.json");
-    auto object_function = static_cast<Gecko::Vehicle*(*)(Gecko::Vehicle* memory, const std::shared_ptr<Gecko::Configuration>&)>(&Gecko::Vehicle::create);
-    auto object_factory = std::bind(object_function, std::placeholders::_1, object_configuration);
+    auto object_factory = std::bind(Gecko::Vehicle::create, std::placeholders::_1, object_configuration, std::make_shared<Gecko::Scene>(std::make_shared<Gecko::Configuration>()));
 
     object_manager->register_type<Gecko::Vehicle>("truck", object_factory);
 
@@ -37,8 +36,7 @@ TEST(object_manager, new_object_manager_can_allocate_memory)
 
     auto object_manager = Gecko::ObjectManager::getSingletonPtr();
     auto object_configuration = std::make_shared<Gecko::Configuration>("../objects/vehicles/civilian/truck.json");
-    auto object_function = static_cast<Gecko::Vehicle*(*)(Gecko::Vehicle* memory, const std::shared_ptr<Gecko::Configuration>&)>(&Gecko::Vehicle::create);
-    auto object_factory = std::bind(object_function, std::placeholders::_1, object_configuration);
+    auto object_factory = std::bind(Gecko::Vehicle::create, std::placeholders::_1, object_configuration, std::make_shared<Gecko::Scene>(std::make_shared<Gecko::Configuration>()));
 
     object_manager->register_type<Gecko::Vehicle>("truck", object_factory);
     object_manager->allocate("truck", 8);
@@ -46,4 +44,3 @@ TEST(object_manager, new_object_manager_can_allocate_memory)
     EXPECT_EQ(object_manager->get_size("truck"), 0);
     EXPECT_EQ(object_manager->get_max_size("truck"), 8);
 }
-*/

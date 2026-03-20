@@ -5,6 +5,11 @@ namespace Gecko
     class Widget :
         public Rml::EventListener
     {
+    // From Rml::EventListener.
+	public:
+        void ProcessEvent(Rml::Event& event) override;
+
+    // Widget.
     public:
         virtual ~Widget() = default;
 
@@ -15,6 +20,7 @@ namespace Gecko
         virtual void deinit_events(Rml::ElementDocument* document);
 
     protected:
-        Rml::DataModelHandle m_model;
+        Rml::ElementDocument* m_document = nullptr;
+        Rml::DataModelHandle  m_model;
     };
 }

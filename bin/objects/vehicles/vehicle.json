@@ -2,13 +2,6 @@
     "layers": [
         "Terrain"
     ],
-    "mesh": {
-        "scale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 2.0
-        }
-    },
     "orders": {
         "available": [
             "Destroy",
@@ -21,17 +14,6 @@
             "Unload",
             "Wait"
         ]
-    },
-    "processes": {
-        "Driving": {
-            "out": {
-                "items": {
-                    "Pollution": {
-                        "production": 0.1
-                    }
-                }
-            }
-        }
     },
     "type": "Vehicle"
 }

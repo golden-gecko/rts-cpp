@@ -8,7 +8,7 @@ namespace Gecko
         using Options = boost::program_options::variables_map;
 
     public:
-        static Options parse_options(int argc, char* argv[], const std::string& default_configuration, const std::string& default_map);
+        static Options parse_options(int argc, char* argv[], const std::map<std::string, std::string>& defaults);
 
         static std::string get_option(const Options& options, const std::string& name);
     };

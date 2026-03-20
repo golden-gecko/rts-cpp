@@ -12,6 +12,12 @@ namespace Gecko
         using Items = std::map<TypeId, BaseType*>;
 
     public:
+        virtual ~Manager()
+        {
+            unregister_all();
+        }
+
+    public:
         template<typename Type>
         bool register_type(const TypeName& name, std::function<BaseType* (Type*)> factory)
         {
@@ -52,21 +58,23 @@ namespace Gecko
                 return nullptr;
             }
 
-            auto element = m_collections.at(name)->create();
+            BaseType* element = m_collections.at(name)->create();
 
             if (element == nullptr)
             {
                 return nullptr;
             }
 
-            element->set_id(++m_last_id);
+            m_last_id++;
+
+            element->set_id(m_last_id);
 
             m_items.emplace(m_last_id, element);
 
             return element;
         }
 
-        void deallocate()
+        void deallocate_all()
         {
             destroy_all();
 
@@ -85,7 +93,7 @@ namespace Gecko
 
             m_items.erase(element->get_id());
 
-            element->set_id(TypeId::Empty);
+            element->set_id(TypeId());
 
             for (const auto& [_, collection] : m_collections)
             {
@@ -165,7 +173,7 @@ namespace Gecko
 
         void unregister_all()
         {
-            deallocate();
+            deallocate_all();
 
             m_collections.clear();
         }

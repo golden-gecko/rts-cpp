@@ -36,7 +36,6 @@ namespace Gecko
 
             if (source != owner.get_heightmap())
             {
-                // TODO: Make scale and grid scale a scalar.
                 if (image.getHeight() != owner.get_size() * (owner.get_scale().x / owner.get_grid_scale().x))
                 {
                     throw Exception("File " + source + " size does not match layer parameters (size, scale and grid scale).");

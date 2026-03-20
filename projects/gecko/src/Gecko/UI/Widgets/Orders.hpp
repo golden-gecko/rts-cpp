@@ -7,23 +7,11 @@ namespace Gecko
     class OrdersWidget :
         public Widget
     {
+	// From Widget.
     public:
-        struct Order
-        {
-            std::string name;
-        };
-
-	public:
-		// From Rml::EventListener.
-		void ProcessEvent(Rml::Event& event) override;
-
-    public:
-		// From Widget.
         void init_data_bindigs(Rml::Context* context) override;
 
-        void init_events(Rml::ElementDocument* document) override;
-        void deinit_events(Rml::ElementDocument* document) override;
-
+    // OrdersWidget.
     public:
         void select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
         void select(const std::string configuration);
@@ -36,6 +24,11 @@ namespace Gecko
         }
 
     private:
+        struct Order
+        {
+            std::string name;
+        };
+
         Rml::Vector<Order> m_orders;
         std::string m_selected_order;
     };

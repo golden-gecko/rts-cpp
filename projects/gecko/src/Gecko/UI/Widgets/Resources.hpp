@@ -7,7 +7,15 @@ namespace Gecko
     class ResourcesWidget :
         public Widget
     {
+    // From Widget.
+	public:
+        void init_data_bindigs(Rml::Context* context) override;
+
+    // ResourcesWidget.
     public:
+        void update(const ResourcesPtr& resources);
+
+    private:
         struct Resource
         {
             std::string   name;
@@ -17,21 +25,6 @@ namespace Gecko
             float         ratio;
         };
 
-	public:
-		// From Rml::EventListener.
-		void ProcessEvent(Rml::Event& event) override;
-
-	public:
-		// From Widget.
-        void init_data_bindigs(Rml::Context* context) override;
-
-        void init_events(Rml::ElementDocument* document) override;
-        void deinit_events(Rml::ElementDocument* document) override;
-
-    public:
-        void update(const std::shared_ptr<Resources>& resources);
-
-    private:
         Rml::Vector<Resource> m_resources;
     };
 }

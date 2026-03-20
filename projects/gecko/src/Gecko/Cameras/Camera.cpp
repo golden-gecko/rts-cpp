@@ -9,7 +9,9 @@
 
 namespace Gecko
 {
-    Camera::Camera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration) :
+    Camera::Camera(const std::string& name, const ConfigurationPtr& configuration, Scene* scene) :
+        m_name(name),
+        m_configuration(configuration),
         m_scene(scene)
     {
         m_camera = m_scene->create_camera(name);

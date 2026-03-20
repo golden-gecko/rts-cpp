@@ -11,6 +11,7 @@ namespace Gecko
         ConfigurationPtr configuration = base_type::serialize();
 
         configuration->set("distance", m_distance);
+        configuration->set("zoom_step", m_zoom_step);
 
         return configuration;
     }
@@ -20,6 +21,7 @@ namespace Gecko
         base_type::deserialize(configuration);
 
         m_distance = configuration->get_float("distance", 0.0f);
+        m_zoom_step = configuration->get_float("zoom_step", 0.0f);
     }
 
     void ObjectFollowCamera::update(float time)
@@ -31,9 +33,10 @@ namespace Gecko
         }
     }
 
-    ObjectFollowCamera::ObjectFollowCamera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration) :
-        base_type(scene, name, configuration)
+    ObjectFollowCamera::ObjectFollowCamera(const std::string& name, const ConfigurationPtr& configuration, Scene* scene) :
+        base_type(name, configuration, scene)
     {
-        m_distance = configuration->get_float("distance", 0.0f);
+        m_distance = configuration->get_float("distance", 0.0f); // TODO: Remove. Use deserialize.
+        m_zoom_step = configuration->get_float("zoom_step", 0.0f); // TODO: Remove. Use deserialize.
     }
 }

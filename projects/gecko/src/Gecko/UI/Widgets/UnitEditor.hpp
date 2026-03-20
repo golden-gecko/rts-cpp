@@ -7,17 +7,19 @@ namespace Gecko
     class UnitEditorWidget :
         public Widget
     {
+    private:
+        using base_type = Widget;
+
+	// From Rml::EventListener.
 	public:
-		// From Rml::EventListener.
 		void ProcessEvent(Rml::Event& event) override;
 
+    // From Widget.
     public:
-        // From Widget.
-        void init_data_bindigs(Rml::Context* context) override;
-
         void init_events(Rml::ElementDocument* document) override;
         void deinit_events(Rml::ElementDocument* document) override;
 
+    // UnitEditorWidget.
     public:
         explicit UnitEditorWidget();
 
@@ -33,8 +35,6 @@ namespace Gecko
         void zoom_out();
 
     private:
-        Rml::ElementDocument* m_document = nullptr;
-
         Ogre::TexturePtr     m_texture        = nullptr;
         Ogre::RenderTexture* m_render_texture = nullptr;
         Ogre::Viewport*      m_viewport       = nullptr;

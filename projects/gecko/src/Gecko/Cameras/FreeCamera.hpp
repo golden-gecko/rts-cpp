@@ -10,11 +10,12 @@ namespace Gecko
     private:
         using base_type = Camera;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // FreeCamera.
     public:
-        explicit FreeCamera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration);
+        explicit FreeCamera(const std::string& name, const ConfigurationPtr& configuration, Scene* scene);
     };
 }

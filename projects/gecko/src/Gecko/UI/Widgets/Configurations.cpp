@@ -2,10 +2,6 @@
 
 namespace Gecko
 {
-    void ConfigurationsWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     void ConfigurationsWidget::init_data_bindigs(Rml::Context* context)
     {
         if (Rml::DataModelConstructor constructor = context->CreateDataModel("configurations"))
@@ -22,14 +18,6 @@ namespace Gecko
                 m_model = constructor.GetModelHandle();
             }
         }
-    }
-
-    void ConfigurationsWidget::init_events(Rml::ElementDocument* document)
-    {
-    }
-
-    void ConfigurationsWidget::deinit_events(Rml::ElementDocument* document)
-    {
     }
 
     void ConfigurationsWidget::select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)

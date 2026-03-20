@@ -7,27 +7,23 @@ namespace Gecko
     class InfoWidget :
         public Widget
     {
+	// From Widget.
     public:
-        struct Description
-        {
-            std::string text;
-        };
-
-	public:
-		// From Rml::EventListener.
-		void ProcessEvent(Rml::Event& event) override;
-
-    public:
-		// From Widget.
         void init_data_bindigs(Rml::Context* context) override;
 
-        void init_events(Rml::ElementDocument* document) override;
-        void deinit_events(Rml::ElementDocument* document) override;
+    // InfoWidget.
+    public:
+        void update(const Id& hovered_object_id);
 
     public:
         void set_description(const std::string& text);
 
     private:
+        struct Description
+        {
+            std::string text;
+        };
+
         Description m_description;
     };
 }

@@ -10,23 +10,33 @@
 #include <Gecko/Managers/PlayerManager.hpp>
 #include <Gecko/Managers/SkillManager.hpp>
 
-/*
+#include "Fixtures.hpp"
+
 TEST(game, can_init_and_deinit)
 {
-    auto component_manager = std::make_shared<Gecko::ComponentManager>();
-    auto configuration_manager = std::make_shared<Gecko::ConfigurationManager>();
-    auto map_manager = std::make_shared<Gecko::MapManager>();
-    auto object_manager = std::make_shared<Gecko::ObjectManager>();
-    auto order_manager = std::make_shared<Gecko::OrderManager>();
-    auto player_manager = std::make_shared<Gecko::PlayerManager>();
-    auto skill_manager = std::make_shared<Gecko::SkillManager>();
+    std::unique_ptr<Gecko::ConfigurationManager> configuration_manager;
+    std::unique_ptr<Gecko::Game> game;
 
-    auto game = std::make_shared<Gecko::Game>(std::make_shared<Gecko::Configuration>("../games/rts.json"));
+    std::string configuration_name = "rts";
+    std::string map_name = "tutorial";
 
+    // Parse configuration files.
+    configuration_manager = std::make_unique<Gecko::ConfigurationManager>(false);
+    configuration_manager->parse_configuration_files(Gecko::Settings::Configuration::Directories);
+    configuration_manager->save_cache();
+
+    // Get configuration.
+    Gecko::ConfigurationPtr game_configuration = configuration_manager->get(configuration_name);
+    Gecko::ConfigurationPtr map_configuration = configuration_manager->get(map_name);
+
+    // Initialize game.
+    game = std::make_unique<Gecko::Game>(game_configuration);
+    game->init();
+
+    // Run test.
     EXPECT_NO_THROW(game->init());
     EXPECT_NO_THROW(game->deinit());
 
     EXPECT_NO_THROW(game->init());
     EXPECT_NO_THROW(game->deinit());
 }
-*/

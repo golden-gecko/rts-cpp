@@ -7,30 +7,21 @@ namespace Gecko
     class DiplomacyWidget :
         public Widget
     {
+	// From Widget.
     public:
-        struct Player
-        {
-            std::string              name;
-            std::vector<std::string> states;
-        };
-
-	public:
-		// From Rml::EventListener.
-		void ProcessEvent(Rml::Event& event) override;
-
-    public:
-		// From Widget.
         void init_data_bindigs(Rml::Context* context) override;
 
-        void init_events(Rml::ElementDocument* document) override;
-        void deinit_events(Rml::ElementDocument* document) override;
-
+    // DiplomacyWidget.
     public:
         void close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
         void update();
 
     private:
-        Rml::ElementDocument* m_document = nullptr;
+        struct Player
+        {
+            std::string              name;
+            std::vector<std::string> states;
+        };
 
         Rml::Vector<Player> m_players;
     };

@@ -9,8 +9,6 @@
 
 namespace Gecko
 {
-    const std::string Player::Name = "Player";
-
     PlayerPtr Player::create(PlayerPtr memory, const ConfigurationPtr& configuration)
     {
         auto player = new (memory) Player();
@@ -63,24 +61,12 @@ namespace Gecko
 
     void Player::update(float time)
     {
-        /*
-        TODO: Restore.
         m_resources->clear();
 
-        for (const auto& [_, object] : ObjectManager::getSingleton())
+        for (const auto& object : ObjectManager::getSingleton().get_by_player(get_id()))
         {
-            if (get_id() == object->get_player_id())
-            {
-                m_resources->merge(*(object->get_resources().get()));
-
-                for (const auto& [_, process] : *(object->get_processes().get()))
-                {
-                    m_resources->merge(*(process.get_in().get()));
-                    m_resources->merge(*(process.get_out().get()));
-                }
-            }
+            m_resources->merge(*(object->get_resources().get()));
         }
-        */
     }
 
     Id Player::get_first_selected()

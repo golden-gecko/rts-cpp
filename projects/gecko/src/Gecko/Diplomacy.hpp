@@ -9,7 +9,7 @@ namespace Gecko
         public Serializable
     {
     public:
-        enum class State :
+        enum class State : // TODO: Move.
             std::int8_t
         {
             Ally,
@@ -18,14 +18,15 @@ namespace Gecko
         };
 
     public:
-        static State from_name(const std::string& name);
-        static std::string to_name(State state);
+        static State from_name(const std::string& name); // TODO: Move.
+        static std::string to_name(State state); // TODO: Move.
 
+    // From Serializable.
     public:
-        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
+    // Diplomacy.
     public:
         State get(ObjectPtr object_a, ObjectPtr object_b) const;
         State get(PlayerPtr player_a, PlayerPtr player_b) const;

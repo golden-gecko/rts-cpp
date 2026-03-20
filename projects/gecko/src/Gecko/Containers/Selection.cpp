@@ -45,7 +45,6 @@ namespace Gecko
         // TODO: Implement.
     }
 
-
     void Selection::apply_current_selection(bool select)
     {
         apply_selection(m_items, select);

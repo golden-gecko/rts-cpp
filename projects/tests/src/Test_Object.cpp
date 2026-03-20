@@ -3,13 +3,15 @@
 #include <Gecko/Configuration.hpp>
 #include <Gecko/Containers/Components.hpp>
 #include <Gecko/Objects/Object.hpp>
+#include <Gecko/Scenes/Scene.hpp>
 
 #include "Fixtures.hpp"
 
-/*
 TEST(object, new_object_is_empty)
 {
-    auto object = std::make_shared<Gecko::Object>();
+    auto scene_configuration = std::make_shared<Gecko::Configuration>();
+    auto scene = std::make_shared<Gecko::Scene>(scene_configuration);
+    auto object = std::make_shared<Gecko::Object>(scene);
 
     EXPECT_EQ(object->get_configuration().get(), nullptr);
     EXPECT_EQ(object->get_id(), Gecko::Id::Empty);
@@ -21,8 +23,10 @@ TEST(object, object_deserialized_from_configuration_is_loaded)
 {
     init_game init_game;
 
+    auto scene_configuration = std::make_shared<Gecko::Configuration>();
+    auto scene = std::make_shared<Gecko::Scene>(scene_configuration);
     auto object_configuration = std::make_shared<Gecko::Configuration>("../tests/vehicles/tank.json");
-    auto object = std::make_shared<Gecko::Object>();
+    auto object = std::make_shared<Gecko::Object>(scene);
 
     object->deserialize(object_configuration);
 
@@ -36,8 +40,10 @@ TEST(object, object_deserialized_and_initialized_from_configuration_is_loaded)
 {
     init_game init_game;
 
+    auto scene_configuration = std::make_shared<Gecko::Configuration>();
+    auto scene = std::make_shared<Gecko::Scene>(scene_configuration);
     auto object_configuration = std::make_shared<Gecko::Configuration>("../tests/vehicles/tank.json");
-    auto object = std::make_shared<Gecko::Object>();
+    auto object = std::make_shared<Gecko::Object>(scene);
 
     object->deserialize(object_configuration);
     object->init();
@@ -47,4 +53,3 @@ TEST(object, object_deserialized_and_initialized_from_configuration_is_loaded)
     EXPECT_EQ(object->get_name(), "Tank");
     EXPECT_EQ(object->get_components()->size(), 5);
 }
-*/

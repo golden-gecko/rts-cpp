@@ -24,27 +24,29 @@ namespace Gecko
         }
     }
 
-    void PreviewWidget::init_data_bindigs(Rml::Context* context)
-    {
-    }
-
     void PreviewWidget::init_events(Rml::ElementDocument* document)
     {
-        Rml::Element* element = document->GetElementById("preview");
+        base_type::init_events(document);
 
-        if (element)
+        if (document)
         {
-            element->AddEventListener(Rml::EventId::Mousescroll, this);
+            if (Rml::Element* element = document->GetElementById("preview"))
+            {
+                element->AddEventListener(Rml::EventId::Mousescroll, this);
+            }
         }
     }
 
     void PreviewWidget::deinit_events(Rml::ElementDocument* document)
     {
-        Rml::Element* element = document->GetElementById("preview");
+        base_type::deinit_events(document);
+        if (document)
 
-        if (element)
         {
-            element->RemoveEventListener(Rml::EventId::Mousescroll, this);
+            if (Rml::Element* element = document->GetElementById("preview"))
+            {
+                element->RemoveEventListener(Rml::EventId::Mousescroll, this);
+            }
         }
     }
 
@@ -79,28 +81,50 @@ namespace Gecko
         Ogre::TextureManager::getSingleton().remove(m_texture);
     }
 
+    void PreviewWidget::update()
+    {
+        /*
+        ObjectPtr hovered_object = ObjectManager::getSingleton().get(m_hovered_object_id);
+
+        if (hovered_object)
+        {
+            set_description(hovered_object->get_info());
+
+            get_component<PreviewWidget>()->get_camera()->set_target_id(hovered_object->get_id());
+        }
+        // Selected object info.
+        else if (Game::getSingleton().get_active_player() && Game::getSingleton().get_active_player()->get_selected()->size())
+        {
+            Id selected_id = Game::getSingleton().get_active_player()->get_first_selected();
+
+            if (ObjectPtr selected = ObjectManager::getSingleton().get(selected_id))
+            {
+                set_description(selected->get_info());
+
+                get_component<PreviewWidget>()->get_camera()->set_target_id(selected_id);
+            }
+        }
+        */
+    }
+
     void PreviewWidget::zoom_in()
     {
-        L_TRACE << "Preview::zoom_in()";
-
         if (MapPtr map = Game::getSingleton().get_active_map())
         {
             if (std::shared_ptr<ObjectFollowCamera> camera = get_camera())
             {
-                camera->set_distance(camera->get_distance() - 10.0f); // TODO: Hardcoded.
+                camera->set_distance(camera->get_distance() - camera->get_zoom_step());
             }
         }
     }
 
     void PreviewWidget::zoom_out()
     {
-        L_TRACE << "Preview::zoom_out()";
-
         if (MapPtr map = Game::getSingleton().get_active_map())
         {
             if (std::shared_ptr<ObjectFollowCamera> camera = get_camera())
             {
-                camera->set_distance(camera->get_distance() + 10.0f); // TODO: Hardcoded.
+                camera->set_distance(camera->get_distance() + camera->get_zoom_step());
             }
         }
     }

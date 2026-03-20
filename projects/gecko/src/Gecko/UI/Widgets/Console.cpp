@@ -95,21 +95,27 @@ namespace Gecko
 
     void ConsoleWidget::init_events(Rml::ElementDocument* document)
     {
-        Rml::Element* element = document->GetElementById("console-input");
+        base_type::init_events(document);
 
-        if (element)
+        if (document)
         {
-            element->AddEventListener(Rml::EventId::Keydown, this);
+            if (Rml::Element* element = document->GetElementById("console-input"))
+            {
+                element->AddEventListener(Rml::EventId::Keydown, this);
+            }
         }
     }
 
     void ConsoleWidget::deinit_events(Rml::ElementDocument* document)
     {
-        Rml::Element* element = document->GetElementById("console-input");
+        base_type::deinit_events(document);
 
-        if (element)
+        if (document)
         {
-            element->RemoveEventListener(Rml::EventId::Keydown, this);
+            if (Rml::Element* element = document->GetElementById("console-input"))
+            {
+                element->RemoveEventListener(Rml::EventId::Keydown, this);
+            }
         }
     }
 }

@@ -72,31 +72,33 @@ namespace Gecko
         }
     }
 
-    void MinimapWidget::init_data_bindigs(Rml::Context* context)
-    {
-    }
-
     void MinimapWidget::init_events(Rml::ElementDocument* document)
     {
-        Rml::Element* element = document->GetElementById("minimap");
+        base_type::init_events(document);
 
-        if (element)
+        if (document)
         {
-            element->AddEventListener(Rml::EventId::Mousedown, this);
-            element->AddEventListener(Rml::EventId::Mousescroll, this);
-            element->AddEventListener(Rml::EventId::Mouseup, this);
+            if (Rml::Element* element = document->GetElementById("minimap"))
+            {
+                element->AddEventListener(Rml::EventId::Mousedown, this);
+                element->AddEventListener(Rml::EventId::Mousescroll, this);
+                element->AddEventListener(Rml::EventId::Mouseup, this);
+            }
         }
     }
 
     void MinimapWidget::deinit_events(Rml::ElementDocument* document)
     {
-        Rml::Element* element = document->GetElementById("minimap");
+        base_type::deinit_events(document);
 
-        if (element)
+        if (document)
         {
-            element->RemoveEventListener(Rml::EventId::Mousedown, this);
-            element->RemoveEventListener(Rml::EventId::Mousescroll, this);
-            element->RemoveEventListener(Rml::EventId::Mouseup, this);
+            if (Rml::Element* element = document->GetElementById("minimap"))
+            {
+                element->RemoveEventListener(Rml::EventId::Mousedown, this);
+                element->RemoveEventListener(Rml::EventId::Mousescroll, this);
+                element->RemoveEventListener(Rml::EventId::Mouseup, this);
+            }
         }
     }
 

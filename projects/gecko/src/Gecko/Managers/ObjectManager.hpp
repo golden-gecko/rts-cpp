@@ -15,15 +15,16 @@ namespace Gecko
     private:
         using base_type = Manager<Object, std::string, Id>;
 
+    // From Initializable.
     public:
-        // From Initializable.
         void init();
         void deinit();
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // ObjectManager.
     public:
         using ObjectsInRange = std::vector<std::pair<Object*, float>>;
 
@@ -32,6 +33,8 @@ namespace Gecko
 
     public:
         Object* create(const std::string& name);
+
+        std::vector<ObjectPtr> get_by_player(const Id& player_id) const;
         ObjectsInRange get_in_range(const Ogre::Vector3& position, float range = std::numeric_limits<float>::max(), const std::vector<Id>& exclude = {});
 
     private:

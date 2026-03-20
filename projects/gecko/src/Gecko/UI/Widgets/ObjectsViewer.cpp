@@ -8,10 +8,6 @@
 
 namespace Gecko
 {
-    void ObjectsViewerWidget::ProcessEvent(Rml::Event& event)
-    {
-    }
-
     void ObjectsViewerWidget::init_data_bindigs(Rml::Context* context)
     {
         if (Rml::DataModelConstructor constructor = context->CreateDataModel("objects_viewer"))
@@ -30,15 +26,6 @@ namespace Gecko
                 m_model = constructor.GetModelHandle();
             }
         }
-    }
-
-    void ObjectsViewerWidget::init_events(Rml::ElementDocument* document)
-    {
-        m_document = document;
-    }
-
-    void ObjectsViewerWidget::deinit_events(Rml::ElementDocument* document)
-    {
     }
 
     void ObjectsViewerWidget::close(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments)

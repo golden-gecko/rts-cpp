@@ -7,23 +7,11 @@ namespace Gecko
     class SkillsWidget :
         public Widget
     {
-    public:
-        struct Skill
-        {
-            std::string name;
-        };
-
+	// From Widget.
 	public:
-		// From Rml::EventListener.
-		void ProcessEvent(Rml::Event& event) override;
-
-	public:
-		// From Widget.
         void init_data_bindigs(Rml::Context* context) override;
 
-        void init_events(Rml::ElementDocument* document) override;
-        void deinit_events(Rml::ElementDocument* document) override;
-
+    // SkillsWidget.
     public:
         void select(Rml::DataModelHandle model, Rml::Event& ev, const Rml::VariantList& arguments);
         void select(const std::string configuration);
@@ -36,6 +24,11 @@ namespace Gecko
         }
         
     private:
+        struct Skill
+        {
+            std::string name;
+        };
+
         Rml::Vector<Skill> m_skills;
         std::string m_selected_skill;
     };

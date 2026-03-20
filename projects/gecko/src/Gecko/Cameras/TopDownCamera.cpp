@@ -67,8 +67,8 @@ namespace Gecko
         }
     }
 
-    TopDownCamera::TopDownCamera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration) :
-        base_type(scene, name, configuration)
+    TopDownCamera::TopDownCamera(const std::string& name, const ConfigurationPtr& configuration, Scene* scene) :
+        base_type(name, configuration, scene)
     {
     }
 }

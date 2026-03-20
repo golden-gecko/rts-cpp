@@ -2,8 +2,8 @@
 
 namespace Gecko
 {
-    MinimapCamera::MinimapCamera(Scene* scene, const std::string& name, const ConfigurationPtr& configuration) :
-        base_type(scene, name, configuration)
+    MinimapCamera::MinimapCamera(const std::string& name, const ConfigurationPtr& configuration, Scene* scene) :
+        base_type(name, configuration, scene)
     {
     }
 }

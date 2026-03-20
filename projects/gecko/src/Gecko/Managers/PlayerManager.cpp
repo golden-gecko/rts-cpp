@@ -20,14 +20,15 @@ namespace Gecko
         {
             L_INFO << "Loading '" << name << "' configuration.";
 
-            std::string type = configuration->get_string("type", "");
-
-            if (type == Player::Name)
+            if (std::optional<std::string> type = configuration->get_string_optional("type"))
             {
-                register_type<Player>(name, std::bind(Player::create, std::placeholders::_1, configuration));
-            }
+                if (type == TO_STRING(Player))
+                {
+                    register_type<Player>(name, std::bind(Player::create, std::placeholders::_1, configuration));
+                }
 
-            allocate(name, max_size);
+                allocate(name, max_size);
+            }
         }
     }
 

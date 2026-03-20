@@ -22,7 +22,8 @@
                         "y": 100.0,
                         "z": 0.0
                     },
-                    "type": "ObjectFollow"
+                    "type": "ObjectFollow",
+                    "zoom_step": 10.0
                 }
             ],
             "directional": {
@@ -103,7 +104,8 @@
                         "y": 100.0,
                         "z": 0.0
                     },
-                    "type": "ObjectFollow"
+                    "type": "ObjectFollow",
+                    "zoom_step": 10.0
                 }
             ],
             "directional": {

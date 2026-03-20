@@ -12,20 +12,21 @@ namespace Gecko
         public Serializable,
         public Updatable
     {
+    // From Initializable.
     public:
-        // From Initializable.
         void init() override;
         void deinit() override;
 
+    // From Serializable.
     public:
-        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // Item.
     public:
         explicit Item() = default;
         Item(const Item& other);
