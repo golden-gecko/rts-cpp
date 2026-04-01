@@ -9,11 +9,12 @@ namespace Gecko
     class SquareTile :
         public Tile
     {
+    // From Initializable.
     public:
-        // From Initializable.
         void init() override;
         void deinit() override;
 
+    // SquareTile.
     public:
         std::string get_mesh_name() const;
 

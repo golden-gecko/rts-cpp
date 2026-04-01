@@ -24,19 +24,11 @@ namespace Gecko
             m_refresh_timer.deserialize(configuration->get_child("refresh_timer"));
         }
 
-        m_activation_count = configuration->get_int<std::uint16_t>("activation_count", 0);
+        m_activation_count = configuration->get_int<decltype(m_activation_count)>("activation_count", 0);
     }
 
     void Skill::update(float time)
     {
         m_refresh_timer.update(time);
-    }
-
-    Skill::Skill(const Skill& other) :
-        base_type(other),
-        m_name(other.m_name),
-        m_refresh_timer(other.m_refresh_timer),
-        m_activation_count(other.m_activation_count)
-    {
     }
 }

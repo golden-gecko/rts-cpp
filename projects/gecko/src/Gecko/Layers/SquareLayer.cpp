@@ -14,6 +14,46 @@
 
 namespace Gecko
 {
+    void SquareLayer::init()
+    {
+        for (auto& z : tiles)
+        {
+            for (auto& x : z)
+            {
+                x.init();
+            }
+        }
+
+        for (const auto& [name, data_layer] : m_data_layers)
+        {
+            data_layer->init();
+        }
+    }
+
+    void SquareLayer::deinit()
+    {
+        for (const auto& [name, data_layer] : m_data_layers)
+        {
+            data_layer->deinit();
+        }
+
+        for (auto& z : tiles)
+        {
+            for (auto& x : z)
+            {
+                x.deinit();
+            }
+        }
+    }
+
+    void SquareLayer::update(float time)
+    {
+        for (const auto& [_, data_layer] : m_data_layers)
+        {
+            data_layer->update(time);
+        }
+    }
+
     SquareLayer::SquareLayer(MapPtr owner, const std::string& name, const ConfigurationPtr& configuration) :
         base_type(owner, name, configuration)
     {
@@ -56,46 +96,6 @@ namespace Gecko
     SquareLayer::~SquareLayer()
     {
         m_owner->get_scene()->destroy_scene_node(m_scene_node);
-    }
-
-    void SquareLayer::init()
-    {
-        for (auto& z : tiles)
-        {
-            for (auto& x : z)
-            {
-                x.init();
-            }
-        }
-
-        for (const auto& [name, data_layer] : m_data_layers)
-        {
-            data_layer->init();
-        }
-    }
-
-    void SquareLayer::deinit()
-    {
-        for (const auto& [name, data_layer] : m_data_layers)
-        {
-            data_layer->deinit();
-        }
-
-        for (auto& z : tiles)
-        {
-            for (auto& x : z)
-            {
-                x.deinit();
-            }
-        }
-    }
-
-    void SquareLayer::update(float time)
-    {
-        for (const auto& [name, data_layer] : m_data_layers)
-        {
-            data_layer->update(time);
-        }
     }
 
     bool SquareLayer::is_index_valid(Index x, Index z) const

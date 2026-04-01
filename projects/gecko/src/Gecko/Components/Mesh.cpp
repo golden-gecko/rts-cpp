@@ -47,27 +47,6 @@ namespace Gecko
         return component;
     }
 
-    Mesh::Mesh(const Mesh& other) :
-        base_type(other)
-    {
-        if (other.m_entity)
-        {
-            m_entity = Utils::Mesh::copy_entity(m_scene, other.m_entity);
-
-            if (get_owner())
-            {
-                m_entity->getUserObjectBindings().setUserAny(Ogre::Any(get_owner()->get_id()));
-            }
-        }
-
-        // TODO: Scene node is created at the same parent? Should be created from new owner.
-        if (other.m_scene_node)
-        {
-            m_scene_node = Utils::Mesh::copy_scene_node(other.m_scene_node);
-            m_scene_node->attachObject(m_entity);
-        }
-    }
-
     Mesh::~Mesh()
     {
         m_scene->destroy_scene_node(m_scene_node);

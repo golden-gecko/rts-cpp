@@ -19,7 +19,7 @@ namespace Gecko
         }
 
     protected:
-        Ogre::Vector3 m_position  = Ogre::Vector3::ZERO;
+        Ogre::Vector3 m_position = Ogre::Vector3::ZERO;
         Ogre::Vector3 m_direction = Ogre::Vector3::ZERO;
     };
 }

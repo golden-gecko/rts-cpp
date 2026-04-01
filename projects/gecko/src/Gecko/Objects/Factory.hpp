@@ -15,7 +15,6 @@ namespace Gecko
 
     public:
         explicit Factory(const ScenePtr& scene);
-        Factory(const Factory& other);
 
     public:
         const std::map<std::string, float>& get_usage() const

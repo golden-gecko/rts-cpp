@@ -19,10 +19,6 @@ namespace Gecko
         static Storage* create(Storage* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
-        explicit Storage();
-        Storage(const Storage& other);
-
-    public:
         Timer& get_load_time()
         {
             return m_load_time;

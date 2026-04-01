@@ -7,31 +7,21 @@ namespace Gecko
     struct Rectangle
     {
     public:
-        Navigation::Coordinate start;
-        Navigation::Coordinate end;
+        Rectangle(const Navigation::Coordinate& start, const Navigation::Coordinate& end);
+        Rectangle(const Index& start_x, const Index& start_z, const Index& end_x, const Index& end_z);
 
     public:
-        explicit Rectangle() = default;
-        explicit Rectangle(const Navigation::Coordinate& start, const Navigation::Coordinate& end);
-        explicit Rectangle(Index start_x, Index start_z, Index end_x, Index end_z);
+        bool operator==(const Rectangle& other) const;
+        bool operator!=(const Rectangle& other) const;
+
+        bool operator<(const Rectangle& other) const;
+        bool operator>(const Rectangle& other) const;
 
     public:
         std::string to_string() const;
 
-    public:
-        bool operator==(const Rectangle& other) const
-        {
-            return start == other.start && end == other.end;
-        }
-
-        bool operator!=(const Rectangle& other) const
-        {
-            return !(*this == other);
-        }
-
-        bool operator<(const Rectangle& other) const
-        {
-            return start < other.start && end < other.end;
-        }
+    private:
+        Navigation::Coordinate m_start;
+        Navigation::Coordinate m_end;
     };
 }

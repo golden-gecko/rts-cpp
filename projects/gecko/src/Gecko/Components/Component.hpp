@@ -11,18 +11,12 @@ namespace Gecko
     private:
         using base_type = Item;
 
+    // From Serializable.
     public:
-        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
-    public:
-        explicit Component() = default;
-        Component(const Component& other);
-
-    public:
-        Component& operator=(const Component&) = delete;
-
+    // Component.
     public:
         virtual bool is_visible() const
         {

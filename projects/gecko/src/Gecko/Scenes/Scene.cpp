@@ -115,7 +115,11 @@ namespace Gecko
 
     Ogre::SceneNode* Scene::create_scene_node() const
     {
-        return m_scene_manager->getRootSceneNode()->createChildSceneNode();
+        auto scene_node = m_scene_manager->getRootSceneNode()->createChildSceneNode();
+
+        scene_node->setFixedYawAxis(true);
+
+        return scene_node;
     }
 
     void Scene::destroy_scene_node(Ogre::SceneNode* scene_node) const

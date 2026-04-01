@@ -24,22 +24,15 @@ namespace Gecko
         m_selected = std::make_shared<Selection>();
     }
 
-    Player::Player(const Player& other) :
+    /*Player::Player(const Player& other) :
         base_type(other)
     {
-        m_name = other.m_name;
+        m_name  = other.m_name;
         m_color = other.m_color;
 
-        if (other.m_resources)
-        {
-            m_resources = std::make_shared<Resources>(*(other.m_resources.get()));
-        }
-
-        if (other.m_selected)
-        {
-            m_selected = std::make_shared<Selection>(*(other.m_selected.get()));
-        }
-    }
+        m_resources = std::make_shared<Resources>(*(other.m_resources.get()));
+        m_selected  = std::make_shared<Selection>(*(other.m_selected.get()));
+    }*/
 
     ConfigurationPtr Player::serialize() const
     {
@@ -48,6 +41,9 @@ namespace Gecko
         configuration->set("name", m_name);
         configuration->set("color", m_color);
 
+        // TODO: Add m_resources.
+        // TODO: Add m_selected.
+
         return configuration;
     }
 
@@ -55,8 +51,11 @@ namespace Gecko
     {
         base_type::deserialize(configuration);
 
-        m_name = configuration->get_string("name");
+        m_name  = configuration->get_string("name");
         m_color = configuration->get_string("color");
+
+        // TODO: Add m_resources.
+        // TODO: Add m_selected.
     }
 
     void Player::update(float time)

@@ -10,20 +10,17 @@ namespace Gecko
     private:
         using base_type = Component;
 
+    // From Initializable.
     public:
-        // From Initializable.
         void init() override;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // Debug.
     public:
         static Debug* create(Debug* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
-
-    public:
-        explicit Debug() = default;
-        Debug(const Debug& other);
 
     private:
         Ogre::ManualObject* m_manual_object = nullptr;

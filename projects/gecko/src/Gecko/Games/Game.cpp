@@ -300,13 +300,12 @@ namespace Gecko
             item.deinit();
         };
 
-        MapManager::getSingleton().iterate(std::bind(deinit, std::placeholders::_1));
-        MapManager::getSingleton().destroy_all();
-
         ComponentManager::getSingleton().iterate(std::bind(deinit, std::placeholders::_1));
+        ObjectManager::getSingleton().iterate(std::bind(deinit, std::placeholders::_1));
         OrderManager::getSingleton().iterate(std::bind(deinit, std::placeholders::_1));
 
         ComponentManager::getSingleton().destroy_all();
+        ObjectManager::getSingleton().destroy_all();
         OrderManager::getSingleton().destroy_all();
     }
 

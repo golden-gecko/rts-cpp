@@ -13,7 +13,7 @@ namespace Gecko
         public Updatable
     {
     public:
-        explicit Layer(MapPtr owner, const std::string& name, const ConfigurationPtr& configuration);
+        Layer(MapPtr owner, const std::string& name, const ConfigurationPtr& configuration);
 
     public:
         virtual bool is_index_valid(Index x, Index z) const = 0;

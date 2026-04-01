@@ -37,21 +37,6 @@ namespace Gecko
         return component;
     }
 
-    Debug::Debug(const Debug& other) :
-        base_type(other)
-    {
-        if (other.m_manual_object)
-        {
-            m_manual_object = Utils::Mesh::copy_manual_object(m_scene, other.m_manual_object);
-        }
-
-        if (other.m_scene_node)
-        {
-            m_scene_node = Utils::Mesh::copy_scene_node(other.m_scene_node);
-            m_scene_node->attachObject(m_manual_object);
-        }
-    }
-
     void Debug::draw_line(const Ogre::Vector3& start, const Ogre::Vector3& end, const Ogre::ColourValue& color)
     {
         m_manual_object->begin("vertex_color", Ogre::RenderOperation::OperationType::OT_LINE_LIST);

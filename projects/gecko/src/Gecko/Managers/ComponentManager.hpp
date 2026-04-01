@@ -14,11 +14,12 @@ namespace Gecko
     private:
         using base_type = Manager<Component, std::string, Id>;
 
+    // From Initializable.
     public:
-        // From Initializable.
         void init() override;
         void deinit() override;
     
+    // ComponentManager.
     public:
         ComponentManager(const ConfigurationPtr& configuration, const ScenePtr& scene);
 

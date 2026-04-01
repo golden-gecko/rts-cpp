@@ -5,21 +5,6 @@ project(Gecko LANGUAGES CXX)
 set(CMAKE_DEBUG_POSTFIX _d)
 
 # Create target and add source files
-file(GLOB_RECURSE BINARY_FILES
-    ${CMAKE_SOURCE_DIR}/bin/*.cfg
-    ${CMAKE_SOURCE_DIR}/bin/*.jpg
-    ${CMAKE_SOURCE_DIR}/bin/*.json
-    ${CMAKE_SOURCE_DIR}/bin/*.log
-    ${CMAKE_SOURCE_DIR}/bin/*.material
-    ${CMAKE_SOURCE_DIR}/bin/*.mesh
-    ${CMAKE_SOURCE_DIR}/bin/*.particle
-    ${CMAKE_SOURCE_DIR}/bin/*.png
-    ${CMAKE_SOURCE_DIR}/bin/*.rcss
-    ${CMAKE_SOURCE_DIR}/bin/*.rml
-    ${CMAKE_SOURCE_DIR}/bin/*.tga
-    ${CMAKE_SOURCE_DIR}/bin/*.ttf
-    ${CMAKE_SOURCE_DIR}/bin/*.zip
-)
 file(GLOB_RECURSE HEADER_FILES
     ${PROJECT_SOURCE_DIR}/src/*.hpp
 )
@@ -27,11 +12,10 @@ file(GLOB_RECURSE SOURCE_FILES
     ${PROJECT_SOURCE_DIR}/src/*.cpp
 )
 
-source_group(TREE ${CMAKE_SOURCE_DIR}/bin PREFIX "Binary Files" FILES ${BINARY_FILES})
 source_group(TREE ${PROJECT_SOURCE_DIR}/src PREFIX "Header Files" FILES ${HEADER_FILES})
 source_group(TREE ${PROJECT_SOURCE_DIR}/src PREFIX "Source Files" FILES ${SOURCE_FILES})
 
-add_library(${PROJECT_NAME} STATIC ${BINARY_FILES} ${HEADER_FILES} ${SOURCE_FILES})
+add_library(${PROJECT_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_EXTENSIONS OFF

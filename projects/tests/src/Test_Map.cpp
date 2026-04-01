@@ -8,8 +8,11 @@
 
 TEST(map, new_map_is_empty)
 {
+    init_game init_game;
+
+    auto game_configuration = std::make_shared<Gecko::Configuration>("../games/rts.json");
     auto map_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
-    auto scene_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
+    auto scene_configuration = game_configuration->get_child("scenes.Map");
 
     auto scene = std::make_shared<Gecko::Scene>(scene_configuration);
     auto map = std::make_shared<Gecko::Map>(scene);
@@ -23,8 +26,11 @@ TEST(map, new_map_is_empty)
 
 TEST(map, map_deserialized_from_configuration_is_loaded)
 {
+    init_game init_game;
+
+    auto game_configuration = std::make_shared<Gecko::Configuration>("../games/rts.json");
     auto map_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
-    auto scene_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
+    auto scene_configuration = game_configuration->get_child("scenes.Map");
 
     auto scene = std::make_shared<Gecko::Scene>(scene_configuration);
     auto map = std::make_shared<Gecko::Map>(scene);
@@ -42,8 +48,9 @@ TEST(map, map_deserialized_and_initialized_from_configuration_is_loaded)
 {
     init_game init_game;
 
+    auto game_configuration = std::make_shared<Gecko::Configuration>("../games/rts.json");
     auto map_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
-    auto scene_configuration = std::make_shared<Gecko::Configuration>("../maps/tutorial/tutorial.json");
+    auto scene_configuration = game_configuration->get_child("scenes.Map");
 
     auto scene = std::make_shared<Gecko::Scene>(scene_configuration);
     auto map = std::make_shared<Gecko::Map>(scene);

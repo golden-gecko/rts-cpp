@@ -26,10 +26,6 @@ namespace Gecko
     public:
         static Weapon* create(Weapon* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
-    public:
-        explicit Weapon() = default;
-        Weapon(const Weapon& other);
-
     private:
         std::string m_missile_configuration;
         std::uint16_t m_missiles_fired = 0;

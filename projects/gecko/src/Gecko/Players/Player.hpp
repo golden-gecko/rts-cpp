@@ -10,21 +10,21 @@ namespace Gecko
     private:
         using base_type = Item;
 
+    // From Serializable.
     public:
-        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // Player.
     public:
         static PlayerPtr create(PlayerPtr memory, const ConfigurationPtr& configuration);
 
     public:
-        explicit Player();
-        Player(const Player& other);
+        Player();
 
     public:
         Player& operator=(const Player&) = delete;

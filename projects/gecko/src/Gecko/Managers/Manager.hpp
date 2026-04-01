@@ -9,7 +9,7 @@ namespace Gecko
     {
     public:
         using Collections = std::map<TypeName, std::unique_ptr<CollectionBase<BaseType>>>;
-        using Items = std::map<TypeId, BaseType*>;
+        using Items       = std::map<TypeId, BaseType*>;
 
     public:
         virtual ~Manager()
@@ -68,6 +68,7 @@ namespace Gecko
             m_last_id++;
 
             element->set_id(m_last_id);
+            // element->init(); TODO: ???
 
             m_items.emplace(m_last_id, element);
 
@@ -93,6 +94,7 @@ namespace Gecko
 
             m_items.erase(element->get_id());
 
+            // element->deinit(); TODO: ???
             element->set_id(TypeId());
 
             for (const auto& [_, collection] : m_collections)

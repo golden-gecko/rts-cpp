@@ -28,10 +28,4 @@ namespace Gecko
 
         return component;
     }
-
-    Shield::Shield(const Shield& other) :
-        base_type(other)
-    {
-        m_defence = other.m_defence;
-    }
 }

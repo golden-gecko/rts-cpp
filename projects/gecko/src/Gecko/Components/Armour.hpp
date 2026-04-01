@@ -18,10 +18,6 @@ namespace Gecko
     public:
         static Armour* create(Armour* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
-    public:
-        explicit Armour() = default;
-        Armour(const Armour& other);
-
     private:
         float m_defence = 0.0f;
     };

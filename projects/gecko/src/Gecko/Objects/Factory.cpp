@@ -16,11 +16,6 @@ namespace Gecko
     {
     }
 
-    Factory::Factory(const Factory& other) :
-        base_type(other)
-    {
-    }
-
     /*
     Factory::Factory(const std::string& configuration_name) :
         base_type(configuration_name)

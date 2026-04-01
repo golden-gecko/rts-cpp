@@ -26,13 +26,4 @@ namespace Gecko
             m_health_timer.deserialize(configuration->get_child("health"));
         }
     }
-
-    Component::Component(const Component& other) :
-        base_type(other),
-        m_owner(other.m_owner),
-        m_scene(other.m_scene),
-        m_name(other.m_name),
-        m_health_timer(other.m_health_timer)
-    {
-    }
 }

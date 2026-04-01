@@ -35,11 +35,6 @@ namespace Gecko
     {
     }
 
-    Vehicle::Vehicle(const Vehicle& other) :
-        base_type(other)
-    {
-    }
-
     OrderStatus Vehicle::on_attack(Order* order, float time)
     {
         // Get order.

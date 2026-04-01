@@ -47,48 +47,13 @@ namespace Gecko
     Object::Object(const ScenePtr& scene) :
         m_scene(scene)
     {
-        m_components = std::make_shared<Components>();
+        m_components     = std::make_shared<Components>();
         m_configurations = std::make_shared<Configurations>();
-        m_layers = std::make_shared<Layers>();
-        m_orders = std::make_shared<Orders>();
-        m_processes = std::make_shared<Processes>();
-        m_resources = std::make_shared<Resources>();
-        m_skills = std::make_shared<Skills>();
-    }
-
-    Object::Object(const Object& other) :
-        base_type(other)
-    {
-        m_scene = other.m_scene;
-        m_name = other.m_name;
-        m_player_id = other.m_player_id;
-        m_alive_timer = other.m_alive_timer;
-
-        m_selected = other.m_selected;
-        m_visible = other.m_visible;
-
-        m_layers = std::make_shared<Layers>(*other.m_layers);
-
-        m_components = std::make_shared<Components>(*other.m_components);
-        m_configurations = std::make_shared<Configurations>(*other.m_configurations);
-        m_layers = std::make_shared<Layers>(*other.m_layers);
-        m_orders = std::make_shared<Orders>(*other.m_orders);
-        m_processes = std::make_shared<Processes>(*other.m_processes);
-        m_resources = std::make_shared<Resources>(*other.m_resources);
-        m_skills = std::make_shared<Skills>(*other.m_skills);
-
-        if (other.m_scene_node)
-        {
-            m_scene_node = Utils::Mesh::copy_scene_node(other.m_scene_node);
-        }
-
-        // TODO: Does not work, because scene node has to be created from new parent.
-        // selection = std::make_unique<Mesh>(*other.selection);
-        create_selection_mesh();
-
-        // TODO: Remove virtual method from constructor.
-        set_selected(false);
-        set_visible(false);
+        m_layers         = std::make_shared<Layers>();
+        m_orders         = std::make_shared<Orders>();
+        m_processes      = std::make_shared<Processes>();
+        m_resources      = std::make_shared<Resources>();
+        m_skills         = std::make_shared<Skills>();
     }
 
     Object::~Object()
@@ -122,21 +87,6 @@ namespace Gecko
 
         set_selected(false);
         set_visible(true);
-
-        /*
-        TODO: Remove.
-        if (type != Type::Value::Missile)
-        {
-            // map->get_terrain().set_unit_position(get_id(), get_position());
-
-            auto player = PlayerManager::getSingleton().get(get_player_id());
-
-            if (player)
-            {
-                player->set_unit_position(get_id(), get_position(), get_visibility_range());
-            }
-        }
-        */
     }
 
     void Object::deinit()
@@ -154,14 +104,14 @@ namespace Gecko
 
     ConfigurationPtr Object::serialize() const
     {
-        auto configuration = base_type::serialize();
+        ConfigurationPtr configuration = base_type::serialize();
 
         configuration->set("name", m_name);
         configuration->set("player_id", m_player_id);
         configuration->set("alive_timer", m_alive_timer.serialize());
+        
         configuration->set("selected", m_selected);
         configuration->set("visible", m_visible);
-        configuration->set("position", get_position());
 
         configuration->append("components", m_components->serialize());
         configuration->append("configurations", m_configurations->serialize());
@@ -170,6 +120,8 @@ namespace Gecko
         configuration->append("processes", m_processes->serialize());
         configuration->append("resources", m_resources->serialize());
         configuration->append("skills", m_skills->serialize());
+
+        configuration->set("position", get_position());
 
         return configuration;
     }
@@ -225,15 +177,11 @@ namespace Gecko
         }
 
         m_scene->destroy_scene_node(m_scene_node);
-        
         m_scene_node = m_scene->create_scene_node();
-        m_scene_node->setFixedYawAxis(true);
 
         create_selection_mesh();
 
         set_position(configuration->get_vector3("position", Ogre::Vector3::ZERO));
-        set_selected(false);
-        set_visible(false);
     }
 
     void Object::update(float time)
@@ -506,7 +454,7 @@ namespace Gecko
         float health = 0.0f;
         float max_health = 0.0f;
 
-        for (Components::Items::const_iterator i = m_components->cbegin(); i != m_components->cend(); i++)
+        for (Components::Container::const_iterator i = m_components->cbegin(); i != m_components->cend(); i++)
         {
             health += (*i)->get_health();
             max_health += (*i)->get_max_health();

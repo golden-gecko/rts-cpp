@@ -12,9 +12,5 @@ namespace Gecko
 
     public:
         static Hull* create(Hull* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
-
-    public:
-        explicit Hull() = default;
-        Hull(const Hull& other) = default;
     };
 }

@@ -29,23 +29,6 @@ namespace Gecko
     {
     }
 
-    Map::Map(const Map& other) :
-        base_type(other),
-        m_scene(other.m_scene)
-    {
-        m_name = other.m_name;
-
-        for (const auto& [name, layer] : other.m_layers)
-        {
-            // m_layers.emplace(name, std::make_shared<SquareLayer>(*layer)); // TODO: Fix. Add clone methods to each object.
-        }
-
-        for (const auto& [name, season] : other.m_seasons)
-        {
-            m_seasons.emplace(name, std::make_shared<Season>(*season));
-        }
-    }
-
     void Map::init()
     {
         base_type::init();

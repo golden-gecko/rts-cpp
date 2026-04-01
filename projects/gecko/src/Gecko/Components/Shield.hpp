@@ -18,10 +18,6 @@ namespace Gecko
     public:
         static Shield* create(Shield* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
-    public:
-        explicit Shield() = default;
-        Shield(const Shield& other);
-
     private:
         float m_defence = 0.0f;
     };

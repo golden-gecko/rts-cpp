@@ -28,13 +28,11 @@ namespace Gecko
 
     // Item.
     public:
-        explicit Item() = default;
-        Item(const Item& other);
-
-        ~Item() override = default;
+        Item() = default;
+        Item(const Item& other) = delete;
 
     public:
-        Item& operator=(const Item& other);
+        Item& operator=(const Item& other) = delete;
 
     public:
         const ConfigurationPtr& get_configuration() const

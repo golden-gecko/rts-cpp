@@ -4,20 +4,6 @@
 
 namespace Gecko
 {
-    Item::Item(const Item& other) :
-        m_configuration(other.m_configuration),
-        m_id(other.m_id)
-    {
-    }
-
-    Item& Item::operator=(const Item& other)
-    {
-        m_configuration = other.m_configuration;
-        m_id = other.m_id;
-
-        return *this;
-    }
-
     void Item::init()
     {
     }
@@ -39,7 +25,7 @@ namespace Gecko
     void Item::deserialize(const ConfigurationPtr& configuration)
     {
         m_configuration = configuration;
-        m_id = configuration->get_int("id", Id::Empty.get());
+        m_id = configuration->get_int("id", decltype(m_id)());
     }
 
     void Item::update(float time)

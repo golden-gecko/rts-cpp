@@ -20,10 +20,6 @@ namespace Gecko
         static Producer* create(Producer* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
-        explicit Producer();
-        Producer(const Producer& other);
-
-    public:
         Timer& get_produce_time()
         {
             return m_produce_time;

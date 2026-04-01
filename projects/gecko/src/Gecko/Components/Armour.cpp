@@ -28,10 +28,4 @@ namespace Gecko
 
         return component;
     }
-
-    Armour::Armour(const Armour& other) :
-        base_type(other)
-    {
-        m_defence = other.m_defence;
-    }
 }

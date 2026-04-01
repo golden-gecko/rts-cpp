@@ -30,11 +30,4 @@ namespace Gecko
 
         return component;
     }
-
-    Drive::Drive(const Drive& other) :
-        base_type(other)
-    {
-        m_speed = other.m_speed;
-        m_distance_driven = other.m_distance_driven;
-    }
 }

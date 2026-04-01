@@ -13,18 +13,16 @@ namespace Gecko
     public:
         using Container = std::map<std::string, std::shared_ptr<Technology>>;
 
+    // From Initializable.
     public:
-        // From Initializable.
         void init() override;
         void deinit() override;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
-    public:
-        explicit TechnologyTree() = default;
-
+    // TechnologyTree.
     public:
         void research(const std::string& name) const;
         void unlock(const std::string& name) const;

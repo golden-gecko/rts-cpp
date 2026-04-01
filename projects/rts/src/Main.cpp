@@ -125,5 +125,8 @@ int main(int argc, char* argv[])
     game->load_options();
     game->run();
 
+    // Deinitialize.
+    ui->deinit();
+
     return 0;
 }

@@ -18,9 +18,6 @@ namespace Gecko
         static Mesh* create(Mesh* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
-        explicit Mesh() = default;
-        Mesh(const Mesh& other);
-
         ~Mesh() override;
 
     public:

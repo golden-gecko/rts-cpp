@@ -10,21 +10,21 @@ namespace Gecko
     private:
         using base_type = Object;
 
+    // From Serializable.
     public:
-        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // Missile.
     public:
         static Missile* create(Missile* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
         explicit Missile(const ScenePtr& scene);
-        Missile(const Missile& other);
 
     public:
         void set_position(const Ogre::Vector3& position, bool validate = true) override;

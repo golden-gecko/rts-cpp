@@ -14,26 +14,26 @@ namespace Gecko
     private:
         using base_type = Item;
 
+    // From Initializable.
     public:
-        // From Initializable.
         void init() override;
         void deinit() override;
 
+    // From Serializable.
     public:
-        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // Object.
     public:
         static Object* create(Object* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
-        explicit Object(const ScenePtr& scene);
-        Object(const Object& other);
+        Object(const ScenePtr& scene);
 
         ~Object() override;
 
@@ -188,19 +188,20 @@ namespace Gecko
         ScenePtr m_scene;
 
         std::string m_name;
-        Id m_player_id;
-        Timer m_alive_timer;
+        Id          m_player_id;
+        Timer       m_alive_timer;
 
         bool m_selected = false;
-        bool m_visible = false;
+        bool m_visible  = false;
 
-        ComponentsPtr m_components;
+        ComponentsPtr     m_components;
         ConfigurationsPtr m_configurations;
-        ProcessesPtr m_processes;
-        ResourcesPtr m_resources;
-        OrdersPtr m_orders;
-        LayersPtr m_layers;
-        SkillsPtr m_skills;
+        ProcessesPtr      m_processes;
+        ResourcesPtr      m_resources;
+        OrdersPtr         m_orders;
+        LayersPtr         m_layers;
+        SkillsPtr         m_skills;
+
         std::shared_ptr<Mesh> m_selection;
 
         Ogre::SceneNode* m_scene_node = nullptr;

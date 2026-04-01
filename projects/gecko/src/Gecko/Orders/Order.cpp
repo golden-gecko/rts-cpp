@@ -87,10 +87,4 @@ namespace Gecko
         m_type(type)
     {
     }
-
-    Order::Order(const Order& other) :
-        base_type(other)
-    {
-        m_type = other.m_type;
-    }
 }

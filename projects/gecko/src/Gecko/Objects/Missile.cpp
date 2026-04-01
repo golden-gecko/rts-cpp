@@ -48,13 +48,6 @@ namespace Gecko
     {
     }
 
-    Missile::Missile(const Missile& other) :
-        base_type(other)
-    {
-        m_damage = other.m_damage;
-        m_speed = other.m_speed;
-    }
-
     void Missile::set_position(const Ogre::Vector3& position, bool validate)
     {
         if (MapPtr map = get_owner())

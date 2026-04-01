@@ -19,10 +19,6 @@ namespace Gecko
         static Drive* create(Drive* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
 
     public:
-        explicit Drive() = default;
-        Drive(const Drive& other);
-
-    public:
         float get_distance_driven() const
         {
             return m_distance_driven;

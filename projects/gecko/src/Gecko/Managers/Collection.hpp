@@ -10,10 +10,10 @@ namespace Gecko
     {
     private:
         using Allocator = std::allocator<Type>;
-        using Traits = std::allocator_traits<Allocator>;
+        using Traits    = std::allocator_traits<Allocator>;
 
     public:
-        explicit Collection(std::function<BaseType* (Type*)> factory) :
+        Collection(std::function<BaseType* (Type*)> factory) :
             m_factory(factory)
         {
         }
@@ -31,11 +31,13 @@ namespace Gecko
                 return false;
             }
 
-            // Allocate memory.
+            // Set size.
             m_max_size = max_size;
+
+            // Allocate memory.
             m_pointer = Traits::allocate(m_allocator, m_max_size);
 
-            // Create elements.
+            // Allocate elements.
             for (std::uint64_t i = 0; i < m_max_size; i++)
             {
                 m_factory(m_pointer + i);
@@ -45,14 +47,28 @@ namespace Gecko
             return true;
         }
 
-        BaseType* at(std::uint64_t index) override
+        void deallocate() override
         {
-            if (index >= m_max_size)
+            if (is_allocated() == false)
             {
-                return nullptr;
+                return;
             }
 
-            return m_elements[index];
+            // Destroy elements.
+            destroy_all();
+
+            // Deallocate elements.
+            for (std::uint64_t i = 0; i < m_max_size; i++)
+            {
+                Traits::destroy(m_allocator, m_pointer + i);
+            }
+
+            // Deallocate memory.
+            Traits::deallocate(m_allocator, m_pointer, m_max_size);
+            m_pointer = nullptr;
+
+            // Set size.
+            m_max_size = 0;
         }
 
         BaseType* create() override
@@ -63,25 +79,6 @@ namespace Gecko
             }
 
             return m_elements[m_size++];
-        }
-
-        void deallocate() override
-        {
-            destroy_all();
-
-            if (is_allocated() == false)
-            {
-                return;
-            }
-
-            for (std::uint64_t i = 0; i < m_max_size; i++)
-            {
-                Traits::destroy(m_allocator, m_pointer + i);
-            }
-
-            Traits::deallocate(m_allocator, m_pointer, m_max_size);
-            m_pointer = nullptr;
-            m_max_size = 0;
         }
 
         void destroy(BaseType* element) override
@@ -99,8 +96,17 @@ namespace Gecko
 
         void destroy_all() override
         {
-            m_elements.clear();
             m_size = 0;
+        }
+
+        BaseType* at(std::uint64_t index) override
+        {
+            if (index >= m_max_size)
+            {
+                return nullptr;
+            }
+
+            return m_elements[index];
         }
 
         void iterate(std::function<void(BaseType& element)> functor) override
@@ -154,7 +160,7 @@ namespace Gecko
 
         std::vector<Type*> m_elements;
 
-        std::uint64_t m_size = 0;
+        std::uint64_t m_size     = 0;
         std::uint64_t m_max_size = 0;
     };
 }

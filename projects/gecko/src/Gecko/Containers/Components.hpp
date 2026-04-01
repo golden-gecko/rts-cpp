@@ -8,15 +8,16 @@ namespace Gecko
         public Serializable
     {
     public:
-        using Items = std::vector<ComponentPtr>;
+        using Container = std::vector<ComponentPtr>;
 
+    // From Serializable.
     public:
-        // From Serializable.
         ConfigurationPtr serialize() const override;
         void deserialize(const ConfigurationPtr& configuration) override;
 
+    // Components.
     public:
-        explicit Components() = default;
+        Components() = default;
         Components(const Components& other);
 
     public:
@@ -44,7 +45,7 @@ namespace Gecko
             return false;
         }
 
-        Items::size_type size() const
+        Container::size_type size() const
         {
             return m_items.size();
         }
@@ -69,28 +70,28 @@ namespace Gecko
         }
 
     public:
-        auto begin()
+        Container::iterator begin()
         {
             return m_items.begin();
         }
 
-        auto end()
+        Container::iterator end()
         {
             return m_items.end();
         }
 
-        auto cbegin() const
+        Container::const_iterator cbegin() const
         {
             return m_items.cbegin();
         }
 
-        auto cend() const
+        Container::const_iterator cend() const
         {
             return m_items.cend();
         }
 
     private:
-        Items m_items;
+        Container m_items;
 
         void add_component(const std::string& configuration_name, const ConfigurationPtr& overriden_configuration = ConfigurationPtr());
     };

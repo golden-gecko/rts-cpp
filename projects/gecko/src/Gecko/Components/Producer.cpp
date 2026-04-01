@@ -33,14 +33,4 @@ namespace Gecko
 
         return component;
     }
-
-    Producer::Producer()
-    {
-    }
-
-    Producer::Producer(const Producer& other) :
-        base_type(other),
-        m_produce_time(other.m_produce_time)
-    {
-    }
 }

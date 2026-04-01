@@ -21,15 +21,6 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        explicit Skill() = default;
-        Skill(const Skill& other);
-
-        ~Skill() override = default;
-
-    public:
-        Skill& operator=(const Skill&) = delete;
-
-    public:
         virtual void activate(const Id& id) = 0;
         virtual void activate(const Ogre::Vector3& position) = 0;
 

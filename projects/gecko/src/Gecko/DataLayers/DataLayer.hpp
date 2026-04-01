@@ -11,17 +11,18 @@ namespace Gecko
         public Initializable,
         public Updatable
     {
+    // From Initializable.
     public:
-        // From Initializable.
         void init() override;
         void deinit() override;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // DataLayer.
     public:
-        explicit DataLayer(Layer* owner, const std::string& name, const Configuration& configuration);
+        DataLayer(Layer* owner, const std::string& name, const Configuration& configuration);
 
     public:
         int get_data(int x, int z) const;

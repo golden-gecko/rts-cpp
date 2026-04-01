@@ -12,9 +12,5 @@ namespace Gecko
 
     public:
         static Radar* create(Radar* memory, const ConfigurationPtr& configuration, const ScenePtr& scene);
-
-    public:
-        explicit Radar() = default;
-        Radar(const Radar& other) = default;
     };
 }

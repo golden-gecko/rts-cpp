@@ -38,15 +38,4 @@ namespace Gecko
 
         return component;
     }
-
-    Storage::Storage()
-    {
-    }
-
-    Storage::Storage(const Storage& other) :
-        base_type(other),
-        m_load_time(other.m_load_time),
-        m_unload_time(other.m_unload_time)
-    {
-    }
 }

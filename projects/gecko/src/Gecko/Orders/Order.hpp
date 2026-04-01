@@ -66,9 +66,8 @@ namespace Gecko
         void update(float time) override;
 
     public:
-        explicit Order() = default;
-        explicit Order(order_type::Value type);
-        Order(const Order& other);
+        Order() = default;
+        Order(order_type::Value type);
 
     public:
         Order& operator=(const Order&) = delete;

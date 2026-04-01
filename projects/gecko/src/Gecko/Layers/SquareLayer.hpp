@@ -12,17 +12,17 @@ namespace Gecko
     private:
         using base_type = Layer;
 
+    // From Initializable.
     public:
-        // From Initializable.
         void init() override;
         void deinit() override;
 
+    // From Updatable.
     public:
-        // From Updatable.
         void update(float time) override;
 
+    // From Layer.
     public:
-        // From Layer.
         bool is_index_valid(Index x, Index z) const override;
         bool is_index_valid(const Navigation::Coordinate& coordinate) const override;
 
@@ -38,8 +38,9 @@ namespace Gecko
         Ogre::Vector3 get_position(float x, float z, bool validate = true) const override;
         Ogre::Vector3 get_position(const Ogre::Vector3& position, bool validate = true) const override;
 
+    // SquareLayer.
     public:
-        explicit SquareLayer(MapPtr owner, const std::string& name, const ConfigurationPtr& configuration);
+        SquareLayer(MapPtr owner, const std::string& name, const ConfigurationPtr& configuration);
 
         ~SquareLayer() override;
 
